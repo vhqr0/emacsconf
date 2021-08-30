@@ -37,10 +37,10 @@
 (org-export-define-derived-backend 'reveal 'html
 
   :menu-entry
-  '(?R "Export to reveal.js HTML Presentation"
-       ((?R "To file" org-reveal-export-to-html)
-        (?B "To file and browse" org-reveal-export-to-html-and-browse)
-        (?S "Current subtree to file" org-reveal-export-current-subtree)))
+  '(?r "Export to reveal.js HTML Presentation"
+       ((?r "As HTML file" org-reveal-export-to-html)
+        (?o "As HTML file and open" org-reveal-export-to-html-and-browse)
+        (?s "Current subtree to file" org-reveal-export-current-subtree)))
 
   :options-alist
   '((:reveal-control nil "reveal_control" org-reveal-control t)
@@ -1137,7 +1137,7 @@ transformed fragment attribute to ELEM's attr_html plist."
   (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer to a reveal.js and browse HTML file."
   (interactive)
-  (browse-url-of-file (expand-file-name (org-reveal-export-to-html async subtreep visible-only body-only ext-plist))))
+  (org-open-file (expand-file-name (org-reveal-export-to-html async subtreep visible-only body-only ext-plist))))
 
 (defun org-reveal-export-current-subtree
     (&optional async subtreep visible-only body-only ext-plist)
