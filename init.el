@@ -223,3 +223,12 @@
       wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
+
+
+(setq org-modules '(org-tempo)
+      org-export-backends '(html reveal latex)
+      org-html-postamble nil
+      org-special-ctrl-a/e t)
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "<") "<"))
