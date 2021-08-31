@@ -90,11 +90,18 @@
       (bounds-of-thing-at-point 'defun)
     (evil-range beg end 'line)))
 
+(evil-define-text-object +evil-textobj-page (count &optional beg end type)
+  (cl-destructuring-bind (beg . end)
+      (bounds-of-thing-at-point 'page)
+    (evil-range beg end 'line)))
+
 (evil-define-text-object +evil-textobj-entire (count &optional beg end type)
   (evil-range (point-min) (point-max) 'line))
 
 (define-key evil-inner-text-objects-map (kbd "f") '+evil-textobj-defun)
 (define-key evil-outer-text-objects-map (kbd "f") '+evil-textobj-defun)
+(define-key evil-inner-text-objects-map (kbd "l") '+evil-textobj-page)
+(define-key evil-outer-text-objects-map (kbd "l") '+evil-textobj-page)
 (define-key evil-inner-text-objects-map (kbd "h") '+evil-textobj-entire)
 (define-key evil-outer-text-objects-map (kbd "h") '+evil-textobj-entire)
 
@@ -122,6 +129,7 @@
     (define-key map (kbd "j") 'dired-jump)
     (define-key map (kbd "i") 'imenu)
     (define-key map (kbd "o") 'other-window)
+    (define-key map (kbd "0") 'delete-window)
     (define-key map (kbd "1") 'delete-other-windows)
     (define-key map (kbd "2") 'split-window-below)
     (define-key map (kbd "3") 'split-window-right)
@@ -216,6 +224,13 @@
     "r" 'dired-do-redisplay
     ";" (lookup-key dired-mode-map ":")))
 
+(with-eval-after-load 'project
+  (setq project-switch-commands
+        '((project-find-file "find file")
+          (project-dired "dired")
+          (project-vc-dir "vc-dir")
+          (project-shell "shell"))))
+
 (defun rg ()
   (interactive)
   (require 'grep)
@@ -243,4 +258,14 @@
 
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "<") "\C-q<")
-  (define-key org-mode-map (kbd "M-o") 'org-meta-return))
+  (define-key org-mode-map (kbd "M-o") 'org-meta-return)
+  (evil-define-key '(normal visual) org-mode-map
+    (kbd "TAB") 'org-cycle
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-l") 'org-metaright
+    (kbd "M-j") 'org-metadown
+    (kbd "M-k") 'org-metaup
+    (kbd "M-H") 'org-shiftmetaright
+    (kbd "M-L") 'org-shiftmetaleft
+    (kbd "M-J") 'org-shiftmetadown
+    (kbd "M-K") 'org-shiftmetaup))
