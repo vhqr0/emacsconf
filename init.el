@@ -49,8 +49,7 @@
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
 
-(setq completion-styles '(orderless)
-      selectrum-refine-candidates-function #'orderless-filter
+(setq selectrum-refine-candidates-function #'orderless-filter
       selectrum-highlight-candidates-function #'orderless-highlight-matches)
 
 (selectrum-mode 1)
@@ -116,32 +115,37 @@
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "f") 'find-file)
     (define-key map (kbd "b") 'switch-to-buffer)
+    (define-key map (kbd "k") 'kill-buffer)
+    (define-key map (kbd "s") 'save-buffer)
+    (define-key map (kbd "h") 'previous-buffer)
+    (define-key map (kbd "l") 'next-buffer)
     (define-key map (kbd "j") 'dired-jump)
     (define-key map (kbd "i") 'imenu)
+    (define-key map (kbd "o") 'other-window)
+    (define-key map (kbd "1") 'delete-other-windows)
+    (define-key map (kbd "2") 'split-window-below)
+    (define-key map (kbd "3") 'split-window-right)
     (define-key map (kbd "4") ctl-x-4-map)
+    (define-key map (kbd "t") tab-prefix-map)
     (define-key map (kbd "p") project-prefix-map)
     (define-key map (kbd "v") vc-prefix-map)
-    (define-key map (kbd "r") (lookup-key ctl-x-map "r"))
-    (define-key map (kbd "n") (lookup-key ctl-x-map "n"))
+    (define-key map (kbd "n") narrow-map)
+    (define-key map (kbd "r") ctl-x-r-map)
+    (define-key map (kbd "x") ctl-x-x-map)
     map))
 
 (evil-global-set-key 'motion (kbd "SPC") +evil-leader-map)
 
 
-(defun +format ()
-  (interactive)
-  (let ((program (assq major-mode
-                       '((c-mode . "clang-format -i ")
-                         (c++-mode . "clang-format -i ")
-                         (python-mode . "yapf -i ")))))
-    (when (and program
-               buffer-file-name
-               (not buffer-read-only))
-      (save-buffer)
-      (shell-command (concat (cdr program) buffer-file-name))
-      (revert-buffer nil t))))
-
-(define-key prog-mode-map (kbd "C-c =") '+format)
+(evil-define-operator +evil-operator-format (beg end)
+  :move-point nil
+  (interactive "<r>")
+  (let ((command (assq major-mode
+                       '((c-mode . "clang-format")
+                         (c++-mode . "clang-format")
+                         (python-mode . "yapf")))))
+    (when command
+      (shell-command-on-region beg end (cdr command) nil t))))
 
 (evil-define-operator +evil-operator-eval (beg end)
   :move-point nil
@@ -153,6 +157,7 @@
     (when func
       (funcall (cdr func) beg end))))
 
+(evil-define-key 'normal prog-mode-map (kbd "g =") '+evil-operator-format)
 (evil-define-key 'motion prog-mode-map (kbd "g r") '+evil-operator-eval)
 
 (with-eval-after-load 'flymake
@@ -237,4 +242,5 @@
       org-special-ctrl-a/e t)
 
 (with-eval-after-load 'org
-  (define-key org-mode-map (kbd "<") "<"))
+  (define-key org-mode-map (kbd "<") "\C-q<")
+  (define-key org-mode-map (kbd "M-o") 'org-meta-return))
