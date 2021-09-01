@@ -173,7 +173,7 @@
 (defun evil-initialize ()
   "Enable Evil in the current buffer, if appropriate.
 To enable Evil globally, do (evil-mode 1)."
-  (unless (and (minibufferp) (not evil-want-minibuffer))
+  (unless (minibufferp)
     (evil-local-mode 1)
     (evil-initialize-state)))
 

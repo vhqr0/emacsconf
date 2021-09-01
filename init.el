@@ -55,17 +55,10 @@
 (selectrum-mode 1)
 
 
-(setq evil-undo-system 'undo-redo
-      evil-search-module 'evil-search
-      evil-want-fine-undo t
-      evil-want-C-u-scroll t
-      evil-want-keybinding nil
-      evil-disable-insert-state-bindings t)
+(setq evil-search-module 'evil-search)
 
 (evil-mode 1)
 (global-evil-surround-mode 1)
-
-(evil-global-set-key 'insert (kbd "C-r") 'evil-paste-from-register)
 
 (global-set-key (kbd "M-z") [escape])
 
@@ -107,12 +100,10 @@
 
 (evil-define-operator +evil-operator-narrow (beg end)
   :move-point nil
-  (interactive "<r>")
   (narrow-to-region beg end))
 
 (evil-define-operator +evil-operator-comment (beg end)
   :move-point nil
-  (interactive "<r>")
   (comment-or-uncomment-region beg end))
 
 (evil-global-set-key 'motion (kbd "g n") '+evil-operator-narrow)
@@ -145,16 +136,6 @@
 (evil-global-set-key 'motion (kbd "SPC") +evil-leader-map)
 
 
-(evil-define-operator +evil-operator-format (beg end)
-  :move-point nil
-  (interactive "<r>")
-  (let ((command (assq major-mode
-                       '((c-mode . "clang-format")
-                         (c++-mode . "clang-format")
-                         (python-mode . "yapf")))))
-    (when command
-      (shell-command-on-region beg end (cdr command) nil t))))
-
 (evil-define-operator +evil-operator-eval (beg end)
   :move-point nil
   (interactive "<r>")
@@ -165,7 +146,6 @@
     (when func
       (funcall (cdr func) beg end))))
 
-(evil-define-key 'normal prog-mode-map (kbd "g =") '+evil-operator-format)
 (evil-define-key 'motion prog-mode-map (kbd "g r") '+evil-operator-eval)
 
 (with-eval-after-load 'flymake

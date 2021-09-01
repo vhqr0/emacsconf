@@ -29,8 +29,6 @@
 
 (declare-function evil-add-command-properties "evil-common"
                   (command &rest properties))
-(declare-function evil-update-insert-state-bindings "evil-maps"
-                  (&optional _option-name remove force))
 
 ;;; Hooks
 
@@ -71,25 +69,6 @@ See `evil-pending-custom-initialize'."
 (add-hook 'evil-after-load-hook 'evil-run-pending-custom-initialize)
 
 ;;; Setters
-
-(defun evil-set-toggle-key (key)
-  "Set `evil-toggle-key' to KEY.
-KEY must be readable by `read-kbd-macro'."
-  (let ((old-key (read-kbd-macro
-                  (if (boundp 'evil-toggle-key)
-                      evil-toggle-key
-                    "C-z")))
-        (key (read-kbd-macro key)))
-    (with-no-warnings
-      (dolist (pair '((evil-motion-state-map evil-emacs-state)
-                      (evil-insert-state-map evil-emacs-state)
-                      (evil-emacs-state-map evil-exit-emacs-state)))
-        (when (boundp (car pair))
-          (let ((map (symbol-value (car pair)))
-                (fun (cadr pair)))
-            (when (keymapp map)
-              (define-key map key fun)
-              (define-key map old-key nil))))))))
 
 (defun evil-set-custom-state-maps (var pending-var key _make newlist)
   "Changes the list of special keymaps.
@@ -328,22 +307,6 @@ WORD boundaries."
   :group 'evil)
 (make-variable-buffer-local 'evil-bigword)
 
-(defcustom evil-want-fine-undo nil
-  "Whether actions are undone in several steps.
-There are two possible choices: nil (\"no\") means that all
-changes made during insert state, including a possible delete
-after a change operation, are collected in a single undo step.
-Non-nil (\"yes\") means that undo steps are determined according
-to Emacs heuristics, and no attempt is made to aggregate changes.
-
-For backward compatibility purposes, the value `fine' is
-interpreted as `nil'.  This option was removed because it did not
-work consistently."
-  :type '(radio (const :tag "No" :value nil)
-                (const :tag "Fine (obsolete)" :value fine)
-                (const :tag "Yes" :value t))
-  :group 'evil)
-
 (defcustom evil-regexp-search t
   "\\<evil-motion-state-map>
 Whether to use regular expressions for searching in \
@@ -446,115 +409,6 @@ replicates the default Vim behavior."
   :type 'boolean
   :group 'evil)
 
-(defcustom evil-want-C-i-jump t
-  "Whether `C-i' jumps forward in the jump list (like Vim).
-Otherwise, `C-i' inserts a tab character."
-  :type 'boolean
-  :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (when (boundp 'evil-motion-state-map)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-motion-state-map (kbd "C-i"))
-                        'evil-jump-forward))
-               (define-key evil-motion-state-map (kbd "C-i") nil))
-              ((and value
-                    (not (lookup-key evil-motion-state-map (kbd "C-i"))))
-               (define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward))))))
-
-(defcustom evil-want-C-u-scroll nil
-  "Whether `C-u' scrolls up (like Vim).
-Otherwise, `C-u' applies a prefix argument.  The binding of
-`C-u' mirrors Emacs behaviour by default due to the relative
-ubiquity of prefix arguments."
-  :type 'boolean
-  :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (when (boundp 'evil-motion-state-map)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-motion-state-map (kbd "C-u"))
-                        'evil-scroll-up))
-               (define-key evil-motion-state-map (kbd "C-u") nil))
-              ((and value
-                    (not (lookup-key evil-motion-state-map (kbd "C-u"))))
-               (define-key evil-motion-state-map (kbd "C-u") 'evil-scroll-up))))))
-
-(defcustom evil-want-C-d-scroll t
-  "Whether `C-d' scrolls down (like Vim)."
-  :type 'boolean
-  :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (when (boundp 'evil-motion-state-map)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-motion-state-map (kbd "C-d"))
-                        'evil-scroll-down))
-               (define-key evil-motion-state-map (kbd "C-d") nil))
-              ((and value
-                    (not (lookup-key evil-motion-state-map (kbd "C-d"))))
-               (define-key evil-motion-state-map (kbd "C-d") 'evil-scroll-down))))))
-
-(defcustom evil-want-C-u-delete nil
-  "Whether `C-u' deletes back to indentation in insert state.
-Otherwise, `C-u' applies a prefix argument.  The binding of
-`C-u' mirrors Emacs behaviour by default due to the relative
-ubiquity of prefix arguments."
-  :type 'boolean
-  :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (when (boundp 'evil-insert-state-map)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-insert-state-map (kbd "C-u"))
-                        'evil-delete-back-to-indentation))
-               (define-key evil-insert-state-map (kbd "C-u") nil))
-              ((and value
-                    (not (lookup-key evil-insert-state-map (kbd "C-u"))))
-               (define-key evil-insert-state-map (kbd "C-u") 'evil-delete-back-to-indentation))))))
-
-(defcustom evil-want-C-w-delete t
-  "Whether `C-w' deletes a word in Insert state."
-  :type 'boolean
-  :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (when (boundp 'evil-insert-state-map)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-insert-state-map (kbd "C-w"))
-                        'evil-delete-backward-word))
-               (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map))
-              ((and value
-                    (eq (lookup-key evil-insert-state-map (kbd "C-w"))
-                        'evil-window-map))
-               (define-key evil-insert-state-map (kbd "C-w") 'evil-delete-backward-word))))))
-
-(defcustom evil-want-C-g-bindings nil
-  "Whether `C-g' postfix can be used in bindings."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-want-C-w-in-emacs-state nil
-  "Whether `C-w' prefixes windows commands in Emacs state."
-  :type 'boolean
-  :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (when (boundp 'evil-emacs-state-map)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-emacs-state-map (kbd "C-w"))
-                        'evil-window-map))
-               (define-key evil-emacs-state-map (kbd "C-w") nil))
-              ((and value
-                    (not (lookup-key evil-emacs-state-map (kbd "C-w"))))
-               (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map))))))
-
 (defcustom evil-want-change-word-to-end t
   "Whether `cw' behaves like `ce'."
   :type 'boolean
@@ -574,91 +428,9 @@ The default behavior is to yank the whole line, like Vim."
                         'evil-end-of-line-or-visual-line
                       'evil-line-or-visual-line))))
 
-(defcustom evil-disable-insert-state-bindings nil
-  "Whether insert state bindings should be used.
-Bindings for escape, delete and `evil-toggle-key' are always
-available. If this is non-nil, default Emacs bindings are by and
-large accessible in insert state."
-  :group 'evil
-  :type 'boolean
-  :initialize #'evil-custom-initialize-pending-reset
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (evil-update-insert-state-bindings sym value)))
-
 (defcustom evil-echo-state t
   "Whether to signal the current state in the echo area."
   :type 'boolean
-  :group 'evil)
-
-(defcustom evil-complete-all-buffers t
-  "\\<evil-insert-state-map>
-Whether completion looks for matches in all buffers.
-This applies to \\[evil-complete-next] and \\[evil-complete-previous] \
-in insert state."
-  :type 'boolean
-  :group 'evil)
-
-(defvar dabbrev-search-these-buffers-only)
-(defvar dabbrev-case-distinction)
-(defcustom evil-complete-next-func
-  #'(lambda (arg)
-      (require 'dabbrev)
-      (let ((dabbrev-search-these-buffers-only
-             (unless evil-complete-all-buffers
-               (list (current-buffer))))
-            dabbrev-case-distinction)
-        (condition-case nil
-            (if (eq last-command this-command)
-                (dabbrev-expand nil)
-              (dabbrev-expand (- (abs (or arg 1)))))
-          (error (dabbrev-expand nil)))))
-  "Completion function used by \
-\\<evil-insert-state-map>\\[evil-complete-next]."
-  :type 'function
-  :group 'evil)
-
-(defcustom evil-complete-previous-func
-  #'(lambda (arg)
-      (require 'dabbrev)
-      (let ((dabbrev-search-these-buffers-only
-             (unless evil-complete-all-buffers
-               (list (current-buffer))))
-            dabbrev-case-distinction)
-        (dabbrev-expand arg)))
-  "Completion function used by \
-\\<evil-insert-state-map>\\[evil-complete-previous]."
-  :type 'function
-  :group 'evil)
-
-(defcustom evil-complete-next-minibuffer-func 'minibuffer-complete
-  "Minibuffer completion function used by \
-\\<evil-insert-state-map>\\[evil-complete-next]."
-  :type 'function
-  :group 'evil)
-
-(defcustom evil-complete-previous-minibuffer-func 'minibuffer-complete
-  "Minibuffer completion function used by \
-\\<evil-insert-state-map>\\[evil-complete-previous]."
-  :type 'function
-  :group 'evil)
-
-(defcustom evil-complete-next-line-func
-  #'(lambda (arg)
-      (let ((hippie-expand-try-functions-list
-             '(try-expand-line
-               try-expand-line-all-buffers)))
-        (hippie-expand arg)))
-  "Minibuffer completion function used by \
-\\<evil-insert-state-map>\\[evil-complete-next-line]."
-  :type 'function
-  :group 'evil)
-
-(defcustom evil-complete-previous-line-func
-  evil-complete-next-line-func
-  "Minibuffer completion function used by \
-\\<evil-insert-state-map>\\[evil-complete-previous-line]."
-  :type 'function
   :group 'evil)
 
 (defcustom evil-lookup-func #'woman
@@ -666,15 +438,6 @@ in insert state."
 \"\\<evil-motion-state-map>\\[evil-lookup]\"."
   :type 'function
   :group 'evil)
-
-(defcustom evil-toggle-key "C-z"
-  "The key used to change to and from Emacs state.
-Must be readable by `read-kbd-macro'. For example: \"C-z\"."
-  :type 'string
-  :group 'evil
-  :set #'(lambda (sym value)
-           (evil-set-toggle-key value)
-           (set-default sym value)))
 
 (defcustom evil-default-state 'normal
   "The default Evil state.
@@ -962,7 +725,6 @@ intercepted."
     forward-sentence
     forward-sexp
     forward-word
-    goto-last-change
     ibuffer-backward-line
     ibuffer-forward-line
     isearch-abort
@@ -1258,24 +1020,12 @@ specified, then is works only on the first match."
   "Face for interactive replacement text."
   :group 'evil)
 
-(defcustom evil-command-window-height 8
-  "Height (in lines) of the command line window.
-Set to 0 to use the default height for `split-window'."
-  :type 'integer
-  :group 'evil)
-
 (defcustom evil-display-shell-error-in-message nil
   "Show error output of a shell command in the error buffer.
 If this variable is non-nil the error output of a shell command
 goes to the messages buffer instead of being mixed with the
 regular output. This happens only if the exit status of the
 command is non-zero."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-want-abbrev-expand-on-insert-exit t
-  "If non-nil abbrevs will be expanded when leaving insert state
-like in Vim, if `abbrev-mode' is on."
   :type 'boolean
   :group 'evil)
 
@@ -1448,10 +1198,7 @@ Using `evil-with-restriction' stores the previous values of
     (?' . evil-jump-backward-swap)
     (?` . evil-jump-backward-swap)
     (?< . evil-visual-beginning)
-    (?> . evil-visual-goto-end)
-    (?. . (lambda ()
-            (let (last-command)
-              (goto-last-change nil)))))
+    (?> . evil-visual-goto-end))
   "Association list for markers.
 Entries have the form (CHAR . DATA), where CHAR is the marker's
 name and DATA is either a marker object as returned by `make-marker',
@@ -1902,17 +1649,6 @@ See `evil-ex-init-shell-argument-completion'.")
   "Non-nil if the previous was a search.
 Otherwise the previous command is assumed as substitute.")
 
-;;; Command line window
-
-(defvar evil-command-window-current-buffer nil
-  "The buffer from which the command line window was called.")
-
-(evil-define-local-var evil-command-window-execute-fn nil
-  "The command to execute when exiting the command line window.")
-
-(evil-define-local-var evil-command-window-cmd-key nil
-  "The key for the command that opened the command line window (:, /, or ?).")
-
 ;; The lazy-highlighting framework.
 (evil-define-local-var evil-ex-active-highlights-alist nil
   "An alist of currently active highlights.")
@@ -1944,75 +1680,6 @@ Otherwise the previous command is assumed as substitute.")
           ;; no repo, use plain version
           "1.14.0"))))
   "The current version of Evil")
-
-(defcustom evil-want-integration t
-  "Whether to load evil-integration.el.
-This variable must be set before Evil is loaded."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-want-keybinding t
-  "Whether to load evil-keybindings.el.
-
-This loads a set of keybindings for evil in other modes as well as
-setting the initial evil state in those modes.
-
-This variable must be set before evil is loaded."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-want-minibuffer nil
-  "Whether to enable Evil in minibuffer(s)."
-  :type 'boolean
-  :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (if value
-               (add-hook 'minibuffer-setup-hook 'evil-initialize)
-             (remove-hook 'minibuffer-setup-hook 'evil-initialize))))
-
-(defun evil--redo-placeholder (_count)
-  (user-error "Customize `evil-undo-system' for redo functionality."))
-
-(defvar evil-undo-function 'undo
-  "Function to be used by `evil-undo'.
-Customized via `evil-undo-system'.")
-
-(defvar evil-redo-function 'evil--redo-placeholder
-  "Function to be used by 'evil-redo'.
-Customized via `evil-undo-system'.")
-
-(defun evil-set-undo-system (system)
-  "Set `evil-undo-function' and `evil-redo-function` by SYSTEM."
-  (cond
-   ((not system)
-    (setq evil-undo-function 'undo
-          evil-redo-function 'evil--redo-placeholder))
-   ((eq system 'undo-redo)
-    (setq evil-undo-function 'undo-only
-          evil-redo-function 'undo-redo))
-   ((eq system 'undo-tree)
-    (setq evil-undo-function 'undo-tree-undo
-          evil-redo-function 'undo-tree-redo))
-   ((eq system 'undo-fu)
-    (setq evil-undo-function 'undo-fu-only-undo
-          evil-redo-function 'undo-fu-only-redo))
-   (t
-    (error "Unknown undo system %s" system))))
-
-(defcustom evil-undo-system nil
-  "Undo system Evil should use.  If equal to `undo-tree' or
-`undo-fu', those packages must be installed.  If equal to
-`undo-tree', `undo-tree-mode' must also be activated.  If equal
-to `undo-redo', Evil uses commands natively available in Emacs 28."
-  :type '(choice (const :tag "Vanilla undo" nil)
-                 (const undo-redo)
-                 (const undo-tree)
-                 (const undo-fu))
-  :group 'evil
-  :set #'(lambda (sym value)
-           (evil-set-undo-system value)
-           (set-default sym value)))
 
 (defun evil-version ()
   (interactive)

@@ -118,17 +118,13 @@ commands opening a new line."
    ((evil-insert-state-p)
     (add-hook 'post-command-hook #'evil-maybe-remove-spaces)
     (add-hook 'pre-command-hook #'evil-insert-repeat-hook)
-    (setq evil-maybe-remove-spaces t)
-    (unless (eq evil-want-fine-undo t)
-      (evil-start-undo-step)))
+    (setq evil-maybe-remove-spaces t))
    (t
     (remove-hook 'post-command-hook #'evil-maybe-remove-spaces)
     (remove-hook 'pre-command-hook #'evil-insert-repeat-hook)
     (evil-maybe-remove-spaces t)
     (setq evil-insert-repeat-info evil-repeat-info)
     (evil-set-marker ?^ nil t)
-    (unless (eq evil-want-fine-undo t)
-      (evil-end-undo-step))
     (when (or (evil-normal-state-p evil-next-state)
               (evil-motion-state-p evil-next-state))
       (evil-move-cursor-back
@@ -871,14 +867,10 @@ CORNER defaults to `upper-left'."
   (cond
    ((evil-replace-state-p)
     (overwrite-mode 1)
-    (add-hook 'pre-command-hook #'evil-replace-pre-command nil t)
-    (unless (eq evil-want-fine-undo t)
-      (evil-start-undo-step)))
+    (add-hook 'pre-command-hook #'evil-replace-pre-command nil t))
    (t
     (overwrite-mode -1)
     (remove-hook 'pre-command-hook #'evil-replace-pre-command t)
-    (unless (eq evil-want-fine-undo t)
-      (evil-end-undo-step))
     (evil-move-cursor-back)))
   (setq evil-replace-alist nil))
 

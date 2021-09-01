@@ -4,53 +4,6 @@
 ;; 2017, when evil moved under new maintainers. For authors since then, please
 ;; consult the git logs.
 
-;;      Alessandro Piras <laynor at gmail.com>
-;;      Alexander Baier <alexander.baier at mailbox.org>
-;;      Antono Vasiljev <antono.vasiljev at gmail.com>
-;;      Bailey Ling <bling at live.ca>
-;;      Barry O'Reilly <gundaetiapo at gmail.com>
-;;      Christoph Lange <langec at web.de>
-;;      Daniel Reiter <danieltreiter at gmail.com>
-;;      Eivind Fonn <evfonn at gmail.com>
-;;      Emanuel Evans <emanuel.evans at gmail.com>
-;;      Eric Siegel <siegel.eric at gmail.com>
-;;      Eugene Yaremenko <w3techplayground at gmail.com>
-;;      Frank Fischer <frank-fischer at shadow-soft.de>
-;;      Frank Terbeck <ft at bewatermyfriend.org>
-;;      Gordon Gustafson <gordon3.14 at gmail.com>
-;;      Herbert Jones <jones.herbert at gmail.com>
-;;      Jonas Bernoulli <jonas at bernoul.li>
-;;      Jonathan Claggett <jclaggett at lonocloud.com>
-;;      José A. Romero L. <escherdragon at gmail.com>
-;;      Justin Burkett <justin at burkett.cc>
-;;      Lars Andersen <expez at expez.com>
-;;      Lintaro Ina <tarao.gnn at gmail.com>
-;;      Lukasz Wrzosek <wrzoski at mail.com>
-;;      Marian Schubert <maio at netsafe.cz>
-;;      Matthew Malcomson <>
-;;      Michael Markert <markert.michael at googlemail.com>
-;;      Mike Gerwitz <mikegerwitz at gnu.org>
-;;      Nikolai Weibull <now at bitwi.se>
-;;      phaebz <phaebz at gmail.com>
-;;      ralesi <scio62 at gmail.com>
-;;      Rodrigo Setti <rodrigosetti at gmail.com>
-;;      Sanel Zukan <sanelz at gmail.com>
-;;      Sarah Brofeldt <sarah at thinkmonster.(none)>
-;;      Simon Hafner <hafnersimon at gmail.com>
-;;      Stefan Wehr <mail at stefanwehr.de>
-;;      Sune Simonsen <sune.simonsen at jayway.com>
-;;      Thomas Hisch <thomas at opentech.at>
-;;      Tim Harper <timcharper at gmail.com>
-;;      Tom Willemse <tom at ryuslash.org>
-;;      Trevor Murphy <trevor.m.murphy at gmail.com>
-;;      Ulrich Müller <ulm at gentoo.org>
-;;      Vasilij Schneidermann <v.schneidermann at gmail.com>
-;;      Vegard Øye <vegard_oye at hotmail.com>
-;;      Winfred Lu <winfred.lu at gmail.com>
-;;      Wolfgang Jenkner <wjenkner at inode.at>
-;;      Xiao Hanyu <xiaohanyu1988 at gmail.com>
-;;      York Zhao <yzhao at telecor.com>
-
 ;; Maintainers: The emacs-evil team. <https://github.com/orgs/emacs-evil/people>
 ;;      To get in touch, please use the bug tracker or the
 ;;      mailing list (see below).
@@ -115,17 +68,6 @@
 ;;     https://gitlab.com/tsc25/undo-tree
 ;;     https://elpa.gnu.org/packages/undo-tree.html
 ;;
-;; Evil requires `goto-last-change' and `goto-last-change-reverse'
-;; function for the corresponding motions g; g, as well as the
-;; last-change-register `.'. One package providing these functions is
-;; goto-chg.el:
-;;
-;;     https://github.com/emacs-evil/goto-chg
-;;     https://melpa.org/#/goto-chg
-;;     https://elpa.nongnu.org/nongnu/goto-chg.html
-;;
-;; Without this package the corresponding motions will raise an error.
-
 ;;; Code:
 
 (require 'evil-vars)
@@ -136,17 +78,11 @@
 (require 'evil-macros)
 (require 'evil-search)
 (require 'evil-ex)
-(require 'evil-digraphs)
 (require 'evil-types)
 (require 'evil-commands)
 (require 'evil-jumps)
 (require 'evil-maps)
-
-(when evil-want-integration
-  (require 'evil-integration))
-
-(when evil-want-keybinding
-  (require 'evil-keybindings))
+(require 'evil-integration)
 
 (run-hooks 'evil-after-load-hook)
 

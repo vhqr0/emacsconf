@@ -165,14 +165,6 @@ Start Eglot session for current buffer if there isn't one." nil nil)
 
 ;;;***
 
-;;;### (autoloads nil "evil-command-window" "evil-command-window.el"
-;;;;;;  (0 0 0 0))
-;;; Generated autoloads from evil-command-window.el
-
-(register-definition-prefixes "evil-command-window" '("evil-"))
-
-;;;***
-
 ;;;### (autoloads nil "evil-commands" "evil-commands.el" (0 0 0 0))
 ;;; Generated autoloads from evil-commands.el
 
@@ -195,25 +187,10 @@ Start Eglot session for current buffer if there isn't one." nil nil)
 
 ;;;***
 
-;;;### (autoloads nil "evil-digraphs" "evil-digraphs.el" (0 0 0 0))
-;;; Generated autoloads from evil-digraphs.el
-
-(register-definition-prefixes "evil-digraphs" '("evil-digraph"))
-
-;;;***
-
 ;;;### (autoloads nil "evil-ex" "evil-ex.el" (0 0 0 0))
 ;;; Generated autoloads from evil-ex.el
 
 (register-definition-prefixes "evil-ex" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-integration" "evil-integration.el" (0
-;;;;;;  0 0 0))
-;;; Generated autoloads from evil-integration.el
-
-(register-definition-prefixes "evil-integration" '("evil-"))
 
 ;;;***
 
@@ -228,13 +205,6 @@ Start Eglot session for current buffer if there isn't one." nil nil)
 ;;; Generated autoloads from evil-macros.el
 
 (register-definition-prefixes "evil-macros" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-maps" "evil-maps.el" (0 0 0 0))
-;;; Generated autoloads from evil-maps.el
-
-(register-definition-prefixes "evil-maps" '("evil-"))
 
 ;;;***
 
@@ -346,46 +316,6 @@ See `evil-surround-mode' for more information on Evil-Surround mode.
 ;;; Generated autoloads from evil-vars.el
 
 (register-definition-prefixes "evil-vars" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "goto-chg" "goto-chg.el" (0 0 0 0))
-;;; Generated autoloads from goto-chg.el
-
-(autoload 'goto-last-change "goto-chg" "\
-Go to the point where the last edit was made in the current buffer.
-Repeat the command to go to the second last edit, etc.
-
-To go back to more recent edit, the reverse of this command, use \\[goto-last-change-reverse]
-or precede this command with \\[universal-argument] - (minus).
-
-It does not go to the same point twice even if there has been many edits
-there. I call the minimal distance between distinguishable edits \"span\".
-Set variable `glc-default-span' to control how close is \"the same point\".
-Default span is 8.
-The span can be changed temporarily with \\[universal-argument] right before \\[goto-last-change]:
-\\[universal-argument] <NUMBER> set current span to that number,
-\\[universal-argument] (no number) multiplies span by 4, starting with default.
-The so set span remains until it is changed again with \\[universal-argument], or the consecutive
-repetition of this command is ended by any other command.
-
-When span is zero (i.e. \\[universal-argument] 0) subsequent \\[goto-last-change] visits each and
-every point of edit and a message shows what change was made there.
-In this case it may go to the same point twice.
-
-This command uses undo information. If undo is disabled, so is this command.
-At times, when undo information becomes too large, the oldest information is
-discarded. See variable `undo-limit'.
-
-\(fn ARG)" t nil)
-
-(autoload 'goto-last-change-reverse "goto-chg" "\
-Go back to more recent changes after \\[goto-last-change] have been used.
-See `goto-last-change' for use of prefix argument.
-
-\(fn ARG)" t nil)
-
-(register-definition-prefixes "goto-chg" '("glc-"))
 
 ;;;***
 
@@ -627,7 +557,8 @@ Setup wgrep preparation." nil nil)
 
 ;;;***
 
-;;;### (autoloads nil nil ("evil.el") (0 0 0 0))
+;;;### (autoloads nil nil ("evil-integration.el" "evil-maps.el" "evil.el")
+;;;;;;  (0 0 0 0))
 
 ;;;***
 

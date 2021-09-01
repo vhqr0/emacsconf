@@ -580,55 +580,7 @@ If SAVE-POINT is non-nil, do not move point."
             (evil-execute-repeat-info-with-count
              count (ring-ref evil-repeat-ring 0))
             (setq evil-last-find evil-last-find-temp)))
-      (if (eq 'evil-execute-in-normal-state last-command)
-          (evil-change-state evil--execute-normal-return-state)
-        (evil-normal-state))))))
-
-;; TODO: the same issue concering disabled undos as for `evil-paste-pop'
-(evil-define-command evil-repeat-pop (count &optional save-point)
-  "Replace the just repeated command with a previously executed command.
-Only allowed after `evil-repeat', `evil-repeat-pop' or
-`evil-repeat-pop-next'. Uses the same repeat count that
-was used for the first repeat.
-
-The COUNT argument inserts the COUNT-th previous kill.
-If COUNT is negative, this is a more recent kill."
-  :repeat nil
-  :suppress-operator t
-  (interactive (list (prefix-numeric-value current-prefix-arg)
-                     (not evil-repeat-move-cursor)))
-  (cond
-   ((not (and (eq last-command #'evil-repeat)
-              evil-last-repeat))
-    (user-error "Previous command was not evil-repeat: %s" last-command))
-   (save-point
-    (save-excursion
-      (evil-repeat-pop count)))
-   (t
-    (unless (eq buffer-undo-list (nth 2 evil-last-repeat))
-      (evil-undo-pop))
-    (goto-char (car evil-last-repeat))
-    ;; rotate the repeat-ring
-    (while (> count 0)
-      (when evil-repeat-ring
-        (ring-insert-at-beginning evil-repeat-ring
-                                  (ring-remove evil-repeat-ring 0)))
-      (setq count (1- count)))
-    (while (< count 0)
-      (when evil-repeat-ring
-        (ring-insert evil-repeat-ring
-                     (ring-remove evil-repeat-ring)))
-      (setq count (1+ count)))
-    (setq this-command #'evil-repeat)
-    (evil-repeat (cadr evil-last-repeat)))))
-
-(evil-define-command evil-repeat-pop-next (count &optional save-point)
-  "Same as `evil-repeat-pop', but with negative COUNT."
-  :repeat nil
-  :suppress-operator t
-  (interactive (list (prefix-numeric-value current-prefix-arg)
-                     (not evil-repeat-move-cursor)))
-  (evil-repeat-pop (- count) save-point))
+      (evil-normal-state)))))
 
 (defadvice read-key-sequence (before evil activate)
   "Record `this-command-keys' before it is reset."
