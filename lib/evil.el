@@ -77,7 +77,6 @@
 (require 'evil-repeat)
 (require 'evil-macros)
 (require 'evil-search)
-(require 'evil-ex)
 (require 'evil-types)
 (require 'evil-commands)
 (require 'evil-jumps)

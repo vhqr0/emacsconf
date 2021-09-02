@@ -26,7 +26,6 @@
 
 (require 'evil-common)
 (require 'evil-search)
-(require 'evil-ex)
 (require 'evil-types)
 (require 'evil-jumps)
 (require 'evil-vars)
@@ -1785,9 +1784,6 @@ The return value is the yanked text."
                                  (car-safe (get-text-property
                                             0 'yank-handler text)))))
              (opoint (point)))
-        (when evil-paste-clear-minibuffer-first
-          (delete-minibuffer-contents)
-          (setq evil-paste-clear-minibuffer-first nil))
         (when text
           (if (functionp yank-handler)
               (let ((evil-paste-count count)
@@ -2009,10 +2005,6 @@ when called interactively."
                        0) 1)
            register (or evil-this-register (read-char)))
      (cond
-      ((or (and (eq register ?@) (eq evil-last-register ?:))
-           (eq register ?:))
-       (setq macro (lambda () (evil-ex-repeat nil))
-             evil-last-register ?:))
       ((eq register ?@)
        (unless evil-last-register
          (user-error "No previously executed keyboard macro."))

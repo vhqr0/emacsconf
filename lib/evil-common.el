@@ -2076,31 +2076,6 @@ The following special registers are supported.
                 (when text
                   (remove-text-properties 0 (length text) '(foreign-selection nil) text))
                 text))
-             ((eq register ?\C-W)
-              (unless (evil-ex-p)
-                (user-error "Register <C-w> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'evil-word)))
-             ((eq register ?\C-A)
-              (unless (evil-ex-p)
-                (user-error "Register <C-a> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'evil-WORD)))
-             ((eq register ?\C-O)
-              (unless (evil-ex-p)
-                (user-error "Register <C-o> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'evil-symbol)))
-             ((eq register ?\C-F)
-              (unless (evil-ex-p)
-                (user-error "Register <C-f> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'filename)))
-             ((eq register ?%)
-              (or (buffer-file-name (and (evil-ex-p)
-                                         (minibufferp)
-                                         evil-ex-current-buffer))
-                  (user-error "No file name")))
              ((= register ?#)
               (or (with-current-buffer (other-buffer) (buffer-file-name))
                   (user-error "No file name")))
@@ -2116,22 +2091,6 @@ The following special registers are supported.
               evil-last-insertion)
              ((eq register ?-)
               evil-last-small-deletion)
-             ((eq register ?=)
-              (let ((enable-recursive-minibuffers t))
-                (setq evil-last-=-register-input
-                      (minibuffer-with-setup-hook
-                          (lambda () (when evil-last-=-register-input
-                                       (add-hook 'pre-command-hook #'evil-ex-remove-default)))
-                        (read-from-minibuffer
-                         "="
-                         (and evil-last-=-register-input
-                              (propertize evil-last-=-register-input 'face 'shadow))
-                         evil-eval-map
-                         nil
-                         'evil-eval-history
-                         evil-last-=-register-input
-                         t)))
-                (evil--eval-expr evil-last-=-register-input)))
              ((eq register ?_) ; the black hole register
               "")
              (t

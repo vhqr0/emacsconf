@@ -27,7 +27,6 @@
 
 (require 'evil-core)
 (require 'evil-common)
-(require 'evil-ex)
 
 ;;; Code:
 

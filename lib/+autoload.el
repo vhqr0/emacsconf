@@ -187,13 +187,6 @@ Start Eglot session for current buffer if there isn't one." nil nil)
 
 ;;;***
 
-;;;### (autoloads nil "evil-ex" "evil-ex.el" (0 0 0 0))
-;;; Generated autoloads from evil-ex.el
-
-(register-definition-prefixes "evil-ex" '("evil-"))
-
-;;;***
-
 ;;;### (autoloads nil "evil-jumps" "evil-jumps.el" (0 0 0 0))
 ;;; Generated autoloads from evil-jumps.el
 

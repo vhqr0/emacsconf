@@ -574,9 +574,6 @@ RETURN-TYPE is non-nil."
     (setq evil-this-type-modified nil)
     (evil-save-echo-area
       (cond
-       ;; Ex mode
-       ((and evil-ex-p evil-ex-range)
-        (setq range evil-ex-range))
        ;; Visual selection
        ((and (not evil-ex-p) (evil-visual-state-p))
         (setq range (evil-visual-range)))

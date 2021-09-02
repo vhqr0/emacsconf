@@ -218,12 +218,16 @@
           (project-vc-dir "vc-dir")
           (project-shell "shell"))))
 
-(defun rg ()
-  (interactive)
+(defun rg (arg)
+  (interactive "P")
   (require 'grep)
   (grep--save-buffers)
   (compilation-start
-   (read-shell-command "command: " "rg --no-heading " 'grep-history)
+   (read-shell-command "command: "
+                       (if arg
+                           "rg --no-heading "
+                         (concat "rg --no-heading -w " (thing-at-point 'symbol)))
+                       'grep-history)
    'grep-mode))
 
 (setq wgrep-auto-save-buffer t

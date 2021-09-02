@@ -1534,9 +1534,6 @@ would ignore `:close-all' actions and invoke the provided functions on
   "Keymap for Ex.
 Key sequences bound in this map are immediately executed.")
 
-(defvar evil-ex-completion-map (make-sparse-keymap)
-  "Completion keymap for Ex.")
-
 (defvar evil-ex-initial-input nil
   "Additional initial content of the ex command line.
 This content of this variable is appended to the ex command line
@@ -1547,9 +1544,6 @@ if ex is started interactively.")
 
 (defvar evil-ex-history nil
   "History of Ex commands.")
-
-(defvar evil-ex-current-buffer nil
-  "The buffer from which Ex was started.")
 
 (defvar evil-ex-expression nil
   "The evaluation tree.")
@@ -1568,9 +1562,6 @@ if ex is started interactively.")
 
 (defvar evil-ex-point nil
   "The position of `point' when the ex command has been called.")
-
-(defvar evil-ex-range nil
-  "The current range of the Ex command.")
 
 (defvar evil-ex-bang nil
   "The \"!\" argument of the current Ex command.")
@@ -1637,11 +1628,6 @@ if ex is started interactively.")
 (defvar evil-ex-last-was-search nil
   "Non-nil if the previous was a search.
 Otherwise the previous command is assumed as substitute.")
-
-(defvar evil-ex-search-keymap (make-sparse-keymap)
-  "Keymap used in ex-search-mode.")
-(define-key evil-ex-search-keymap [escape] 'abort-recursive-edit)
-(set-keymap-parent evil-ex-search-keymap minibuffer-local-map)
 
 (defconst evil-version
   (eval-when-compile
