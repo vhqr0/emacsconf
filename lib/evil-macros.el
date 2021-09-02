@@ -589,7 +589,7 @@ RETURN-TYPE is non-nil."
               (setq keys (listify-key-sequence keys))
               (dotimes (var (length keys))
                 (define-key evil-operator-shortcut-map
-                  (vconcat (nthcdr var keys)) 'evil-line-or-visual-line)))
+                  (vconcat (nthcdr var keys)) 'evil-line)))
             ;; read motion from keyboard
             (setq command (evil-read-motion motion)
                   motion (nth 0 command)

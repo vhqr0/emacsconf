@@ -954,14 +954,6 @@ See also `evil-save-goal-column'."
        ,@body
        (move-to-column col))))
 
-(defun evil-narrow (beg end)
-  "Restrict the buffer to BEG and END.
-BEG or END may be nil, specifying a one-sided restriction including
-`point-min' or `point-max'. See also `evil-with-restriction.'"
-  (setq beg (or (evil-normalize-position beg) (point-min)))
-  (setq end (or (evil-normalize-position end) (point-max)))
-  (narrow-to-region beg end))
-
 (defmacro evil-with-restriction (beg end &rest body)
   "Execute BODY with the buffer narrowed to BEG and END.
 BEG or END may be nil as passed to `evil-narrow'; this creates
@@ -970,8 +962,12 @@ a one-sided restriction."
            (debug t))
   `(save-restriction
      (let ((evil-restriction-stack
-            (cons (cons (point-min) (point-max)) evil-restriction-stack)))
-       (evil-narrow ,beg ,end)
+            (cons (cons (point-min) (point-max)) evil-restriction-stack))
+           (beg ,beg)
+           (end ,end))
+       (setq beg (or (evil-normalize-position beg) (point-min))
+             end (or (evil-normalize-position end) (point-max)))
+       (narrow-to-region beg end)
        ,@body)))
 
 (defmacro evil-without-restriction (&rest body)

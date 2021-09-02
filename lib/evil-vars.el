@@ -407,29 +407,9 @@ replicates the default Vim behavior."
   :type 'boolean
   :group 'evil)
 
-(defcustom evil-want-Y-yank-to-eol nil
-  "Whether `Y' yanks to the end of the line.
-The default behavior is to yank the whole line, like Vim."
-  :group 'evil
-  :type 'boolean
-  :initialize #'evil-custom-initialize-pending-reset
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (evil-add-command-properties
-            'evil-yank-line
-            :motion (if value
-                        'evil-end-of-line-or-visual-line
-                      'evil-line-or-visual-line))))
-
 (defcustom evil-echo-state t
   "Whether to signal the current state in the echo area."
   :type 'boolean
-  :group 'evil)
-
-(defcustom evil-lookup-func #'woman
-  "Lookup function used by \
-\"\\<evil-motion-state-map>\\[evil-lookup]\"."
-  :type 'function
   :group 'evil)
 
 (defcustom evil-default-state 'normal
@@ -1286,108 +1266,6 @@ Elements have the form (NAME . FUNCTION).")
 (declare-function origami-open-node "ext:origami.el")
 (declare-function origami-open-node-recursively "ext:origami.el")
 (declare-function origami-close-node "ext:origami.el")
-
-(defvar evil-fold-list
-  `(((vdiff-mode)
-     :open-all   vdiff-open-all-folds
-     :close-all  vdiff-close-all-folds
-     :toggle     ,(lambda () (call-interactively 'vdiff-toggle-fold))
-     :open       ,(lambda () (call-interactively 'vdiff-open-fold))
-     :open-rec   ,(lambda () (call-interactively 'vdiff-open-fold))
-     :close      ,(lambda () (call-interactively 'vdiff-close-fold)))
-    ((vdiff-3way-mode)
-     :open-all   vdiff-open-all-folds
-     :close-all  vdiff-close-all-folds
-     :toggle     ,(lambda () (call-interactively 'vdiff-toggle-fold))
-     :open       ,(lambda () (call-interactively 'vdiff-open-fold))
-     :open-rec   ,(lambda () (call-interactively 'vdiff-open-fold))
-     :close      ,(lambda () (call-interactively 'vdiff-close-fold)))
-    ((hs-minor-mode)
-     :open-all   hs-show-all
-     :close-all  hs-hide-all
-     :toggle     hs-toggle-hiding
-     :open       hs-show-block
-     :open-rec   nil
-     :close      hs-hide-block)
-    ((hide-ifdef-mode)
-     :open-all   show-ifdefs
-     :close-all  hide-ifdefs
-     :toggle     nil
-     :open       show-ifdef-block
-     :open-rec   nil
-     :close      hide-ifdef-block)
-    ((outline-mode
-      outline-minor-mode
-      org-mode
-      markdown-mode)
-     :open-all   show-all
-     :close-all  ,(lambda ()
-                    (with-no-warnings (hide-sublevels 1)))
-     :toggle     outline-toggle-children
-     :open       ,(lambda ()
-                    (with-no-warnings
-                      (show-entry)
-                      (show-children)))
-     :open-rec   show-subtree
-     :close      hide-subtree)
-    ((origami-mode)
-     :open-all   ,(lambda () (origami-open-all-nodes (current-buffer)))
-     :close-all  ,(lambda () (origami-close-all-nodes (current-buffer)))
-     :toggle     ,(lambda () (origami-toggle-node (current-buffer) (point)))
-     :open       ,(lambda () (origami-open-node (current-buffer) (point)))
-     :open-rec   ,(lambda () (origami-open-node-recursively (current-buffer) (point)))
-     :close      ,(lambda () (origami-close-node (current-buffer) (point)))))
-  "Actions to be performed for various folding operations.
-
-The value should be a list of fold handlers, were a fold handler has
-the format:
-
-  ((MODES) PROPERTIES)
-
-MODES acts as a predicate, containing the symbols of all major or
-minor modes for which the handler should match.  For example:
-
-  '((outline-minor-mode org-mode) ...)
-
-would match for either outline-minor-mode or org-mode, even though the
-former is a minor mode and the latter is a major.
-
-PROPERTIES specifies possible folding actions and the functions to be
-applied in the event of a match on one (or more) of the MODES; the
-supported properties are:
-
-  - `:open-all'
-    Open all folds.
-  - `:close-all'
-    Close all folds.
-  - `:toggle'
-    Toggle the display of the fold at point.
-  - `:open'
-    Open the fold at point.
-  - `:open-rec'
-    Open the fold at point recursively.
-  - `:close'
-    Close the fold at point.
-
-Each value must be a function.  A value of `nil' will cause the action
-to be ignored for that respective handler.  For example:
-
-  `((org-mode)
-     :close-all  nil
-     :open       ,(lambda ()
-                    (show-entry)
-                    (show-children))
-     :close      hide-subtree)
-
-would ignore `:close-all' actions and invoke the provided functions on
-`:open' or `:close'.")
-
-;; Eval
-(defvar evil-eval-history nil
-  "History of eval input, from the `=' register.")
-
-(defvar evil-eval-map (make-sparse-keymap)
-  "Keymap for eval input.")
 
 (defconst evil-version
   (eval-when-compile

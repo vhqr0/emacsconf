@@ -193,9 +193,9 @@ This is a cons cell (LEFT . RIGHT), both strings."
 This overlay includes the delimiters.
 See also `evil-surround-inner-overlay'."
   (let ((outer (lookup-key
-                 (make-composed-keymap
-                   evil-surround-local-outer-text-object-map-list
-                   evil-outer-text-objects-map) (string char))))
+                (make-composed-keymap
+                 evil-surround-local-outer-text-object-map-list
+                 evil-outer-text-objects-map) (string char))))
     (when (functionp outer)
       (setq outer (funcall outer))
       (when (evil-range-p outer)
@@ -221,9 +221,9 @@ See also `evil-surround-inner-overlay'."
 This overlay excludes the delimiters.
 See also `evil-surround-outer-overlay'."
   (let ((inner (lookup-key
-                 (make-composed-keymap
-                   evil-surround-local-inner-text-object-map-list
-                   evil-inner-text-objects-map) (string char))))
+                (make-composed-keymap
+                 evil-surround-local-inner-text-object-map-list
+                 evil-inner-text-objects-map) (string char))))
     (when (functionp inner)
       (setq inner (funcall inner))
       (when (evil-range-p inner)
@@ -378,7 +378,7 @@ Becomes this:
 
   (interactive (evil-surround-input-region-char))
   (if evil-this-motion-count
-    (evil-repeat-record (int-to-string evil-this-motion-count)))
+      (evil-repeat-record (int-to-string evil-this-motion-count)))
 
   (when (evil-surround-valid-char-p char)
     (let* ((overlay (make-overlay beg end nil nil t))
@@ -391,33 +391,6 @@ Becomes this:
             (goto-char beg-pos)
             (cond ((eq type 'block)
                    (evil-surround-block beg end char))
-
-				  ((and (eq type 'screen-line) evil-respect-visual-line-mode)
-                   (setq force-new-line
-                         (or force-new-line
-                             ;; Force newline if not invoked from an operator, e.g. visual line mode with VS)
-                             (evil-visual-state-p)
-                             ;; Or on multi-line operator surrounds (like 'ysj]')
-                             (/= (line-number-at-pos) (line-number-at-pos (1- end)))))
-
-                   (beginning-of-visual-line)
-				   (skip-syntax-forward " " (save-excursion (evil-end-of-visual-line) (point)))
-				   (backward-prefix-chars)
-                   (setq beg-pos (point))
-                   (insert open)
-                   (when force-new-line (newline-and-indent))
-                   (evil-end-of-visual-line)
-                   (if force-new-line
-                       (when (eobp)
-                         (newline-and-indent))
-                     (backward-char)
-                     (evil-end-of-visual-line)
-				     (skip-syntax-backward " " (save-excursion (evil-beginning-of-visual-line) (point))))
-                   (insert close)
-                   (when (or force-new-line
-                             (/= (line-number-at-pos) (line-number-at-pos beg-pos)))
-                     (indent-region beg-pos (point))
-                     (newline-and-indent)))
 
                   ((eq type 'line)
                    (setq force-new-line
@@ -436,7 +409,7 @@ Becomes this:
                        (when (eobp)
                          (newline-and-indent))
                      (backward-char)
-                     (evil-last-non-blank)
+                     (evil-end-of-line)
                      (forward-char))
                    (insert close)
                    (when (or force-new-line
