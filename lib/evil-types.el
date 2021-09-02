@@ -350,12 +350,6 @@ If visual state is inactive then those values are nil."
   (when (evil-ex-p)
     (evil-delimited-arguments evil-ex-argument)))
 
-(evil-define-interactive-code "<s/>"
-  "Ex substitution argument."
-  :ex-arg substitution
-  (when (evil-ex-p)
-    (evil-ex-get-substitute-info evil-ex-argument t)))
-
 (evil-define-interactive-code "<xc/>"
   "Ex register and count argument, both optional.
 Can be used for commands such as :delete [REGISTER] [COUNT] where the

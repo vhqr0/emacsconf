@@ -573,42 +573,7 @@ keywords and function:
         ',arg-type
         '(,runner ,completer)))))
 
-(evil-ex-define-argument-type file
-  "Handles a file argument."
-  :collection read-file-name-internal)
-
-(evil-ex-define-argument-type buffer
-  "Called to complete a buffer name argument."
-  :collection internal-complete-buffer)
-
 (declare-function shell-completion-vars "shell" ())
-
-(defun evil-ex-init-shell-argument-completion (flag &optional arg)
-  "Prepares the current minibuffer for completion of shell commands.
-This function must be called from the :runner function of some
-argument handler that requires shell completion."
-  (when (and (eq flag 'start)
-             (not evil-ex-shell-argument-initialized))
-    (set (make-local-variable 'evil-ex-shell-argument-initialized) t)
-    (cond
-     ;; Emacs 24
-     ((fboundp 'comint-completion-at-point)
-      (shell-completion-vars))
-     (t
-      (set (make-local-variable 'minibuffer-default-add-function)
-           'minibuffer-default-add-shell-commands)))
-    (setq completion-at-point-functions
-          '(evil-ex-command-completion-at-point
-            evil-ex-argument-completion-at-point))))
-
-(define-obsolete-function-alias
-  'evil-ex-shell-command-completion-at-point
-  'comint-completion-at-point "1.2.13")
-
-(evil-ex-define-argument-type shell
-  "Shell argument type, supports completion."
-  :completion-at-point comint-completion-at-point
-  :runner evil-ex-init-shell-argument-completion)
 
 (defun evil-ex-file-or-shell-command-completion-at-point ()
   (if (and (< (point-min) (point-max))
@@ -617,14 +582,6 @@ argument handler that requires shell completion."
         (narrow-to-region (1+ (point-min)) (point-max))
         (comint-completion-at-point))
     (list (point-min) (point-max) #'read-file-name-internal)))
-
-(evil-ex-define-argument-type file-or-shell
-  "File or shell argument type.
-If the current argument starts with a ! the rest of the argument
-is considered a shell command, otherwise a file-name. Completion
-works accordingly."
-  :completion-at-point evil-ex-file-or-shell-command-completion-at-point
-  :runner evil-ex-init-shell-argument-completion)
 
 (defun evil-ex-binding (command &optional noerror)
   "Returns the final binding of COMMAND."

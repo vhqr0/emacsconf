@@ -337,9 +337,7 @@
 (evil-ex-define-cmd "on[ly]" 'delete-other-windows)
 (evil-ex-define-cmd "wqa[ll]" 'evil-save-and-quit)
 (evil-ex-define-cmd "xa[ll]" "wqall")
-(evil-ex-define-cmd "s[ubstitute]" 'evil-ex-substitute)
 (evil-ex-define-cmd "ju[mps]" 'evil-show-jumps)
-(evil-ex-define-cmd "noh[lsearch]" 'evil-ex-nohighlight)
 (evil-ex-define-cmd "<" 'evil-shift-left)
 (evil-ex-define-cmd ">" 'evil-shift-right)
 (evil-ex-define-cmd "=" 'evil-ex-line-number)
@@ -349,7 +347,6 @@
 (evil-ex-define-cmd "cr[ewind]" 'first-error)
 (evil-ex-define-cmd "cn[ext]" 'next-error)
 (evil-ex-define-cmd "cp[revious]" 'previous-error)
-(evil-ex-define-cmd "set-initial-state" 'evil-ex-set-initial-state)
 (evil-ex-define-cmd "u[ndo]" 'evil-undo)
 (evil-ex-define-cmd "red[o]" 'evil-redo)
 
