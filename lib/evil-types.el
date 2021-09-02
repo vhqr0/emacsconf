@@ -337,11 +337,6 @@ If visual state is inactive then those values are nil."
   "Current yank-handler."
   (list (evil-yank-handler)))
 
-(evil-define-interactive-code "<a>"
-  "Ex argument."
-  :ex-arg t
-  (list (when (evil-ex-p) evil-ex-argument)))
-
 (evil-define-interactive-code "<N>" (prompt)
   "Prefix argument, ex-arg or minibuffer input, converted to number"
   (list (cond
@@ -350,57 +345,10 @@ If visual state is inactive then those values are nil."
          ((evil-ex-p) nil)
          (t (string-to-number (read-string prompt))))))
 
-(evil-define-interactive-code "<f>"
-  "Ex file argument."
-  :ex-arg file
-  (list (when (evil-ex-p) (evil-ex-file-arg))))
-
-(evil-define-interactive-code "<b>"
-  "Ex buffer argument."
-  :ex-arg buffer
-  (list (when (evil-ex-p) evil-ex-argument)))
-
-(evil-define-interactive-code "<sh>"
-  "Ex shell command argument."
-  :ex-arg shell
-  (list (when (evil-ex-p) evil-ex-argument)))
-
-(evil-define-interactive-code "<fsh>"
-  "Ex file or shell command argument."
-  :ex-arg file-or-shell
-  (list (when (evil-ex-p) evil-ex-argument)))
-
-(evil-define-interactive-code "<sym>"
-  "Ex symbolic argument."
-  :ex-arg sym
-  (list (when (and (evil-ex-p) evil-ex-argument)
-          (intern evil-ex-argument))))
-
-(evil-define-interactive-code "<addr>"
-  "Ex line number."
-  (list
-   (and (evil-ex-p)
-        (let ((expr (evil-ex-parse evil-ex-argument)))
-          (if (eq (car expr) 'evil-goto-line)
-              (save-excursion
-                (goto-char evil-ex-point)
-                (eval (cadr expr)))
-            (user-error "Invalid address"))))))
-
-(evil-define-interactive-code "<!>"
-  "Ex bang argument."
-  :ex-bang t
-  (list (when (evil-ex-p) evil-ex-bang)))
-
 (evil-define-interactive-code "</>"
   "Ex delimited argument."
   (when (evil-ex-p)
     (evil-delimited-arguments evil-ex-argument)))
-
-(evil-define-interactive-code "<g/>"
-  "Ex global argument."
-  (when (evil-ex-p)
-    (evil-ex-parse-global evil-ex-argument)))
 
 (evil-define-interactive-code "<s/>"
   "Ex substitution argument."

@@ -2106,10 +2106,7 @@ The following special registers are supported.
                   (user-error "No file name")))
              ((eq register ?/)
               (or (car-safe
-                   (or (and (boundp 'evil-search-module)
-                            (eq evil-search-module 'evil-search)
-                            evil-ex-search-history)
-                       (and isearch-regexp regexp-search-ring)
+                   (or (and isearch-regexp regexp-search-ring)
                        search-ring))
                   (user-error "No previous regular expression")))
              ((eq register ?:)

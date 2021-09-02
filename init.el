@@ -55,10 +55,17 @@
 (selectrum-mode 1)
 
 
-(setq evil-search-module 'evil-search)
-
 (evil-mode 1)
 (global-evil-surround-mode 1)
+
+(defun +evil-ex (arg)
+  (interactive "P")
+  (let ((completing-read-function 'completing-read-default))
+    (execute-extended-command arg)))
+
+(evil-global-set-key 'normal ":" '+evil-ex)
+
+(defalias 'w 'save-buffer)
 
 (global-set-key (kbd "M-z") [escape])
 
