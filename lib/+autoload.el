@@ -298,13 +298,6 @@ See `evil-surround-mode' for more information on Evil-Surround mode.
 
 ;;;***
 
-;;;### (autoloads nil "evil-types" "evil-types.el" (0 0 0 0))
-;;; Generated autoloads from evil-types.el
-
-(register-definition-prefixes "evil-types" '("evil-ex-get-optional-register-and-count"))
-
-;;;***
-
 ;;;### (autoloads nil "evil-vars" "evil-vars.el" (0 0 0 0))
 ;;; Generated autoloads from evil-vars.el
 
@@ -550,8 +543,8 @@ Setup wgrep preparation." nil nil)
 
 ;;;***
 
-;;;### (autoloads nil nil ("evil-integration.el" "evil-maps.el" "evil.el")
-;;;;;;  (0 0 0 0))
+;;;### (autoloads nil nil ("evil-integration.el" "evil-maps.el" "evil-types.el"
+;;;;;;  "evil.el") (0 0 0 0))
 
 ;;;***
 

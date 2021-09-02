@@ -31,8 +31,6 @@
 
 ;;; Code:
 
-(declare-function evil-ex-p "evil-ex")
-
 ;; set some error codes
 (put 'beginning-of-line 'error-conditions '(beginning-of-line error))
 (put 'beginning-of-line 'error-message "Beginning of line")
@@ -565,9 +563,7 @@ Optional keyword arguments are:
   "Read a motion from the keyboard and return its buffer positions.
 The return value is a list (BEG END), or (BEG END TYPE) if
 RETURN-TYPE is non-nil."
-  (let* ((evil-ex-p (and (not (minibufferp)) (evil-ex-p)))
-         (motion (or evil-operator-range-motion
-                     (when evil-ex-p 'evil-line)))
+  (let* ((motion evil-operator-range-motion)
          (type evil-operator-range-type)
          (range (evil-range (point) (point)))
          command count)
@@ -575,10 +571,10 @@ RETURN-TYPE is non-nil."
     (evil-save-echo-area
       (cond
        ;; Visual selection
-       ((and (not evil-ex-p) (evil-visual-state-p))
+       ((evil-visual-state-p)
         (setq range (evil-visual-range)))
        ;; active region
-       ((and (not evil-ex-p) (region-active-p))
+       ((region-active-p)
         (setq range (evil-range (region-beginning)
                                 (region-end)
                                 (or evil-this-type 'exclusive))))

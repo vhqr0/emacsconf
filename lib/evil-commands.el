@@ -1415,65 +1415,6 @@ be joined with the previous line if and only if
       (call-interactively 'delete-backward-char)
     (user-error "Beginning of line")))
 
-(evil-define-command evil-delete-backward-word ()
-  "Delete previous word."
-  (if (and (bolp) (not (bobp)))
-      (progn
-        (unless evil-backspace-join-lines (user-error "Beginning of line"))
-        (delete-char -1))
-    (delete-region (max
-                    (save-excursion
-                      (evil-backward-word-begin)
-                      (point))
-                    (line-beginning-position))
-                   (point))))
-
-(evil-define-command evil-delete-back-to-indentation ()
-  "Delete back to the first non-whitespace character.
-If point is before the first non-whitespace character of a
-current line then delete from the point to the beginning of the
-current line.  If point is on the beginning of the line, behave
-according to `evil-backspace-join-lines'."
-  (if (bolp)
-      (evil-delete-backward-char-and-join 1)
-    (delete-region (if (<= (current-column) (current-indentation))
-                       (line-beginning-position)
-                     (save-excursion
-                       (evil-first-non-blank)
-                       (point)))
-                   (point))))
-
-(defun evil-ex-delete-or-yank (should-delete beg end type register count yank-handler)
-  "Execute evil-delete or evil-yank on the given region.
-If SHOULD-DELETE is t, evil-delete will be executed, otherwise
-evil-yank.
-The region specified by BEG and END will be adjusted if COUNT is
-given."
-  (when count
-    ;; with COUNT, the command should go the end of the region and delete/yank
-    ;; COUNT lines from there
-    (setq beg (save-excursion
-                (goto-char end)
-                (forward-line -1)
-                (point))
-          end (save-excursion
-                (goto-char end)
-                (point-at-bol count))
-          type 'line))
-  (funcall (if should-delete 'evil-delete 'evil-yank) beg end type register yank-handler))
-
-(evil-define-operator evil-ex-delete (beg end type register count yank-handler)
-  "The Ex delete command.
-\[BEG,END]delete [REGISTER] [COUNT]"
-  (interactive "<R><xc/><y>")
-  (evil-ex-delete-or-yank t beg end type register count yank-handler))
-
-(evil-define-operator evil-ex-yank (beg end type register count yank-handler)
-  "The Ex yank command.
-\[BEG,END]yank [REGISTER] [COUNT]"
-  (interactive "<R><xc/><y>")
-  (evil-ex-delete-or-yank nil beg end type register count yank-handler))
-
 (evil-define-operator evil-change
   (beg end type register yank-handler delete-func)
   "Change text from BEG to END with TYPE.
@@ -2719,13 +2660,6 @@ Default position is the beginning of the buffer."
   (let ((position (evil-normalize-position
                    (or position (point-min)))))
     (goto-char position)))
-
-(evil-define-operator evil-ex-line-number (beg end)
-  "Print the last line number."
-  :motion mark-whole-buffer
-  :move-point nil
-  (interactive "<r>")
-  (message "%d" (count-lines (point-min) end)))
 
 ;;; Window navigation
 
