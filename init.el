@@ -50,6 +50,9 @@
 (define-key undo-repeat-map (kbd "U") 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
+(global-set-key (kbd "M-j") 'avy-goto-char-timer)
+(define-key isearch-mode-map (kbd "M-j") 'avy-isearch)
+
 
 (setq selectrum-refine-candidates-function #'orderless-filter
       selectrum-highlight-candidates-function #'orderless-highlight-matches)
