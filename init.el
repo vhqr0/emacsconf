@@ -75,7 +75,10 @@
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
-(setq company-backends '(company-files company-dabbrev))
+(setq company-idle-delay 0
+      company-echo-delay 0
+      company-minimum-prefix-length 2
+      company-backends '(company-files company-dabbrev))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
