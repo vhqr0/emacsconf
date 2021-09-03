@@ -165,146 +165,6 @@ Start Eglot session for current buffer if there isn't one." nil nil)
 
 ;;;***
 
-;;;### (autoloads nil "evil-commands" "evil-commands.el" (0 0 0 0))
-;;; Generated autoloads from evil-commands.el
-
-(register-definition-prefixes "evil-commands" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-common" "evil-common.el" (0 0 0 0))
-;;; Generated autoloads from evil-common.el
-
-(register-definition-prefixes "evil-common" '("bounds-of-evil-" "evil-" "forward-evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-core" "evil-core.el" (0 0 0 0))
-;;; Generated autoloads from evil-core.el
- (autoload 'evil-mode "evil" nil t)
-
-(register-definition-prefixes "evil-core" '("evil-" "turn-o"))
-
-;;;***
-
-;;;### (autoloads nil "evil-jumps" "evil-jumps.el" (0 0 0 0))
-;;; Generated autoloads from evil-jumps.el
-
-(register-definition-prefixes "evil-jumps" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-macros" "evil-macros.el" (0 0 0 0))
-;;; Generated autoloads from evil-macros.el
-
-(register-definition-prefixes "evil-macros" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-repeat" "evil-repeat.el" (0 0 0 0))
-;;; Generated autoloads from evil-repeat.el
-
-(register-definition-prefixes "evil-repeat" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-search" "evil-search.el" (0 0 0 0))
-;;; Generated autoloads from evil-search.el
-
-(register-definition-prefixes "evil-search" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-states" "evil-states.el" (0 0 0 0))
-;;; Generated autoloads from evil-states.el
-
-(register-definition-prefixes "evil-states" '("evil-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-surround" "evil-surround.el" (0 0 0 0))
-;;; Generated autoloads from evil-surround.el
-
-(autoload 'evil-surround-delete "evil-surround" "\
-Delete the surrounding delimiters represented by CHAR.
-Alternatively, the text to delete can be represented with
-the overlays OUTER and INNER, where OUTER includes the delimiters
-and INNER excludes them. The intersection (i.e., difference)
-between these overlays is what is deleted.
-
-\(fn CHAR &optional OUTER INNER)" t nil)
-
-(autoload 'evil-surround-change "evil-surround" "\
-Change the surrounding delimiters represented by CHAR.
-Alternatively, the text to delete can be represented with the
-overlays OUTER and INNER, which are passed to `evil-surround-delete'.
-
-\(fn CHAR &optional OUTER INNER)" t nil)
-
-(autoload 'evil-surround-mode "evil-surround" "\
-Buffer-local minor mode to emulate surround.vim.
-
-This is a minor mode.  If called interactively, toggle the
-`Evil-Surround mode' mode.  If the prefix argument is positive,
-enable the mode, and if it is zero or negative, disable the mode.
-
-If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
-the mode if ARG is nil, omitted, or is a positive number.
-Disable the mode if ARG is a negative number.
-
-To check whether the minor mode is enabled in the current buffer,
-evaluate `evil-surround-mode'.
-
-The mode's hook is called both when the mode is enabled and when
-it is disabled.
-
-\(fn &optional ARG)" t nil)
-
-(autoload 'turn-on-evil-surround-mode "evil-surround" "\
-Enable evil-surround-mode in the current buffer." nil nil)
-
-(autoload 'turn-off-evil-surround-mode "evil-surround" "\
-Disable evil-surround-mode in the current buffer." nil nil)
-
-(put 'global-evil-surround-mode 'globalized-minor-mode t)
-
-(defvar global-evil-surround-mode nil "\
-Non-nil if Global Evil-Surround mode is enabled.
-See the `global-evil-surround-mode' command
-for a description of this minor mode.
-Setting this variable directly does not take effect;
-either customize it (see the info node `Easy Customization')
-or call the function `global-evil-surround-mode'.")
-
-(custom-autoload 'global-evil-surround-mode "evil-surround" nil)
-
-(autoload 'global-evil-surround-mode "evil-surround" "\
-Toggle Evil-Surround mode in all buffers.
-With prefix ARG, enable Global Evil-Surround mode if ARG is
-positive; otherwise, disable it.
-
-If called from Lisp, toggle the mode if ARG is `toggle'.
-Enable the mode if ARG is nil, omitted, or is a positive number.
-Disable the mode if ARG is a negative number.
-
-Evil-Surround mode is enabled in all buffers where
-`turn-on-evil-surround-mode' would do it.
-
-See `evil-surround-mode' for more information on Evil-Surround mode.
-
-\(fn &optional ARG)" t nil)
-
-(register-definition-prefixes "evil-surround" '("evil-surround-"))
-
-;;;***
-
-;;;### (autoloads nil "evil-vars" "evil-vars.el" (0 0 0 0))
-;;; Generated autoloads from evil-vars.el
-
-(register-definition-prefixes "evil-vars" '("evil-"))
-
-;;;***
-
 ;;;### (autoloads nil "htmlize" "htmlize.el" (0 0 0 0))
 ;;; Generated autoloads from htmlize.el
 
@@ -540,11 +400,6 @@ Setup wgrep preparation." nil nil)
 (add-hook 'grep-setup-hook 'wgrep-setup)
 
 (register-definition-prefixes "wgrep" '("wgrep-"))
-
-;;;***
-
-;;;### (autoloads nil nil ("evil-integration.el" "evil-maps.el" "evil-types.el"
-;;;;;;  "evil.el") (0 0 0 0))
 
 ;;;***
 

@@ -42,6 +42,8 @@
 
 (setq disabled-command-function nil)
 
+(setq view-read-only t)
+
 (repeat-mode 1)
 
 (global-set-key (kbd "C-x U") 'undo-redo)
@@ -55,105 +57,7 @@
 (selectrum-mode 1)
 
 
-(evil-mode 1)
-(global-evil-surround-mode 1)
-
-(defun +evil-ex (arg)
-  (interactive "P")
-  (let ((completing-read-function 'completing-read-default))
-    (execute-extended-command arg)))
-
-(evil-global-set-key 'normal ":" '+evil-ex)
-
-(defalias 'w 'save-buffer)
-
-(global-set-key (kbd "M-z") [escape])
-
-(defun +input-method-function (first-char)
-  (if (and (eq first-char ?j)
-           (evil-insert-state-p)
-           (not executing-kbd-macro)
-           (not (sit-for 0.1 'no-redisplay)))
-      (let ((next-char
-             (let (input-method-function)
-               (read-event))))
-        (if (eq next-char ?k)
-            '(escape)
-          (push next-char unread-command-events)
-          '(?j)))
-    `(,first-char)))
-
-(setq input-method-function '+input-method-function)
-
-(evil-define-text-object +evil-textobj-defun (count &optional beg end type)
-  (cl-destructuring-bind (beg . end)
-      (bounds-of-thing-at-point 'defun)
-    (evil-range beg end 'line)))
-
-(evil-define-text-object +evil-textobj-page (count &optional beg end type)
-  (cl-destructuring-bind (beg . end)
-      (bounds-of-thing-at-point 'page)
-    (evil-range beg end 'line)))
-
-(evil-define-text-object +evil-textobj-entire (count &optional beg end type)
-  (evil-range (point-min) (point-max) 'line))
-
-(define-key evil-inner-text-objects-map (kbd "f") '+evil-textobj-defun)
-(define-key evil-outer-text-objects-map (kbd "f") '+evil-textobj-defun)
-(define-key evil-inner-text-objects-map (kbd "l") '+evil-textobj-page)
-(define-key evil-outer-text-objects-map (kbd "l") '+evil-textobj-page)
-(define-key evil-inner-text-objects-map (kbd "h") '+evil-textobj-entire)
-(define-key evil-outer-text-objects-map (kbd "h") '+evil-textobj-entire)
-
-(evil-define-operator +evil-operator-narrow (beg end)
-  :move-point nil
-  (narrow-to-region beg end))
-
-(evil-define-operator +evil-operator-comment (beg end)
-  :move-point nil
-  (comment-or-uncomment-region beg end))
-
-(evil-global-set-key 'motion (kbd "g n") '+evil-operator-narrow)
-(evil-global-set-key 'normal (kbd "g c") '+evil-operator-comment)
-
-(defvar +evil-leader-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "f") 'find-file)
-    (define-key map (kbd "b") 'switch-to-buffer)
-    (define-key map (kbd "k") 'kill-buffer)
-    (define-key map (kbd "s") 'save-buffer)
-    (define-key map (kbd "h") 'previous-buffer)
-    (define-key map (kbd "l") 'next-buffer)
-    (define-key map (kbd "j") 'dired-jump)
-    (define-key map (kbd "i") 'imenu)
-    (define-key map (kbd "o") 'other-window)
-    (define-key map (kbd "0") 'delete-window)
-    (define-key map (kbd "1") 'delete-other-windows)
-    (define-key map (kbd "2") 'split-window-below)
-    (define-key map (kbd "3") 'split-window-right)
-    (define-key map (kbd "4") ctl-x-4-map)
-    (define-key map (kbd "t") tab-prefix-map)
-    (define-key map (kbd "p") project-prefix-map)
-    (define-key map (kbd "v") vc-prefix-map)
-    (define-key map (kbd "n") narrow-map)
-    (define-key map (kbd "r") ctl-x-r-map)
-    (define-key map (kbd "x") ctl-x-x-map)
-    map))
-
-(evil-global-set-key 'motion (kbd "SPC") +evil-leader-map)
-
-
-(evil-define-operator +evil-operator-eval (beg end)
-  :move-point nil
-  (interactive "<r>")
-  (let ((func (assq major-mode
-                    '((emacs-lisp-mode . eval-region)
-                      (lisp-interaction-mode . eval-region)
-                      (python-mode . python-shell-send-region)))))
-    (when func
-      (funcall (cdr func) beg end))))
-
-(evil-define-key 'motion prog-mode-map (kbd "g r") '+evil-operator-eval)
+(global-set-key (kbd "C-x j") 'imenu)
 
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
@@ -202,13 +106,7 @@
     (call-process-shell-command (concat "xdg-open " file))))
 
 (with-eval-after-load 'dired
-  (define-key dired-mode-map (kbd "V") '+dired-do-xdg-open)
-  (evil-make-overriding-map dired-mode-map 'normal)
-  (evil-add-hjkl-bindings dired-mode-map 'normal
-    " " +evil-leader-map
-    "J" 'dired-goto-file
-    "K" 'dired-do-kill-lines
-    "r" 'dired-do-redisplay))
+  (define-key dired-mode-map (kbd "V") '+dired-do-xdg-open))
 
 (with-eval-after-load 'project
   (setq project-switch-commands
@@ -243,15 +141,4 @@
       org-special-ctrl-a/e t)
 
 (with-eval-after-load 'org
-  (define-key org-mode-map (kbd "<") "\C-q<")
-  (define-key org-mode-map (kbd "M-o") 'org-meta-return)
-  (evil-define-key '(normal visual) org-mode-map
-    (kbd "TAB") 'org-cycle
-    (kbd "M-h") 'org-metaleft
-    (kbd "M-l") 'org-metaright
-    (kbd "M-j") 'org-metadown
-    (kbd "M-k") 'org-metaup
-    (kbd "M-H") 'org-shiftmetaright
-    (kbd "M-L") 'org-shiftmetaleft
-    (kbd "M-J") 'org-shiftmetadown
-    (kbd "M-K") 'org-shiftmetaup))
+  (define-key org-mode-map (kbd "<") "\C-q<"))
