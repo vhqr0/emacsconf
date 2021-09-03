@@ -78,8 +78,7 @@ If the end position is at the beginning of a line, then:
                      (looking-back "^[ \f\t\v]*" (line-beginning-position)))
                    (evil-expand beg end 'line))
                   (t
-                   (unless evil-cross-lines
-                     (setq end (max beg (1- end))))
+                   (setq end (max beg (1- end)))
                    (evil-expand beg end 'inclusive))))
                 (t
                  (evil-range beg end))))
@@ -95,14 +94,7 @@ line and `evil-want-visual-char-semi-exclusive', then:
 
 * If in visual state return `exclusive' (expanded)."
   :expand (lambda (beg end)
-            (if (and evil-want-visual-char-semi-exclusive
-                     (evil-visual-state-p)
-                     (< beg end)
-                     (save-excursion
-                       (goto-char end)
-                       (or (bolp) (eolp))))
-                (evil-range beg end 'exclusive)
-              (evil-range beg (1+ end))))
+            (evil-range beg (1+ end)))
   :contract (lambda (beg end)
               (evil-range beg (max beg (1- end))))
   :normalize (lambda (beg end)

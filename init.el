@@ -208,8 +208,7 @@
     " " +evil-leader-map
     "J" 'dired-goto-file
     "K" 'dired-do-kill-lines
-    "r" 'dired-do-redisplay
-    ";" (lookup-key dired-mode-map ":")))
+    "r" 'dired-do-redisplay))
 
 (with-eval-after-load 'project
   (setq project-switch-commands
@@ -218,16 +217,12 @@
           (project-vc-dir "vc-dir")
           (project-shell "shell"))))
 
-(defun rg (arg)
-  (interactive "P")
+(defun rg ()
+  (interactive)
   (require 'grep)
   (grep--save-buffers)
   (compilation-start
-   (read-shell-command "command: "
-                       (if arg
-                           "rg --no-heading "
-                         (concat "rg --no-heading -w " (thing-at-point 'symbol)))
-                       'grep-history)
+   (read-shell-command "command: " "rg --no-heading " 'grep-history)
    'grep-mode))
 
 (setq wgrep-auto-save-buffer t

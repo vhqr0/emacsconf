@@ -127,8 +127,7 @@ commands opening a new line."
     (evil-set-marker ?^ nil t)
     (when (or (evil-normal-state-p evil-next-state)
               (evil-motion-state-p evil-next-state))
-      (evil-move-cursor-back
-       (and (eolp) (not evil-move-beyond-eol)))))))
+      (evil-move-cursor-back)))))
 
 (defun evil-insert-repeat-hook ()
   "Record insertion keys in `evil-insert-repeat-info'."
@@ -143,8 +142,7 @@ Handles the repeat-count of the insertion command."
     (dotimes (_ (1- evil-insert-count))
       (when evil-insert-lines
         (evil-insert-newline-below)
-        (when evil-auto-indent
-          (indent-according-to-mode)))
+        (indent-according-to-mode))
       (when (fboundp 'evil-execute-repeat-info)
         (evil-execute-repeat-info
          (cdr evil-insert-repeat-info)))))

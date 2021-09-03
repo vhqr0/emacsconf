@@ -37,15 +37,6 @@
 This hook can be used the execute some initialization routines
 when Evil is completely loaded.")
 
-(defcustom evil-goto-definition-functions
-  '(evil-goto-definition-imenu
-    evil-goto-definition-semantic
-    evil-goto-definition-xref
-    evil-goto-definition-search)
-  "List of functions run until success by `evil-goto-definition'."
-  :type 'hook
-  :group 'evil)
-
 ;;; Initialization
 
 (defvar evil-pending-custom-initialize nil
@@ -110,41 +101,12 @@ hook."
               (push map newlist))))
         (set-default pending-var newlist)))))
 
-(defun evil-set-visual-newline-commands (var value)
-  "Set the value of `evil-visual-newline-commands'.
-Setting this variable changes the properties of the appropriate
-commands."
-  (with-no-warnings
-    (when (default-boundp var)
-      (dolist (cmd (default-value var))
-        (evil-set-command-property cmd :exclude-newline nil)))
-    (set-default var value)
-    (dolist (cmd (default-value var))
-      (evil-set-command-property cmd :exclude-newline t))))
-
-(defun evil-set-custom-motions (var values)
-  "Sets the list of motion commands."
-  (with-no-warnings
-    (when (default-boundp var)
-      (dolist (motion (default-value var))
-        (evil-add-command-properties motion :keep-visual nil :repeat nil)))
-    (set-default var values)
-    (mapc #'evil-declare-motion (default-value var))))
-
 ;;; Customization group
 
 (defgroup evil nil
   "Extensible vi layer."
   :group 'emulations
   :prefix 'evil-)
-
-(defcustom evil-auto-indent t
-  "\\<evil-normal-state-map>
-Whether to auto-indent when opening lines with \\[evil-open-below] \
-and \\[evil-open-above]."
-  :type  'boolean
-  :group 'evil)
-(make-variable-buffer-local 'evil-auto-indent)
 
 (defcustom evil-shift-width 4
   "\\<evil-normal-state-map>
@@ -183,47 +145,6 @@ cursor, or a list of the above."
 (defvar evil-force-cursor nil
   "Overwrite the current states default cursor.")
 
-(defcustom evil-repeat-move-cursor t
-  "\\<evil-normal-state-map>
-Whether repeating commands with \\[evil-repeat] may move the cursor.
-If nil, the original cursor position is preserved, even if the command
-normally would have moved the cursor."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-cross-lines nil
-  "\\<evil-motion-state-map>
-Whether horizontal motions may move to other lines.  If non-nil,
-certain motions that conventionally operate in a single line may move
-the cursor to other lines.  Otherwise, they are restricted to the
-current line.  This applies to \\[evil-backward-char], \
-\\[evil-forward-char], \\[evil-find-char], \
-\\[evil-find-char-backward], \\[evil-find-char-to], \
-\\[evil-find-char-to-backward], \
-\\<evil-normal-state-map>\\[evil-invert-char]."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-backspace-join-lines t
-  "Whether backward delete in insert state may join lines."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-move-cursor-back t
-  "Whether the cursor is moved backwards when exiting insert state.
-If non-nil, the cursor moves \"backwards\" when exiting insert state,
-so that it ends up on the character to the left.  Otherwise it remains
-in place, on the character to the right."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-move-beyond-eol nil
-  "Whether the cursor can move past the end of the line.
-If non-nil, the cursor is allowed to move one character past the
-end of the line, as in Emacs."
-  :type 'boolean
-  :group 'evil)
-
 (defcustom evil-respect-visual-line-mode nil
   "\\<evil-motion-state-map>
 Whether movement commands respect `visual-line-mode'.
@@ -234,11 +155,6 @@ than \"physical\" lines (defined by newline characters).  If nil,
 the setting of `visual-line-mode' is ignored.
 
 This variable must be set before Evil is loaded."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-repeat-find-to-skip-next t
-  "Whether a repeat of t or T should skip an adjacent character."
   :type 'boolean
   :group 'evil)
 
@@ -261,15 +177,6 @@ possibilities:
                 (const :tag "Record" :value record)
                 (const :tag "Replay" :value replay)
                 (const :tag "Both" :value t))
-  :group 'evil)
-
-(defcustom evil-track-eol t
-  "\\<evil-motion-state-map>
-Whether \\[evil-end-of-line] \"sticks\" the cursor to the end of the line.
-If non-nil, vertical motions after \\[evil-end-of-line] maintain the cursor at the
-end of the line, even if the target line is longer.  This is analogous
-to `track-eol', but respects Evil's interpretation of end-of-line."
-  :type 'boolean
   :group 'evil)
 
 (defcustom evil-mode-line-format 'before
@@ -377,36 +284,6 @@ also happen in graphical Emacs sessions.  Set this variable to
                 (const :tag "Always" :value always))
   :group 'evil)
 
-(defcustom evil-show-paren-range 0
-  "The minimal distance between point and a parenthesis
-which causes the parenthesis to be highlighted."
-  :type 'integer
-  :group 'evil)
-
-(defcustom evil-highlight-closing-paren-at-point-states
-  '(not emacs insert replace)
-  "The states in which the closing parenthesis at point should be highlighted.
-All states listed here highlight the closing parenthesis at
-point (which is Vim's default behavior).  All others highlight the
-parenthesis before point (which is Emacs default behavior). If
-this list contains the symbol `not' then its meaning is inverted,
-i.e. all states listed here highlight the closing parenthesis
-before point."
-  :type '(repeat symbol)
-  :group 'evil)
-
-(defcustom evil-kill-on-visual-paste t
-  "Whether pasting in visual state adds the replaced text to the
-kill ring, making it the default for the next paste. The default,
-replicates the default Vim behavior."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-want-change-word-to-end t
-  "Whether `cw' behaves like `ce'."
-  :type 'boolean
-  :group 'evil)
-
 (defcustom evil-echo-state t
   "Whether to signal the current state in the echo area."
   :type 'boolean
@@ -432,48 +309,13 @@ expression matching the buffer's name and STATE is one of `normal',
   :group 'evil)
 
 (defcustom evil-emacs-state-modes
-  '(5x5-mode
-    archive-mode
-    bbdb-mode
-    biblio-selection-mode
-    blackbox-mode
-    bookmark-bmenu-mode
+  '(bookmark-bmenu-mode
     bookmark-edit-annotation-mode
-    browse-kill-ring-mode
-    bs-mode
-    bubbles-mode
-    bzr-annotate-mode
     calc-mode
-    cfw:calendar-mode
-    completion-list-mode
-    Custom-mode
-    custom-theme-choose-mode
     debugger-mode
-    delicious-search-mode
-    desktop-menu-blist-mode
-    desktop-menu-mode
-    doc-view-mode
-    dun-mode
-    dvc-bookmarks-mode
-    dvc-diff-mode
-    dvc-info-buffer-mode
-    dvc-log-buffer-mode
-    dvc-revlist-mode
-    dvc-revlog-mode
-    dvc-status-mode
-    dvc-tips-mode
     ediff-mode
     ediff-meta-mode
-    efs-mode
-    Electric-buffer-menu-mode
-    emms-browser-mode
-    emms-mark-mode
-    emms-metaplaylist-mode
-    emms-playlist-mode
-    ess-help-mode
     etags-select-mode
-    fj-mode
-    gc-issues-mode
     gdb-breakpoints-mode
     gdb-disassembly-mode
     gdb-frames-mode
@@ -481,126 +323,24 @@ expression matching the buffer's name and STATE is one of `normal',
     gdb-memory-mode
     gdb-registers-mode
     gdb-threads-mode
-    gist-list-mode
-    git-rebase-mode
-    gnus-article-mode
-    gnus-browse-mode
-    gnus-group-mode
-    gnus-server-mode
-    gnus-summary-mode
-    gomoku-mode
-    google-maps-static-mode
-    ibuffer-mode
-    jde-javadoc-checker-report-mode
-    magit-cherry-mode
-    magit-diff-mode
-    magit-log-mode
-    magit-log-select-mode
-    magit-popup-mode
-    magit-popup-sequence-mode
-    magit-process-mode
-    magit-reflog-mode
-    magit-refs-mode
-    magit-revision-mode
-    magit-stash-mode
-    magit-stashes-mode
-    magit-status-mode
-    mh-folder-mode
-    monky-mode
-    mpuz-mode
-    mu4e-main-mode
-    mu4e-headers-mode
-    mu4e-view-mode
-    notmuch-hello-mode
-    notmuch-search-mode
-    notmuch-show-mode
-    notmuch-tree-mode
     occur-mode
-    org-agenda-mode
-    package-menu-mode
-    pdf-outline-buffer-mode
-    pdf-view-mode
     proced-mode
-    rcirc-mode
-    rebase-mode
-    recentf-dialog-mode
-    reftex-select-bib-mode
-    reftex-select-label-mode
-    reftex-toc-mode
-    sldb-mode
-    slime-inspector-mode
-    slime-thread-control-mode
-    slime-xref-mode
-    snake-mode
-    solitaire-mode
-    sr-buttons-mode
-    sr-mode
-    sr-tree-mode
-    sr-virtual-mode
     tar-mode
-    tetris-mode
-    tla-annotate-mode
-    tla-archive-list-mode
-    tla-bconfig-mode
-    tla-bookmarks-mode
-    tla-branch-list-mode
-    tla-browse-mode
-    tla-category-list-mode
-    tla-changelog-mode
-    tla-follow-symlinks-mode
-    tla-inventory-file-mode
-    tla-inventory-mode
-    tla-lint-mode
-    tla-logs-mode
-    tla-revision-list-mode
-    tla-revlog-mode
-    tla-tree-lint-mode
-    tla-version-list-mode
-    twittering-mode
-    urlview-mode
     vc-annotate-mode
     vc-dir-mode
     vc-git-log-view-mode
     vc-hg-log-view-mode
-    vc-svn-log-view-mode
-    vm-mode
-    vm-summary-mode
-    w3m-mode
-    wab-compilation-mode
-    xgit-annotate-mode
-    xgit-changelog-mode
-    xgit-diff-mode
-    xgit-revlog-mode
-    xhg-annotate-mode
-    xhg-log-mode
-    xhg-mode
-    xhg-mq-mode
-    xhg-mq-sub-mode
-    xhg-status-extra-mode)
+    vc-svn-log-view-mode)
   "Modes that should come up in Emacs state."
   :type  '(repeat symbol)
   :group 'evil)
 
 (defcustom evil-insert-state-modes
   '(comint-mode
-    erc-mode
-    eshell-mode
-    geiser-repl-mode
-    gud-mode
-    inferior-apl-mode
-    inferior-caml-mode
     inferior-emacs-lisp-mode
-    inferior-j-mode
     inferior-python-mode
-    inferior-scheme-mode
-    inferior-sml-mode
-    internal-ange-ftp-mode
-    prolog-inferior-mode
-    reb-mode
     shell-mode
-    slime-repl-mode
-    term-mode
-    wdired-mode)
+    term-mode)
   "Modes that should come up in Insert state."
   :type  '(repeat symbol)
   :group 'evil)
@@ -608,17 +348,12 @@ expression matching the buffer's name and STATE is one of `normal',
 (defcustom evil-motion-state-modes
   '(apropos-mode
     Buffer-menu-mode
-    calendar-mode
-    color-theme-mode
-    command-history-mode
     compilation-mode
+    diff-mode
     dictionary-mode
-    ert-results-mode
     help-mode
     Info-mode
     Man-mode
-    speedbar-mode
-    undo-tree-visualizer-mode
     woman-mode)
   "Modes that should come up in Motion state."
   :type  '(repeat symbol)
@@ -666,195 +401,6 @@ intercepted."
                                        'evil-make-intercept-map
                                        values))
   :initialize 'evil-custom-initialize-pending-reset)
-
-(defcustom evil-motions
-  '(back-to-indentation
-    backward-char
-    backward-list
-    backward-paragraph
-    backward-sentence
-    backward-sexp
-    backward-up-list
-    backward-word
-    beginning-of-buffer
-    beginning-of-defun
-    beginning-of-line
-    beginning-of-visual-line
-    c-beginning-of-defun
-    c-end-of-defun
-    diff-file-next
-    diff-file-prev
-    diff-hunk-next
-    diff-hunk-prev
-    down-list
-    end-of-buffer
-    end-of-defun
-    end-of-line
-    end-of-visual-line
-    exchange-point-and-mark
-    forward-char
-    forward-list
-    forward-paragraph
-    forward-sentence
-    forward-sexp
-    forward-word
-    ibuffer-backward-line
-    ibuffer-forward-line
-    isearch-abort
-    isearch-cancel
-    isearch-complete
-    isearch-del-char
-    isearch-delete-char
-    isearch-edit-string
-    isearch-exit
-    isearch-highlight-regexp
-    isearch-occur
-    isearch-other-control-char
-    isearch-other-meta-char
-    isearch-printing-char
-    isearch-query-replace
-    isearch-query-replace-regexp
-    isearch-quote-char
-    isearch-repeat-backward
-    isearch-repeat-forward
-    isearch-ring-advance
-    isearch-ring-retreat
-    isearch-toggle-case-fold
-    isearch-toggle-input-method
-    isearch-toggle-regexp
-    isearch-toggle-specified-input-method
-    isearch-toggle-word
-    isearch-yank-char
-    isearch-yank-kill
-    isearch-yank-line
-    isearch-yank-word-or-char
-    keyboard-quit
-    left-char
-    left-word
-    mouse-drag-region
-    mouse-save-then-kill
-    mouse-set-point
-    mouse-set-region
-    mwheel-scroll
-    move-beginning-of-line
-    move-end-of-line
-    next-error
-    next-line
-    paredit-backward
-    paredit-backward-down
-    paredit-backward-up
-    paredit-forward
-    paredit-forward-down
-    paredit-forward-up
-    pop-global-mark
-    pop-tag-mark
-    pop-to-mark-command
-    previous-error
-    previous-line
-    right-char
-    right-word
-    scroll-down
-    scroll-down-command
-    scroll-up
-    scroll-up-command
-    sgml-skip-tag-backward
-    sgml-skip-tag-forward
-    up-list)
-  "Non-Evil commands to initialize to motions."
-  :type  '(repeat symbol)
-  :group 'evil
-  :set 'evil-set-custom-motions
-  :initialize 'evil-custom-initialize-pending-reset)
-
-(defcustom evil-visual-newline-commands
-  '(LaTeX-section
-    TeX-font)
-  "Commands excluding the trailing newline of a Visual Line selection.
-These commands work better without this newline."
-  :type  '(repeat symbol)
-  :group 'evil
-  :set 'evil-set-visual-newline-commands
-  :initialize 'evil-custom-initialize-pending-reset)
-
-(defcustom evil-want-visual-char-semi-exclusive nil
-  "Visual character selection to beginning/end of line is exclusive.
-If non nil then an inclusive visual character selection which
-ends at the beginning or end of a line is turned into an
-exclusive selection. Thus if the selected (inclusive) range ends
-at the beginning of a line it is changed to not include the first
-character of that line, and if the selected range ends at the end
-of a line it is changed to not include the newline character of
-that line."
-  :type 'boolean
-  :group 'evil)
-
-(defcustom evil-text-object-change-visual-type t
-  "Text objects change the current visual state type.
-If non-nil then a text-object changes the type of the visual state to
-its default selection type (e.g. a word object always changes to
-charwise visual state). Otherwise the current visual state type is
-preserved."
-  :type 'boolean
-  :group 'evil)
-
-(defgroup evil-cjk nil
-  "CJK support"
-  :prefix "evil-cjk-"
-  :group 'evil)
-
-(defcustom evil-cjk-emacs-word-boundary nil
-  "Determine word boundary exactly the same way as Emacs does."
-  :type 'boolean
-  :group 'evil-cjk)
-
-(defcustom evil-cjk-word-separating-categories
-  '(;; Kanji
-    (?C . ?H) (?C . ?K) (?C . ?k) (?C . ?A) (?C . ?G)
-    ;; Hiragana
-    (?H . ?C) (?H . ?K) (?H . ?k) (?H . ?A) (?H . ?G)
-    ;; Katakana
-    (?K . ?C) (?K . ?H) (?K . ?k) (?K . ?A) (?K . ?G)
-    ;; half-width Katakana
-    (?k . ?C) (?k . ?H) (?k . ?K) ; (?k . ?A) (?k . ?G)
-    ;; full-width alphanumeric
-    (?A . ?C) (?A . ?H) (?A . ?K) ; (?A . ?k) (?A . ?G)
-    ;; full-width Greek
-    (?G . ?C) (?G . ?H) (?G . ?K) ; (?G . ?k) (?G . ?A)
-    )
-  "List of pair (cons) of categories to determine word boundary
-used in `evil-cjk-word-boundary-p'. See the documentation of
-`word-separating-categories'. Use `describe-categories' to see
-the list of categories."
-  :type '(alist :key-type (choice character (const nil))
-                :value-type (choice character (const nil)))
-  :group 'evil-cjk)
-
-(defcustom evil-cjk-word-combining-categories
-  '(;; default value in word-combining-categories
-    (nil . ?^) (?^ . nil)
-    ;; Roman
-    (?r . ?k) (?r . ?A) (?r . ?G)
-    ;; half-width Katakana
-    (?k . ?r) (?k . ?A) (?k . ?G)
-    ;; full-width alphanumeric
-    (?A . ?r) (?A . ?k) (?A . ?G)
-    ;; full-width Greek
-    (?G . ?r) (?G . ?k) (?G . ?A)
-    )
-  "List of pair (cons) of categories to determine word boundary
-used in `evil-cjk-word-boundary-p'. See the documentation of
-`word-combining-categories'. Use `describe-categories' to see the
-list of categories."
-  :type '(alist :key-type (choice character (const nil))
-                :value-type (choice character (const nil)))
-  :group 'evil-cjk)
-
-;; Searching
-(defcustom evil-symbol-word-search nil
-  "If nil then * and # search for words otherwise for symbols."
-  :group 'evil
-  :type 'boolean)
-(make-variable-buffer-local 'evil-symbol-word-search)
 
 ;;; Variables
 
@@ -1259,13 +805,6 @@ Elements have the form (NAME . FUNCTION).")
 
 (defvar evil-visual-x-select-timeout 0.1
   "Time in seconds for the update of the X selection.")
-
-(declare-function origami-open-all-nodes "ext:origami.el")
-(declare-function origami-close-all-nodes "ext:origami.el")
-(declare-function origami-toggle-node "ext:origami.el")
-(declare-function origami-open-node "ext:origami.el")
-(declare-function origami-open-node-recursively "ext:origami.el")
-(declare-function origami-close-node "ext:origami.el")
 
 (defconst evil-version
   (eval-when-compile

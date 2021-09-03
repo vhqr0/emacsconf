@@ -177,8 +177,7 @@ upon reaching the beginning or end of the current line.
      (when (save-excursion (goto-char end) (bolp))
        (setq end (max beg (1- end))))
      ;; don't include the newline in Normal state
-     (when (and (not evil-move-beyond-eol)
-                (not (evil-visual-state-p))
+     (when (and (not (evil-visual-state-p))
                 (not (evil-operator-state-p)))
        (setq end (max beg (1- end))))
      (evil-with-restriction beg end
@@ -428,10 +427,7 @@ Optional keyword arguments:
                ;; unless the selection goes the other way
                (setq mark  (evil-range-beginning range)
                      point (evil-range-end range)
-                     type  (evil-type
-                            (if evil-text-object-change-visual-type
-                                range
-                              (evil-visual-range))))
+                     type  (evil-type range))
                (when (and (eq type 'line)
                           (not (eq type (evil-type range))))
                  (let ((newrange (evil-text-object-make-linewise range)))

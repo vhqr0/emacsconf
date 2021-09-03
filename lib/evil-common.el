@@ -1008,27 +1008,26 @@ Like `move-end-of-line', but retains the goal column."
   "Move point one character back if at the end of a non-empty line.
 This behavior is controled by `evil-move-beyond-eol'."
   (when (and (eolp)
-             (not evil-move-beyond-eol)
              (not (bolp))
              (= (point)
                 (save-excursion
                   (evil-move-end-of-line)
                   (point))))
-    (evil-move-cursor-back t)))
+    (evil-move-cursor-back)))
 
-(defun evil-move-cursor-back (&optional force)
+(defun evil-move-cursor-back ()
   "Move point one character back within the current line.
 Contingent on the variable `evil-move-cursor-back' or the FORCE
 argument. Honors field boundaries, i.e., constrains the movement
 to the current field as recognized by `line-beginning-position'."
-  (when (or evil-move-cursor-back force)
-    (unless (or (= (point) (line-beginning-position))
-                (and (boundp 'visual-line-mode)
-                     visual-line-mode
-                     (= (point) (save-excursion
-                                  (beginning-of-visual-line)
-                                  (point)))))
-      (backward-char))))
+  (unless (or (= (point) (line-beginning-position))
+              (and (boundp 'visual-line-mode)
+                   visual-line-mode
+                   (= (point)
+                      (save-excursion
+                        (beginning-of-visual-line)
+                        (point)))))
+    (backward-char)))
 
 (defun evil-line-position (line &optional column)
   "Return the position of LINE.
@@ -1163,7 +1162,6 @@ moved to `point-max' if `evil-move-beyond-eol' is nil and
 the last line in the buffer is not empty."
   (when (or (eobp)
             (and (not (eolp))
-                 (not evil-move-beyond-eol)
                  (save-excursion (forward-char) (eobp))))
     (signal 'end-of-buffer nil)))
 
@@ -1652,9 +1650,7 @@ an empty line matching ^$."
   (evil-forward-nearest
    count
    #'(lambda (&optional cnt)
-       (let ((word-separating-categories evil-cjk-word-separating-categories)
-             (word-combining-categories evil-cjk-word-combining-categories)
-             (pnt (point)))
+       (let ((pnt (point)))
          (forward-word cnt)
          (if (= pnt (point)) cnt 0)))
    #'(lambda (&optional cnt)

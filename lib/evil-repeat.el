@@ -553,34 +553,29 @@ and only if COUNT is non-nil."
      (t
       (evil-execute-repeat-info repeat-info)))))
 
-(evil-define-command evil-repeat (count &optional save-point)
+(evil-define-command evil-repeat (count)
   "Repeat the last editing command with count replaced by COUNT.
 If SAVE-POINT is non-nil, do not move point."
   :repeat ignore
   :suppress-operator t
-  (interactive (list current-prefix-arg
-                     (not evil-repeat-move-cursor)))
-  (cond
-   ((null evil-repeat-ring)
-    (error "Already executing repeat"))
-   (save-point
+  (interactive (list (prefix-numeric-value current-prefix-arg)))
+  (if (null evil-repeat-ring)
+      (error "Already executing repeat")
     (save-excursion
-      (evil-repeat count)))
-   (t
-    (unwind-protect
-        (let ((evil-last-find-temp evil-last-find)
-              (confirm-kill-emacs t)
-              (kill-buffer-hook
-               (cons #'(lambda ()
-                         (user-error "Cannot delete buffer in repeat command"))
-                     kill-buffer-hook))
-              (undo-pointer buffer-undo-list))
-          (evil-with-single-undo
-            (setq evil-last-repeat (list (point) count undo-pointer))
-            (evil-execute-repeat-info-with-count
-             count (ring-ref evil-repeat-ring 0))
-            (setq evil-last-find evil-last-find-temp)))
-      (evil-normal-state)))))
+      (unwind-protect
+          (let ((evil-last-find-temp evil-last-find)
+                (confirm-kill-emacs t)
+                (kill-buffer-hook
+                 (cons #'(lambda ()
+                           (user-error "Cannot delete buffer in repeat command"))
+                       kill-buffer-hook))
+                (undo-pointer buffer-undo-list))
+            (evil-with-single-undo
+              (setq evil-last-repeat (list (point) count undo-pointer))
+              (evil-execute-repeat-info-with-count
+               count (ring-ref evil-repeat-ring 0))
+              (setq evil-last-find evil-last-find-temp)))
+        (evil-normal-state)))))
 
 (defadvice read-key-sequence (before evil activate)
   "Record `this-command-keys' before it is reset."

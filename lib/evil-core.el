@@ -1162,11 +1162,10 @@ BINDINGS."
 Add additional BINDINGS if specified."
   (declare (indent defun))
   `(evil-define-key ,state ,keymap
-     "h" (lookup-key evil-motion-state-map "h")
-     "j" (lookup-key evil-motion-state-map "j")
-     "k" (lookup-key evil-motion-state-map "k")
-     "l" (lookup-key evil-motion-state-map "l")
-     ":" (lookup-key evil-motion-state-map ":")
+     "h" 'evil-backward-char
+     "j" 'evil-next-line
+     "k" 'evil-previous-line
+     "l" 'evil-forward-char
      ,@bindings))
 
 ;; may be useful for programmatic purposes

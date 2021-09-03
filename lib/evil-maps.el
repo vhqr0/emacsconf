@@ -170,8 +170,6 @@
 (define-key evil-motion-state-map "zl" 'evil-scroll-column-right)
 (define-key evil-motion-state-map "zh" 'evil-scroll-column-left)
 
-(define-key evil-motion-state-map "gd" 'evil-goto-definition)
-(define-key evil-motion-state-map "gf" 'find-file-at-point)
 (define-key evil-motion-state-map "gt" 'tab-bar-switch-to-next-tab)
 (define-key evil-motion-state-map "gT" 'tab-bar-switch-to-prev-tab)
 
