@@ -81,9 +81,10 @@
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
-(setq company-idle-delay 0
-      company-echo-delay 0
-      company-minimum-prefix-length 2
+(setq company-idle-delay 0.15
+      company-frontends
+      '(company-pseudo-tooltip-unless-just-one-frontend
+        company-preview-if-just-one-frontend)
       company-backends '(company-files company-dabbrev))
 
 (add-hook 'emacs-lisp-mode-hook

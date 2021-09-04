@@ -1,6 +1,7 @@
 *.elc
 /auto-save-list
 /bookmarks
+/eln-cache
 /emacs
 /projects
 /recentf

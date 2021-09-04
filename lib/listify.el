@@ -8,6 +8,13 @@
 (require 'subr-x)
 (require 'hl-line)
 
+(defgroup listify nil
+  "Completing read UI.")
+
+(defcustom listify-idle-delay 0.15
+  "The idle delay in seconds to update `listify-window'."
+  :type 'number)
+
 (defvar listify-collection nil)
 (defvar listify-window nil)
 (defvar listify-timer nil)
@@ -87,7 +94,7 @@
               (hl-line-mode 1)
               (selected-window))))
       (listify-update "")
-      (setq listify-timer (run-with-idle-timer 0.2 t 'listify-update))
+      (setq listify-timer (run-with-idle-timer listify-idle-delay t 'listify-update))
       (unwind-protect
           (read-from-minibuffer "complete: " nil listify-map)
         (kill-buffer (window-buffer listify-window))))))
