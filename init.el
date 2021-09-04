@@ -30,6 +30,10 @@
 
 (auto-save-visited-mode 1)
 
+(recentf-mode 1)
+
+(global-set-key (kbd "C-x j") 'recentf-open-files)
+
 
 (setq-default indent-tabs-mode nil)
 
@@ -50,6 +54,8 @@
 (define-key undo-repeat-map (kbd "U") 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
+(winner-mode 1)
+
 (global-set-key (kbd "M-g r") 'avy-resume)
 (global-set-key (kbd "M-g l") 'avy-goto-line)
 (global-set-key (kbd "M-g j") 'avy-goto-char-timer)
@@ -58,7 +64,7 @@
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
 
 
-(global-set-key (kbd "C-x j") 'imenu)
+(global-set-key (kbd "C-c C-j") 'imenu)
 
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
