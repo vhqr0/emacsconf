@@ -69,10 +69,6 @@
 (defvar vip-d-com nil
   "How to reexecute last destructive command.  Value is list (M-COM VAL COM).")
 
-(defcustom vip-shift-width 4
-  "The number of columns shifted by > and < command."
-  :type 'integer)
-
 (defvar vip-d-char nil
   "The character remembered by the vi \"r\" command.")
 
@@ -88,18 +84,11 @@
 (defvar vip-f-offset nil
   "For use by \";\" command.")
 
-(defcustom vip-re-search nil
-  "If t, search is reg-exp search, otherwise vanilla search."
-  :type 'boolean)
-
 (defvar vip-s-string nil
   "Last vip search string.")
 
 (defvar vip-s-forward nil
   "If t, search is forward.")
-
-(defvar vip-quote-string "> "
-  "String inserted at the beginning of region.")
 
 
 ;; key bindings
@@ -128,8 +117,6 @@
     (define-key map "c"  #'vip-command-argument)
     (define-key map "d"  #'vip-command-argument)
     (define-key map "y"  #'vip-command-argument)
-    (define-key map ">"  #'vip-command-argument)
-    (define-key map "<"  #'vip-command-argument)
     (define-key map "="  #'vip-command-argument)
     (define-key map "!"  #'vip-command-argument)
     (define-key map "\"" #'vip-command-argument)
@@ -306,7 +293,7 @@ obtained so far, and COM is the command part obtained so far."
 (defun vip-prefix-arg-com (char value com)
   "Vi operator as prefix argument."
   (let ((cont t))
-    (while (and cont (memq char '(?c ?d ?y ?! ?< ?> ?= ?r ?R ?\")))
+    (while (and cont (memq char '(?c ?d ?y ?! ?= ?r ?R ?\")))
       (if com
           ;; this means that we already have a command character, so we
           ;; construct a com list and exit while.  however, if char is "
@@ -323,12 +310,6 @@ obtained so far, and COM is the command part obtained so far."
         (cond ((memq char '(?! ?=))
                (setq com char)
                (setq char (read-char))
-               (setq cont nil))
-              ((memq char '(?< ?>))
-               (setq com char)
-               (setq char (read-char))
-               (when (= com char)
-                 (setq com `(,char . ,com)))
                (setq cont nil))
               ((= char ?\")
                (let ((reg (read-char)))
@@ -361,8 +342,6 @@ obtained so far, and COM is the command part obtained so far."
       (cond ((equal com '(?c . ?c)) (vip-line (cons value ?C)))
             ((equal com '(?d . ?d)) (vip-line (cons value ?D)))
             ((equal com '(?y . ?y)) (vip-line (cons value ?Y)))
-            ((equal com '(?< . ?<)) (vip-line (cons value ?<)))
-            ((equal com '(?> . ?>)) (vip-line (cons value ?>)))
             ((equal com '(?! . ?!)) (vip-line (cons value ?!)))
             ((equal com '(?= . ?=)) (vip-line (cons value ?=)))
             (t (error ""))))))
@@ -493,19 +472,7 @@ to vip-d-com for later use by vip-repeat"
                  (vip-enlarge-region (mark) (point))
                  (when (> (mark) (point))
                    (exchange-point-and-mark))
-                 (indent-region (mark) (point))))
-              ((= com ?<)
-               (save-excursion
-                 (set-mark vip-com-point)
-                 (vip-enlarge-region (mark) (point))
-                 (indent-rigidly (mark) (point) (- vip-shift-width)))
-               (goto-char vip-com-point))
-              ((= com ?>)
-               (save-excursion
-                 (set-mark vip-com-point)
-                 (vip-enlarge-region (mark) (point))
-                 (indent-rigidly (mark) (point) vip-shift-width))
-               (goto-char vip-com-point))))
+                 (indent-region (mark) (point))))))
     (setq vip-d-com (list m-com val
                           (if (memq com '(?c ?C ?!))
                               (- com)
@@ -1080,15 +1047,11 @@ giving null search string."
   (let ((val (vip-P-val arg))
         (com (vip-getcom arg)))
     (setq vip-s-forward t
-          vip-s-string (read-string (if vip-re-search "RE-/" "/")))
-    (when (string= vip-s-string "")
-      (setq vip-re-search (not vip-re-search))
-      (message "Search mode changed to %s search."
-               (if vip-re-search "regular expression" "vanilla"))
-      (vip-search vip-s-string t val)
-      (when com
-        (move-marker vip-com-point (mark))
-        (vip-execute-com 'vip-search-next val com)))))
+          vip-s-string (read-string "/"))
+    (vip-search vip-s-string t val)
+    (when com
+      (move-marker vip-com-point (mark))
+      (vip-execute-com 'vip-search-next val com))))
 
 (defun vip-search-backward (arg)
   "Search a string backward.  ARG is used to find the ARG's occurrence
@@ -1098,15 +1061,11 @@ giving null search string."
   (let ((val (vip-P-val arg))
         (com (vip-getcom arg)))
     (setq vip-s-forward nil
-          vip-s-string (read-string (if vip-re-search "RE-?" "?")))
-    (when (string= vip-s-string "")
-      (setq vip-re-search (not vip-re-search))
-      (message "Search mode changed to %s search."
-               (if vip-re-search "regular expression" "vanilla"))
-      (vip-search vip-s-string nil val)
-      (when com
-        (move-marker vip-com-point (mark))
-        (vip-execute-com 'vip-search-next val com)))))
+          vip-s-string (read-string "?"))
+    (vip-search vip-s-string nil val)
+    (when com
+      (move-marker vip-com-point (mark))
+      (vip-execute-com 'vip-search-next val com))))
 
 (defun vip-search (string forward arg &optional no-offset init-point)
   "(STRING FORWARD COUNT &optional NO-OFFSET) Search COUNT's occurrence of
@@ -1121,12 +1080,8 @@ STRING.  Search will be forward if FORWARD, otherwise backward."
             (progn
               (when (and offset (not (eobp)))
                 (forward-char))
-              (if vip-re-search
-                  (progn
-                    (re-search-forward string nil nil val)
-                    (re-search-backward string))
-                (search-forward string nil nil val)
-                (search-backward string))
+              (re-search-forward string nil nil val)
+              (re-search-backward string)
               (push-mark start-point))
           (search-failed
            (if null-arg
@@ -1137,9 +1092,7 @@ STRING.  Search will be forward if FORWARD, otherwise backward."
              (signal 'search-failed (cdr conditions)))))
       (condition-case conditions
           (progn
-            (if vip-re-search
-                (re-search-backward string nil nil val)
-              (search-backward string nil nil val))
+            (re-search-backward string nil nil val)
             (push-mark start-point))
         (search-failed
          (if null-arg

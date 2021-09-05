@@ -38,8 +38,9 @@
 (show-paren-mode 1)
 (electric-pair-mode 1)
 
-(global-set-key (kbd "C-x M-r") 'raise-sexp)
-(global-set-key (kbd "C-x M-d") 'delete-pair)
+(global-set-key (kbd "C-x M-r")   'raise-sexp)
+(global-set-key (kbd "C-x M-d")   'delete-pair)
+(global-set-key (kbd "C-x M-DEL") 'backward-kill-sexp)
 
 
 (setq disabled-command-function nil)
