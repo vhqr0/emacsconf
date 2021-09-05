@@ -16,8 +16,6 @@
 (menu-bar-mode -1)
 (blink-cursor-mode -1)
 
-(load-theme 'modus-vivendi)
-
 
 (setq confirm-kill-emacs 'y-or-n-p
       vc-handled-backends '(Git)
@@ -55,6 +53,8 @@
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
 (winner-mode 1)
+
+(global-set-key (kbd "C-z") 'vip-change-mode-to-vi)
 
 (global-set-key (kbd "M-g r") 'avy-resume)
 (global-set-key (kbd "M-g l") 'avy-goto-line)

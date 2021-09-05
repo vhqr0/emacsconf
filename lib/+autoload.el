@@ -511,6 +511,16 @@ Return output file name.
 
 ;;;***
 
+;;;### (autoloads nil "vip" "vip.el" (0 0 0 0))
+;;; Generated autoloads from vip.el
+
+(autoload 'vip-change-mode-to-vi "vip" "\
+Change mode to vi mode." t nil)
+
+(register-definition-prefixes "vip" '("vip-"))
+
+;;;***
+
 ;;;### (autoloads nil "wgrep" "wgrep.el" (0 0 0 0))
 ;;; Generated autoloads from wgrep.el
 
