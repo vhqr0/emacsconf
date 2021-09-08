@@ -90,6 +90,12 @@
 (defvar vip-s-forward nil
   "If t, search is forward.")
 
+(defvar vip-read-tobj nil
+  "For used by \"a\" and \"i\" command to read text object.")
+
+(defvar vip-last-tobj nil
+  "Last used text object.")
+
 
 ;; key bindings
 
@@ -119,39 +125,44 @@
     (define-key map "y"  #'vip-command-argument)
     (define-key map "="  #'vip-command-argument)
     (define-key map "!"  #'vip-command-argument)
+    (define-key map "#"  #'vip-command-argument)
     (define-key map "\"" #'vip-command-argument)
-    (define-key map "C" "c$")
-    (define-key map "D" "d$")
-    (define-key map "Y" "y$")
+    (define-key map "gc" "#")
+    (define-key map "C"  "c$")
+    (define-key map "D"  "d$")
+    (define-key map "Y"  "y$")
 
-    (define-key map "h" #'vip-backward-char)
-    (define-key map "j" #'vip-next-line)
-    (define-key map "k" #'vip-previous-line)
-    (define-key map "l" #'vip-forward-char)
-    (define-key map "w" #'vip-forward-word)
-    (define-key map "W" #'vip-forward-Word)
-    (define-key map "b" #'vip-backward-word)
-    (define-key map "B" #'vip-backward-Word)
-    (define-key map "e" #'vip-end-of-word)
-    (define-key map "E" #'vip-end-of-Word)
-    (define-key map "f" #'vip-find-char-forward)
-    (define-key map "F" #'vip-find-char-backward)
-    (define-key map "t" #'vip-goto-char-forward)
-    (define-key map "T" #'vip-goto-char-backward)
-    (define-key map ";" #'vip-repeat-find)
-    (define-key map "," #'vip-repeat-find-opposite)
-    (define-key map "/" #'vip-search-forward)
-    (define-key map "?" #'vip-search-backward)
-    (define-key map "n" #'vip-search-next)
-    (define-key map "N" #'vip-search-Next)
-    (define-key map "^" #'vip-bol-and-skip-white)
-    (define-key map "$" #'vip-goto-eol)
-    (define-key map "{" #'vip-backward-paragraph)
-    (define-key map "}" #'vip-forward-paragraph)
+    (define-key map "h"  #'vip-backward-char)
+    (define-key map "j"  #'vip-next-line)
+    (define-key map "k"  #'vip-previous-line)
+    (define-key map "l"  #'vip-forward-char)
+    (define-key map "w"  #'vip-forward-word)
+    (define-key map "W"  #'vip-forward-Word)
+    (define-key map "b"  #'vip-backward-word)
+    (define-key map "B"  #'vip-backward-Word)
+    (define-key map "e"  #'vip-end-of-word)
+    (define-key map "E"  #'vip-end-of-Word)
+    (define-key map "f"  #'vip-find-char-forward)
+    (define-key map "F"  #'vip-find-char-backward)
+    (define-key map "t"  #'vip-goto-char-forward)
+    (define-key map "T"  #'vip-goto-char-backward)
+    (define-key map ";"  #'vip-repeat-find)
+    (define-key map ","  #'vip-repeat-find-opposite)
+    (define-key map "/"  #'vip-search-forward)
+    (define-key map "?"  #'vip-search-backward)
+    (define-key map "n"  #'vip-search-next)
+    (define-key map "N"  #'vip-search-Next)
+    (define-key map "^"  #'vip-bol-and-skip-white)
+    (define-key map "$"  #'vip-goto-eol)
+    (define-key map "{"  #'vip-backward-paragraph)
+    (define-key map "}"  #'vip-forward-paragraph)
+    (define-key map "G"  #'vip-goto-last-line)
+    (define-key map "gg" #'vip-goto-first-line)
 
     (define-key map "." #'vip-repeat)
     (define-key map "u" #'vip-undo)
     (define-key map ":" #'execute-extended-command)
+    (define-key map "v" #'set-mark-command)
     (define-key map "m" #'point-to-register)
     (define-key map "`" #'vip-goto-mark)
     (define-key map "'" #'vip-goto-mark-and-skip-white)
@@ -293,7 +304,7 @@ obtained so far, and COM is the command part obtained so far."
 (defun vip-prefix-arg-com (char value com)
   "Vi operator as prefix argument."
   (let ((cont t))
-    (while (and cont (memq char '(?c ?d ?y ?! ?= ?r ?R ?\")))
+    (while (and cont (memq char '(?c ?d ?y ?! ?= ?# ?r ?R ?\")))
       (if com
           ;; this means that we already have a command character, so we
           ;; construct a com list and exit while.  however, if char is "
@@ -307,7 +318,7 @@ obtained so far, and COM is the command part obtained so far."
         ;; if com is nil we set com as char, and read more.  again, if char
         ;; is ", we read the name of register and store it in vip-use-register.
         ;; if char is !, or =, a complete com is formed so we exit while.
-        (cond ((memq char '(?! ?=))
+        (cond ((memq char '(?! ?= ?#))
                (setq com char)
                (setq char (read-char))
                (setq cont nil))
@@ -344,6 +355,8 @@ obtained so far, and COM is the command part obtained so far."
             ((equal com '(?y . ?y)) (vip-line (cons value ?Y)))
             ((equal com '(?! . ?!)) (vip-line (cons value ?!)))
             ((equal com '(?= . ?=)) (vip-line (cons value ?=)))
+            ((equal com '(?# . ?#)) (vip-line (cons value ?#)))
+            ((equal com '(?c . ?#)) (vip-line (cons value ?#)))
             (t (error ""))))))
 
 (defun vip-digit-argument (arg)
@@ -472,7 +485,14 @@ to vip-d-com for later use by vip-repeat"
                  (vip-enlarge-region (mark) (point))
                  (when (> (mark) (point))
                    (exchange-point-and-mark))
-                 (indent-region (mark) (point))))))
+                 (indent-region (mark) (point))))
+              ((= com ?#)
+               (save-excursion
+                 (set-mark vip-com-point)
+                 (vip-enlarge-region (mark) (point))
+                 (when (> (mark) (point))
+                   (exchange-point-and-mark))
+                 (comment-or-uncomment-region (mark) (point))))))
     (setq vip-d-com (list m-com val
                           (if (memq com '(?c ?C ?!))
                               (- com)
@@ -543,6 +563,54 @@ is the name of the register for COM."
 
 ;; insertion commands
 
+(defun vip-tobj (arg)
+  "Com on text object."
+  (interactive "P")
+  (let ((val (vip-p-val arg))
+        (com (vip-getcom arg)))
+    (setq vip-last-tobj
+          (if vip-read-tobj
+              (read-char)
+            vip-last-tobj))
+    (let (range)
+      (cond ((setq range (assq vip-last-tobj '((?w . word)
+                                               (?o . sexp)
+                                               (?f . defun)
+                                               (?l . page))))
+             (setq range (bounds-of-thing-at-point (cdr range)))
+             (when range
+               (if (region-active-p)
+                   (progn
+                     (set-mark (car range))
+                     (goto-char (cdr range)))
+                 (move-marker vip-com-point (car range))
+                 (goto-char (cdr range))
+                 (vip-execute-com 'vip-tobj val com))))
+            ((= vip-last-tobj ?p)
+             (if (region-active-p)
+                 (progn
+                   (set-mark (save-excursion
+                               (backward-paragraph)
+                               (point)))
+                   (forward-paragraph))
+               (move-marker vip-com-point (save-excursion
+                                            (backward-paragraph)
+                                            (point)))
+               (forward-paragraph)
+               (vip-execute-com 'vip-tobj val com)))
+            ((= vip-last-tobj ?b)
+             (let ((range (save-excursion
+                            (backward-up-list)
+                            (bounds-of-thing-at-point 'sexp))))
+               (when range
+                 (if (region-active-p)
+                     (progn
+                       (set-mark (car range))
+                       (goto-char (cdr range)))
+                   (move-marker vip-com-point (car range))
+                   (goto-char (cdr range))
+                   (vip-execute-com 'vip-tobj val com)))))))))
+
 (defun vip-repeat-insert-command ()
   "This function is called when mode changes from insertion mode to
 vi command mode.  It will repeat the insertion command if original insertion
@@ -560,9 +628,10 @@ command was invoked with argument > 1."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (setq vip-d-com `(vip-insert ,val ?r))
-    (if com
-        (vip-loop val (yank))
+    (if (or com (region-active-p))
+        (let ((vip-read-tobj t))
+          (vip-tobj arg))
+      (setq vip-d-com `(vip-insert ,val ?r))
       (vip-change-mode-to-insert))))
 
 (defun vip-append (arg)
@@ -570,22 +639,12 @@ command was invoked with argument > 1."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (setq vip-d-com `(vip-append ,val ?r))
-    (unless (eolp)
-      (forward-char))
-    (if (eq com ?r)
-        (vip-loop val (yank))
-      (vip-change-mode-to-insert))))
-
-(defun vip-Append (arg)
-  "Append at end of line."
-  (interactive "P")
-  (let ((val (vip-p-val arg))
-        (com (vip-getcom arg)))
-    (setq vip-d-com `(vip-Append ,val ?r))
-    (end-of-line)
-    (if (eq com ?r)
-        (vip-loop val (yank))
+    (if (or com (region-active-p))
+        (let ((vip-read-tobj t))
+          (vip-tobj arg))
+      (setq vip-d-com `(vip-append ,val ?r))
+      (unless (eolp)
+        (forward-char))
       (vip-change-mode-to-insert))))
 
 (defun vip-Insert (arg)
@@ -594,28 +653,32 @@ command was invoked with argument > 1."
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
     (setq vip-d-com `(vip-Insert ,val ?r))
-    (back-to-indentation)
-    (if (eq com ?r)
-        (vip-loop val (yank))
-      (vip-change-mode-to-insert))))
+    (unless (region-active-p)
+      (back-to-indentation))
+    (vip-change-mode-to-insert)))
+
+(defun vip-Append (arg)
+  "Append at end of line."
+  (interactive "P")
+  (let ((val (vip-p-val arg))
+        (com (vip-getcom arg)))
+    (setq vip-d-com `(vip-Append ,val ?r))
+    (unless (region-active-p)
+      (end-of-line))
+    (vip-change-mode-to-insert)))
 
 (defun vip-open-line (arg)
   "Open line below."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (setq vip-d-com `(vip-open-line ,val ?r))
-    (let ((col (current-indentation)))
-      (if (eq com ?r)
-          (vip-loop val
-                    (progn
-                      (end-of-line)
-                      (newline 1)
-                      (indent-to col)
-                      (yank)))
+    (if (region-active-p)
+        (exchange-point-and-mark)
+      (setq vip-d-com `(vip-open-line ,val ?r))
+      (let ((col (current-indentation)))
         (end-of-line)
         (newline 1)
-        (indent-to col)
+        (indent-for-tab-command)
         (vip-change-mode-to-insert)))))
 
 (defun vip-Open-line (arg)
@@ -623,18 +686,13 @@ command was invoked with argument > 1."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (setq vip-d-com `(vip-Open-line ,val ?r))
-    (let ((col (current-indentation)))
-      (if (eq com ?r)
-          (vip-loop val
-                    (progn
-                      (beginning-of-line)
-                      (open-line 1)
-                      (indent-to col)
-                      (yank)))
+    (if (region-active-p)
+        (exchange-point-and-mark)
+      (setq vip-d-com `(vip-Open-line ,val ?r))
+      (let ((col (current-indentation)))
         (beginning-of-line)
         (open-line 1)
-        (indent-to col)
+        (indent-for-tab-command)
         (vip-change-mode-to-insert)))))
 
 
@@ -836,6 +894,28 @@ beginning of buffer, stop and signal error."
     (end-of-line val)
     (when com
       (vip-execute-com 'vip-goto-eol val com))))
+
+(defun vip-goto-first-line (arg)
+  "Go to first line."
+  (interactive "P")
+  (let ((val (vip-p-val arg))
+        (com (vip-getcom arg)))
+    (when com
+      (move-marker vip-com-point (point)))
+    (beginning-of-buffer)
+    (when com
+      (vip-execute-com 'vip-goto-first-line val com))))
+
+(defun vip-goto-last-line (arg)
+  "Go to last line."
+  (interactive "P")
+  (let ((val (vip-p-val arg))
+        (com (vip-getcom arg)))
+    (when com
+      (move-marker vip-com-point (point)))
+    (end-of-buffer)
+    (when com
+      (vip-execute-com 'vip-goto-last-line val com))))
 
 (defun vip-next-line (arg)
   "Go to next line."
