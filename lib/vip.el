@@ -35,11 +35,6 @@
 
 ;;; Code:
 
-(defgroup vip nil
-  "A VI Package for GNU Emacs."
-  :prefix "vip-"
-  :group 'emulations)
-
 ;; external variables
 
 (defvar-local vip-emacs-local-map nil
@@ -96,6 +91,11 @@
 (defvar vip-last-tobj nil
   "Last used text object.")
 
+(defvar vip-eval-functions
+  '((emacs-lisp-mode . eval-region)
+    (lisp-interaction-mode . eval-region)
+    (python-mode . python-shell-send-region)))
+
 
 ;; key bindings
 
@@ -126,8 +126,12 @@
     (define-key map "="  #'vip-command-argument)
     (define-key map "!"  #'vip-command-argument)
     (define-key map "#"  #'vip-command-argument)
+    (define-key map "&"  #'vip-command-argument)
+    (define-key map "@"  #'vip-command-argument)
     (define-key map "\"" #'vip-command-argument)
     (define-key map "gc" "#")
+    (define-key map "gn" "&")
+    (define-key map "gr" "@")
     (define-key map "C"  "c$")
     (define-key map "D"  "d$")
     (define-key map "Y"  "y$")
@@ -304,7 +308,7 @@ obtained so far, and COM is the command part obtained so far."
 (defun vip-prefix-arg-com (char value com)
   "Vi operator as prefix argument."
   (let ((cont t))
-    (while (and cont (memq char '(?c ?d ?y ?! ?= ?# ?r ?R ?\")))
+    (while (and cont (memq char '(?c ?d ?y ?! ?= ?# ?& ?@ ?r ?R ?\")))
       (if com
           ;; this means that we already have a command character, so we
           ;; construct a com list and exit while.  however, if char is "
@@ -318,7 +322,7 @@ obtained so far, and COM is the command part obtained so far."
         ;; if com is nil we set com as char, and read more.  again, if char
         ;; is ", we read the name of register and store it in vip-use-register.
         ;; if char is !, or =, a complete com is formed so we exit while.
-        (cond ((memq char '(?! ?= ?#))
+        (cond ((memq char '(?! ?= ?# ?& ?@))
                (setq com char)
                (setq char (read-char))
                (setq cont nil))
@@ -357,6 +361,8 @@ obtained so far, and COM is the command part obtained so far."
             ((equal com '(?= . ?=)) (vip-line (cons value ?=)))
             ((equal com '(?# . ?#)) (vip-line (cons value ?#)))
             ((equal com '(?c . ?#)) (vip-line (cons value ?#)))
+            ((equal com '(?& . ?&)) (vip-line (cons value ?&)))
+            ((equal com '(?@ . ?@)) (vip-line (cons value ?@)))
             (t (error ""))))))
 
 (defun vip-digit-argument (arg)
@@ -410,10 +416,15 @@ obtained so far, and COM is the command part obtained so far."
 
 ;; repeat last destructive command
 
+(defun vip-eval-region (beg end)
+  (let ((func (assq major-mode vip-eval-functions)))
+    (when func
+      (funcall (cdr func) beg end))))
+
 (defun vip-execute-com (m-com val com)
   "(M-COM VAL COM)  Execute command COM. The list (M-COM VAL COM) is set
 to vip-d-com for later use by vip-repeat"
-  (let ((reg vip-use-register))
+  (let ((reg vip-use-register) func)
     (if com
         (cond ((= com ?c) (vip-change vip-com-point (point)))
               ((= com (- ?c)) (vip-change-subr vip-com-point (point)))
@@ -479,20 +490,17 @@ to vip-d-com for later use by vip-repeat"
                       (setq vip-last-shell-com (read-string "!"))
                     vip-last-shell-com)
                   t t)))
-              ((= com ?=)
+              ((setq func (assq com '((?= . indent-region)
+                                      (?# . comment-or-uncomment-region)
+                                      (?& . narrow-to-region)
+                                      (?@ . vip-eval-region))))
                (save-excursion
                  (set-mark vip-com-point)
                  (vip-enlarge-region (mark) (point))
                  (when (> (mark) (point))
                    (exchange-point-and-mark))
-                 (indent-region (mark) (point))))
-              ((= com ?#)
-               (save-excursion
-                 (set-mark vip-com-point)
-                 (vip-enlarge-region (mark) (point))
-                 (when (> (mark) (point))
-                   (exchange-point-and-mark))
-                 (comment-or-uncomment-region (mark) (point))))))
+                 (funcall (cdr func) (mark) (point))
+                 (deactivate-mark)))))
     (setq vip-d-com (list m-com val
                           (if (memq com '(?c ?C ?!))
                               (- com)
