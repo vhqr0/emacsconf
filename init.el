@@ -127,13 +127,15 @@
           (project-vc-dir "vc-dir")
           (project-shell "shell"))))
 
-(defun rg ()
+(defun +grep-rg ()
   (interactive)
   (require 'grep)
   (grep--save-buffers)
   (compilation-start
    (read-shell-command "command: " "rg --no-heading " 'grep-history)
    'grep-mode))
+
+(defalias 'rg '+grep-rg)
 
 (setq wgrep-auto-save-buffer t
       wgrep-change-readonly-file t)

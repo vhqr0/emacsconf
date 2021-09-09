@@ -37,12 +37,6 @@
 
 ;; external variables
 
-(defvar-local vip-emacs-local-map nil
-  "Local map used in emacs mode.")
-
-(defvar-local vip-insert-local-map nil
-  "Local map used in insert mode.")
-
 (defvar-local vip-insert-point (make-marker)
   "Remember insert point as a marker.")
 
@@ -51,9 +45,6 @@
 
 (defvar-local vip-current-mode 'emacs-mode
   "Current mode.  One of `emacs-mode', `vi-mode', `insert-mode'.")
-
-(defvar-local vip-current-major-mode nil
-  "The major-mode vi considers it is now.")
 
 (defvar vip-last-shell-com nil
   "Last shell command executed by ! command.")
@@ -91,6 +82,10 @@
 (defvar vip-last-tobj nil
   "Last used text object.")
 
+(defvar vip-read-surround nil)
+
+(defvar vip-last-surround nil)
+
 (defvar vip-eval-functions
   '((emacs-lisp-mode . eval-region)
     (lisp-interaction-mode . eval-region)
@@ -99,7 +94,14 @@
 
 ;; key bindings
 
-(defvar vip-mode-map
+(defvar vip-insert-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "j"    #'vip-jk)
+    (define-key map "\M-z" #'vip-change-mode-to-vi)
+    (define-key map "\C-z" #'vip-change-mode-to-emacs)
+    map))
+
+(defvar vip-vi-mode-map
   (let ((map (make-keymap)))
     (define-key map [remap self-insert-command] #'undefined)
     (define-key map (kbd "RET") #'undefined)
@@ -164,7 +166,7 @@
     (define-key map "gg" #'vip-goto-first-line)
 
     (define-key map "." #'vip-repeat)
-    (define-key map "u" #'vip-undo)
+    (define-key map "u" #'undo)
     (define-key map ":" #'execute-extended-command)
     (define-key map "v" #'set-mark-command)
     (define-key map "m" #'point-to-register)
@@ -184,7 +186,7 @@
     (define-key map "r" #'vip-replace-char)
     (define-key map "x" #'vip-delete-char)
     (define-key map "X" #'vip-delete-backward-char)
-    (define-key map "s" "xi")
+    (define-key map "s" #'vip-s)
 
     (define-key map "ZQ" #'kill-emacs)
     (define-key map "ZZ" #'save-buffers-kill-emacs)
@@ -196,11 +198,12 @@
 
 ;; basic set up
 
-(defmacro vip-loop (count body)
+(defmacro vip-loop (count &rest body)
   "(COUNT BODY) Execute BODY COUNT times."
+  (declare (indent 1))
   `(let ((count ,count))
      (while (> count 0)
-       ,body
+       ,@body
        (setq count (1- count)))))
 
 (defun vip-copy-keymap (map)
@@ -220,34 +223,33 @@ No message."
 
 ;; changing mode
 
+(define-minor-mode vip-insert-mode
+  "Vip insert mode."
+  :keymap vip-insert-mode-map)
+
+(define-minor-mode vip-vi-mode
+  "Vip vi mode."
+  :keymap vip-vi-mode-map)
+
 (defun vip-change-mode (new-mode)
-  "Change mode to NEW-MODE---either emacs-mode, vi-mode, or insert-mode."
   (unless (eq new-mode vip-current-mode)
     (cond ((eq new-mode 'vi-mode)
-           (if (eq vip-current-mode 'insert-mode)
-               (progn
-                 (copy-region-as-kill (point) vip-insert-point)
-                 (vip-repeat-insert-command))
-             (setq vip-emacs-local-map (current-local-map)
-                   vip-insert-local-map
-                   (vip-copy-keymap (current-local-map))))
-           (vip-change-mode-line "[Vi]:")
-           (use-local-map vip-mode-map))
+           (when (eq vip-current-mode 'insert-mode)
+             (copy-region-as-kill (point) vip-insert-point)
+             (vip-repeat-insert-command)
+             (vip-insert-mode -1))
+           (vip-vi-mode 1)
+           (vip-change-mode-line "[Vi]:"))
           ((eq new-mode 'insert-mode)
-           (move-marker vip-insert-point (point))
-           (if (eq vip-current-mode 'emacs-mode)
-               (setq vip-emacs-local-map (current-local-map)
-                     vip-insert-local-map
-                     (vip-copy-keymap (current-local-map)))
-             (setq vip-insert-local-map
-                   (vip-copy-keymap vip-emacs-local-map)))
-           (vip-change-mode-line "[Insert]:")
-           (use-local-map vip-insert-local-map)
-           (define-key vip-insert-local-map "j"    #'vip-jk)
-           (define-key vip-insert-local-map "\M-z" #'vip-change-mode-to-vi))
-          ((eq new-mode 'emacs-mode)
-           (vip-change-mode-line "[Emacs]:")
-           (use-local-map vip-emacs-local-map)))
+           (when (eq vip-current-mode 'vi-mode)
+             (move-marker vip-insert-point (point))
+             (vip-vi-mode -1))
+           (vip-insert-mode 1)
+           (vip-change-mode-line "[Insert]:"))
+          (t
+           (vip-vi-mode -1)
+           (vip-insert-mode -1)
+           (vip-change-mode-line "[Emacs]:")))
     (setq vip-current-mode new-mode)
     (force-mode-line-update)))
 
@@ -308,7 +310,7 @@ obtained so far, and COM is the command part obtained so far."
 (defun vip-prefix-arg-com (char value com)
   "Vi operator as prefix argument."
   (let ((cont t))
-    (while (and cont (memq char '(?c ?d ?y ?! ?= ?# ?& ?@ ?r ?R ?\")))
+    (while (and cont (memq char '(?c ?d ?y ?! ?= ?# ?& ?@ ?s ?r ?R ?\")))
       (if com
           ;; this means that we already have a command character, so we
           ;; construct a com list and exit while.  however, if char is "
@@ -317,16 +319,13 @@ obtained so far, and COM is the command part obtained so far."
             ;; new com is (CHAR . OLDCOM)
             (when (= char ?\")
               (error ""))
-            (setq com `(,char . ,com))
+            (unless (= char ?s)
+              (setq com `(,char . ,com)))
             (setq cont nil))
         ;; if com is nil we set com as char, and read more.  again, if char
         ;; is ", we read the name of register and store it in vip-use-register.
         ;; if char is !, or =, a complete com is formed so we exit while.
-        (cond ((memq char '(?! ?= ?# ?& ?@))
-               (setq com char)
-               (setq char (read-char))
-               (setq cont nil))
-              ((= char ?\")
+        (cond ((= char ?\")
                (let ((reg (read-char)))
                  (setq vip-use-register reg)
                  (setq char (read-char))))
@@ -410,7 +409,7 @@ obtained so far, and COM is the command part obtained so far."
   "Get com part of prefix-argument ARG and modify it."
   (let ((com (vip-getcom arg)))
     (or (cdr-safe
-         (assq com '((?c . ?C) (?d . ?D) (?y . ?Y))))
+         (assq com '((?c . ?C) (?d . ?D) (?y . ?Y) (?s . ?S))))
         com)))
 
 
@@ -480,6 +479,26 @@ to vip-d-com for later use by vip-repeat"
                  (setq last-command nil)
                  (copy-region-as-kill (mark) (point)))
                (goto-char vip-com-point))
+              ((memq com `(?s ,(- ?s)))
+               (save-excursion
+                 (let* ((vip-read-surround (= com ?s))
+                        (pair (vip-read-surround)))
+                   (insert (cdr pair))
+                   (goto-char vip-com-point)
+                   (insert (car pair)))))
+              ((memq com `(?S ,(- ?S)))
+               (save-excursion
+                 (let* ((vip-read-surround (= com ?S))
+                        (pair (vip-read-surround)))
+                   (set-mark vip-com-point)
+                   (vip-enlarge-region (mark) (point))
+                   (move-marker vip-com-point (mark))
+                   (open-line 1)
+                   (insert (cdr pair))
+                   (goto-char vip-com-point)
+                   (open-line 1)
+                   (insert (car pair))
+                   (indent-region (mark) (point)))))
               ((memq com `(?! ,(- ?!)))
                (save-excursion
                  (set-mark vip-com-point)
@@ -502,7 +521,7 @@ to vip-d-com for later use by vip-repeat"
                  (funcall (cdr func) (mark) (point))
                  (deactivate-mark)))))
     (setq vip-d-com (list m-com val
-                          (if (memq com '(?c ?C ?!))
+                          (if (memq com '(?c ?C ?s ?S ?!))
                               (- com)
                             com)
                           reg))))
@@ -513,35 +532,15 @@ to vip-d-com for later use by vip-repeat"
 argument for COM, CH is a flag for repeat, and REG is optional and if exists
 is the name of the register for COM."
   (interactive "P")
-  (if (eq last-command 'vip-undo)
-      ;; if the last command was vip-undo, then undo-more
-      (vip-undo-more)
-    ;; otherwise execute the command stored in vip-d-com.  if arg is non-nil
-    ;; its prefix value is used as new prefix value for the command.
-    (let ((m-com (car vip-d-com))
-          (val (or (vip-P-val arg)
-                   (cadr vip-d-com)))
-          (com (nth 2 vip-d-com))
-          (reg (nth 3 vip-d-com)))
-      (unless m-com
-        (error "No previous command to repeat"))
-      (setq vip-use-register reg)
-      (funcall m-com `(,val . ,com)))))
-
-
-;; undoing
-
-(defun vip-undo ()
-  "Undo previous change."
-  (interactive)
-  (undo-start)
-  (undo-more 2)
-  (setq this-command 'vip-undo))
-
-(defun vip-undo-more ()
-  "Continue undoing previous changes."
-  (undo-more 1)
-  (setq this-command 'vip-undo))
+  (let ((m-com (car vip-d-com))
+        (val (or (vip-P-val arg)
+                 (cadr vip-d-com)))
+        (com (nth 2 vip-d-com))
+        (reg (nth 3 vip-d-com)))
+    (unless m-com
+      (error "No previous command to repeat"))
+    (setq vip-use-register reg)
+    (funcall m-com `(,val . ,com))))
 
 
 ;; utilities
@@ -584,7 +583,8 @@ is the name of the register for COM."
       (cond ((setq range (assq vip-last-tobj '((?w . word)
                                                (?o . sexp)
                                                (?f . defun)
-                                               (?l . page))))
+                                               (?l . line)
+                                               (?P . page))))
              (setq range (bounds-of-thing-at-point (cdr range)))
              (when range
                (if (region-active-p)
@@ -637,8 +637,10 @@ command was invoked with argument > 1."
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
     (if (or com (region-active-p))
-        (let ((vip-read-tobj t))
-          (vip-tobj arg))
+        (if (eq com ?r)
+            (vip-loop val (yank))
+          (let ((vip-read-tobj t))
+            (vip-tobj arg)))
       (setq vip-d-com `(vip-insert ,val ?r))
       (vip-change-mode-to-insert))))
 
@@ -648,8 +650,10 @@ command was invoked with argument > 1."
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
     (if (or com (region-active-p))
-        (let ((vip-read-tobj t))
-          (vip-tobj arg))
+        (if (eq com ?r)
+            (vip-loop val (yank))
+          (let ((vip-read-tobj t))
+            (vip-tobj arg)))
       (setq vip-d-com `(vip-append ,val ?r))
       (unless (eolp)
         (forward-char))
@@ -660,30 +664,39 @@ command was invoked with argument > 1."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (setq vip-d-com `(vip-Insert ,val ?r))
-    (unless (region-active-p)
-      (back-to-indentation))
-    (vip-change-mode-to-insert)))
+    (if (eq com ?r)
+        (vip-loop val (yank))
+      (setq vip-d-com `(vip-Insert ,val ?r))
+      (unless (region-active-p)
+        (back-to-indentation))
+      (vip-change-mode-to-insert))))
 
 (defun vip-Append (arg)
   "Append at end of line."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (setq vip-d-com `(vip-Append ,val ?r))
-    (unless (region-active-p)
-      (end-of-line))
-    (vip-change-mode-to-insert)))
+    (if (eq com ?r)
+        (vip-loop val (yank))
+      (setq vip-d-com `(vip-Append ,val ?r))
+      (unless (region-active-p)
+        (end-of-line))
+      (vip-change-mode-to-insert))))
 
 (defun vip-open-line (arg)
   "Open line below."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (if (region-active-p)
-        (exchange-point-and-mark)
-      (setq vip-d-com `(vip-open-line ,val ?r))
-      (let ((col (current-indentation)))
+    (if (eq com ?r)
+        (vip-loop val
+          (end-of-line)
+          (newline 1)
+          (indent-for-tab-command)
+          (yank))
+      (if (region-active-p)
+          (exchange-point-and-mark)
+        (setq vip-d-com `(vip-open-line ,val ?r))
         (end-of-line)
         (newline 1)
         (indent-for-tab-command)
@@ -694,10 +707,15 @@ command was invoked with argument > 1."
   (interactive "P")
   (let ((val (vip-p-val arg))
         (com (vip-getcom arg)))
-    (if (region-active-p)
-        (exchange-point-and-mark)
-      (setq vip-d-com `(vip-Open-line ,val ?r))
-      (let ((col (current-indentation)))
+    (if (eq com ?r)
+        (vip-loop val
+          (beginning-of-line)
+          (open-line 1)
+          (indent-for-tab-command)
+          (yank))
+      (if (region-active-p)
+          (exchange-point-and-mark)
+        (setq vip-d-com `(vip-Open-line ,val ?r))
         (beginning-of-line)
         (open-line 1)
         (indent-for-tab-command)
@@ -1211,6 +1229,63 @@ STRING.  Search will be forward if FORWARD, otherwise backward."
     (vip-search vip-s-string (not vip-s-forward) arg)
     (when com
       (vip-execute-com 'vip-search-Next val com))))
+
+
+;;; surround
+
+(defun vip-read-surround ()
+  (setq vip-last-surround
+        (if vip-read-surround
+            (read-char)
+          vip-last-surround))
+  (or (cdr (assq vip-last-surround '((?b . (?\( . ?\)))
+                                     (?B . (?\{ . ?\}))
+                                     (?r . (?\[ . ?\])))))
+      `(,vip-last-surround . ,vip-last-surround)))
+
+(defun vip-surround (arg)
+  "Surround."
+  (interactive "P")
+  (let ((val (vip-p-val arg))
+        (com (vip-getcom arg)))
+    (cond ((eq com ?y)
+           (let ((last-command-event ?s))
+             (vip-command-argument nil)))
+          ((eq com ?s)
+           (setq vip-d-com '(vip-surround nil ?s))
+           (let ((pair (vip-read-surround)))
+             (save-excursion
+               (end-of-line)
+               (insert (cdr pair))
+               (vip-bol-and-skip-white nil)
+               (insert (car pair)))))
+          ((eq com ?d)
+           (setq vip-d-com '(vip-surround nil ?d))
+           (save-excursion
+             (backward-up-list)
+             (delete-pair)))
+          ((eq com ?c)
+           (setq vip-d-com `(vip-surround nil ?c))
+           (let ((pair (vip-read-surround)))
+             (save-excursion
+               (backward-up-list)
+               (insert-pair 1 (car pair) (cdr pair))
+               (delete-pair))))
+          ((region-active-p)
+           (let ((pair (vip-read-surround)))
+             (deactivate-mark)
+             (insert (cdr pair))
+             (goto-char (mark))
+             (insert (car pair))))
+          (t
+           (vip-delete-char arg)
+           (vip-change-mode-to-insert)))))
+
+(defun vip-s (arg)
+  "Surround."
+  (interactive "P")
+  (let ((vip-read-surround t))
+    (vip-surround arg)))
 
 
 ;; yank and pop
