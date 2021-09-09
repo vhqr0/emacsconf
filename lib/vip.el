@@ -580,44 +580,28 @@ is the name of the register for COM."
               (read-char)
             vip-last-tobj))
     (let (range)
-      (cond ((setq range (assq vip-last-tobj '((?w . word)
-                                               (?o . sexp)
-                                               (?f . defun)
-                                               (?l . line)
-                                               (?P . page))))
-             (setq range (bounds-of-thing-at-point (cdr range)))
-             (when range
-               (if (region-active-p)
-                   (progn
-                     (set-mark (car range))
-                     (goto-char (cdr range)))
-                 (move-marker vip-com-point (car range))
-                 (goto-char (cdr range))
-                 (vip-execute-com 'vip-tobj val com))))
-            ((= vip-last-tobj ?p)
-             (if (region-active-p)
-                 (progn
-                   (set-mark (save-excursion
-                               (backward-paragraph)
-                               (point)))
-                   (forward-paragraph))
-               (move-marker vip-com-point (save-excursion
-                                            (backward-paragraph)
-                                            (point)))
-               (forward-paragraph)
-               (vip-execute-com 'vip-tobj val com)))
-            ((= vip-last-tobj ?b)
-             (let ((range (save-excursion
-                            (backward-up-list)
-                            (bounds-of-thing-at-point 'sexp))))
-               (when range
-                 (if (region-active-p)
-                     (progn
-                       (set-mark (car range))
-                       (goto-char (cdr range)))
-                   (move-marker vip-com-point (car range))
-                   (goto-char (cdr range))
-                   (vip-execute-com 'vip-tobj val com)))))))))
+      (setq range (cdr (assq vip-last-tobj
+                             '((?w . word)
+                               (?o . sexp)
+                               (?f . defun)
+                               (?p . paragraph)
+                               (?P . page)
+                               (?h . buffer)
+                               (?b . pair)))))
+      (cond ((eq range 'pair)
+             (setq range (save-excursion
+                           (backward-up-list)
+                           (bounds-of-thing-at-point 'sexp))))
+            (range
+             (setq range (bounds-of-thing-at-point range))))
+      (when range
+        (if (region-active-p)
+            (progn
+              (set-mark (car range))
+              (goto-char (cdr range)))
+          (move-marker vip-com-point (car range))
+          (goto-char (cdr range))
+          (vip-execute-com 'vip-tobj val com))))))
 
 (defun vip-repeat-insert-command ()
   "This function is called when mode changes from insertion mode to
