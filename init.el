@@ -1,11 +1,13 @@
 ;;; -*- lexical-binding: t -*-
 
 
+
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/")
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
 (require '+autoload)
 
 
+
 (setq text-quoting-style 'grave)
 (startup--setup-quote-display 'grave)
 
@@ -17,6 +19,7 @@
 (blink-cursor-mode -1)
 
 
+
 (setq confirm-kill-emacs 'y-or-n-p
       vc-handled-backends '(Git)
       vc-make-backup-files t
@@ -30,9 +33,8 @@
 
 (recentf-mode 1)
 
-(global-set-key (kbd "C-x j") 'recentf-open-files)
-
 
+
 (setq-default indent-tabs-mode nil)
 
 (show-paren-mode 1)
@@ -43,6 +45,7 @@
 (global-set-key (kbd "C-x M-DEL") 'backward-kill-sexp)
 
 
+
 (setq disabled-command-function nil)
 
 (setq view-read-only t)
@@ -55,16 +58,33 @@
 
 (winner-mode 1)
 
-(global-set-key (kbd "C-z") 'vip-change-mode-to-vi)
+(global-set-key (kbd "<f2>") 'listify-tab-completion)
+(global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
+
+(defvar +kill-ring-display-buffer "*kill-ring-display*")
+
+(defun +kill-ring-display ()
+  (interactive)
+  (switch-to-buffer-other-window +kill-ring-display-buffer)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (dolist (text kill-ring)
+      (insert text "\n\n\C-l\n\n")))
+  (set-buffer-modified-p nil)
+  (beginning-of-buffer)
+  (view-mode 1))
+
+(global-set-key (kbd "C-x y") '+kill-ring-display)
 
 (global-set-key (kbd "M-g r") 'avy-resume)
 (global-set-key (kbd "M-g l") 'avy-goto-line)
 (global-set-key (kbd "M-g j") 'avy-goto-char-timer)
 (define-key isearch-mode-map (kbd "M-g j") 'avy-isearch)
 
-(global-set-key (kbd "<f2>") 'listify-tab-completion)
+(global-set-key (kbd "C-z") 'vip-change-mode-to-vi)
 
 
+
 (global-set-key (kbd "C-c C-j") 'imenu)
 
 (with-eval-after-load 'flymake
@@ -96,6 +116,7 @@
 (add-hook 'prog-mode-hook 'company-mode)
 
 
+
 (when (getenv "WSLENV")
   (setq +xclip-program "clip.exe"
         browse-url-generic-program "/mnt/c/Windows/System32/cmd.exe"
@@ -143,6 +164,7 @@
 (setq ispell-dictionary "american")
 
 
+
 (defun +org-xdg-open (file _link)
   (call-process-shell-command (concat "xdg-open " file)))
 

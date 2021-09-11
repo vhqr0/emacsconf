@@ -3,13 +3,16 @@
 ;;; Commentary:
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
+;; (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
 
 ;;; Code:
 (require 'subr-x)
 (require 'hl-line)
 
 (defgroup listify nil
-  "Completing read UI.")
+  "Completing read UI."
+  :prefix "listify-"
+  :group 'listify)
 
 (defcustom listify-idle-delay 0.15
   "The idle delay in seconds to update `listify-window'."
@@ -82,7 +85,8 @@
              (line-beginning-position) (line-end-position))))
   (exit-minibuffer))
 
-(defun listify-read (collection)
+;;;###autoload
+(defun listify-read (prompt collection)
   "Read from minibuffer and select with listify COLLECTION."
   (save-window-excursion
     (let* ((listify-collection collection)
@@ -91,12 +95,13 @@
                                       (minibuffer-selected-window)
                                     (selected-window))
               (switch-to-buffer-other-window "*listify*")
+              (setq truncate-lines t)
               (hl-line-mode 1)
               (selected-window))))
       (listify-update "")
       (setq listify-timer (run-with-idle-timer listify-idle-delay t 'listify-update))
       (unwind-protect
-          (read-from-minibuffer "complete: " nil listify-map)
+          (read-from-minibuffer prompt nil listify-map)
         (kill-buffer (window-buffer listify-window))))))
 
 (defun listify-completion-in-region (beg end collection predicate)
@@ -112,7 +117,7 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
                          nil))
          (choice (cond ((null choices) nil)
                        ((null (cdr choices)) (car choices))
-                       (t (listify-read choices)))))
+                       (t (listify-read "complete: " choices)))))
     (when choice
       (delete-region boundary end)
       (insert (substring-no-properties choice)))))
@@ -127,6 +132,20 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
                       'completion-at-point
                     command)))
     (call-interactively command)))
+
+;;;###autoload
+(defun listify-switch-to-buffer ()
+  (interactive)
+  (require 'recentf)
+  (let* ((buffers (seq-filter
+                   (lambda (x)
+                     (not (= (aref x 0) ?\s)))
+                   (mapcar 'buffer-name (buffer-list))))
+         (choice (listify-read "open: " (append buffers recentf-list))))
+    (when choice
+      (if (member choice buffers)
+          (switch-to-buffer choice)
+        (find-file choice)))))
 
 (provide 'listify)
 ;;; listify.el ends here
