@@ -85,6 +85,16 @@
 
 (global-set-key (kbd "C-z") 'eve-change-mode-to-vi)
 
+(add-hook 'lisp-interaction-mode-hook 'eve-change-mode-to-vi)
+
+(defun +eve-ctrl-p ()
+  (interactive)
+  (listify-switch-to-buffer)
+  (eve-change-mode-to-vi))
+
+(with-eval-after-load 'eve
+  (define-key eve-vi-mode-map "\C-p" '+eve-ctrl-p))
+
 
 
 (global-set-key (kbd "C-c C-j") 'imenu)

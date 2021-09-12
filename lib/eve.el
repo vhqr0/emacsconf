@@ -490,7 +490,7 @@
   (skip-chars-forward " \t\n"))
 
 (eve-define-inclusive-motion eve-U
-  (backward-up-list arg))
+  (backward-up-list val))
 
 (eve-define-exclusive-motion eve-b
   (backward-word val))
@@ -705,3 +705,5 @@
     (delete-char val)
     (eve-loop val
       (insert eve-r-last))))
+
+(provide 'eve)
