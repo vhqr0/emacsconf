@@ -425,6 +425,16 @@ Start Eglot session for current buffer if there isn't one." nil nil)
 
 ;;;***
 
+;;;### (autoloads nil "eve" "eve.el" (0 0 0 0))
+;;; Generated autoloads from eve.el
+
+(autoload 'eve-change-mode-to-vi "eve" "\
+Change mode to vi." t nil)
+
+(register-definition-prefixes "eve" '("eve-"))
+
+;;;***
+
 ;;;### (autoloads nil "htmlize" "htmlize.el" (0 0 0 0))
 ;;; Generated autoloads from htmlize.el
 
@@ -515,16 +525,6 @@ Return output file name.
 \(fn PLIST FILENAME PUB-DIR)" nil nil)
 
 (register-definition-prefixes "ox-reveal" '("client-multiplex" "frag-" "if-format" "org-reveal-"))
-
-;;;***
-
-;;;### (autoloads nil "vip" "vip.el" (0 0 0 0))
-;;; Generated autoloads from vip.el
-
-(autoload 'vip-change-mode-to-vi "vip" "\
-Change mode to vi mode." t nil)
-
-(register-definition-prefixes "vip" '("vip-"))
 
 ;;;***
 

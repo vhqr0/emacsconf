@@ -33,6 +33,8 @@
 
 (recentf-mode 1)
 
+(defalias 'w 'save-buffer)
+
 
 
 (setq-default indent-tabs-mode nil)
@@ -81,7 +83,7 @@
 (global-set-key (kbd "M-g j") 'avy-goto-char-timer)
 (define-key isearch-mode-map (kbd "M-g j") 'avy-isearch)
 
-(global-set-key (kbd "C-z") 'vip-change-mode-to-vi)
+(global-set-key (kbd "C-z") 'eve-change-mode-to-vi)
 
 
 
