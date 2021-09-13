@@ -1,4 +1,10 @@
-;;; eve.el --- Emacs Vi Emu.
+;;; eve.el --- Emacs Vi Emu. -*- lexical-binding: t -*-
+
+;;; Commentary:
+;; Add this code to your init file:
+;; (global-set-key (kbd "C-z") 'eve-change-mode-to-vi)
+
+;;; Code:
 
 
 
@@ -7,7 +13,8 @@
     (define-key map "j"    'eve-jk)
     (define-key map "\M-z" 'eve-change-mode-to-vi)
     (define-key map "\C-z" 'eve-change-mode-to-emacs)
-    map))
+    map)
+  "Eve insert mode map.")
 
 (defvar eve-vi-mode-map
   (let ((map (make-sparse-keymap)))
@@ -86,7 +93,16 @@
     (define-key map "X" 'eve-X)
     (define-key map "r" 'eve-r)
     (define-key map "J"  "j\M-^")
-    map))
+    map)
+  "Eve vi mode map.")
+
+(defvar-local eve-d-com nil
+  "Last (m-com val com) used by eve-repeat.")
+
+(defvar eve-in-repeat nil
+  "Set to t while repeating to determine if read-xxx.")
+
+
 
 (define-minor-mode eve-insert-mode
   "Eve insert mode."
@@ -96,18 +112,22 @@
   "Eve vi mode."
   :keymap eve-vi-mode-map)
 
-(defvar-local eve-last-insert nil)
+(defvar-local eve-insert-point (make-marker)
+  "Save last insert start point.")
 
-(defvar-local eve-insert-point (make-marker))
+(defvar-local eve-insert-last nil
+  "Save last insert string.")
 
 (defvar-local eve-current-mode nil)
 
 (defun eve-change-mode (new-mode)
+  "Change mode to `new-mode'.
+`new-mode' is vi-mode, insert-mode or emacs-mode."
   (let (id)
     (unless (eq new-mode eve-current-mode)
       (cond ((eq new-mode 'vi-mode)
              (when (eq eve-current-mode 'insert-mode)
-               (setq eve-last-insert
+               (setq eve-insert-last
                      (buffer-substring-no-properties
                       (point) eve-insert-point))
                (let ((i-com (nth 0 eve-d-com))
@@ -151,6 +171,7 @@
   (eve-change-mode 'emacs-mode))
 
 (defun eve-jk ()
+  "Like vim's :imap jk <esc>."
   (interactive)
   (if (and (eq eve-current-mode 'insert-mode)
            (not executing-kbd-macro)
@@ -171,6 +192,7 @@
 
 
 (defun eve-prefix-arg-val (char val com)
+  "Process reading val."
   (while (<= ?0 char ?9)
     (setq val (+ (* (if (numberp val) val 0) 10) (- char ?0))
           char (read-char)))
@@ -181,6 +203,7 @@
   (push char unread-command-events))
 
 (defun eve-prefix-arg-com (char val com)
+  "Process reading com."
   (if com
       (if (or (eq char com)
               (and (eq com ?#) (eq char ?c))
@@ -188,102 +211,65 @@
           (eve-line
            `(,val . ,com))
         (error ""))
-    (setq prefix-arg `(,val . ,char))
-    (push (read-char) unread-command-events)))
+    (setq prefix-arg `(,val . ,char))))
 
 (defun eve-digit-arg (arg)
+  "Preprocess reading val."
   (interactive "P")
   (eve-prefix-arg-val
    last-command-event nil (cdr-safe arg)))
 
 (defun eve-command-arg (arg)
+  "Preprocess reading com."
   (interactive "P")
   (eve-prefix-arg-com last-command-event
                       (if (numberp arg) arg (car-safe arg))
                       (cdr-safe arg)))
 
 (defun eve-gc (arg)
+  "`eve-command-arg' wrapper for gc."
   (interactive "P")
   (let ((last-command-event ?#))
     (eve-command-arg arg)))
 
 (defun eve-gy (arg)
+  "`eve-command-arg' wrapper for gy."
   (interactive "P")
   (let ((last-command-event ?@))
     (eve-command-arg arg)))
 
 (defun eve-getval (arg)
+  "Get val from `prefix-arg'."
   (if (numberp arg)
       arg
     (or (car-safe arg) 1)))
 
 (defun eve-getcom (arg)
+  "Get com from `prefix-arg'."
   (cdr-safe arg))
 
 
 
-(defvar eve-surround-last nil)
-
-(defun eve-read-surround ()
-  (setq eve-surround-last
-        (if eve-in-repeat
-            eve-surround-last
-          (read-char)))
-  (or (cdr (assq eve-surround-last '((?b . (?\( . ?\)))
-                                     (?B . (?\{ . ?\}))
-                                     (?r . (?\[ . ?\])))))
-      `(,eve-surround-last . ,eve-surround-last)) )
-
-(defun eve-surround-region (beg end)
-  (let ((pair (eve-read-surround)))
-    (goto-char end)
-    (insert (cdr pair))
-    (goto-char beg)
-    (insert (car pair))
-    (indent-region beg end)))
-
-(defun eve-s (arg)
-  (interactive "P")
-  (let ((val (eve-getval arg))
-        (com (eve-getcom arg)))
-    (cond ((eq com ?y)
-           (eve-command-arg nil))
-          ((eq com ?s)
-           (eve-command-arg arg))
-          ((eq com ?d)
-           (setq eve-d-com '(eve-s nil ?d))
-           (save-excursion
-             (backward-up-list)
-             (delete-pair)))
-          ((eq com ?c)
-           (let ((pair (eve-read-surround)))
-             (save-excursion
-               (backward-up-list)
-               (insert-pair 1 (car pair) (cdr pair))
-               (delete-pair))))
-          (t
-           (delete-char val)
-           (eve-change-mode-to-insert)))))
-
-
-
 (defvar eve-eval-functions
+  "Alist of (major-mode . eval-region-function), used by `eve-eval-region'."
   '((emacs-lisp-mode . eval-region)
     (lisp-interaction-mode . eval-region)
     (python-mode . python-shell-send-region)))
 
 (defun eve-eval-region (beg end)
+  "Eval region by `major-mode'."
   (let ((func (cdr (assq major-mode eve-eval-functions))))
     (when func
       (funcall func beg end))))
 
 
 
-(defvar-local eve-com-point (make-marker))
-
-(defvar-local eve-d-com nil)
+(defvar-local eve-com-point (make-marker)
+  "Normally set by motion, and then call `eve-exec-com'.
+The region is `eve-com-point' and `point'.")
 
 (defun eve-exec-com (m-com val com)
+  "Call function by `com' and set `eve-d-com' for `eve-repeat'."
   (let ((func (assq com '((?c . kill-region)
                           (?d . kill-region)
                           (?y . copy-region-as-kill)
@@ -309,9 +295,8 @@
        ,@body
        (setq count (1- count)))))
 
-(defvar eve-in-repeat nil)
-
 (defun eve-repeat (&optional arg)
+  "Repeat by `eve-d-com'."
   (interactive "P")
   (eve-loop (or arg 1)
     (let ((eve-in-repeat t)
@@ -325,8 +310,11 @@
 
 
 (defmacro eve-define-insert (func &rest body)
+  "Dispatch to `eve-tobj' when there is a com.
+Eval `body' and insert or yank if in repeat."
   (declare (indent 1))
   `(defun ,func (arg)
+     "Generated by `eve-define-insert'."
      (interactive "P")
      (let ((val (eve-getval arg))
            (com (eve-getcom arg)))
@@ -334,7 +322,7 @@
              (eve-in-repeat
               (eve-loop val
                 ,@body
-                (insert eve-last-insert)))
+                (insert eve-insert-last)))
              (t
               (setq eve-d-com (list ',func val))
               ,@body
@@ -363,18 +351,18 @@
 
 
 
-(defvar-local eve-save-point (make-marker))
+(defvar-local eve-save-point (make-marker)
+  "Save last position by motion, and restore after `eve-exec-com'.")
 
 (defvar eve-tobj-last nil)
 
 (defun eve-tobj (arg)
+  "Like vim's inner text object."
   (interactive "P")
   (let ((val (eve-getval arg))
         (com (eve-getcom arg)))
-    (setq eve-tobj-last
-          (if eve-in-repeat
-              eve-tobj-last
-            (read-char)))
+    (unless eve-in-repeat
+      (setq eve-tobj-last (read-char)))
     (let (range)
       (setq range (cdr (assq eve-tobj-last
                              '((?w . word)
@@ -404,6 +392,7 @@
   "For h, l, w, W, b, B, F, T, /, ?, 0, ^, $, `."
   (declare (indent 1))
   `(defun ,func (arg)
+     "Generated by `eve-define-exclusive-motion'."
      (interactive "P")
      (let ((val (eve-getval arg))
            (com (eve-getcom arg)))
@@ -419,6 +408,7 @@
   "For e, E, U, f, t."
   (declare (indent 1))
   `(defun ,func (arg)
+     "Generated by `eve-define-inclusive-motion'."
      (interactive "P")
      (let ((val (eve-getval arg))
            (com (eve-getcom arg)))
@@ -436,6 +426,7 @@
   (declare (indent 1))
   `(defun ,func (arg)
      (interactive "P")
+     "Generated by `eve-define-line-motion'."
      (let ((val (eve-getval arg))
            (com (eve-getcom arg))
            beg end tmp)
@@ -469,11 +460,11 @@
 
 (eve-define-line-motion eve-j
   (setq this-command 'next-line)
-  (next-line val))
+  (line-move val))
 
 (eve-define-line-motion eve-k
   (setq this-command 'previous-line)
-  (previous-line val))
+  (line-move (- val)))
 
 (eve-define-exclusive-motion eve-h
   (backward-char val))
@@ -540,30 +531,23 @@
 (defvar eve-f-char nil)
 
 (defun eve-find-char (val)
-  (setq eve-f-char
-        (if eve-in-repeat
-            eve-f-char
-          (read-char)))
+  "Find `eve-f-char' by `eve-f-forward'."
+  (unless eve-in-repeat
+    (setq eve-f-char (read-char)))
   (let ((point (point)))
     (condition-case nil
         (if eve-f-forward
             (progn
               (forward-char)
-              (re-search-forward
-               (concat "\n\\|" (regexp-quote (string eve-f-char)))
-               nil nil val)
-              (backward-char)
-              (when (eq (following-char) ?\n)
-                (goto-char point)
-                (signal 'search-failed "Search failed")))
-          (re-search-backward
-           (concat "\n\\|" (regexp-quote (string eve-f-char)))
-           nil nil val)
-          (when (eq (following-char) ?\n)
-            (goto-char point)
-            (signal 'search-failed "Search failed")))
+              (when eve-f-t
+                (forward-char))
+              (search-forward (string eve-f-char) nil nil val)
+              (backward-char))
+          (backward-char)
+          (search-backward (string eve-f-char) nil nil val))
       (search-failed
-       (error "Search failed")))))
+       (goto-char point)
+       (error "Search failed.")))))
 
 (eve-define-inclusive-motion eve-f
   (setq eve-f-t nil
@@ -588,30 +572,27 @@
   (forward-char))
 
 (defun eve-\; (arg)
+  "Repeat `eve-find-char'."
   (interactive "P")
   (let ((eve-in-repeat t))
     (if eve-f-t
-        (if eve-f-forward
-            (eve-t arg)
-          (eve-T arg))
-      (if eve-f-forward
-          (eve-f arg)
-        (eve-F arg)))))
+        (if eve-f-forward (eve-t arg) (eve-T arg))
+      (if eve-f-forward (eve-f arg) (eve-F arg)))))
 
 (defun eve-\, (arg)
+  "Repeat `eve-find-char' reverse."
   (interactive "P")
-  (setq eve-f-forward (not eve-f-forward))
-  (eve-\; arg)
-  (setq eve-f-forward (not eve-f-forward)))
+  (let ((eve-f-forward (not eve-f-forward)))
+    (eve-\; arg)))
 
 (defvar eve-s-forward nil)
 
 (defvar eve-s-string nil)
 
 (defun eve-search-string (val)
-  (setq eve-s-string
-        (if eve-in-repeat
-            eve-s-string
+  "Search `eve-s-string' by `eve-s-forward'."
+  (unless eve-in-repeat
+    (setq eve-s-string
           (read-string (if eve-s-forward "/" "?"))))
   (let ((point (point)))
     (condition-case nil
@@ -634,6 +615,7 @@
   (eve-search-string val))
 
 (defun eve-n (arg)
+  "Repeat `eve-search-string'."
   (interactive "P")
   (let ((eve-in-repeat t))
     (if eve-s-forward
@@ -641,10 +623,59 @@
       (eve-? arg))))
 
 (defun eve-N (arg)
+  "Repeat `eve-search-string' reverse."
   (interactive "P")
-  (setq eve-s-forward (not eve-s-forward))
-  (eve-n arg)
-  (setq eve-s-forward (not eve-s-forward)))
+  (let ((eve-s-forward (not eve-s-forward)))
+    (eve-n arg)))
+
+
+
+(defvar eve-surround-last nil)
+
+(defun eve-read-surround ()
+  "Read `eve-surround-last' and return corresponding pair."
+  (unless eve-in-repeat
+    (setq eve-surround-last (read-char)))
+  (or (cdr (assq eve-surround-last '((?b . (?\( . ?\)))
+                                     (?B . (?\{ . ?\}))
+                                     (?r . (?\[ . ?\]))
+                                     (?< . (?\< . ?\>))
+                                     (?\` . (?\` . ?\')))))
+      `(,eve-surround-last . ,eve-surround-last)) )
+
+(defun eve-surround-region (beg end)
+  "Surround region, used by `eve-exec-com' when com is ?s."
+  (let ((pair (eve-read-surround)))
+    (goto-char end)
+    (insert (cdr pair))
+    (goto-char beg)
+    (insert (car pair))
+    (indent-region beg end)))
+
+(defun eve-s (arg)
+  "Like vim-surround but target determined by `backward-up-list'."
+  (interactive "P")
+  (let ((val (eve-getval arg))
+        (com (eve-getcom arg)))
+    (cond ((eq com ?y)
+           (eve-command-arg nil))
+          ((eq com ?s)
+           (eve-command-arg arg))
+          ((eq com ?d)
+           (setq eve-d-com '(eve-s nil ?d))
+           (save-excursion
+             (backward-up-list)
+             (delete-pair)))
+          ((eq com ?c)
+           (setq eve-d-com '(eve-s nil ?c))
+           (let ((pair (eve-read-surround)))
+             (save-excursion
+               (backward-up-list)
+               (insert-pair 1 (car pair) (cdr pair))
+               (delete-pair))))
+          (t
+           (delete-char val)
+           (eve-change-mode-to-insert)))))
 
 
 
@@ -653,6 +684,7 @@
       (eq (aref string (1- (length string))) ?\n)))
 
 (defun eve-p (arg)
+  "Yank after."
   (interactive "P")
   (save-excursion
     (let ((val (eve-getval arg)))
@@ -669,6 +701,7 @@
           (yank))))))
 
 (defun eve-P (arg)
+  "Yank before."
   (interactive "P")
   (save-excursion
     (let ((val (eve-getval arg)))
@@ -681,12 +714,14 @@
           (yank))))))
 
 (defun eve-x (arg)
+  "Kill after char."
   (interactive "P")
   (let ((val (eve-getval arg)))
     (setq eve-d-com `(eve-x ,val))
     (kill-region (point) (+ (point) val))))
 
 (defun eve-X (arg)
+  "Kill before char."
   (interactive "P")
   (let ((val (eve-getval arg)))
     (setq eve-d-com `(eve-X ,val))
@@ -695,15 +730,15 @@
 (defvar eve-r-last nil)
 
 (defun eve-r (arg)
+  "Replace after char."
   (interactive "P")
   (let ((val (eve-getval arg)))
     (setq eve-d-com `(eve-r ,val))
-    (setq eve-r-last
-          (if eve-in-repeat
-              eve-r-last
-            (read-char)))
+    (unless eve-in-repeat
+      (setq eve-r-last (read-char)))
     (delete-char val)
     (eve-loop val
       (insert eve-r-last))))
 
 (provide 'eve)
+;;; eve.el ends here
