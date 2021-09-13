@@ -538,12 +538,11 @@ Eval `body' and insert or yank if in repeat."
     (condition-case nil
         (if eve-f-forward
             (progn
-              (forward-char)
-              (when eve-f-t
-                (forward-char))
+              (forward-char (if eve-f-t 2 1))
               (search-forward (string eve-f-char) nil nil val)
               (backward-char))
-          (backward-char)
+          (when eve-f-t
+            (backward-char))
           (search-backward (string eve-f-char) nil nil val))
       (search-failed
        (goto-char point)
