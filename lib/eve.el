@@ -96,14 +96,6 @@
     map)
   "Eve vi mode map.")
 
-(defvar-local eve-d-com nil
-  "Last (m-com val com) used by eve-repeat.")
-
-(defvar eve-in-repeat nil
-  "Set to t while repeating to determine if read-xxx.")
-
-
-
 (define-minor-mode eve-insert-mode
   "Eve insert mode."
   :keymap eve-insert-mode-map)
@@ -111,6 +103,14 @@
 (define-minor-mode eve-vi-mode
   "Eve vi mode."
   :keymap eve-vi-mode-map)
+
+(defvar-local eve-d-com nil
+  "Last (m-com val com) used by eve-repeat.")
+
+(defvar eve-in-repeat nil
+  "Set to t while repeating to determine if read-xxx.")
+
+
 
 (defvar-local eve-insert-point (make-marker)
   "Save last insert start point.")
@@ -417,7 +417,7 @@ Eval `body' and insert or yank if in repeat."
          (move-marker eve-com-point (point)))
        ,@body
        (when com
-         (forward-word)
+         (forward-char)
          (eve-exec-com ',func val com)
          (goto-char eve-save-point)))))
 
