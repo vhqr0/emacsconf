@@ -258,10 +258,10 @@ ARG see `eve-command-arg'."
 
 
 (defvar eve-eval-functions
-  "Alist of (major-mode . eval-region-function), used by `eve-eval-region'."
   '((emacs-lisp-mode . eval-region)
     (lisp-interaction-mode . eval-region)
-    (python-mode . python-shell-send-region)))
+    (python-mode . python-shell-send-region))
+  "Alist of (major-mode . eval-region-function), used by `eve-eval-region'.")
 
 (defun eve-eval-region (beg end)
   "Eval region (BEG . END) by `major-mode'."

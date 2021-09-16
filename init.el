@@ -31,6 +31,8 @@
 
 (auto-save-visited-mode 1)
 
+(setq recentf-max-saved-items 100)
+
 (recentf-mode 1)
 
 (defalias 'w 'save-buffer)
@@ -57,8 +59,6 @@
 (global-set-key (kbd "C-x U") 'undo-redo)
 (define-key undo-repeat-map (kbd "U") 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
-
-(winner-mode 1)
 
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
 (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
