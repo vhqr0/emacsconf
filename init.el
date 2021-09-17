@@ -55,7 +55,7 @@
 (repeat-mode 1)
 
 (global-set-key (kbd "C-x U") 'undo-redo)
-(define-key undo-repeat-map (kbd "U") 'undo-redo)
+(define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
 
@@ -77,11 +77,16 @@
 
 
 
+(define-key special-mode-map "n" 'next-line)
+(define-key special-mode-map "p" 'previous-line)
+
 (setq view-read-only t)
 
 (with-eval-after-load 'view
   (define-key view-mode-map "j"    'next-line)
   (define-key view-mode-map "k"    'previous-line)
+  (define-key view-mode-map "h"    'backward-char)
+  (define-key view-mode-map "l"    'forward-char)
   (define-key view-mode-map "\C-p" 'listify-switch-to-buffer))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
@@ -119,8 +124,8 @@
 (global-set-key (kbd "C-c C-j") 'imenu)
 
 (with-eval-after-load 'flymake
-  (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-  (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error))
+  (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
+  (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
 
 (defun +flymake-cc-command ()
   `("gcc" "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c") "-fsyntax-only" "-"))
@@ -209,4 +214,4 @@
       org-special-ctrl-a/e t)
 
 (with-eval-after-load 'org
-  (define-key org-mode-map (kbd "<") "\C-q<"))
+  (define-key org-mode-map "<" "\C-q<"))
