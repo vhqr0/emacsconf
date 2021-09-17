@@ -52,16 +52,13 @@
 
 (setq disabled-command-function nil)
 
-(setq view-read-only t)
-
 (repeat-mode 1)
 
 (global-set-key (kbd "C-x U") 'undo-redo)
 (define-key undo-repeat-map (kbd "U") 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
-(global-set-key (kbd "<f2>") 'listify-tab-completion)
-(global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
+
 
 (defvar +kill-ring-display-buffer "*kill-ring-display*")
 
@@ -78,22 +75,44 @@
 
 (global-set-key (kbd "C-x y") '+kill-ring-display)
 
-(global-set-key (kbd "M-g r") 'avy-resume)
-(global-set-key (kbd "M-g l") 'avy-goto-line)
-(global-set-key (kbd "M-g j") 'avy-goto-char-timer)
-(define-key isearch-mode-map (kbd "M-g j") 'avy-isearch)
+
 
-(global-set-key (kbd "C-z") 'eve-change-mode-to-vi)
+(setq view-read-only t)
 
-(add-hook 'lisp-interaction-mode-hook 'eve-change-mode-to-vi)
+(with-eval-after-load 'view
+  (define-key view-mode-map "j"    'next-line)
+  (define-key view-mode-map "k"    'previous-line)
+  (define-key view-mode-map "\C-p" 'listify-switch-to-buffer))
 
-(defun +eve-ctrl-p ()
-  (interactive)
-  (listify-switch-to-buffer)
-  (eve-change-mode-to-vi))
+(global-set-key "\C-z" 'eve-change-mode-to-vi)
+
+(defun +eve-setup ()
+  (cond ((derived-mode-p 'special-mode 'dired-mode)
+         (eve-jk-mode 1))
+        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
+         (eve-change-mode-to-vi))))
+
+(defun +eve-view-setup ()
+  (if view-mode
+      (when eve-current-mode
+        (eve-change-mode-to-emacs))
+    (+eve-setup)))
+
+(add-hook 'after-change-major-mode-hook '+eve-setup)
+(add-hook 'view-mode-hook '+eve-view-setup)
 
 (with-eval-after-load 'eve
-  (define-key eve-vi-mode-map "\C-p" '+eve-ctrl-p))
+  (define-key eve-jk-mode-map "\C-p" 'listify-switch-to-buffer)
+  (define-key eve-vi-mode-map "\C-p" 'listify-switch-to-buffer))
+
+(global-set-key (kbd "<f2>") 'listify-tab-completion)
+(global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
+
+(global-set-key (kbd "M-g r") 'avy-resume)
+(global-set-key (kbd "M-g l") 'avy-goto-line)
+(global-set-key (kbd "M-g w") 'avy-goto-word-0)
+(global-set-key (kbd "M-g j") 'avy-goto-char-timer)
+(define-key isearch-mode-map (kbd "M-g j") 'avy-isearch)
 
 
 
@@ -151,7 +170,8 @@
     (call-process-shell-command (concat "xdg-open " file))))
 
 (with-eval-after-load 'dired
-  (define-key dired-mode-map (kbd "V") '+dired-do-xdg-open))
+  (define-key dired-mode-map "K" 'dired-kill-line)
+  (define-key dired-mode-map "V" '+dired-do-xdg-open))
 
 (with-eval-after-load 'project
   (setq project-switch-commands
