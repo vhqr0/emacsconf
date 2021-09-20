@@ -263,6 +263,13 @@ Transpose lines in the active region." t nil)
 
 ;;;***
 
+;;;### (autoloads nil "cja" "cja.el" (0 0 0 0))
+;;; Generated autoloads from cja.el
+
+(register-definition-prefixes "cja" '("cja-"))
+
+;;;***
+
 ;;;### (autoloads nil "company" "company.el" (0 0 0 0))
 ;;; Generated autoloads from company.el
 
@@ -370,6 +377,33 @@ dabbrev-like `company-mode' completion backend.
 
 ;;;***
 
+;;;### (autoloads nil "company-dabbrev-code" "company-dabbrev-code.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from company-dabbrev-code.el
+
+(autoload 'company-dabbrev-code "company-dabbrev-code" "\
+dabbrev-like `company-mode' backend for code.
+The backend looks for all symbols in the current buffer that aren't in
+comments or strings.
+
+\(fn COMMAND &optional ARG &rest IGNORED)" t nil)
+
+(register-definition-prefixes "company-dabbrev-code" '("company-dabbrev-code-"))
+
+;;;***
+
+;;;### (autoloads nil "company-etags" "company-etags.el" (0 0 0 0))
+;;; Generated autoloads from company-etags.el
+
+(autoload 'company-etags "company-etags" "\
+`company-mode' completion backend for etags.
+
+\(fn COMMAND &optional ARG &rest IGNORED)" t nil)
+
+(register-definition-prefixes "company-etags" '("company-etags-"))
+
+;;;***
+
 ;;;### (autoloads nil "company-files" "company-files.el" (0 0 0 0))
 ;;; Generated autoloads from company-files.el
 
@@ -381,6 +415,19 @@ File paths with spaces are only supported inside strings.
 \(fn COMMAND &optional ARG &rest IGNORED)" t nil)
 
 (register-definition-prefixes "company-files" '("company-file"))
+
+;;;***
+
+;;;### (autoloads nil "company-keywords" "company-keywords.el" (0
+;;;;;;  0 0 0))
+;;; Generated autoloads from company-keywords.el
+
+(autoload 'company-keywords "company-keywords" "\
+`company-mode' backend for programming language keywords.
+
+\(fn COMMAND &optional ARG &rest IGNORED)" t nil)
+
+(register-definition-prefixes "company-keywords" '("company-keywords-"))
 
 ;;;***
 
@@ -556,6 +603,10 @@ Setup wgrep preparation." nil nil)
 (add-hook 'grep-setup-hook 'wgrep-setup)
 
 (register-definition-prefixes "wgrep" '("wgrep-"))
+
+;;;***
+
+;;;### (autoloads nil nil ("cja-cc.el") (0 0 0 0))
 
 ;;;***
 

@@ -8,8 +8,8 @@
 
 
 
-(setq text-quoting-style 'grave)
-(startup--setup-quote-display 'grave)
+;; (setq text-quoting-style 'grave)
+;; (startup--setup-quote-display)
 
 (setq visible-bell t)
 
@@ -35,7 +35,13 @@
 
 (recentf-mode 1)
 
-(defalias 'w 'save-buffer)
+
+
+(define-key minibuffer-local-completion-map " " "-")
+
+(defalias 'w    'save-buffer)
+(defalias 'mak  'compile)
+(defalias 'make 'compile)
 
 
 
@@ -92,7 +98,7 @@
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
 (defun +eve-setup ()
-  (cond ((derived-mode-p 'special-mode 'dired-mode)
+  (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
          (eve-jk-mode 1))
         ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
          (eve-change-mode-to-vi))))
@@ -121,6 +127,9 @@
 
 
 
+(with-eval-after-load 'cc-mode
+  (require 'cja-cc))
+
 (global-set-key (kbd "C-c C-j") 'imenu)
 
 (with-eval-after-load 'flymake
@@ -142,12 +151,17 @@
       company-frontends
       '(company-pseudo-tooltip-unless-just-one-frontend
         company-preview-if-just-one-frontend)
-      company-backends '(company-files company-dabbrev))
+      company-backends
+      '(company-files
+        (company-dabbrev-code
+         company-etags
+         company-keywords)
+        company-dabbrev))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (setq-local company-backends
-                        '(company-capf company-files company-dabbrev))))
+                        `(company-capf ,@company-backends))))
 
 (add-hook 'prog-mode-hook 'company-mode)
 
@@ -155,6 +169,7 @@
 
 (when (getenv "WSLENV")
   (setq +xclip-program "clip.exe"
+        +xdg-open-program (expand-file-name "bin/xdg-open" user-emacs-directory)
         browse-url-generic-program "/mnt/c/Windows/System32/cmd.exe"
         browse-url-generic-args '("/c" "start")
         browse-url-browser-function 'browse-url-generic))
@@ -167,14 +182,20 @@
 
 (global-set-key (kbd "C-x w") '+xclip)
 
+(defvar +xdg-open-program "xdg-open")
+
+(defun +xdg-open (file)
+  (call-process-shell-command (concat +xdg-open-program " " file)))
+
 (setq dired-listing-switches "-alh")
 
 (defun +dired-do-xdg-open ()
   (interactive)
   (dolist (file (dired-get-marked-files))
-    (call-process-shell-command (concat "xdg-open " file))))
+    (+xdg-open file)))
 
 (with-eval-after-load 'dired
+  (define-key dired-mode-map "J" 'dired-goto-file)
   (define-key dired-mode-map "K" 'dired-kill-line)
   (define-key dired-mode-map "V" '+dired-do-xdg-open))
 
@@ -203,7 +224,7 @@
 
 
 (defun +org-xdg-open (file _link)
-  (call-process-shell-command (concat "xdg-open " file)))
+  (+xdg-open file))
 
 (setq org-modules '(org-tempo)
       org-file-apps '((auto-mode . emacs)
