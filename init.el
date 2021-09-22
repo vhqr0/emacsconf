@@ -113,6 +113,8 @@
 (add-hook 'view-mode-hook '+eve-view-setup)
 
 (with-eval-after-load 'eve
+  (define-key eve-jk-mode-map "z"    'avy-goto-char-timer)
+  (define-key eve-vi-mode-map "z"    'avy-goto-char-timer)
   (define-key eve-jk-mode-map "\C-p" 'listify-switch-to-buffer)
   (define-key eve-vi-mode-map "\C-p" 'listify-switch-to-buffer))
 
@@ -126,9 +128,6 @@
 (define-key isearch-mode-map (kbd "M-g j") 'avy-isearch)
 
 
-
-(with-eval-after-load 'cc-mode
-  (require 'cja-cc))
 
 (global-set-key (kbd "C-c C-j") 'imenu)
 
@@ -147,7 +146,7 @@
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
-(setq company-idle-delay 0.15
+(setq company-idle-delay 0.1
       company-frontends
       '(company-pseudo-tooltip-unless-just-one-frontend
         company-preview-if-just-one-frontend)

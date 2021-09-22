@@ -263,13 +263,6 @@ Transpose lines in the active region." t nil)
 
 ;;;***
 
-;;;### (autoloads nil "cja" "cja.el" (0 0 0 0))
-;;; Generated autoloads from cja.el
-
-(register-definition-prefixes "cja" '("cja-"))
-
-;;;***
-
 ;;;### (autoloads nil "company" "company.el" (0 0 0 0))
 ;;; Generated autoloads from company.el
 
@@ -603,10 +596,6 @@ Setup wgrep preparation." nil nil)
 (add-hook 'grep-setup-hook 'wgrep-setup)
 
 (register-definition-prefixes "wgrep" '("wgrep-"))
-
-;;;***
-
-;;;### (autoloads nil nil ("cja-cc.el") (0 0 0 0))
 
 ;;;***
 

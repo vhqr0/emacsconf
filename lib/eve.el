@@ -66,6 +66,7 @@
     (define-key map "." 'eve-repeat)
     (define-key map "u" 'undo)
     (define-key map "m" 'point-to-register)
+    (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
 
     (define-key map "j"  'eve-j)
