@@ -89,11 +89,15 @@
 (setq view-read-only t)
 
 (with-eval-after-load 'view
-  (define-key view-mode-map "j"    'next-line)
-  (define-key view-mode-map "k"    'previous-line)
-  (define-key view-mode-map "h"    'backward-char)
-  (define-key view-mode-map "l"    'forward-char)
-  (define-key view-mode-map "\C-p" 'listify-switch-to-buffer))
+  (define-key view-mode-map "g" nil)
+  (dolist (key '("j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
+                 "/" "?" "n" "N" "f" "F" "t" "T" ";" ":"
+                 "gg" "G" "'" "`" "0" "$" "^"))
+    (define-key view-mode-map key (intern (concat "eve-" key))))
+  (define-key view-mode-map "y" 'eve-command-arg)
+  (define-key view-mode-map ":" 'execute-extended-command)
+  (define-key view-mode-map "v" 'set-mark-command)
+  (define-key view-mode-map "m" 'point-to-register))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
@@ -101,7 +105,9 @@
   (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
          (eve-jk-mode 1))
         ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
-         (eve-change-mode-to-vi))))
+         (eve-change-mode-to-vi))
+        ((derived-mode-p 'comint-mode)
+         (eve-change-mode-to-insert))))
 
 (defun +eve-view-setup ()
   (if view-mode
@@ -112,20 +118,42 @@
 (add-hook 'after-change-major-mode-hook '+eve-setup)
 (add-hook 'view-mode-hook '+eve-view-setup)
 
+
+
+(with-eval-after-load 'project
+  (setq project-switch-commands
+        '((project-shell "shell")
+          (project-vc-dir "vc")
+          (project-dired "dired")
+          (project-find-file "find file"))))
+
+(global-set-key (kbd "<f2>") 'listify-tab-completion)
+
 (with-eval-after-load 'eve
-  (define-key eve-jk-mode-map "z"    'avy-goto-char-timer)
-  (define-key eve-vi-mode-map "z"    'avy-goto-char-timer)
   (define-key eve-jk-mode-map "\C-p" 'listify-switch-to-buffer)
   (define-key eve-vi-mode-map "\C-p" 'listify-switch-to-buffer))
 
-(global-set-key (kbd "<f2>") 'listify-tab-completion)
-(global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
+(with-eval-after-load 'view
+  (define-key view-mode-map "\C-p" 'listify-switch-to-buffer))
 
-(global-set-key (kbd "M-g r") 'avy-resume)
-(global-set-key (kbd "M-g l") 'avy-goto-line)
-(global-set-key (kbd "M-g w") 'avy-goto-word-0)
-(global-set-key (kbd "M-g j") 'avy-goto-char-timer)
-(define-key isearch-mode-map (kbd "M-g j") 'avy-isearch)
+
+
+(global-set-key "\M-o" 'avy-goto-char-timer)
+(define-key isearch-mode-map "\M-o" 'avy-isearch)
+
+(with-eval-after-load 'eve
+  (define-key eve-vi-mode-map "g." 'avy-resume)
+  (define-key eve-vi-mode-map "gf" 'avy-goto-char)
+  (define-key eve-vi-mode-map "gj" 'avy-goto-line)
+  (define-key eve-vi-mode-map "gw" 'avy-goto-word-0)
+  (define-key eve-vi-mode-map "go" 'avy-goto-symbol-1))
+
+(with-eval-after-load 'view
+  (define-key view-mode-map "g." 'avy-resume)
+  (define-key view-mode-map "gf" 'avy-goto-char)
+  (define-key view-mode-map "gj" 'avy-goto-line)
+  (define-key view-mode-map "gw" 'avy-goto-word-0)
+  (define-key view-mode-map "go" 'avy-goto-symbol-1))
 
 
 
@@ -148,19 +176,14 @@
 
 (setq company-idle-delay 0.1
       company-frontends
-      '(company-pseudo-tooltip-unless-just-one-frontend
-        company-preview-if-just-one-frontend)
+      '(company-pseudo-tooltip-frontend)
       company-backends
-      '(company-files
+      '(company-capf
+        company-files
         (company-dabbrev-code
          company-etags
          company-keywords)
         company-dabbrev))
-
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (setq-local company-backends
-                        `(company-capf ,@company-backends))))
 
 (add-hook 'prog-mode-hook 'company-mode)
 
@@ -197,13 +220,6 @@
   (define-key dired-mode-map "J" 'dired-goto-file)
   (define-key dired-mode-map "K" 'dired-kill-line)
   (define-key dired-mode-map "V" '+dired-do-xdg-open))
-
-(with-eval-after-load 'project
-  (setq project-switch-commands
-        '((project-find-file "find file")
-          (project-dired "dired")
-          (project-vc-dir "vc-dir")
-          (project-shell "shell"))))
 
 (defun +grep-rg ()
   (interactive)

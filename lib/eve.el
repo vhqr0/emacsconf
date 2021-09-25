@@ -11,9 +11,8 @@
 
 (defvar eve-jk-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "j"    "n")
-    (define-key map "k"    "p")
-    (define-key map "\M-z" 'eve-jk-mode)
+    (define-key map "j" "n")
+    (define-key map "k" "p")
     map)
   "Eve jk mode map.")
 
@@ -30,7 +29,6 @@
     (define-key map [remap self-insert-command] 'undefined)
     (define-key map "\s"   'scroll-up-command)
     (define-key map "\d"   'scroll-down-command)
-    (define-key map "\M-z" 'eve-jk-mode)
     (define-key map "\C-z" 'eve-change-mode-to-emacs)
 
     (define-key map "1" 'eve-digit-arg)
@@ -140,6 +138,9 @@
 (defvar-local eve-insert-last nil
   "Save last insert string.")
 
+(defvar-local eve-insert-record nil
+  "Weather record insert string.")
+
 (defvar-local eve-current-mode nil)
 
 (defun eve-change-mode (new-mode)
@@ -149,25 +150,28 @@ NEW-MODE is vi-mode, insert-mode or emacs-mode."
     (unless (eq new-mode eve-current-mode)
       (cond ((eq new-mode 'vi-mode)
              (when (eq eve-current-mode 'insert-mode)
-               (setq eve-insert-last
-                     (buffer-substring-no-properties
-                      (point) eve-insert-point))
-               (let ((i-com (nth 0 eve-d-com))
-                     (val (nth 1 eve-d-com)))
-                 (when (and val (> val 1))
-                   (setq eve-d-com `(,i-com ,(1- val)))
-                   (eve-repeat)
-                   (setq eve-d-com `(,i-com ,val))))
+               (when eve-insert-record
+                 (setq eve-insert-last
+                       (buffer-substring-no-properties
+                        (point) eve-insert-point))
+                 (let ((i-com (nth 0 eve-d-com))
+                       (val (nth 1 eve-d-com)))
+                   (when (and val (> val 1))
+                     (setq eve-d-com `(,i-com ,(1- val)))
+                     (eve-repeat)
+                     (setq eve-d-com `(,i-com ,val)))))
                (eve-insert-mode -1))
              (eve-vi-mode 1)
              (setq id "<V>"))
             ((eq new-mode 'insert-mode)
              (when (eq eve-current-mode 'vi-mode)
+               (setq eve-insert-record t)
                (move-marker eve-insert-point (point))
                (eve-vi-mode -1))
              (eve-insert-mode 1)
              (setq id "<I>"))
             (t
+             (setq eve-insert-record nil)
              (eve-vi-mode -1)
              (eve-insert-mode -1)
              (setq id "<E>")))
