@@ -244,19 +244,3 @@
       wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
-
-
-
-(defun +org-xdg-open (file _link)
-  (+xdg-open file))
-
-(setq org-modules '(org-tempo)
-      org-file-apps '((auto-mode . emacs)
-                      (directory . emacs)
-                      ("\\.pdf\\'\\|\\.x?html?\\'" . +org-xdg-open))
-      org-export-backends '(html reveal latex)
-      org-html-postamble nil
-      org-special-ctrl-a/e t)
-
-(with-eval-after-load 'org
-  (define-key org-mode-map "<" "\C-q<"))
