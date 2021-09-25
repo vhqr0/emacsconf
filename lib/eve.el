@@ -101,6 +101,8 @@
     (define-key map "N"  'eve-N)
     (define-key map "`"  'eve-\`)
     (define-key map "'"  'eve-\')
+    (define-key map "gn" "\C-c\C-n")
+    (define-key map "gp" "\C-c\C-p")
 
     (define-key map "p" 'eve-p)
     (define-key map "P" 'eve-P)

@@ -94,10 +94,13 @@
                  "/" "?" "n" "N" "f" "F" "t" "T" ";" ":"
                  "gg" "G" "'" "`" "0" "$" "^"))
     (define-key view-mode-map key (intern (concat "eve-" key))))
-  (define-key view-mode-map "y" 'eve-command-arg)
-  (define-key view-mode-map "m" 'point-to-register)
-  (define-key view-mode-map "v" 'set-mark-command)
-  (define-key view-mode-map ":" 'execute-extended-command))
+  (define-key view-mode-map "gn" "\C-c\C-n")
+  (define-key view-mode-map "gp" "\C-c\C-p")
+  (define-key view-mode-map "."  'repeat)
+  (define-key view-mode-map "y"  'eve-command-arg)
+  (define-key view-mode-map "m"  'point-to-register)
+  (define-key view-mode-map "v"  'set-mark-command)
+  (define-key view-mode-map ":"  'execute-extended-command))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
@@ -160,8 +163,8 @@
 (global-set-key (kbd "C-c C-j") 'imenu)
 
 (with-eval-after-load 'flymake
-  (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
-  (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
+  (define-key flymake-mode-map (kbd "C-c C-n") 'flymake-goto-next-error)
+  (define-key flymake-mode-map (kbd "C-c C-p") 'flymake-goto-prev-error))
 
 (defun +flymake-cc-command ()
   `("gcc" "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c") "-fsyntax-only" "-"))
