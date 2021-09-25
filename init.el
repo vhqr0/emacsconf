@@ -95,9 +95,9 @@
                  "gg" "G" "'" "`" "0" "$" "^"))
     (define-key view-mode-map key (intern (concat "eve-" key))))
   (define-key view-mode-map "y" 'eve-command-arg)
-  (define-key view-mode-map ":" 'execute-extended-command)
+  (define-key view-mode-map "m" 'point-to-register)
   (define-key view-mode-map "v" 'set-mark-command)
-  (define-key view-mode-map "m" 'point-to-register))
+  (define-key view-mode-map ":" 'execute-extended-command))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
@@ -206,8 +206,14 @@
 
 (defvar +xdg-open-program "xdg-open")
 
-(defun +xdg-open (file)
-  (call-process-shell-command (concat +xdg-open-program " " file)))
+(defun +xdg-open (&optional file)
+  (interactive `(,(if (eq major-mode 'dired-mode)
+                      (expand-file-name dired-directory)
+                    buffer-file-name)))
+  (when file
+    (call-process-shell-command (concat +xdg-open-program " " file))))
+
+(define-key ctl-x-x-map "o" '+xdg-open)
 
 (setq dired-listing-switches "-alh")
 
