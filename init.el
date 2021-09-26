@@ -2,7 +2,6 @@
 
 
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/")
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
 (require '+autoload)
 
@@ -66,11 +65,9 @@
 
 
 
-(defvar +kill-ring-display-buffer "*kill-ring-display*")
-
 (defun +kill-ring-display ()
   (interactive)
-  (switch-to-buffer-other-window +kill-ring-display-buffer)
+  (switch-to-buffer-other-window "*kill-ring-display*")
   (let ((inhibit-read-only t))
     (erase-buffer)
     (dolist (text kill-ring)
@@ -144,9 +141,6 @@
 
 
 
-(global-set-key "\M-o" 'avy-goto-char-timer)
-(define-key isearch-mode-map "\M-o" 'avy-isearch)
-
 (with-eval-after-load 'eve
   (define-key eve-vi-mode-map "g." 'avy-resume)
   (define-key eve-vi-mode-map "gf" 'avy-goto-char)
@@ -166,8 +160,8 @@
 (global-set-key (kbd "C-c C-j") 'imenu)
 
 (with-eval-after-load 'flymake
-  (define-key flymake-mode-map (kbd "C-c C-n") 'flymake-goto-next-error)
-  (define-key flymake-mode-map (kbd "C-c C-p") 'flymake-goto-prev-error))
+  (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
+  (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
 
 (defun +flymake-cc-command ()
   `("gcc" "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c") "-fsyntax-only" "-"))
@@ -180,7 +174,13 @@
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
+
+
 (setq company-idle-delay 0.1
+      company-dabbrev-downcase nil
+      company-dabbrev-ignore-case t
+      company-dabbrev-code-ignore-case t
+      company-etags-ignore-case t
       company-frontends
       '(company-pseudo-tooltip-frontend)
       company-backends
@@ -190,6 +190,9 @@
          company-etags
          company-keywords)
         company-dabbrev))
+
+(with-eval-after-load 'company
+  (add-to-list 'company-begin-commands 'eve-jk))
 
 (add-hook 'prog-mode-hook 'company-mode)
 

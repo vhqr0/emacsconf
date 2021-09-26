@@ -86,7 +86,7 @@
   (exit-minibuffer))
 
 (defun listify-read (prompt collection)
-  "Read from minibuffer and select with listify COLLECTION."
+  "Read from minibuffer and select with listify PROMPT COLLECTION."
   (save-window-excursion
     (let* ((listify-collection collection)
            (listify-window
@@ -132,8 +132,11 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
                     command)))
     (call-interactively command)))
 
+(defvar recentf-list)
+
 ;;;###autoload
 (defun listify-switch-to-buffer ()
+  "Switch to buffer or recent file with `listify-completion-in-region'."
   (interactive)
   (require 'recentf)
   (let* ((buffers (seq-filter

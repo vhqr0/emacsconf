@@ -500,7 +500,8 @@ Change mode to vi." t nil)
 (autoload 'listify-tab-completion "listify" "\
 Tab completion with `listify-completion-in-region'." t nil)
 
-(autoload 'listify-switch-to-buffer "listify" nil t nil)
+(autoload 'listify-switch-to-buffer "listify" "\
+Switch to buffer or recent file with `listify-completion-in-region'." t nil)
 
 (register-definition-prefixes "listify" '("listify-"))
 
