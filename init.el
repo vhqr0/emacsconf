@@ -37,7 +37,7 @@
 
 
 
-(define-key minibuffer-local-completion-map " " "-")
+(define-key minibuffer-local-completion-map "\s" "-")
 
 (defalias 'w    'save-buffer)
 (defalias 'mak  'compile)
@@ -123,12 +123,15 @@
 
 
 
-(with-eval-after-load 'project
-  (setq project-switch-commands
-        '((project-shell "shell")
-          (project-vc-dir "vc")
-          (project-dired "dired")
-          (project-find-file "find file"))))
+(defun +project-switch ()
+  (interactive)
+  (let ((default-directory (project-prompt-project-dir))
+        (command (lookup-key project-prefix-map
+                             `[,(read-event "switch project: ")])))
+    (when command
+      (call-interactively command))))
+
+(define-key project-prefix-map "p" '+project-switch)
 
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
 
@@ -210,9 +213,7 @@
 (defvar +xdg-open-program "xdg-open")
 
 (defun +xdg-open (&optional file)
-  (interactive `(,(if (eq major-mode 'dired-mode)
-                      (expand-file-name dired-directory)
-                    buffer-file-name)))
+  (interactive `(,(or buffer-file-name default-directory)))
   (when file
     (call-process-shell-command (concat +xdg-open-program " " file))))
 

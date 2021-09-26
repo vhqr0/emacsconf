@@ -497,11 +497,6 @@ Change mode to vi." t nil)
 ;;;### (autoloads nil "listify" "listify.el" (0 0 0 0))
 ;;; Generated autoloads from listify.el
 
-(autoload 'listify-read "listify" "\
-Read from minibuffer and select with listify COLLECTION.
-
-\(fn PROMPT COLLECTION)" nil nil)
-
 (autoload 'listify-tab-completion "listify" "\
 Tab completion with `listify-completion-in-region'." t nil)
 

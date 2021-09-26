@@ -85,7 +85,6 @@
              (line-beginning-position) (line-end-position))))
   (exit-minibuffer))
 
-;;;###autoload
 (defun listify-read (prompt collection)
   "Read from minibuffer and select with listify COLLECTION."
   (save-window-excursion
