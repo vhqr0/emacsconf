@@ -66,6 +66,7 @@
     (define-key map "m" 'point-to-register)
     (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
+    (define-key map "z" 'hs-toggle-hiding)
 
     (define-key map "j"  'eve-j)
     (define-key map "k"  'eve-k)
@@ -209,9 +210,6 @@ NEW-MODE is vi-mode, insert-mode or emacs-mode."
         (if (eq next-char ?k)
             (progn
               (eve-change-mode-to-vi)
-              (delete-trailing-whitespace
-               (line-beginning-position)
-               (line-end-position))
               (unless (bolp) (left-char)))
           (insert ?j)
           (push next-char unread-command-events)))

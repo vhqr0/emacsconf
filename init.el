@@ -34,13 +34,9 @@
 
 (recentf-mode 1)
 
-
+(defalias 'w 'save-buffer)
 
 (define-key minibuffer-local-completion-map "\s" "-")
-
-(defalias 'w    'save-buffer)
-(defalias 'mak  'compile)
-(defalias 'make 'compile)
 
 
 
@@ -62,6 +58,21 @@
 (global-set-key (kbd "C-x U") 'undo-redo)
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
+
+
+
+(define-key ctl-x-x-map "s" 'whitespace-mode)
+(define-key ctl-x-x-map "l" 'display-line-numbers-mode)
+
+(defun +project-switch ()
+  (interactive)
+  (let ((default-directory (project-prompt-project-dir))
+        (command (lookup-key project-prefix-map
+                             `[,(read-event "switch project: ")])))
+    (when command
+      (call-interactively command))))
+
+(define-key project-prefix-map "p" '+project-switch)
 
 
 
@@ -97,7 +108,8 @@
   (define-key view-mode-map "y"  'eve-command-arg)
   (define-key view-mode-map "m"  'point-to-register)
   (define-key view-mode-map "v"  'set-mark-command)
-  (define-key view-mode-map ":"  'execute-extended-command))
+  (define-key view-mode-map ":"  'execute-extended-command)
+  (define-key view-mode-map "z"  'hs-toggle-hiding))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
@@ -119,16 +131,6 @@
 (add-hook 'view-mode-hook '+eve-view-setup)
 
 
-
-(defun +project-switch ()
-  (interactive)
-  (let ((default-directory (project-prompt-project-dir))
-        (command (lookup-key project-prefix-map
-                             `[,(read-event "switch project: ")])))
-    (when command
-      (call-interactively command))))
-
-(define-key project-prefix-map "p" '+project-switch)
 
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
 
@@ -191,12 +193,13 @@
          company-keywords)
         company-dabbrev))
 
-(add-hook 'prog-mode-hook 'company-mode)
-
 (with-eval-after-load 'company
-  (add-to-list 'company-begin-commands 'eve-jk)
   (define-key company-mode-map "\M-o" 'company-complete)
   (define-key company-active-map "\M-o" 'listify-company))
+
+(add-hook 'prog-mode-hook 'company-mode)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 
 
