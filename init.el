@@ -191,10 +191,12 @@
          company-keywords)
         company-dabbrev))
 
-(with-eval-after-load 'company
-  (add-to-list 'company-begin-commands 'eve-jk))
-
 (add-hook 'prog-mode-hook 'company-mode)
+
+(with-eval-after-load 'company
+  (add-to-list 'company-begin-commands 'eve-jk)
+  (define-key company-mode-map "\M-o" 'company-complete)
+  (define-key company-active-map "\M-o" 'listify-company))
 
 
 

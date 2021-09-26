@@ -4,6 +4,7 @@
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
+;; (define-key company-active-map "\M-o" 'listify-company)
 
 ;;; Code:
 (require 'subr-x)
@@ -135,9 +136,10 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
 (defvar recentf-list)
 
 ;;;###autoload
-(defun listify-switch-to-buffer ()
-  "Switch to buffer or recent file with `listify-completion-in-region'."
-  (interactive)
+(defun listify-switch-to-buffer (arg)
+  "Switch to buffer or recent file with `listify-read'.
+In other window if ARG not nil."
+  (interactive "P")
   (require 'recentf)
   (let* ((buffers (seq-filter
                    (lambda (x)
@@ -146,8 +148,29 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
          (choice (listify-read "open: " (append buffers recentf-list))))
     (when choice
       (if (member choice buffers)
-          (switch-to-buffer choice)
-        (find-file choice)))))
+          (if arg
+              (switch-to-buffer-other-window choice)
+            (switch-to-buffer choice))
+        (if arg
+            (find-file-other-window choice)
+          (find-file choice))))))
+
+(defvar company-prefix)
+(defvar company-candidates)
+(declare-function company-abort "company")
+
+;;;###autoload
+(defun listify-company ()
+  "Select company candidate with `listify-read'."
+  (interactive)
+  (when company-candidates
+    (let ((length (length company-prefix))
+          (candidates company-candidates))
+      (company-abort)
+      (let ((candidate (listify-read "complete: " candidates)))
+        (when candidate
+          (delete-char (- length))
+          (insert candidate))))))
 
 (provide 'listify)
 ;;; listify.el ends here

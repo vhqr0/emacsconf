@@ -501,7 +501,13 @@ Change mode to vi." t nil)
 Tab completion with `listify-completion-in-region'." t nil)
 
 (autoload 'listify-switch-to-buffer "listify" "\
-Switch to buffer or recent file with `listify-completion-in-region'." t nil)
+Switch to buffer or recent file with `listify-read'.
+In other window if ARG not nil.
+
+\(fn ARG)" t nil)
+
+(autoload 'listify-company "listify" "\
+Select company candidate with `listify-read'." t nil)
 
 (register-definition-prefixes "listify" '("listify-"))
 
