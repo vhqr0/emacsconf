@@ -385,18 +385,6 @@ comments or strings.
 
 ;;;***
 
-;;;### (autoloads nil "company-etags" "company-etags.el" (0 0 0 0))
-;;; Generated autoloads from company-etags.el
-
-(autoload 'company-etags "company-etags" "\
-`company-mode' completion backend for etags.
-
-\(fn COMMAND &optional ARG &rest IGNORED)" t nil)
-
-(register-definition-prefixes "company-etags" '("company-etags-"))
-
-;;;***
-
 ;;;### (autoloads nil "company-files" "company-files.el" (0 0 0 0))
 ;;; Generated autoloads from company-files.el
 

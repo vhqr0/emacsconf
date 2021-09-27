@@ -66,7 +66,6 @@
     (define-key map "m" 'point-to-register)
     (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
-    (define-key map "z" 'hs-toggle-hiding)
 
     (define-key map "j"  'eve-j)
     (define-key map "k"  'eve-k)

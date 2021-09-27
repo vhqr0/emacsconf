@@ -108,8 +108,7 @@
   (define-key view-mode-map "y"  'eve-command-arg)
   (define-key view-mode-map "m"  'point-to-register)
   (define-key view-mode-map "v"  'set-mark-command)
-  (define-key view-mode-map ":"  'execute-extended-command)
-  (define-key view-mode-map "z"  'hs-toggle-hiding))
+  (define-key view-mode-map ":"  'execute-extended-command))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
@@ -182,14 +181,13 @@
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
-      company-etags-ignore-case t
       company-frontends
-      '(company-pseudo-tooltip-frontend)
+      '(company-preview-frontend
+        company-pseudo-tooltip-frontend)
       company-backends
       '(company-capf
         company-files
         (company-dabbrev-code
-         company-etags
          company-keywords)
         company-dabbrev))
 
@@ -198,7 +196,6 @@
   (define-key company-active-map "\M-o" 'listify-company))
 
 (add-hook 'prog-mode-hook 'company-mode)
-(add-hook 'prog-mode-hook 'hs-minor-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 
