@@ -185,11 +185,15 @@
       '(company-preview-frontend
         company-pseudo-tooltip-frontend)
       company-backends
-      '(company-capf
-        company-files
+      '(company-files
         (company-dabbrev-code
          company-keywords)
         company-dabbrev))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (setq-local company-backends
+                        `(company-capf ,@company-backends))))
 
 (with-eval-after-load 'company
   (define-key company-mode-map "\M-o" 'company-complete)

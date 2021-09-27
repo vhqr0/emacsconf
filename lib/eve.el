@@ -108,7 +108,11 @@
     (define-key map "P" 'eve-P)
     (define-key map "x" 'eve-x)
     (define-key map "X" 'eve-X)
+    (define-key map "~" 'eve-~)
     (define-key map "r" 'eve-r)
+    (define-key map "K" 'kill-sexp)
+    (define-key map "S" 'delete-pair)
+    (define-key map "R" 'raise-sexp)
     (define-key map "J"  "j\M-^")
     map)
   "Eve vi mode map.")
@@ -780,6 +784,18 @@ ARG: (com . val), dispatched by com."
   (let ((val (eve-getval arg)))
     (setq eve-d-com `(eve-X ,val))
     (kill-region (- (point) val) (point))))
+
+(defun eve-~ (arg)
+  "Inverse case after ARG char."
+  (interactive "P")
+  (let ((val (eve-getval arg)))
+    (setq eve-d-com `(eve-~ ,val))
+    (eve-loop val
+      (let ((char (following-char)))
+        (delete-char 1)
+        (insert (if (<= ?A char ?Z)
+                    (downcase char)
+                  (upcase char)))))))
 
 (defvar eve-r-last nil)
 

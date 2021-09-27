@@ -29,32 +29,35 @@
 (require 'cl-lib)
 
 (defvar company-keywords-alist
-  '((java-mode
-     "abstract" "assert" "boolean" "break" "catch" "class" "continue"
-     "default" "double" "extends" "final" "finally" "float"
-     "implements" "import" "instanceof" "interface" "native" "package"
-     "private" "protected" "public" "return" "short" "static"
-     "strictfp" "super" "switch" "synchronized" "throw" "throws"
-     "transient" "volatile" "while" "System" "String" "Integer"
-     "ArrayList" "LinkedList" "TreeSet" "HashSet" "LinkedHashSet"
-     "TreeMap" "HashMap" "LinkedHashMap")
-    (c-mode
-     "alignof" "assert" "break" "catch" "char8_t" "char16_t"
-     "char32_t" "class" "const" "const_cast" "consteval" "constexpr"
-     "constinit" "continue" "decltype" "default" "define" "delete"
-     "double" "dynamic_cast" "explicit" "export" "extern" "false"
-     "final" "float" "friend" "ifdef" "ifndef" "include" "inline"
-     "namespace" "noexcept" "nullptr" "operator" "override" "private"
-     "protected" "public" "return" "short" "signed" "size_t" "sizeof"
-     "static" "static_assert" "static_cast" "struct" "switch"
-     "template" "throw" "typedef" "typeid" "typename" "uint8_t"
-     "uint16_t" "uint32_t" "uint64_t" "union" "unsigned" "using"
-     "virtual" "volatile" "wchar_t" "while" "NULL")
-    (c++-mode . c-mode)
+  '((c-mode . c++-mode)
+    (c++-mode
+     "alignof" "assert" "auto" "bool" "break" "case" "catch" "char"
+     "char16_t" "char32_t" "char8_t" "class" "const" "const_cast"
+     "consteval" "constexpr" "constinit" "continue" "decltype"
+     "default" "define" "delete" "double" "dynamic_cast" "else" "enum"
+     "explicit" "export" "extern" "false" "final" "float" "for"
+     "friend" "goto" "if" "ifdef" "ifndef" "include" "inline" "int"
+     "long" "namespace" "new" "noexcept" "nullptr" "operator"
+     "override" "private" "protected" "public" "register" "restrict"
+     "return" "short" "signed" "size_t" "sizeof" "static"
+     "static_assert" "static_cast" "struct" "switch" "template" "this"
+     "throw" "true" "try" "typedef" "typeid" "typename" "uint16_t"
+     "uint32_t" "uint64_t" "uint8_t" "union" "unsigned" "using"
+     "virtual" "void" "volatile" "wchar_t" "while" "do" "NULL")
     (python-mode
-     "assert" "break" "class" "continue" "except" "finally" "global"
-     "import" "lambda" "nonlocal" "print" "raise" "return" "while"
-     "yield" "None" "True" "False"))
+     "all" "any" "ascii" "assert" "bin" "bool" "break" "breakpoint"
+     "bytearray" "bytes" "callable" "chr" "class" "classmethod"
+     "compile" "complex" "continue" "delattr" "dict" "dir" "divmod"
+     "elif" "else" "enumerate" "eval" "except" "exec" "filter"
+     "finally" "float" "format" "from" "frozenset" "getattr" "global"
+     "globals" "hasattr" "hash" "help" "hex" "id" "import" "input"
+     "int" "isinstance" "issubclass" "iter" "lambda" "len" "list"
+     "locals" "map" "max" "memoryview" "min" "next" "nonlocal"
+     "object" "oct" "open" "ord" "pass" "pow" "print" "property"
+     "raise" "range" "repr" "return" "reversed" "round" "set"
+     "setattr" "slice" "sorted" "staticmethod" "str" "sum" "super"
+     "tuple" "type" "vars" "while" "with" "yield" "zip" "abs"
+     "Ellipsis" "Exception" "False" "NotImplemented" "True" "None"))
   "Alist mapping major-modes to sorted keywords for `company-keywords'.")
 
 ;;;###autoload
