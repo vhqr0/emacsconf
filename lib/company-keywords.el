@@ -39,11 +39,12 @@
      "friend" "goto" "if" "ifdef" "ifndef" "include" "inline" "int"
      "long" "namespace" "new" "noexcept" "nullptr" "operator"
      "override" "private" "protected" "public" "register" "restrict"
-     "return" "short" "signed" "size_t" "sizeof" "static"
+     "return" "shared_ptr" "short" "signed" "size_t" "sizeof" "static"
      "static_assert" "static_cast" "struct" "switch" "template" "this"
      "throw" "true" "try" "typedef" "typeid" "typename" "uint16_t"
-     "uint32_t" "uint64_t" "uint8_t" "union" "unsigned" "using"
-     "virtual" "void" "volatile" "wchar_t" "while" "do" "NULL")
+     "uint32_t" "uint64_t" "uint8_t" "union" "unique_ptr" "unsigned"
+     "using" "virtual" "void" "volatile" "wchar_t" "weak_ptr" "while"
+     "do" "NULL")
     (python-mode
      "all" "any" "ascii" "assert" "bin" "bool" "break" "breakpoint"
      "bytearray" "bytes" "callable" "chr" "class" "classmethod"

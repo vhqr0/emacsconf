@@ -3,12 +3,15 @@
 
 
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
+
 (require '+autoload)
 
-
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-;; (setq text-quoting-style 'grave)
-;; (startup--setup-quote-display)
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+
 
 (setq visible-bell t)
 
@@ -35,6 +38,7 @@
 (recentf-mode 1)
 
 (defalias 'w 'save-buffer)
+(defalias 'make 'compile)
 
 (define-key minibuffer-local-completion-map "\s" "-")
 
@@ -90,6 +94,12 @@
 (global-set-key (kbd "C-x y") '+kill-ring-display)
 
 
+
+(setq isearch-lazy-count t
+      isearch-allow-scroll t
+      isearch-allow-motion t
+      isearch-motion-changes-direction t
+      isearch-repeat-on-direction-change t)
 
 (define-key special-mode-map "n" 'next-line)
 (define-key special-mode-map "p" 'previous-line)
@@ -158,11 +168,16 @@
 
 
 
-(global-set-key (kbd "C-c C-j") 'imenu)
+(global-set-key (kbd "C-c j") 'imenu)
+
+(define-key prog-mode-map (kbd "C-c f") 'flymake-mode)
 
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
+
+(with-eval-after-load 'flymake-proc
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
 
 (defun +flymake-cc-command ()
   `("gcc" "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c") "-fsyntax-only" "-"))
@@ -177,13 +192,12 @@
 
 
 
-(setq company-idle-delay 0.1
+(setq company-idle-delay 0.15
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
       company-frontends
-      '(company-preview-frontend
-        company-pseudo-tooltip-frontend)
+      '(company-pseudo-tooltip-frontend)
       company-backends
       '(company-files
         (company-dabbrev-code
@@ -239,6 +253,8 @@
   (define-key dired-mode-map "J" 'dired-goto-file)
   (define-key dired-mode-map "K" 'dired-kill-line)
   (define-key dired-mode-map "V" '+dired-do-xdg-open))
+
+(setq xref-search-program 'ripgrep)
 
 (defun +grep-rg ()
   (interactive)
