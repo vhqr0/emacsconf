@@ -88,7 +88,7 @@
 (defvar company-tooltip-align-annotations)
 
 
-
+
 ;;; User tweakable stuff
 (defgroup eglot nil
   "Interaction with Language Server Protocol servers"
@@ -99,25 +99,49 @@
   "Compute server-choosing function for `eglot-server-programs'.
 Each element of ALTERNATIVES is a string PROGRAM or a list of
 strings (PROGRAM ARGS...) where program names an LSP server
-program to start with ARGS.  Returns a function of one
-argument."
+program to start with ARGS.  Returns a function of one argument.
+When invoked, that function will return a list (ABSPATH ARGS),
+where ABSPATH is the absolute path of the PROGRAM that was
+chosen (interactively or automatically)."
   (lambda (&optional interactive)
+    ;; JT@2021-06-13: This function is way more complicated than it
+    ;; could be because it accounts for the fact that
+    ;; `eglot--executable-find' may take much longer to execute on
+    ;; remote files.
     (let* ((listified (cl-loop for a in alternatives
                                collect (if (listp a) a (list a))))
-           (available (cl-remove-if-not #'executable-find listified :key #'car)))
-      (cond ((and interactive (cdr available))
-             (let ((chosen (completing-read
-                            "[eglot] More than one server executable available:"
-                            (mapcar #'car available)
-                            nil t nil nil (car (car available)))))
-               (assoc chosen available #'equal)))
-            ((car available))
+           (err (lambda ()
+                  (error "None of '%s' are valid executables"
+                         (mapconcat #'identity alternatives ", ")))))
+      (cond (interactive
+             (let* ((augmented (mapcar (lambda (a)
+                                         (let ((found (eglot--executable-find
+                                                       (car a) t)))
+                                           (and found
+                                                (cons (car a) (cons found (cdr a))))))
+                                       listified))
+                    (available (remove nil augmented)))
+               (cond ((cdr available)
+                      (cdr (assoc
+                            (completing-read
+                             "[eglot] More than one server executable available:"
+                             (mapcar #'car available)
+                             nil t nil nil (car (car available)))
+                            available #'equal)))
+                     ((cdr (car available)))
+                     (t
+                      ;; Don't error when used interactively, let the
+                      ;; Eglot prompt the user for alternative (github#719)
+                      nil))))
             (t
-             (car listified))))))
+             (cl-loop for (p . args) in listified
+                      for probe = (eglot--executable-find p t)
+                      when probe return (cons probe args)
+                      finally (funcall err)))))))
 
 (defvar eglot-server-programs `((rust-mode . (eglot-rls "rls"))
                                 (python-mode
-                                 . ,(eglot-alternatives '("pyls" "pylsp")))
+                                 . ,(eglot-alternatives '("pylsp" "pyls")))
                                 ((js-mode typescript-mode)
                                  . ("typescript-language-server" "--stdio"))
                                 (sh-mode . ("bash-language-server" "start"))
@@ -155,28 +179,37 @@ An association list of (MAJOR-MODE . CONTACT) pairs.  MAJOR-MODE
 identifies the buffers that are to be managed by a specific
 language server.  The associated CONTACT specifies how to connect
 to a server for those buffers.
+
 MAJOR-MODE can be:
+
 * In the most common case, a symbol such as `c-mode';
+
 * A list (MAJOR-MODE-SYMBOL :LANGUAGE-ID ID) where
   MAJOR-MODE-SYMBOL is the aforementioned symbol and ID is a
   string identifying the language to the server;
+
 * A list combining the previous two alternatives, meaning
   multiple major modes will be associated with a single server
   program.
+
 CONTACT can be:
+
 * In the most common case, a list of strings (PROGRAM [ARGS...]).
   PROGRAM is called with ARGS and is expected to serve LSP requests
   over the standard input/output channels.
+
 * A list (HOST PORT [TCP-ARGS...]) where HOST is a string and
   PORT is a positive integer for connecting to a server via TCP.
   Remaining ARGS are passed to `open-network-stream' for
   upgrading the connection with encryption or other capabilities.
+
 * A list (PROGRAM [ARGS...] :autoport [MOREARGS...]), whereupon a
   combination of the two previous options is used.  First, an
   attempt is made to find an available server port, then PROGRAM
   is launched with ARGS; the `:autoport' keyword substituted for
   that number; and MOREARGS.  Eglot then attempts to establish a
   TCP connection to that port number on the localhost.
+
 * A cons (CLASS-NAME . INITARGS) where CLASS-NAME is a symbol
   designating a subclass of `eglot-lsp-server', for representing
   experimental LSP servers.  INITARGS is a keyword-value plist
@@ -187,6 +220,7 @@ CONTACT can be:
   `eglot-lsp-server' descends from `jsonrpc-process-connection',
   which you should see for the semantics of the mandatory
   :PROCESS argument.
+
 * A function of a single argument producing any of the above
   values for CONTACT.  The argument's value is non-nil if the
   connection was requested interactively (e.g. from the `eglot'
@@ -257,7 +291,7 @@ let the buffer grow forever."
 (when (assoc 'flex completion-styles-alist)
   (add-to-list 'completion-category-defaults '(eglot (styles flex basic))))
 
-
+
 ;;; Constants
 ;;;
 (defconst eglot--symbol-kind-names
@@ -285,7 +319,7 @@ let the buffer grow forever."
   (if (>= emacs-major-version 27) (executable-find command remote)
     (executable-find command)))
 
-
+
 ;;; Message verification helpers
 ;;;
 (eval-and-compile
@@ -305,6 +339,7 @@ let the buffer grow forever."
       (Hover (:contents) (:range))
       (InitializeResult (:capabilities) (:serverInfo))
       (Location (:uri :range))
+      (LocationLink (:targetUri :targetRange :targetSelectionRange) (:originSelectionRange))
       (LogMessageParams (:type :message))
       (MarkupContent (:kind :value))
       (ParameterInformation (:label) (:documentation))
@@ -328,6 +363,7 @@ let the buffer grow forever."
       (WorkspaceEdit () (:changes :documentChanges))
       )
     "Alist (INTERFACE-NAME . INTERFACE) of known external LSP interfaces.
+
 INTERFACE-NAME is a symbol designated by the spec as
 \"interface\".  INTERFACE is a list (REQUIRED OPTIONAL) where
 REQUIRED and OPTIONAL are lists of KEYWORD designating field
@@ -335,7 +371,9 @@ names that must be, or may be, respectively, present in a message
 adhering to that interface.  KEY can be a keyword or a cons (SYM
 TYPE), where type is used by `cl-typep' to check types at
 runtime.
+
 Here's what an element of this alist might look like:
+
     (Command ((:title . string) (:command . string)) (:arguments))"))
 
 (eval-and-compile
@@ -348,19 +386,24 @@ Here's what an element of this alist might look like:
                                 ;; enforce-optional-keys
                                 ))
     "How strictly to check LSP interfaces at compile- and run-time.
+
 Value is a list of symbols (if the list is empty, no checks are
 performed).
+
 If the symbol `disallow-non-standard-keys' is present, an error
 is raised if any extraneous fields are sent by the server.  At
 compile-time, a warning is raised if a destructuring spec
 includes such a field.
+
 If the symbol `enforce-required-keys' is present, an error is
 raised if any required fields are missing from the message sent
 from the server.  At compile-time, a warning is raised if a
 destructuring spec doesn't use such a field.
+
 If the symbol `enforce-optional-keys' is present, nothing special
 happens at run-time.  At compile-time, a warning is raised if a
 destructuring spec doesn't use all optional fields.
+
 If the symbol `disallow-unknown-methods' is present, Eglot warns
 on unknown notifications and errors on unknown requests.
 "))
@@ -519,7 +562,7 @@ treated as in `eglot-dbind'."
                        ,obj-once
                        ',(mapcar #'car clauses)))))))
 
-
+
 ;;; API (WORK-IN-PROGRESS!)
 ;;;
 (cl-defmacro eglot--when-live-buffer (buf &rest body)
@@ -600,10 +643,14 @@ treated as in `eglot-dbind'."
                                          (:labelOffsetSupport t)
                                          :activeParameterSupport t))
              :references         `(:dynamicRegistration :json-false)
-             :definition         `(:dynamicRegistration :json-false)
-             :declaration        `(:dynamicRegistration :json-false)
-             :implementation     `(:dynamicRegistration :json-false)
-             :typeDefinition     `(:dynamicRegistration :json-false)
+             :definition         (list :dynamicRegistration :json-false
+                                       :linkSupport t)
+             :declaration        (list :dynamicRegistration :json-false
+                                       :linkSupport t)
+             :implementation     (list :dynamicRegistration :json-false
+                                       :linkSupport t)
+             :typeDefinition     (list :dynamicRegistration :json-false
+                                       :linkSupport t)
              :documentSymbol     (list
                                   :dynamicRegistration :json-false
                                   :hierarchicalDocumentSymbolSupport t
@@ -681,9 +728,11 @@ treated as in `eglot-dbind'."
   "Politely ask SERVER to quit.
 Interactively, read SERVER from the minibuffer unless there is
 only one and it's managing the current buffer.
+
 Forcefully quit it if it doesn't respond within TIMEOUT seconds.
 TIMEOUT defaults to 1.5 seconds.  Don't leave this function with
 the server still running.
+
 If PRESERVE-BUFFERS is non-nil (interactively, when called with a
 prefix argument), do not kill events and output buffers of
 SERVER."
@@ -812,7 +861,9 @@ be guessed."
                      ((null guess)
                       (format "[eglot] Sorry, couldn't guess for `%s'!\n%s"
                               managed-mode base-prompt))
-                     ((and program (not (eglot--executable-find program t)))
+                     ((and program
+                           (not (file-name-absolute-p program))
+                           (not (eglot--executable-find program t)))
                       (concat (format "[eglot] I guess you want to run `%s'"
                                       program-guess)
                               (format ", but I can't find `%s' in PATH!" program)
@@ -855,6 +906,7 @@ suitable root directory for a given LSP server's purposes."
 (defun eglot (managed-major-mode project class contact language-id
                                  &optional interactive)
   "Manage a project with a Language Server Protocol (LSP) server.
+
 The LSP server of CLASS is started (or contacted) via CONTACT.
 If this operation is successful, current *and future* file
 buffers of MANAGED-MAJOR-MODE inside PROJECT become \"managed\"
@@ -862,22 +914,29 @@ by the LSP server, meaning information about their contents is
 exchanged periodically to provide enhanced code-analysis via
 `xref-find-definitions', `flymake-mode', `eldoc-mode',
 `completion-at-point', among others.
+
 Interactively, the command attempts to guess MANAGED-MAJOR-MODE
 from current buffer, CLASS and CONTACT from
 `eglot-server-programs' and PROJECT from
 `project-find-functions'.  The search for active projects in this
 context binds `eglot-lsp-context' (which see).
+
 If it can't guess, the user is prompted.  With a single
 \\[universal-argument] prefix arg, it always prompt for COMMAND.
 With two \\[universal-argument] prefix args, also prompts for
 MANAGED-MAJOR-MODE.
+
 PROJECT is a project object as returned by `project-current'.
+
 CLASS is a subclass of `eglot-lsp-server'.
+
 CONTACT specifies how to contact the server.  It is a
 keyword-value plist used to initialize CLASS or a plain list as
 described in `eglot-server-programs', which see.
+
 LANGUAGE-ID is the language ID string to send to the server for
 MANAGED-MAJOR-MODE, which matters to a minority of servers.
+
 INTERACTIVE is t if called interactively."
   (interactive (append (eglot--guess-contact t) '(t)))
   (let* ((current-server (eglot-current-server))
@@ -946,10 +1005,12 @@ Use current server's or first available Eglot events buffer."
 (defvar eglot-server-initialized-hook
   '()
   "Hook run after a `eglot-lsp-server' instance is created.
+
 That is before a connection was established. Use
 `eglot-connect-hook' to hook into when a connection was
 successfully established and the server on the other side has
 received the initializing configuration.
+
 Each function is passed the server as an argument")
 
 (defun eglot--cmd (contact)
@@ -1164,7 +1225,7 @@ CONNECT-ARGS are passed as additional arguments to
                                        (process-command inferior))
                              "!")))))))
 
-
+
 ;;; Helpers (move these to API?)
 ;;;
 (defun eglot--error (format &rest args)
@@ -1185,6 +1246,7 @@ CONNECT-ARGS are passed as additional arguments to
 
 (defvar eglot-current-column-function #'eglot-lsp-abiding-column
   "Function to calculate the current column.
+
 This is the inverse operation of
 `eglot-move-to-column-function' (which see).  It is a function of
 no arguments returning a column number.  For buffers managed by
@@ -1209,11 +1271,13 @@ LBP defaults to `line-beginning-position'."
 
 (defvar eglot-move-to-column-function #'eglot-move-to-lsp-abiding-column
   "Function to move to a column reported by the LSP server.
+
 According to the standard, LSP column/character offsets are based
 on a count of UTF-16 code units, not actual visual columns.  So
 when LSP says position 3 of a line containing just \"aXbc\",
 where X is a multi-byte character, it actually means `b', not
 `c'. However, many servers don't follow the spec this closely.
+
 For buffers managed by fully LSP-compliant servers, this should
 be set to `eglot-move-to-lsp-abiding-column' (the default), and
 `eglot-move-to-column' for all others.")
@@ -1322,7 +1386,10 @@ Doubles as an indicator of snippet support."
       (font-lock-ensure)
       (string-trim (filter-buffer-substring (point-min) (point-max))))))
 
-(defcustom eglot-ignored-server-capabilites (list)
+(define-obsolete-variable-alias 'eglot-ignored-server-capabilites
+  'eglot-ignored-server-capabilities "1.8")
+
+(defcustom eglot-ignored-server-capabilities (list)
   "LSP server capabilities that Eglot could use, but won't.
 You could add, for instance, the symbol
 `:documentHighlightProvider' to prevent automatic highlighting
@@ -1399,7 +1466,7 @@ and just return it.  PROMPT shouldn't end with a question mark."
              (cl-find read servers :key name :test #'equal)))
           (t (car servers)))))
 
-
+
 ;;; Minor modes
 ;;;
 (defvar eglot-mode-map
@@ -1418,16 +1485,20 @@ and just return it.  PROMPT shouldn't end with a question mark."
 Each element is a string, a symbol, or a regexp which is matched
 against a variable's name.  Examples include the string
 \"company\" or the symbol `xref'.
+
 Before Eglot starts \"managing\" a particular buffer, it
 opinionatedly sets some peripheral Emacs facilites, such as
 Flymake, Xref and Company.  These overriding settings help ensure
 consistent Eglot behaviour and only stay in place until
 \"managing\" stops (usually via `eglot-shutdown'), whereupon the
 previous settings are restored.
+
 However, if you wish for Eglot to stay out of a particular Emacs
 facility that you'd like to keep control of add an element to
 this list and Eglot will refrain from setting it.
+
 For example, to keep your Company customization use
+
 (add-to-list 'eglot-stay-out-of 'company)")
 
 (defun eglot--stay-out-of-p (symbol)
@@ -1550,6 +1621,7 @@ Use `eglot-managed-p' to determine if current buffer is managed.")
 
 (defun eglot--maybe-activate-editing-mode ()
   "Maybe activate `eglot--managed-mode'.
+
 If it is activated, also signal textDocument/didOpen."
   (unless eglot--managed-mode
     ;; Called when `revert-buffer-in-progress-p' is t but
@@ -1567,7 +1639,7 @@ If it is activated, also signal textDocument/didOpen."
   (interactive (list (eglot--current-server-or-lose)))
   (setf (jsonrpc-last-error server) nil))
 
-
+
 ;;; Mode-line, menu and other sugar
 ;;;
 (defvar eglot--mode-line-format `(:eval (eglot--mode-line-format)))
@@ -1651,7 +1723,7 @@ Uses THING, FACE, DEFS and PREPEND."
                                   (eglot--mouse-call 'eglot-code-actions))
                                 map)))))
 
-
+
 ;;; Protocol implementation (Requests, notifications, etc)
 ;;;
 (cl-defmethod eglot-handle-notification
@@ -2023,10 +2095,13 @@ Calls REPORT-FN (or arranges for it to be called) when the server
 publishes diagnostics.  Between calls to this function, REPORT-FN
 may be called multiple times (respecting the protocol of
 `flymake-backend-functions')."
-  (setq eglot--current-flymake-report-fn report-fn)
-  ;; Report anything unreported
-  (when eglot--unreported-diagnostics
-    (eglot--report-to-flymake (cdr eglot--unreported-diagnostics))))
+  (cond (eglot--managed-mode
+         (setq eglot--current-flymake-report-fn report-fn)
+         ;; Report anything unreported
+         (when eglot--unreported-diagnostics
+           (eglot--report-to-flymake (cdr eglot--unreported-diagnostics))))
+        (t
+         (funcall report-fn nil))))
 
 (defun eglot--report-to-flymake (diags)
   "Internal helper for `eglot-flymake-backend'."
@@ -2125,9 +2200,15 @@ Try to visit the target file for a richer summary line."
           method (append (eglot--TextDocumentPositionParams) extra-params))))
     (eglot--collecting-xrefs (collect)
       (mapc
-       (eglot--lambda ((Location) uri range)
-         (collect (eglot--xref-make-match (symbol-name (symbol-at-point))
-                                          uri range)))
+       (lambda (loc-or-loc-link)
+         (let ((sym-name (symbol-name (symbol-at-point))))
+           (eglot--dcase loc-or-loc-link
+             (((LocationLink) targetUri targetSelectionRange)
+              (collect (eglot--xref-make-match sym-name
+                                               targetUri targetSelectionRange)))
+             (((Location) uri range)
+              (collect (eglot--xref-make-match sym-name
+                                               uri range))))))
        (if (vectorp response) response (and response (list response)))))))
 
 (cl-defun eglot--lsp-xref-helper (method &key extra-params capability )
@@ -2282,14 +2363,15 @@ is not active."
           ((null action)                                 ; try-completion
            (try-completion probe (funcall proxies)))
           ((eq action t)                                 ; all-completions
-           (cl-remove-if-not
+           (all-completions
+            ""
+            (funcall proxies)
             (lambda (proxy)
               (let* ((item (get-text-property 0 'eglot--lsp-item proxy))
                      (filterText (plist-get item :filterText)))
                 (and (or (null pred) (funcall pred proxy))
                      (string-prefix-p
-                      probe (or filterText proxy) completion-ignore-case))))
-            (funcall proxies)))))
+                      probe (or filterText proxy) completion-ignore-case))))))))
        :annotation-function
        (lambda (proxy)
          (eglot--dbind ((CompletionItem) detail kind)
@@ -2726,7 +2808,7 @@ at point.  With prefix argument, prompt for ACTION-KIND."
 (eglot--code-action eglot-code-action-rewrite "refactor.rewrite")
 (eglot--code-action eglot-code-action-quickfix "quickfix")
 
-
+
 ;;; Dynamic registration
 ;;;
 (cl-defmethod eglot-register-capability
@@ -2778,7 +2860,7 @@ at point.  With prefix argument, prompt for ACTION-KIND."
   (remhash id (eglot--file-watches server))
   (list t "OK"))
 
-
+
 ;;; Glob heroics
 ;;;
 (defun eglot--glob-parse (glob)
@@ -2842,7 +2924,7 @@ If NOERROR, return predicate, else erroring function."
   (when (eq ?! (aref arg 1)) (aset arg 1 ?^))
   `(,self () (re-search-forward ,(concat "\\=" arg)) (,next)))
 
-
+
 ;;; Rust-specific
 ;;;
 (defclass eglot-rls (eglot-lsp-server) () :documentation "Rustlang's RLS.")
@@ -2861,7 +2943,7 @@ If NOERROR, return predicate, else erroring function."
   "Handle notification window/progress"
   (setf (eglot--spinner server) (list id title done message)))
 
-
+
 ;;; eclipse-jdt-specific
 ;;;
 (defclass eglot-eclipse-jdt (eglot-lsp-server) ()

@@ -20,6 +20,8 @@
 (menu-bar-mode -1)
 (blink-cursor-mode -1)
 
+(load-theme 'modus-vivendi)
+
 
 
 (setq confirm-kill-emacs 'y-or-n-p
@@ -33,7 +35,7 @@
 
 (auto-save-visited-mode 1)
 
-(setq recentf-max-saved-items 100)
+(setq recentf-max-saved-items 200)
 
 (recentf-mode 1)
 
@@ -167,6 +169,8 @@
   (define-key view-mode-map "go" 'avy-goto-symbol-1))
 
 
+
+(global-set-key (kbd "C-c s") 'shell)
 
 (global-set-key (kbd "C-c j") 'imenu)
 
