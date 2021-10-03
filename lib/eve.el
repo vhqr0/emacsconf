@@ -47,6 +47,7 @@
     (define-key map "="  'eve-command-arg)
     (define-key map "#"  'eve-command-arg)
     (define-key map "@"  'eve-command-arg)
+    (define-key map "!"  'eve-command-arg)
     (define-key map "gc" 'eve-gc)
     (define-key map "gy" 'eve-gy)
     (define-key map "s"  'eve-s)
@@ -64,8 +65,9 @@
     (define-key map "." 'eve-repeat)
     (define-key map "u" 'undo)
     (define-key map "m" 'point-to-register)
-    (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
+    (define-key map "v" 'set-mark-command)
+    (define-key map "V" "\C-a\C-\s\C-n")
 
     (define-key map "j"  'eve-j)
     (define-key map "k"  'eve-k)
@@ -235,14 +237,16 @@ CHAR is to process, (VAL . COM) is the current `prefix-arg'."
 (defun eve-prefix-arg-com (char val com)
   "Process reading com.
 CHAR is to process, (VAL . COM) is the current `prefix-arg'."
-  (if com
-      (if (or (eq char com)
-              (and (eq com ?#) (eq char ?c))
-              (and (eq com ?@) (eq char ?y)))
-          (eve-line
-           `(,val . ,com))
-        (error ""))
-    (setq prefix-arg `(,val . ,char))))
+  (if (region-active-p)
+      (eve-exec-com nil nil char)
+    (if com
+        (if (or (eq char com)
+                (and (eq com ?#) (eq char ?c))
+                (and (eq com ?@) (eq char ?y)))
+            (eve-line
+             `(,val . ,com))
+          (error ""))
+      (setq prefix-arg `(,val . ,char)))))
 
 (defun eve-digit-arg (arg)
   "Preprocess reading val.
@@ -297,6 +301,14 @@ ARG see `eve-command-arg'."
     (when func
       (funcall func beg end))))
 
+(defvar eve-shell-last nil)
+
+(defun eve-shell-region (beg end)
+  "Run shell command on region (BEG . END) and replace."
+  (unless eve-in-repeat
+    (setq eve-shell-last (read-shell-command "shell command: ")))
+  (shell-command-on-region beg end eve-shell-last nil t))
+
 
 
 (defvar-local eve-com-point (make-marker)
@@ -311,15 +323,21 @@ The region is `eve-com-point' and `point'.")
                           (?= . indent-region)
                           (?# . comment-or-uncomment-region)
                           (?@ . eve-eval-region)
+                          (?! . eve-shell-region)
                           (?s . eve-surround-region)))))
     (when func
-      (funcall (cdr func) eve-com-point (point))
-      (deactivate-mark)
-      (if (eq com ?c)
+      (if (region-active-p)
           (progn
-            (setq eve-d-com '(eve-i 1))
-            (eve-change-mode-to-insert))
-        (setq eve-d-com `(,m-com ,val ,com))))))
+            (unless (<= (mark) (point))
+              (exchange-point-and-mark))
+            (funcall (cdr func) (mark) (point)))
+        (funcall (cdr func) eve-com-point (point))
+        (deactivate-mark)
+        (if (eq com ?c)
+            (progn
+              (setq eve-d-com '(eve-i 1))
+              (eve-change-mode-to-insert))
+          (setq eve-d-com `(,m-com ,val ,com)))))))
 
 
 
@@ -354,7 +372,9 @@ Dispatch to `eve-tobj' when there is a com."
      (interactive "P")
      (let ((val (eve-getval arg))
            (com (eve-getcom arg)))
-       (cond (com (eve-tobj arg))
+       (cond ((region-active-p)
+              (eve-tobj nil))
+             (com (eve-tobj arg))
              (eve-in-repeat
               (eve-loop val
                 ,@body
@@ -416,11 +436,15 @@ Dispatch to `eve-tobj' when there is a com."
             (range
              (setq range (bounds-of-thing-at-point range))))
       (when range
-        (move-marker eve-save-point (point))
-        (move-marker eve-com-point (car range))
-        (goto-char (cdr range))
-        (eve-exec-com 'eve-tobj val com)
-        (goto-char eve-save-point)))))
+        (if (region-active-p)
+            (progn
+              (set-mark (car range))
+              (goto-char (cdr range)))
+          (move-marker eve-save-point (point))
+          (move-marker eve-com-point (car range))
+          (goto-char (cdr range))
+          (eve-exec-com 'eve-tobj val com)
+          (goto-char eve-save-point))))))
 
 
 
@@ -688,6 +712,8 @@ For jkGgg{}[]()."
 
 (defvar eve-surround-last nil)
 
+(defvar eve-surround-last-tag nil)
+
 (defun eve-read-surround ()
   "Read `eve-surround-last' and return corresponding pair."
   (unless eve-in-repeat
@@ -697,6 +723,11 @@ For jkGgg{}[]()."
                                      (?r . (?\[ . ?\]))
                                      (?< . (?\< . ?\>))
                                      (?\` . (?\` . ?\')))))
+      (when (eq eve-surround-last ?t)
+        (unless eve-in-repeat
+          (setq eve-surround-last-tag (read-string "<")))
+        `(,(concat "<" eve-surround-last-tag ">") .
+          ,(concat "</" eve-surround-last-tag ">")))
       `(,eve-surround-last . ,eve-surround-last)) )
 
 (defun eve-surround-region (beg end)
@@ -714,7 +745,11 @@ ARG: (com . val), dispatched by com."
   (interactive "P")
   (let ((val (eve-getval arg))
         (com (eve-getcom arg)))
-    (cond ((eq com ?y)
+    (cond ((region-active-p)
+           (unless (<= (mark) (point))
+             (exchange-point-and-mark))
+           (eve-surround-region (mark) (point)))
+          ((eq com ?y)
            (eve-command-arg nil))
           ((eq com ?s)
            (eve-command-arg arg))
@@ -744,6 +779,8 @@ ARG: (com . val), dispatched by com."
 (defun eve-p (arg)
   "Yank after ARG char."
   (interactive "P")
+  (when (region-active-p)
+    (delete-region (mark) (point)))
   (save-excursion
     (let ((val (eve-getval arg)))
       (setq eve-d-com `(eve-p ,val))
@@ -761,6 +798,8 @@ ARG: (com . val), dispatched by com."
 (defun eve-P (arg)
   "Yank before ARG char."
   (interactive "P")
+  (when (region-active-p)
+    (delete-region (mark) (point)))
   (save-excursion
     (let ((val (eve-getval arg)))
       (setq eve-d-com `(eve-P ,val))
@@ -774,41 +813,59 @@ ARG: (com . val), dispatched by com."
 (defun eve-x (arg)
   "Kill after ARG char."
   (interactive "P")
-  (let ((val (eve-getval arg)))
-    (setq eve-d-com `(eve-x ,val))
-    (kill-region (point) (+ (point) val))))
+  (if (region-active-p)
+      (delete-region (mark) (point))
+    (let ((val (eve-getval arg)))
+      (setq eve-d-com `(eve-x ,val))
+      (kill-region (point) (+ (point) val)))))
 
 (defun eve-X (arg)
   "Kill before ARG char."
   (interactive "P")
-  (let ((val (eve-getval arg)))
-    (setq eve-d-com `(eve-X ,val))
-    (kill-region (- (point) val) (point))))
+  (if (region-active-p)
+      (delete-region (mark) (point))
+    (let ((val (eve-getval arg)))
+      (setq eve-d-com `(eve-X ,val))
+      (kill-region (- (point) val) (point)))))
 
 (defun eve-~ (arg)
   "Inverse case after ARG char."
   (interactive "P")
-  (let ((val (eve-getval arg)))
-    (setq eve-d-com `(eve-~ ,val))
-    (eve-loop val
-      (let ((char (following-char)))
-        (delete-char 1)
-        (insert (if (<= ?A char ?Z)
-                    (downcase char)
-                  (upcase char)))))))
+  (if (region-active-p)
+      (progn
+        (unless (<= (point) (mark))
+          (exchange-point-and-mark))
+        (deactivate-mark)
+        (eve-~ (- (mark) (point))))
+    (let ((val (eve-getval arg)))
+      (setq eve-d-com `(eve-~ ,val))
+      (eve-loop val
+        (let ((char (following-char)))
+          (delete-char 1)
+          (insert (if (<= ?A char ?Z)
+                      (downcase char)
+                    (upcase char))))))))
 
 (defvar eve-r-last nil)
 
 (defun eve-r (arg)
   "Replace after ARG char."
   (interactive "P")
-  (let ((val (eve-getval arg)))
-    (setq eve-d-com `(eve-r ,val))
-    (unless eve-in-repeat
-      (setq eve-r-last (read-char)))
-    (delete-char val)
-    (eve-loop val
-      (insert eve-r-last))))
+  (if (region-active-p)
+      (progn
+        (setq eve-r-last (read-char))
+        (unless (<= (point) (mark))
+          (exchange-point-and-mark))
+        (deactivate-mark)
+        (let ((eve-in-repeat t))
+          (eve-r (- (mark) (point)))))
+    (let ((val (eve-getval arg)))
+      (setq eve-d-com `(eve-r ,val))
+      (unless eve-in-repeat
+        (setq eve-r-last (read-char)))
+      (delete-char val)
+      (eve-loop val
+        (insert eve-r-last)))))
 
 (provide 'eve)
 ;;; eve.el ends here

@@ -67,6 +67,9 @@
 
 
 
+(global-set-key (kbd "C-x m") 'list-imenu)
+(global-set-key (kbd "C-x y") 'list-kill-ring)
+
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
@@ -79,11 +82,6 @@
       (call-interactively command))))
 
 (define-key project-prefix-map "p" '+project-switch)
-
-
-
-(global-set-key (kbd "C-x m") 'list-imenu)
-(global-set-key (kbd "C-x y") 'list-kill-ring)
 
 
 
@@ -109,8 +107,9 @@
   (define-key view-mode-map "."  'repeat)
   (define-key view-mode-map "y"  'eve-command-arg)
   (define-key view-mode-map "m"  'point-to-register)
-  (define-key view-mode-map "v"  'set-mark-command)
-  (define-key view-mode-map ":"  'execute-extended-command))
+  (define-key view-mode-map ":"  'execute-extended-command)
+  (define-key view-mode-map "v" 'set-mark-command)
+  (define-key view-mode-map "V" "\C-a\C-\s\C-n"))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
