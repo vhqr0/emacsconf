@@ -82,18 +82,8 @@
 
 
 
-(defun +kill-ring-display ()
-  (interactive)
-  (switch-to-buffer-other-window "*kill-ring-display*")
-  (let ((inhibit-read-only t))
-    (erase-buffer)
-    (dolist (text kill-ring)
-      (insert text "\n\n\C-l\n\n")))
-  (set-buffer-modified-p nil)
-  (beginning-of-buffer)
-  (view-mode 1))
-
-(global-set-key (kbd "C-x y") '+kill-ring-display)
+(global-set-key (kbd "C-x m") 'list-imenu)
+(global-set-key (kbd "C-x y") 'list-kill-ring)
 
 
 
@@ -127,10 +117,8 @@
 (defun +eve-setup ()
   (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
          (eve-jk-mode 1))
-        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
-         (eve-change-mode-to-vi))
-        ((derived-mode-p 'comint-mode)
-         (eve-change-mode-to-insert))))
+        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode 'comint-mode)
+         (eve-change-mode-to-vi))))
 
 (defun +eve-view-setup ()
   (if view-mode
@@ -170,12 +158,6 @@
 
 
 
-(global-set-key (kbd "C-c s") 'shell)
-
-(global-set-key (kbd "C-c j") 'imenu)
-
-(define-key prog-mode-map (kbd "C-c f") 'flymake-mode)
-
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
@@ -187,10 +169,6 @@
   `("gcc" "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c") "-fsyntax-only" "-"))
 
 (setq flymake-cc-command '+flymake-cc-command)
-
-(setq semantic-new-buffer-setup-functions
-      '((c-mode . semantic-default-c-setup)
-        (c++-mode . semantic-default-c-setup)))
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
@@ -257,8 +235,6 @@
   (define-key dired-mode-map "J" 'dired-goto-file)
   (define-key dired-mode-map "K" 'dired-kill-line)
   (define-key dired-mode-map "V" '+dired-do-xdg-open))
-
-(setq xref-search-program 'ripgrep)
 
 (defun +grep-rg ()
   (interactive)
