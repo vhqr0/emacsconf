@@ -24,6 +24,8 @@
       (switch-to-buffer-other-window (marker-buffer pos))
       (goto-char pos))))
 
+(declare-function imenu--make-index-alist "imenu")
+
 ;;;###autoload
 (defun list-imenu ()
   (interactive)

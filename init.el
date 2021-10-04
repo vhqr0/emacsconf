@@ -108,8 +108,8 @@
   (define-key view-mode-map "y"  'eve-command-arg)
   (define-key view-mode-map "m"  'point-to-register)
   (define-key view-mode-map ":"  'execute-extended-command)
-  (define-key view-mode-map "v" 'set-mark-command)
-  (define-key view-mode-map "V" "\C-a\C-\s\C-n"))
+  (define-key view-mode-map "v"  'set-mark-command)
+  (define-key view-mode-map "V"  "\C-a\C-\s\C-n"))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 

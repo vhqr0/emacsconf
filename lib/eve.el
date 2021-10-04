@@ -728,7 +728,7 @@ For jkGgg{}[]()."
           (setq eve-surround-last-tag (read-string "<")))
         `(,(concat "<" eve-surround-last-tag ">") .
           ,(concat "</" eve-surround-last-tag ">")))
-      `(,eve-surround-last . ,eve-surround-last)) )
+      `(,eve-surround-last . ,eve-surround-last)))
 
 (defun eve-surround-region (beg end)
   "Surround region (BEG . END), used by `eve-exec-com' when com is ?s."
