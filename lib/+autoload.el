@@ -263,6 +263,17 @@ Transpose lines in the active region." t nil)
 
 ;;;***
 
+;;;### (autoloads nil "cmake-capf" "cmake-capf.el" (0 0 0 0))
+;;; Generated autoloads from cmake-capf.el
+
+(autoload 'cmake-capf "cmake-capf" nil nil nil)
+
+(with-eval-after-load 'cmake-mode (add-hook 'cmake-mode-hook (lambda nil (add-hook 'completion-at-point-functions #'cmake-capf nil 'local))))
+
+(register-definition-prefixes "cmake-capf" '("cmake-capf-lists"))
+
+;;;***
+
 ;;;### (autoloads nil "cmake-mode" "cmake-mode.el" (0 0 0 0))
 ;;; Generated autoloads from cmake-mode.el
 
