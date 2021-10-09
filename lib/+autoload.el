@@ -450,19 +450,6 @@ File paths with spaces are only supported inside strings.
 
 ;;;***
 
-;;;### (autoloads nil "company-keywords" "company-keywords.el" (0
-;;;;;;  0 0 0))
-;;; Generated autoloads from company-keywords.el
-
-(autoload 'company-keywords "company-keywords" "\
-`company-mode' backend for programming language keywords.
-
-\(fn COMMAND &optional ARG &rest IGNORED)" t nil)
-
-(register-definition-prefixes "company-keywords" '("company-keywords-alist"))
-
-;;;***
-
 ;;;### (autoloads nil "eglot" "eglot.el" (0 0 0 0))
 ;;; Generated autoloads from eglot.el
 
@@ -538,6 +525,50 @@ it is disabled.
 Change mode to vi." t nil)
 
 (register-definition-prefixes "eve" '("eve-"))
+
+;;;***
+
+;;;### (autoloads nil "gtags" "gtags.el" (0 0 0 0))
+;;; Generated autoloads from gtags.el
+
+(autoload 'gtags-mode "gtags" "\
+Toggle Gtags mode, a minor mode for browsing source code using GLOBAL.
+
+Specify the root directory of project.
+	\\[gtags-visit-rootdir]
+Input tag name and move to the definition.
+	\\[gtags-find-tag]
+Input tag name and move to the definition in other window.
+        \\[gtags-find-tag-other-window]
+Input tag name and move to the referenced point.
+	\\[gtags-find-rtag]
+Input symbol and move to the locations.
+	\\[gtags-find-symbol]
+Input pattern, search with grep(1) and move to the locations.
+	\\[gtags-find-with-grep]
+Input pattern, search with idutils(1) and move to the locations.
+	\\[gtags-find-with-idutils]
+Input pattern and move to the top of the file.
+	\\[gtags-find-file]
+Input pattern and show the list of definitions of the file.
+	\\[gtags-parse-file]
+Get the expression as a tagname around here and move there.
+	\\[gtags-find-tag-from-here]
+Display current screen on hypertext browser.
+	\\[gtags-display-browser]
+Get the expression as a tagname around here and move there.
+	\\[gtags-find-tag-by-event]
+Move to previous point on the stack.
+	\\[gtags-pop-stack]
+
+Key definitions:
+\\{gtags-mode-map}
+Turning on Gtags mode calls the value of the variable `gtags-mode-hook'
+with no args, if that value is non-nil.
+
+\(fn &optional FORCES)" t nil)
+
+(register-definition-prefixes "gtags" '("gtags-"))
 
 ;;;***
 

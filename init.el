@@ -169,6 +169,8 @@
 
 (setq flymake-cc-command '+flymake-cc-command)
 
+(setq gtags-suggested-key-mapping t)
+
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
 
@@ -181,8 +183,7 @@
       '(company-pseudo-tooltip-frontend)
       company-backends
       '(company-files
-        (company-dabbrev-code
-         company-keywords)
+        company-dabbrev-code
         company-dabbrev))
 
 (add-hook 'emacs-lisp-mode-hook
