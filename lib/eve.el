@@ -398,12 +398,12 @@ Dispatch to `eve-tobj' when there is a com."
 (eve-define-insert eve-o
   (end-of-line)
   (newline 1)
-  (indent-for-tab-command))
+  (indent-according-to-mode))
 
 (eve-define-insert eve-O
   (beginning-of-line)
   (open-line 1)
-  (indent-for-tab-command))
+  (indent-according-to-mode))
 
 
 

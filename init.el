@@ -159,6 +159,8 @@
 
 (global-set-key (kbd "C-c j") 'imenu)
 
+(setq xref-search-program 'ripgrep)
+
 (global-set-key "\M-\"" 'xref-find-apropos)
 
 (with-eval-after-load 'flymake

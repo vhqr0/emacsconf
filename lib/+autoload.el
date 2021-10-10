@@ -539,7 +539,7 @@ for a description of this minor mode.")
 (custom-autoload 'gtags-mode "gtags" nil)
 
 (autoload 'gtags-mode "gtags" "\
-Gtags xref backends enabled mode.
+Gtags xref backend enabled mode.
 
 This is a minor mode.  If called interactively, toggle the `gtags
 mode' mode.  If the prefix argument is positive, enable the mode,

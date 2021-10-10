@@ -36,16 +36,16 @@
 
 ;;;###autoload
 (define-minor-mode gtags-mode
-  "Gtags xref backends enabled mode."
+  "Gtags xref backend enabled mode."
   :global t
   :lighter " gtags"
   :group 'etags)
 
 (advice-add 'etags--xref-backend
-            :around (lambda (_func)
-                      (if (and gtags-mode
-                               (eq 0 (shell-command (concat gtags-global-program " -p"))))
-                          'gtags
-                        'etags)))
+            :override (lambda ()
+                        (if (and gtags-mode
+                                 (eq 0 (shell-command (concat gtags-global-program " -p"))))
+                            'gtags
+                          'etags)))
 
 (provide 'gtags)
