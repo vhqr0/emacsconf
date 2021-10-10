@@ -157,6 +157,10 @@
 
 
 
+(global-set-key (kbd "C-c j") 'imenu)
+
+(global-set-key "\M-\"" 'xref-find-apropos)
+
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
@@ -168,11 +172,6 @@
   `("gcc" "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c") "-fsyntax-only" "-"))
 
 (setq flymake-cc-command '+flymake-cc-command)
-
-(global-set-key (kbd "C-c j") 'imenu)
-(global-set-key (kbd "C-c d") 'gxref-find-definitions)
-(global-set-key (kbd "C-c r") 'gxref-find-references)
-(global-set-key (kbd "C-c g") 'gxref-find-apropos)
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 

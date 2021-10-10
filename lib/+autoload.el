@@ -528,16 +528,36 @@ Change mode to vi." t nil)
 
 ;;;***
 
-;;;### (autoloads nil "gxref" "gxref.el" (0 0 0 0))
-;;; Generated autoloads from gxref.el
+;;;### (autoloads nil "gtags" "gtags.el" (0 0 0 0))
+;;; Generated autoloads from gtags.el
 
-(autoload 'gxref-find-definitions "gxref" nil t nil)
+(defvar gtags-mode nil "\
+Non-nil if gtags mode is enabled.
+See the `gtags-mode' command
+for a description of this minor mode.")
 
-(autoload 'gxref-find-references "gxref" nil t nil)
+(custom-autoload 'gtags-mode "gtags" nil)
 
-(autoload 'gxref-find-apropos "gxref" nil t nil)
+(autoload 'gtags-mode "gtags" "\
+Gtags xref backends enabled mode.
 
-(register-definition-prefixes "gxref" '("gxref-"))
+This is a minor mode.  If called interactively, toggle the `gtags
+mode' mode.  If the prefix argument is positive, enable the mode,
+and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value 'gtags-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
+\(fn &optional ARG)" t nil)
+
+(register-definition-prefixes "gtags" '("gtags-"))
 
 ;;;***
 
