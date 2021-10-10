@@ -169,7 +169,10 @@
 
 (setq flymake-cc-command '+flymake-cc-command)
 
-(setq gtags-suggested-key-mapping t)
+(global-set-key (kbd "C-c j") 'imenu)
+(global-set-key (kbd "C-c d") 'gxref-find-definitions)
+(global-set-key (kbd "C-c r") 'gxref-find-references)
+(global-set-key (kbd "C-c g") 'gxref-find-apropos)
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
@@ -182,9 +185,7 @@
       company-frontends
       '(company-pseudo-tooltip-frontend)
       company-backends
-      '(company-files
-        company-dabbrev-code
-        company-dabbrev))
+      '(company-files company-dabbrev-code company-dabbrev))
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
