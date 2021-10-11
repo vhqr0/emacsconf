@@ -396,18 +396,6 @@ it is disabled.
 
 ;;;***
 
-;;;### (autoloads nil "wgrep" "wgrep.el" (0 0 0 0))
-;;; Generated autoloads from wgrep.el
-
-(autoload 'wgrep-setup "wgrep" "\
-Setup wgrep preparation." nil nil)
-
-(add-hook 'grep-setup-hook 'wgrep-setup)
-
-(register-definition-prefixes "wgrep" '("wgrep-"))
-
-;;;***
-
 (provide '+autoload)
 ;; Local Variables:
 ;; version-control: never

@@ -163,8 +163,6 @@
 
 
 
-(global-set-key (kbd "C-c j") 'imenu)
-
 (setq xref-search-program 'ripgrep)
 
 (global-set-key "\M-\"" 'xref-find-apropos)
@@ -253,8 +251,5 @@
    'grep-mode))
 
 (defalias 'rg '+grep-rg)
-
-(setq wgrep-auto-save-buffer t
-      wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
