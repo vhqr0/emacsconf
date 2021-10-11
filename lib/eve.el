@@ -147,7 +147,7 @@
   "Save last insert string.")
 
 (defvar-local eve-insert-record nil
-  "Weather record insert string.")
+  "Whether record insert string.")
 
 (defvar-local eve-current-mode nil)
 
@@ -422,7 +422,7 @@ Dispatch to `eve-tobj' when there is a com."
     (let (range)
       (setq range (cdr (assq eve-tobj-last
                              '((?w . word)
-                               (?o . sexp)
+                               (?W . sexp)
                                (?f . defun)
                                (?p . paragraph)
                                (?P . page)
@@ -772,7 +772,7 @@ ARG: (com . val), dispatched by com."
 
 
 (defun eve-end-with-newline-p (string)
-  "Weather STRING end with a ?\n."
+  "Whether STRING end with a ?\n."
   (or (string-empty-p string)
       (eq (aref string (1- (length string))) ?\n)))
 

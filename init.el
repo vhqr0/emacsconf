@@ -44,6 +44,16 @@
 
 (define-key minibuffer-local-completion-map "\s" "-")
 
+(defun +minibuffer-yank-symbol ()
+  (interactive)
+  (when (window-minibuffer-p)
+    (let ((symbol (with-selected-window (minibuffer-selected-window)
+                    (thing-at-point 'symbol))))
+      (when symbol
+        (insert symbol)))))
+
+(define-key minibuffer-local-map "\M-." '+minibuffer-yank-symbol)
+
 
 
 (setq-default indent-tabs-mode nil)
@@ -142,18 +152,14 @@
 
 
 (with-eval-after-load 'eve
-  (define-key eve-vi-mode-map "g." 'avy-resume)
-  (define-key eve-vi-mode-map "gf" 'avy-goto-char)
-  (define-key eve-vi-mode-map "gj" 'avy-goto-line)
-  (define-key eve-vi-mode-map "gw" 'avy-goto-word-0)
-  (define-key eve-vi-mode-map "go" 'avy-goto-symbol-1))
+  (define-key eve-vi-mode-map "gf" 'aj-goto-char)
+  (define-key eve-vi-mode-map "gj" 'aj-goto-line)
+  (define-key eve-vi-mode-map "gw" 'aj-goto-symbol))
 
 (with-eval-after-load 'view
-  (define-key view-mode-map "g." 'avy-resume)
-  (define-key view-mode-map "gf" 'avy-goto-char)
-  (define-key view-mode-map "gj" 'avy-goto-line)
-  (define-key view-mode-map "gw" 'avy-goto-word-0)
-  (define-key view-mode-map "go" 'avy-goto-symbol-1))
+  (define-key view-mode-map "gf" 'aj-goto-char)
+  (define-key view-mode-map "gj" 'aj-goto-line)
+  (define-key view-mode-map "gw" 'aj-goto-symbol))
 
 
 
