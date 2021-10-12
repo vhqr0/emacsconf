@@ -46,70 +46,8 @@
     (when ctn
       (user-error "No such char"))))
 
-;;;###autoload
-(defun aj-goto-line ()
-  (interactive)
+(defun aj-goto-regexp (regexp)
   (let ((beg (window-start))
-        (end (window-end)))
-    (save-excursion
-      (let ((ctn t)
-            (cur aj-forward-chars))
-        (while (and ctn cur)
-          (goto-char (line-end-position))
-          (forward-char)
-          (if (< (point) end)
-              (aj-make-overlay (point) (car cur))
-            (setq ctn nil))
-          (setq cur (cdr cur)))))
-    (save-excursion
-      (let ((ctn t)
-            (cur aj-backward-chars))
-        (while (and ctn cur)
-          (backward-char)
-          (goto-char (line-beginning-position))
-          (if (> (point) beg)
-              (aj-make-overlay (point) (car cur))
-            (setq ctn nil))
-          (setq cur (cdr cur))))))
-  (when aj-overlays
-    (unwind-protect
-        (aj-goto-overlay (read-char))
-      (aj-clear-overlays))))
-
-;;;###autoload
-(defun aj-goto-symbol ()
-  (interactive)
-  (let ((beg (window-start))
-        (end (window-end)))
-    (save-excursion
-      (let ((ctn t)
-            (cur aj-forward-chars))
-        (while (and ctn cur)
-          (forward-symbol 2)
-          (forward-symbol -1)
-          (if (< (point) end)
-              (aj-make-overlay (point) (car cur))
-            (setq ctn nil))
-          (setq cur (cdr cur)))))
-    (save-excursion
-      (let ((ctn t)
-            (cur aj-backward-chars))
-        (while (and ctn cur)
-          (forward-symbol -1)
-          (if (> (point) beg)
-              (aj-make-overlay (point) (car cur))
-            (setq ctn nil))
-          (setq cur (cdr cur))))))
-  (when aj-overlays
-    (unwind-protect
-        (aj-goto-overlay (read-char))
-      (aj-clear-overlays))))
-
-;;;###autoload
-(defun aj-goto-char (&optional char)
-  (interactive)
-  (let ((regexp (regexp-quote (char-to-string (or char (read-char)))))
-        (beg (window-start))
         (end (window-end)))
     (save-excursion
       (let ((ctn t)
@@ -139,5 +77,20 @@
     (unwind-protect
         (aj-goto-overlay (read-char))
       (aj-clear-overlays))))
+
+;;;###autoload
+(defun aj-goto-char (&optional char)
+  (interactive)
+  (aj-goto-regexp (regexp-quote (char-to-string (or char (read-char))))))
+
+;;;###autoload
+(defun aj-goto-line ()
+  (interactive)
+  (aj-goto-regexp "^."))
+
+;;;###autoload
+(defun aj-goto-symbol ()
+  (interactive)
+  (aj-goto-regexp "\\_<\\sw"))
 
 (provide 'aj)

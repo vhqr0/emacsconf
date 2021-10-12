@@ -6,14 +6,14 @@
 ;;;### (autoloads nil "aj" "aj.el" (0 0 0 0))
 ;;; Generated autoloads from aj.el
 
-(autoload 'aj-goto-line "aj" nil t nil)
-
-(autoload 'aj-goto-symbol "aj" nil t nil)
-
 (autoload 'aj-goto-char "aj" "\
 
 
 \(fn &optional CHAR)" t nil)
+
+(autoload 'aj-goto-line "aj" nil t nil)
+
+(autoload 'aj-goto-symbol "aj" nil t nil)
 
 (register-definition-prefixes "aj" '("aj-"))
 
