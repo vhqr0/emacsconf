@@ -31,7 +31,7 @@
   (let ((window (selected-window))
         (overlay (make-overlay pos (1+ pos))))
     (overlay-put overlay 'window window)
-    (overlay-put overlay 'before-string (propertize (char-to-string char) 'face 'highlight))
+    (overlay-put overlay 'display (propertize (char-to-string char) 'face 'highlight))
     (overlay-put overlay 'char char)
     (setq aj-overlays (cons overlay aj-overlays))))
 
