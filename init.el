@@ -11,6 +11,11 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+(defvar package-activated-list nil)
+
+(when (file-exists-p package-quickstart-file)
+  (load package-quickstart-file))
+
 
 
 (setq visible-bell t)
@@ -25,6 +30,7 @@
 
 
 (setq confirm-kill-emacs 'y-or-n-p
+      auto-revert-check-vc-info t
       vc-handled-backends '(Git)
       vc-make-backup-files t
       version-control t

@@ -4,6 +4,8 @@
 /custom.el
 /eglot-eclipse-jdt-cache
 /eln-cache
-/emacs
+/elpa
+/package-quickstart.el
 /projects
 /recentf
+/transient
