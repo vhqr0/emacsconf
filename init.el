@@ -81,6 +81,9 @@
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
+(define-key tab-bar-switch-repeat-map "t" 'tab-next)
+(define-key tab-bar-switch-repeat-map "T" 'tab-previous)
+
 
 
 (global-set-key (kbd "C-x m") 'list-imenu)
@@ -118,6 +121,8 @@
                  "/" "?" "n" "N" "f" "F" "t" "T" ";" ":"
                  "gg" "G" "'" "`" "0" "$" "^"))
     (define-key view-mode-map key (intern (concat "eve-" key))))
+  (define-key view-mode-map "gt" 'tab-next)
+  (define-key view-mode-map "gT" 'tab-previous)
   (define-key view-mode-map "gn" "\C-c\C-n")
   (define-key view-mode-map "gp" "\C-c\C-p")
   (define-key view-mode-map "."  'repeat)

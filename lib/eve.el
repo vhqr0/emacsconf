@@ -103,6 +103,8 @@
     (define-key map "N"  'eve-N)
     (define-key map "`"  'eve-\`)
     (define-key map "'"  'eve-\')
+    (define-key map "gt" 'tab-next)
+    (define-key map "gT" 'tab-previous)
     (define-key map "gn" "\C-c\C-n")
     (define-key map "gp" "\C-c\C-p")
 
