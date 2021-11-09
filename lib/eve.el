@@ -161,9 +161,11 @@ NEW-MODE is vi-mode, insert-mode or emacs-mode."
       (cond ((eq new-mode 'vi-mode)
              (when (eq eve-current-mode 'insert-mode)
                (when eve-insert-record
-                 (setq eve-insert-last
-                       (buffer-substring-no-properties
-                        (point) eve-insert-point))
+                 (condition-case nil
+                     (setq eve-insert-last
+                           (buffer-substring-no-properties
+                            (point) eve-insert-point))
+                   (t))
                  (let ((i-com (nth 0 eve-d-com))
                        (val (nth 1 eve-d-com)))
                    (when (and val (> val 1))
