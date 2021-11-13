@@ -22,6 +22,8 @@
 
 (setq inhibit-splash-screen t)
 
+(setq describe-bindings-outline nil)
+
 (menu-bar-mode -1)
 (blink-cursor-mode -1)
 
@@ -152,6 +154,7 @@
 
 
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
+(global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
 
 (with-eval-after-load 'eve
   (define-key eve-jk-mode-map "\C-p" 'listify-switch-to-buffer)
