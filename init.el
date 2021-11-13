@@ -91,6 +91,7 @@
 (global-set-key (kbd "C-x m") 'list-imenu)
 (global-set-key (kbd "C-x y") 'list-kill-ring)
 
+(define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
