@@ -140,7 +140,7 @@
 (defun +eve-setup ()
   (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
          (eve-jk-mode 1))
-        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode 'comint-mode)
+        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
          (eve-change-mode-to-vi))))
 
 (defun +eve-view-setup ()
