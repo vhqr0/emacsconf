@@ -260,6 +260,9 @@
 
 (defalias 'rg '+grep-rg)
 
+(setq wgrep-auto-save-buffer t
+      wgrep-change-readonly-file t)
+
 (setq ispell-dictionary "american")
 
 (when (getenv "WSLENV")
