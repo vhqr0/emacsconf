@@ -396,6 +396,18 @@ it is disabled.
 
 ;;;***
 
+;;;### (autoloads nil "web-mode" "web-mode.el" (0 0 0 0))
+;;; Generated autoloads from web-mode.el
+
+(autoload 'web-mode "web-mode" "\
+Major mode for editing web templates.
+
+\(fn)" t nil)
+
+(register-definition-prefixes "web-mode" '("web-mode-"))
+
+;;;***
+
 ;;;### (autoloads nil "wgrep" "wgrep.el" (0 0 0 0))
 ;;; Generated autoloads from wgrep.el
 

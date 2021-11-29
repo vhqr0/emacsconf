@@ -83,6 +83,8 @@
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
+(winner-mode 1)
+
 (define-key tab-bar-switch-repeat-map "t" 'tab-next)
 (define-key tab-bar-switch-repeat-map "T" 'tab-previous)
 
@@ -195,6 +197,8 @@
 (setq flymake-cc-command '+flymake-cc-command)
 
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
+
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
 
 
