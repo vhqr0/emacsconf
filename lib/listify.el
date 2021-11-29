@@ -4,6 +4,7 @@
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
+;; (global-set-key (kbd "<f6>") 'listify-project-find-file)
 ;; (define-key company-active-map "\M-o" 'listify-company)
 
 ;;; Code:
@@ -154,6 +155,18 @@ In other window if ARG not nil."
         (if arg
             (find-file-other-window choice)
           (find-file choice))))))
+
+;;;###autoload
+(defun listify-project-find-file (arg)
+  "Open project file with `listify-read'.
+In other window if ARG not nil."
+  (interactive "P")
+  (let ((choice (listify-read "open: "
+                              (split-string (shell-command-to-string "rg --files")))))
+    (when choice
+      (if arg
+          (find-file-other-window choice)
+        (find-file choice)))))
 
 (defvar company-prefix)
 (defvar company-candidates)

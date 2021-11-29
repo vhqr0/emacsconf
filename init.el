@@ -99,6 +99,7 @@
 
 (defun +project-switch ()
   (interactive)
+  (require 'project)
   (let ((default-directory (project-prompt-project-dir))
         (command (lookup-key project-prefix-map
                              `[,(read-event "switch project: ")])))
@@ -158,13 +159,17 @@
 
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
 (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
+(global-set-key (kbd "<f5>") 'listify-project-find-file)
 
 (with-eval-after-load 'eve
   (define-key eve-jk-mode-map "\C-p" 'listify-switch-to-buffer)
-  (define-key eve-vi-mode-map "\C-p" 'listify-switch-to-buffer))
+  (define-key eve-jk-mode-map "\C-n" 'listify-project-find-file)
+  (define-key eve-vi-mode-map "\C-p" 'listify-switch-to-buffer)
+  (define-key eve-vi-mode-map "\C-n" 'listify-project-find-file))
 
 (with-eval-after-load 'view
-  (define-key view-mode-map "\C-p" 'listify-switch-to-buffer))
+  (define-key view-mode-map "\C-p" 'listify-switch-to-buffer)
+  (define-key view-mode-map "\C-n" 'listify-project-find-file))
 
 
 
@@ -199,6 +204,10 @@
 (setq eglot-ignored-server-capabilites '(:hoverProvider))
 
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+
+(add-hook 'sgml-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'emmet-mode)
 
 
 
