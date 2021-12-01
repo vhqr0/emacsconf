@@ -136,7 +136,7 @@
   (define-key view-mode-map "m"  'point-to-register)
   (define-key view-mode-map ":"  'execute-extended-command)
   (define-key view-mode-map "v"  'set-mark-command)
-  (define-key view-mode-map "V"  "\C-a\C-\s\C-n"))
+  (define-key view-mode-map "V"  "0vj"))
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
@@ -159,7 +159,7 @@
 
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
 (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
-(global-set-key (kbd "<f5>") 'listify-project-find-file)
+(global-set-key (kbd "<f6>") 'listify-project-find-file)
 
 (with-eval-after-load 'eve
   (define-key eve-jk-mode-map "\C-p" 'listify-switch-to-buffer)

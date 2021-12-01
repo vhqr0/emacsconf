@@ -67,7 +67,7 @@
     (define-key map "m" 'point-to-register)
     (define-key map ":" 'execute-extended-command)
     (define-key map "v" 'set-mark-command)
-    (define-key map "V" "\C-a\C-\s\C-n")
+    (define-key map "V" "0vj")
 
     (define-key map "j"  'eve-j)
     (define-key map "k"  'eve-k)
