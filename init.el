@@ -205,6 +205,14 @@
 
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
+(defvar emmet-mode-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "M-RET") 'emmet-expand-line)
+    (define-key map (kbd "C-c n") 'emmet-next-edit-point)
+    (define-key map (kbd "C-c p") 'emmet-prev-edit-point)
+    (define-key map (kbd "C-c C-c w") 'emmet-wrap-with-markup)
+    map))
+
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
@@ -224,10 +232,6 @@
           (lambda ()
             (setq-local company-backends
                         `(company-capf ,@company-backends))))
-
-(with-eval-after-load 'company
-  (define-key company-mode-map "\M-o" 'company-complete)
-  (define-key company-active-map "\M-o" 'listify-company))
 
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)

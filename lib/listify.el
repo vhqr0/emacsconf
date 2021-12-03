@@ -5,7 +5,6 @@
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
 ;; (global-set-key (kbd "<f6>") 'listify-project-find-file)
-;; (define-key company-active-map "\M-o" 'listify-company)
 
 ;;; Code:
 (require 'subr-x)
@@ -167,23 +166,6 @@ In other window if ARG not nil."
       (if arg
           (find-file-other-window choice)
         (find-file choice)))))
-
-(defvar company-prefix)
-(defvar company-candidates)
-(declare-function company-abort "company")
-
-;;;###autoload
-(defun listify-company ()
-  "Select company candidate with `listify-read'."
-  (interactive)
-  (when company-candidates
-    (let ((length (length company-prefix))
-          (candidates company-candidates))
-      (company-abort)
-      (let ((candidate (listify-read "complete: " candidates)))
-        (when candidate
-          (delete-char (- length))
-          (insert candidate))))))
 
 (provide 'listify)
 ;;; listify.el ends here

@@ -425,9 +425,6 @@ In other window if ARG not nil.
 
 \(fn ARG)" t nil)
 
-(autoload 'listify-company "listify" "\
-Select company candidate with `listify-read'." t nil)
-
 (register-definition-prefixes "listify" '("listify-"))
 
 ;;;***
