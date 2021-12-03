@@ -27,7 +27,11 @@
 (menu-bar-mode -1)
 (blink-cursor-mode -1)
 
-(load-theme 'modus-vivendi)
+(add-to-list 'custom-theme-load-path (expand-file-name "theme" user-emacs-directory))
+
+(defvar +theme 'zenburn)
+
+(load-theme +theme)
 
 
 
