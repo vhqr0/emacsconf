@@ -101,17 +101,6 @@
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
-(defun +project-switch ()
-  (interactive)
-  (require 'project)
-  (let ((default-directory (project-prompt-project-dir))
-        (command (lookup-key project-prefix-map
-                             `[,(read-event "switch project: ")])))
-    (when command
-      (call-interactively command))))
-
-(define-key project-prefix-map "p" '+project-switch)
-
 
 
 (setq isearch-lazy-count t

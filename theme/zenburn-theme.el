@@ -313,6 +313,17 @@ Also bind `class' to ((class color) (min-colors 89))."
 ;;;;; ert
    `(ert-test-result-expected ((t (:foreground ,zenburn-green+4 :background ,zenburn-bg))))
    `(ert-test-result-unexpected ((t (:foreground ,zenburn-red :background ,zenburn-bg))))
+;;;;; eshell
+   `(eshell-prompt ((t (:foreground ,zenburn-yellow :weight bold))))
+   `(eshell-ls-archive ((t (:foreground ,zenburn-red-1 :weight bold))))
+   `(eshell-ls-backup ((t (:inherit font-lock-comment-face))))
+   `(eshell-ls-clutter ((t (:inherit font-lock-comment-face))))
+   `(eshell-ls-directory ((t (:foreground ,zenburn-blue+1 :weight bold))))
+   `(eshell-ls-executable ((t (:foreground ,zenburn-red+1 :weight bold))))
+   `(eshell-ls-unreadable ((t (:foreground ,zenburn-fg))))
+   `(eshell-ls-missing ((t (:inherit font-lock-warning-face))))
+   `(eshell-ls-product ((t (:inherit font-lock-doc-face))))
+   `(eshell-ls-special ((t (:foreground ,zenburn-yellow :weight bold))))
 ;;;;; flymake
    `(flymake-errline
      ((((supports :underline (:style wave)))

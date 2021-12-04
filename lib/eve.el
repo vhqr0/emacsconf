@@ -124,15 +124,18 @@
 ;;;###autoload
 (define-minor-mode eve-jk-mode
   "Eve jk mode."
-  :keymap eve-jk-mode-map)
+  :keymap eve-jk-mode-map
+  :lighter " <JK>")
 
 (define-minor-mode eve-insert-mode
   "Eve insert mode."
-  :keymap eve-insert-mode-map)
+  :keymap eve-insert-mode-map
+  :lighter " <I>")
 
 (define-minor-mode eve-vi-mode
   "Eve vi mode."
-  :keymap eve-vi-mode-map)
+  :keymap eve-vi-mode-map
+  :lighter " <V>")
 
 (defvar-local eve-d-com nil
   "Last (m-com val com) used by `eve-repeat'.")
@@ -156,41 +159,35 @@
 (defun eve-change-mode (new-mode)
   "Change mode to NEW-MODE.
 NEW-MODE is vi-mode, insert-mode or emacs-mode."
-  (let (id)
-    (unless (eq new-mode eve-current-mode)
-      (cond ((eq new-mode 'vi-mode)
-             (when (eq eve-current-mode 'insert-mode)
-               (when eve-insert-record
-                 (condition-case nil
-                     (setq eve-insert-last
-                           (buffer-substring-no-properties
-                            (point) eve-insert-point))
-                   (t))
-                 (let ((i-com (nth 0 eve-d-com))
-                       (val (nth 1 eve-d-com)))
-                   (when (and val (> val 1))
-                     (setq eve-d-com `(,i-com ,(1- val)))
-                     (eve-repeat)
-                     (setq eve-d-com `(,i-com ,val)))))
-               (eve-insert-mode -1))
-             (eve-vi-mode 1)
-             (setq id "<V>"))
-            ((eq new-mode 'insert-mode)
-             (when (eq eve-current-mode 'vi-mode)
-               (setq eve-insert-record t)
-               (move-marker eve-insert-point (point))
-               (eve-vi-mode -1))
-             (eve-insert-mode 1)
-             (setq id "<I>"))
-            (t
-             (setq eve-insert-record nil)
-             (eve-vi-mode -1)
-             (eve-insert-mode -1)
-             (setq id "<E>")))
-      (setq eve-current-mode new-mode)
-      (setq mode-line-buffer-identification
-            `(,(concat id " %17b")))
-      (force-mode-line-update))))
+  (unless (eq new-mode eve-current-mode)
+    (cond ((eq new-mode 'vi-mode)
+           (when (eq eve-current-mode 'insert-mode)
+             (when eve-insert-record
+               (condition-case nil
+                   (setq eve-insert-last
+                         (buffer-substring-no-properties
+                          (point) eve-insert-point))
+                 (t))
+               (let ((i-com (nth 0 eve-d-com))
+                     (val (nth 1 eve-d-com)))
+                 (when (and val (> val 1))
+                   (setq eve-d-com `(,i-com ,(1- val)))
+                   (eve-repeat)
+                   (setq eve-d-com `(,i-com ,val)))))
+             (eve-insert-mode -1))
+           (eve-vi-mode 1))
+          ((eq new-mode 'insert-mode)
+           (when (eq eve-current-mode 'vi-mode)
+             (setq eve-insert-record t)
+             (move-marker eve-insert-point (point))
+             (eve-vi-mode -1))
+           (eve-insert-mode 1))
+          (t
+           (setq eve-insert-record nil)
+           (eve-vi-mode -1)
+           (eve-insert-mode -1)))
+    (setq eve-current-mode new-mode)
+    (force-mode-line-update)))
 
 ;;;###autoload
 (defun eve-change-mode-to-vi ()
