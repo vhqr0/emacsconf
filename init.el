@@ -192,17 +192,15 @@
 
 (setq flymake-cc-command '+flymake-cc-command)
 
-(setq eglot-ignored-server-capabilites '(:hoverProvider))
-
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
-(defvar emmet-mode-keymap
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "M-RET") 'emmet-expand-line)
-    (define-key map (kbd "C-c n") 'emmet-next-edit-point)
-    (define-key map (kbd "C-c p") 'emmet-prev-edit-point)
-    (define-key map (kbd "C-c C-c w") 'emmet-wrap-with-markup)
-    map))
+(setq emmet-mode-keymap
+      (let ((map (make-sparse-keymap)))
+        (define-key map (kbd "M-RET") 'emmet-expand-line)
+        (define-key map (kbd "C-c n") 'emmet-next-edit-point)
+        (define-key map (kbd "C-c p") 'emmet-prev-edit-point)
+        (define-key map (kbd "C-c C-c w") 'emmet-wrap-with-markup)
+        map))
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)

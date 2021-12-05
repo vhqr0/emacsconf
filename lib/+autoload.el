@@ -414,8 +414,8 @@ it is disabled.
 Tab completion with `listify-completion-in-region'." t nil)
 
 (autoload 'listify-open "listify" "\
-Switch to buffer or recent file with `listify-read'.
-In other window if ARG not nil.
+Open buffer or recent file with `listify-read'.
+Open file in current directory if ARG not nil.
 
 \(fn ARG)" t nil)
 

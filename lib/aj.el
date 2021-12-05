@@ -29,9 +29,15 @@
 
 (defun aj-make-overlay (pos char)
   (let ((window (selected-window))
-        (overlay (make-overlay pos (1+ pos))))
+        (overlay (make-overlay pos (1+ pos)))
+        (beforep (eq (save-excursion
+                       (goto-char pos)
+                       (following-char))
+                     ?\n)))
     (overlay-put overlay 'window window)
-    (overlay-put overlay 'display (propertize (char-to-string char) 'face 'highlight))
+    (overlay-put overlay
+                 (if beforep 'before-string 'display)
+                 (propertize (char-to-string char) 'face 'highlight))
     (overlay-put overlay 'char char)
     (setq aj-overlays (cons overlay aj-overlays))))
 
@@ -86,7 +92,7 @@
 ;;;###autoload
 (defun aj-goto-line ()
   (interactive)
-  (aj-goto-regexp "^."))
+  (aj-goto-regexp "^.\\|^\n"))
 
 ;;;###autoload
 (defun aj-goto-symbol ()

@@ -13,6 +13,7 @@
   (let ((map (make-sparse-keymap)))
     (define-key map "j" "n")
     (define-key map "k" "p")
+    (define-key map ":" 'execute-extended-command)
     map)
   "Eve jk mode map.")
 
