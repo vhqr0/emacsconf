@@ -56,7 +56,7 @@
   (let ((beg (window-start))
         (end (window-end)))
     (save-excursion
-      (let ((ctn t)
+      (let ((ctn (not (eobp)))
             (cur aj-forward-chars))
         (condition-case nil
             (while (and ctn cur)
@@ -74,7 +74,7 @@
         (condition-case nil
             (while (and ctn cur)
               (re-search-backward regexp)
-              (if (> (point) beg)
+              (if (>= (point) beg)
                   (aj-make-overlay (point) (car cur))
                 (setq ctn nil))
               (setq cur (cdr cur)))
