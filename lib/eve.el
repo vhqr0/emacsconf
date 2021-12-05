@@ -115,6 +115,7 @@
     (define-key map "~" 'eve-~)
     (define-key map "r" 'eve-r)
     (define-key map "K" 'kill-sexp)
+    (define-key map "Q" 'indent-pp-sexp)
     (define-key map "S" 'delete-pair)
     (define-key map "R" 'raise-sexp)
     (define-key map "J"  "j\M-^")

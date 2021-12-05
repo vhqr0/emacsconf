@@ -3,8 +3,7 @@
 ;;; Commentary:
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
-;; (global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
-;; (global-set-key (kbd "<f6>") 'listify-project-find-file)
+;; (global-set-key (kbd "<f5>") 'listify-open)
 
 ;;; Code:
 (require 'subr-x)
@@ -27,6 +26,7 @@
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-n") 'listify-next)
     (define-key map (kbd "C-p") 'listify-prev)
+    (define-key map (kbd "C-o") 'listify-exit-minibuffer)
     (define-key map (kbd "RET") 'listify-exit-minibuffer)
     (make-composed-keymap map minibuffer-local-map)))
 
@@ -136,36 +136,31 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
 (defvar recentf-list)
 
 ;;;###autoload
-(defun listify-switch-to-buffer (arg)
-  "Switch to buffer or recent file with `listify-read'.
-In other window if ARG not nil."
+(defun listify-open (arg)
+  "Open buffer or recent file with `listify-read'.
+Open file in current directory if ARG not nil."
   (interactive "P")
-  (require 'recentf)
-  (let* ((buffers (seq-filter
-                   (lambda (x)
-                     (not (= (aref x 0) ?\s)))
-                   (mapcar 'buffer-name (buffer-list))))
-         (choice (listify-read "open: " (append buffers recentf-list))))
-    (when choice
-      (if (member choice buffers)
-          (if arg
-              (switch-to-buffer-other-window choice)
-            (switch-to-buffer choice))
-        (if arg
-            (find-file-other-window choice)
-          (find-file choice))))))
-
-;;;###autoload
-(defun listify-project-find-file (arg)
-  "Open project file with `listify-read'.
-In other window if ARG not nil."
-  (interactive "P")
-  (let ((choice (listify-read "open: "
-                              (split-string (shell-command-to-string "rg --files")))))
-    (when choice
-      (if arg
-          (find-file-other-window choice)
-        (find-file choice)))))
+  (if arg
+      (let ((choice (listify-read "open: "
+                                  (split-string (shell-command-to-string "rg --files")))))
+        (when choice
+          (if (eq last-command-event ?\C-m)
+              (find-file choice)
+            (find-file-other-window choice))))
+    (require 'recentf)
+    (let* ((buffers (seq-filter
+                     (lambda (x)
+                       (not (= (aref x 0) ?\s)))
+                     (mapcar 'buffer-name (buffer-list))))
+           (choice (listify-read "open: " (append buffers recentf-list))))
+      (when choice
+        (if (member choice buffers)
+            (if (eq last-command-event ?\C-m)
+                (switch-to-buffer choice)
+              (switch-to-buffer-other-window choice))
+          (if (eq last-command-event ?\C-m)
+              (find-file choice)
+            (find-file-other-window choice)))))))
 
 (provide 'listify)
 ;;; listify.el ends here

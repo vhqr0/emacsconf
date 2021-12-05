@@ -45,6 +45,8 @@
       delete-old-versions t
       backup-directory-alist '(("." . "~/.bak")))
 
+(setq auto-save-visited-interval 2)
+
 (auto-save-visited-mode 1)
 
 (setq recentf-max-saved-items 200)
@@ -151,18 +153,14 @@
 
 
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
-(global-set-key (kbd "<f5>") 'listify-switch-to-buffer)
-(global-set-key (kbd "<f6>") 'listify-project-find-file)
+(global-set-key (kbd "<f5>") 'listify-open)
 
 (with-eval-after-load 'eve
-  (define-key eve-jk-mode-map "\C-p" 'listify-switch-to-buffer)
-  (define-key eve-jk-mode-map "\C-n" 'listify-project-find-file)
-  (define-key eve-vi-mode-map "\C-p" 'listify-switch-to-buffer)
-  (define-key eve-vi-mode-map "\C-n" 'listify-project-find-file))
+  (define-key eve-jk-mode-map "\C-p" 'listify-open)
+  (define-key eve-vi-mode-map "\C-p" 'listify-open))
 
 (with-eval-after-load 'view
-  (define-key view-mode-map "\C-p" 'listify-switch-to-buffer)
-  (define-key view-mode-map "\C-n" 'listify-project-find-file))
+  (define-key view-mode-map "\C-p" 'listify-open))
 
 
 

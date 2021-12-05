@@ -413,14 +413,8 @@ it is disabled.
 (autoload 'listify-tab-completion "listify" "\
 Tab completion with `listify-completion-in-region'." t nil)
 
-(autoload 'listify-switch-to-buffer "listify" "\
+(autoload 'listify-open "listify" "\
 Switch to buffer or recent file with `listify-read'.
-In other window if ARG not nil.
-
-\(fn ARG)" t nil)
-
-(autoload 'listify-project-find-file "listify" "\
-Open project file with `listify-read'.
 In other window if ARG not nil.
 
 \(fn ARG)" t nil)
