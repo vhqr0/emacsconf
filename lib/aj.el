@@ -37,7 +37,7 @@
     (overlay-put overlay 'window window)
     (overlay-put overlay
                  (if beforep 'before-string 'display)
-                 (propertize (char-to-string char) 'face 'highlight))
+                 (propertize (char-to-string char) 'face 'match))
     (overlay-put overlay 'char char)
     (setq aj-overlays (cons overlay aj-overlays))))
 
