@@ -2,18 +2,17 @@
 
 
 
-(add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
-
-(require '+autoload)
-
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (when (file-exists-p custom-file)
   (load custom-file))
 
-(defvar package-activated-list nil)
+(add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
+
+(require '+autoload)
 
 (when (file-exists-p package-quickstart-file)
+  (defvar package-activated-list nil)
   (load package-quickstart-file))
 
 
@@ -27,11 +26,7 @@
 (menu-bar-mode -1)
 (blink-cursor-mode -1)
 
-(add-to-list 'custom-theme-load-path (expand-file-name "theme" user-emacs-directory))
-
-(defvar +theme 'zenburn)
-
-(load-theme +theme)
+(load-theme 'modus-vivendi)
 
 
 
@@ -89,10 +84,10 @@
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
-(winner-mode 1)
-
 (define-key tab-bar-switch-repeat-map "t" 'tab-next)
 (define-key tab-bar-switch-repeat-map "T" 'tab-previous)
+
+(winner-mode 1)
 
 
 
