@@ -522,11 +522,11 @@ For jkGgg{}[]()."
 ;; j, k, h, l, w, W, b, B, e, E, 0, ^, $, gg, G, {}[](), `, '
 
 (eve-define-line-motion eve-line
-  (line-move (1- val)))
+  (line-move (1- val) t))
 
 (eve-define-line-motion eve-j
   (setq this-command 'next-line)
-  (line-move val))
+  (line-move val t))
 
 (eve-define-line-motion eve-k
   (setq this-command 'previous-line)
