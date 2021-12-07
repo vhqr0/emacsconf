@@ -682,7 +682,7 @@ ARG: (val . ope), dispatched by ope."
       (eq (aref string (1- (length string))) ?\n)))
 
 (eve-define-command "p"
-  "Yank after ARG char."
+  "Yank after ARG times."
   (when (region-active-p)
     (delete-region (mark) (point)))
   (save-excursion
@@ -700,7 +700,7 @@ ARG: (val . ope), dispatched by ope."
           (yank))))))
 
 (eve-define-command "P"
-  "Yank before ARG char."
+  "Yank before ARG times."
   (when (region-active-p)
     (delete-region (mark) (point)))
   (save-excursion

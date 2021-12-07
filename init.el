@@ -150,7 +150,8 @@
 
 (defun +eve-view-setup ()
   (if view-mode
-      (when eve-current-mode
+      (when (or eve-vi-mode
+                eve-insert-mode)
         (eve-change-mode-to-emacs))
     (+eve-setup)))
 
