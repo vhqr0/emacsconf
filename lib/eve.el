@@ -39,6 +39,7 @@
     (define-key map "D" "d$")
     (define-key map "J" "j\M-^")
     (define-key map "K" 'kill-sexp)
+    (define-key map "H" 'backward-kill-sexp)
     (define-key map "Q" 'indent-pp-sexp)
     (define-key map "S" 'delete-pair)
     (define-key map "R" 'raise-sexp)
@@ -66,9 +67,6 @@
   "Eve vi mode."
   :keymap eve-vi-mode-map
   :lighter " <V>")
-
-(defvar-local eve-current-mode nil
-  "Currnet eve mode.")
 
 (defvar-local eve-exec-last nil
   "Last (move val ope) used by `eve-.'.")
@@ -150,45 +148,30 @@
 
 
 
-(defun eve-change-mode (new-mode)
+(defun eve-change-mode (&optional new-mode)
   "Change mode to NEW-MODE.
-NEW-MODE is vi-mode, insert-mode or emacs-mode."
-  (unless (eq new-mode eve-current-mode)
-    (cond ((eq new-mode 'vi-mode)
-           (when (eq eve-current-mode 'insert-mode)
-             (eve-insert-mode -1))
-           (eve-vi-mode 1))
-          ((eq new-mode 'insert-mode)
-           (when (eq eve-current-mode 'vi-mode)
-             (eve-vi-mode -1))
-           (eve-insert-mode 1))
-          (t
-           (eve-vi-mode -1)
-           (eve-insert-mode -1)))
-    (setq eve-current-mode new-mode)
-    (force-mode-line-update)))
+NEW-MODE is Vi, Insert or Emacs by default."
+  (interactive)
+  (eve-vi-mode (if (eq new-mode 'vi) 1 -1))
+  (eve-insert-mode (if (eq new-mode 'insert) 1 -1)))
 
 ;;;###autoload
 (defun eve-change-mode-to-vi ()
   "Change mode to Vi."
   (interactive)
-  (eve-change-mode 'vi-mode))
+  (eve-change-mode 'vi))
 
 (defun eve-change-mode-to-insert ()
   "Change mode to Insert."
   (interactive)
-  (eve-change-mode 'insert-mode))
+  (eve-change-mode 'insert))
 
-(defun eve-change-mode-to-emacs ()
-  "Change mode to Emacs."
-  (interactive)
-  (eve-change-mode 'emacs-mode))
+(defalias 'eve-change-mode-to-emacs 'eve-change-mode)
 
 (defun eve-jk ()
   ":imap jk <esc>."
   (interactive)
-  (if (and (eq eve-current-mode 'insert-mode)
-           (not executing-kbd-macro)
+  (if (and (not executing-kbd-macro)
            (not defining-kbd-macro)
            (not (sit-for 0.1 'no-redisplay)))
       (let ((next-char (read-event)))
