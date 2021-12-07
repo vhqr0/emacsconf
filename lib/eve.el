@@ -411,7 +411,7 @@ Dispatch to `eve-tobj' when there is a ope."
     (insert (car pair))
     (indent-region beg end)))
 
-(eve-define-operator ?c 'kill-region)
+(eve-define-operator ?c 'kill-region t)
 (eve-define-operator ?d 'kill-region)
 (eve-define-operator ?y 'copy-region-as-kill)
 (eve-define-operator ?= 'indent-region)
