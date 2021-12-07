@@ -130,9 +130,21 @@
 
 (global-set-key "\C-z" 'eve-change-mode-to-vi)
 
+(defvar +eve-jk-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "j" "n")
+    (define-key map "k" "p")
+    (define-key map ":" 'execute-extended-command)
+    map))
+
+(define-minor-mode +eve-jk-mode
+  "Eve jk mode."
+  :keymap +eve-jk-mode-map
+  :lighter " <JK>")
+
 (defun +eve-setup ()
   (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
-         (eve-jk-mode 1))
+         (+eve-jk-mode 1))
         ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
          (eve-change-mode-to-vi))))
 
@@ -151,8 +163,8 @@
 (global-set-key (kbd "<f5>") 'listify-open)
 
 (with-eval-after-load 'eve
-  (define-key eve-jk-mode-map "\C-p" 'listify-open)
-  (define-key eve-vi-mode-map "\C-p" 'listify-open))
+  (define-key eve-vi-mode-map "\C-p" 'listify-open)
+  (define-key +eve-jk-mode-map "\C-p" 'listify-open))
 
 (with-eval-after-load 'view
   (define-key view-mode-map "\C-p" 'listify-open))

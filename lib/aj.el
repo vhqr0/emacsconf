@@ -47,6 +47,7 @@
     (while (and ctn cur)
       (when (eq (overlay-get (car cur) 'char) char)
         (setq ctn nil)
+        (push-mark)
         (goto-char (overlay-start (car cur))))
       (setq cur (cdr cur)))
     (when ctn
