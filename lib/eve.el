@@ -1,13 +1,33 @@
 ;;; eve.el --- Emacs Vi Emu. -*- lexical-binding: t -*-
 
 ;;; Commentary:
+;;
 ;; Add this code to your init file:
+;; (require 'eve)
+;;
+;; Or start manually:
+;; (setq eve-setup nil)
+;; (setq eve-setup-view nil)
 ;; (global-set-key (kbd "C-z") 'eve-change-mode-to-vi)
+;;
+;; It's recommended that:
+;; (setq view-read-only t)
+;; (defalias 'w 'save-buffer)
 
 ;;; Code:
 (require 'subr-x)
 
+(eval-when-compile
+  (require 'view))
+
 
+
+(defvar eve-jk-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "j" "n")
+    (define-key map "k" "p")
+    (define-key map ":" 'execute-extended-command)
+    map))
 
 (defvar eve-insert-mode-map
   (let ((map (make-sparse-keymap)))
@@ -58,15 +78,26 @@
     map)
   "Eve vi mode map.")
 
+(define-minor-mode eve-jk-mode
+  "Eve JK mode."
+  :keymap eve-jk-mode-map
+  :lighter " <JK>")
+
 (define-minor-mode eve-insert-mode
-  "Eve insert mode."
+  "Eve Insert mode."
   :keymap eve-insert-mode-map
   :lighter " <I>")
 
 (define-minor-mode eve-vi-mode
-  "Eve vi mode."
+  "Eve Vi mode."
   :keymap eve-vi-mode-map
   :lighter " <V>")
+
+(defvar eve-setup t
+  "Wether setup eve.")
+
+(defvar eve-setup-view t
+  "Wether setup eve for view mode.")
 
 (defvar-local eve-exec-last nil
   "Last (move val ope) used by `eve-.'.")
@@ -95,11 +126,17 @@
 (defvar eve-find-last ?$
   "Last search char of `eve-f'.")
 
+(defvar eve-find-last-2 ?$
+  "Last search char of `eve-z'.")
+
 (defvar eve-find-forward nil
   "Last search direction of `eve-f'.")
 
 (defvar eve-find-to nil
   "Last search type of `eve-f'.")
+
+(defvar eve-find-2 nil
+  "Last search 2 char or not.")
 
 (defvar eve-jump-forward-chars
   (append '(?f ?j ?g ?h ?a)
@@ -492,9 +529,11 @@ Dispatch to `eve-tobj' when there is a ope."
   (end-of-line))
 
 (eve-define-line-motion "gg"
+  (push-mark)
   (goto-char (point-min)))
 
 (eve-define-line-motion "G"
+  (push-mark)
   (goto-char (point-max)))
 
 (eve-define-line-motion "{"
@@ -516,9 +555,11 @@ Dispatch to `eve-tobj' when there is a ope."
   (end-of-defun val))
 
 (eve-define-exclusive-motion "`"
+  (push-mark)
   (jump-to-register (read-char)))
 
 (eve-define-line-motion "'"
+  (push-mark)
   (jump-to-register (read-char)))
 
 
@@ -579,16 +620,35 @@ Dispatch to `eve-tobj' when there is a ope."
   "Find VAL `eve-find-last' by `eve-find-forward'."
   (unless eve-repeat-flag
     (setq eve-find-last (read-char)))
+  (setq eve-find-2 nil)
   (let ((point (point)))
     (condition-case nil
         (if eve-find-forward
             (progn
               (forward-char (if eve-find-to 2 1))
-              (search-forward (string eve-find-last) nil nil val)
+              (search-forward (char-to-string eve-find-last) nil nil val)
               (backward-char))
           (when eve-find-to
             (backward-char))
-          (search-backward (string eve-find-last) nil nil val))
+          (search-backward (char-to-string eve-find-last) nil nil val))
+      (search-failed
+       (goto-char point)
+       (error "Search failed")))))
+
+(defun eve-find-char-2 (val)
+  "Find VAL `eve-find-last-2' and `eve-find-last-1' by `eve-find-forward'."
+  (unless eve-repeat-flag
+    (setq eve-find-last-2 (read-char)
+          eve-find-last (read-char)))
+  (setq eve-find-2 t)
+  (let ((point (point)))
+    (condition-case nil
+        (if eve-find-forward
+            (progn
+              (forward-char 1)
+              (search-forward (format "%c%c" eve-find-last-2 eve-find-last) nil nil val)
+              (backward-char 2))
+          (search-backward (format "%c%c" eve-find-last-2 eve-find-last) nil nil val))
       (search-failed
        (goto-char point)
        (error "Search failed")))))
@@ -598,16 +658,16 @@ Dispatch to `eve-tobj' when there is a ope."
         eve-find-forward t)
   (eve-find-char val))
 
+(eve-define-exclusive-motion "F"
+  (setq eve-find-to nil
+        eve-find-forward nil)
+  (eve-find-char val))
+
 (eve-define-inclusive-motion "t"
   (setq eve-find-to t
         eve-find-forward t)
   (eve-find-char val)
   (backward-char))
-
-(eve-define-exclusive-motion "F"
-  (setq eve-find-to nil
-        eve-find-forward nil)
-  (eve-find-char val))
 
 (eve-define-exclusive-motion "T"
   (setq eve-find-to t
@@ -615,12 +675,23 @@ Dispatch to `eve-tobj' when there is a ope."
   (eve-find-char val)
   (forward-char))
 
+(eve-define-exclusive-motion "z"
+  (setq eve-find-forward t)
+  (eve-find-char-2 val))
+
+(eve-define-exclusive-motion "Z"
+  (setq eve-find-forward nil)
+  (eve-find-char-2 val))
+
 (eve-define-command ";"
   "Repeat `eve-find-char' with ARG."
   (let ((eve-repeat-flag t))
-    (if eve-find-to
-        (if eve-find-forward (eve-t arg) (eve-T arg))
-      (if eve-find-forward (eve-f arg) (eve-F arg)))))
+    (cond (eve-find-2
+           (if eve-find-forward (eve-z arg) (eve-Z arg)))
+          (eve-find-to
+           (if eve-find-forward (eve-t arg) (eve-T arg)))
+          (t
+           (if eve-find-forward (eve-f arg) (eve-F arg))))))
 
 (eve-define-command ","
   "Repeat `eve-find-char' reverse with ARG."
@@ -629,18 +700,32 @@ Dispatch to `eve-tobj' when there is a ope."
 
 (eve-define-exclusive-motion "/"
   (isearch-forward-regexp)
-  (re-search-backward isearch-string))
+  (let ((point (point)))
+    (condition-case nil
+        (re-search-backward isearch-string)
+      (search-failed
+       (goto-char point)))))
 
 (eve-define-exclusive-motion "?"
   (isearch-backward-regexp))
 
 (eve-define-exclusive-motion "n"
-  (forward-char)
-  (re-search-forward isearch-string nil nil val)
-  (re-search-backward isearch-string))
+  (let ((point (point)))
+    (condition-case nil
+        (progn (forward-char)
+               (re-search-forward isearch-string nil nil val)
+               (re-search-backward isearch-string))
+      (search-failed
+       (goto-char point)
+       (error "Search failed")))))
 
 (eve-define-exclusive-motion "N"
-  (re-search-backward isearch-string nil nil val))
+  (let ((point (point)))
+    (condition-case nil
+        (re-search-backward isearch-string nil nil val)
+      (search-failed
+       (goto-char point)
+       (error "Search failed")))))
 
 
 
@@ -688,7 +773,7 @@ Dispatch to `eve-tobj' when there is a ope."
   "Repeat do jump until find single pos or error."
   (cond ((not (or eve-jump-forward-overlays
                   eve-jump-backward-overlays))
-         (user-error "No such char"))
+         (error "No such char"))
         ((and (not eve-jump-backward-overlays)
               (car eve-jump-forward-overlays)
               (not (cdr eve-jump-forward-overlays)))
@@ -698,6 +783,7 @@ Dispatch to `eve-tobj' when there is a ope."
         ((and (not eve-jump-forward-overlays)
               (car eve-jump-backward-overlays)
               (not (cdr eve-jump-backward-overlays)))
+         (push-mark)
          (goto-char (overlay-start (car eve-jump-backward-overlays)))
          (delete-overlay (car eve-jump-backward-overlays))
          (setq eve-jump-backward-overlays nil))
@@ -890,6 +976,49 @@ ARG: (val . ope), dispatched by ope."
       (delete-char val)
       (dotimes (_ val)
         (insert eve-replace-last)))))
+
+
+
+(defun eve-setup ()
+  "Eve setup."
+  (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
+         (eve-jk-mode 1))
+        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
+         (eve-change-mode-to-vi))))
+
+(defun eve-setup-view ()
+  "Eve setup for view mode."
+  (if view-mode
+      (when (or eve-vi-mode eve-insert-mode)
+        (eve-change-mode-to-emacs))
+    (eve-setup)))
+
+(when eve-setup
+  (global-set-key "\C-z" 'eve-change-mode-to-vi)
+  (define-key special-mode-map "n" 'next-line)
+  (define-key special-mode-map "p" 'previous-line)
+  (add-hook 'after-change-major-mode-hook 'eve-setup))
+
+(when eve-setup-view
+  (with-eval-after-load 'view
+    (define-key view-mode-map "g" nil)
+    (dolist (key '("_" "j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
+                   "0" "^" "$" "gg" "G" "{" "}" "[" "]" "(" ")" "`" "'"
+                   "f" "F" "t" "T" "z" "Z" ";" "," "/" "?" "n" "N"
+                   "gf" "gw" "gj" "g/"))
+      (define-key view-mode-map key (intern (concat "eve-" key))))
+    (define-key view-mode-map "y"  'eve-operator)
+    (define-key view-mode-map "-"  'eve-operator)
+    (define-key view-mode-map "."  'repeat)
+    (define-key view-mode-map "m"  'point-to-register)
+    (define-key view-mode-map ":"  'execute-extended-command)
+    (define-key view-mode-map "v"  'set-mark-command)
+    (define-key view-mode-map "V"  "0vj")
+    (define-key view-mode-map "gt" 'tab-next)
+    (define-key view-mode-map "gT" 'tab-previous)
+    (define-key view-mode-map "gn" "\C-c\C-n")
+    (define-key view-mode-map "gp" "\C-c\C-p")
+    (add-hook 'view-mode-hook 'eve-setup-view)))
 
 (provide 'eve)
 ;;; eve.el ends here

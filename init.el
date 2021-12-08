@@ -91,6 +91,8 @@
 
 
 
+(setq view-read-only t)
+
 (setq isearch-lazy-count t
       isearch-allow-scroll t
       isearch-allow-motion t
@@ -101,6 +103,8 @@
 (setq lazy-highlight-buffer t
       lazy-highlight-cleanup nil)
 
+(defalias 'hls 'lazy-highlight-cleanup)
+
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
 (global-set-key (kbd "C-x m") 'list-imenu)
@@ -110,7 +114,7 @@
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
-(require 'eve-setup)
+(require 'eve)
 
 
 

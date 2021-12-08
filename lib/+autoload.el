@@ -328,13 +328,6 @@ Change mode to Vi." t nil)
 
 ;;;***
 
-;;;### (autoloads nil "eve-setup" "eve-setup.el" (0 0 0 0))
-;;; Generated autoloads from eve-setup.el
-
-(register-definition-prefixes "eve-setup" '("eve-"))
-
-;;;***
-
 ;;;### (autoloads nil "gtags" "gtags.el" (0 0 0 0))
 ;;; Generated autoloads from gtags.el
 
