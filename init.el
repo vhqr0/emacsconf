@@ -91,6 +91,12 @@
 
 
 
+(setq isearch-lazy-count t
+      isearch-allow-scroll t
+      isearch-allow-motion t
+      isearch-motion-changes-direction t
+      isearch-repeat-on-direction-change t)
+
 (global-set-key (kbd "C-x m") 'list-imenu)
 (global-set-key (kbd "C-x y") 'list-kill-ring)
 
@@ -98,65 +104,7 @@
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
-
-
-(setq isearch-lazy-count t
-      isearch-allow-scroll t
-      isearch-allow-motion t
-      isearch-motion-changes-direction t
-      isearch-repeat-on-direction-change t)
-
-(define-key special-mode-map "n" 'next-line)
-(define-key special-mode-map "p" 'previous-line)
-
-(setq view-read-only t)
-
-(with-eval-after-load 'view
-  (define-key view-mode-map "g" nil)
-  (dolist (key '("j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
-                 "/" "?" "n" "N" "f" "F" "t" "T" ";" ":"
-                 "gg" "G" "'" "`" "0" "$" "^"))
-    (define-key view-mode-map key (intern (concat "eve-" key))))
-  (define-key view-mode-map "gt" 'tab-next)
-  (define-key view-mode-map "gT" 'tab-previous)
-  (define-key view-mode-map "gn" "\C-c\C-n")
-  (define-key view-mode-map "gp" "\C-c\C-p")
-  (define-key view-mode-map "."  'repeat)
-  (define-key view-mode-map "y"  'eve-command-arg)
-  (define-key view-mode-map "m"  'point-to-register)
-  (define-key view-mode-map ":"  'execute-extended-command)
-  (define-key view-mode-map "v"  'set-mark-command)
-  (define-key view-mode-map "V"  "0vj"))
-
-(global-set-key "\C-z" 'eve-change-mode-to-vi)
-
-(defvar +eve-jk-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "j" "n")
-    (define-key map "k" "p")
-    (define-key map ":" 'execute-extended-command)
-    map))
-
-(define-minor-mode +eve-jk-mode
-  "Eve jk mode."
-  :keymap +eve-jk-mode-map
-  :lighter " <JK>")
-
-(defun +eve-setup ()
-  (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
-         (+eve-jk-mode 1))
-        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
-         (eve-change-mode-to-vi))))
-
-(defun +eve-view-setup ()
-  (if view-mode
-      (when (or eve-vi-mode
-                eve-insert-mode)
-        (eve-change-mode-to-emacs))
-    (+eve-setup)))
-
-(add-hook 'after-change-major-mode-hook '+eve-setup)
-(add-hook 'view-mode-hook '+eve-view-setup)
+(require 'eve-setup)
 
 
 
@@ -165,22 +113,10 @@
 
 (with-eval-after-load 'eve
   (define-key eve-vi-mode-map "\C-p" 'listify-open)
-  (define-key +eve-jk-mode-map "\C-p" 'listify-open))
+  (define-key eve-jk-mode-map "\C-p" 'listify-open))
 
 (with-eval-after-load 'view
   (define-key view-mode-map "\C-p" 'listify-open))
-
-
-
-(with-eval-after-load 'eve
-  (define-key eve-vi-mode-map "gf" 'aj-goto-char)
-  (define-key eve-vi-mode-map "gj" 'aj-goto-line)
-  (define-key eve-vi-mode-map "gw" 'aj-goto-symbol))
-
-(with-eval-after-load 'view
-  (define-key view-mode-map "gf" 'aj-goto-char)
-  (define-key view-mode-map "gj" 'aj-goto-line)
-  (define-key view-mode-map "gw" 'aj-goto-symbol))
 
 
 

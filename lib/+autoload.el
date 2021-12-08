@@ -3,22 +3,6 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aj" "aj.el" (0 0 0 0))
-;;; Generated autoloads from aj.el
-
-(autoload 'aj-goto-char "aj" "\
-
-
-\(fn &optional CHAR)" t nil)
-
-(autoload 'aj-goto-line "aj" nil t nil)
-
-(autoload 'aj-goto-symbol "aj" nil t nil)
-
-(register-definition-prefixes "aj" '("aj-"))
-
-;;;***
-
 ;;;### (autoloads nil "cmake-capf" "cmake-capf.el" (0 0 0 0))
 ;;; Generated autoloads from cmake-capf.el
 
@@ -337,29 +321,19 @@ Wrap region with markup.
 ;;;### (autoloads nil "eve" "eve.el" (0 0 0 0))
 ;;; Generated autoloads from eve.el
 
-(autoload 'eve-jk-mode "eve" "\
-Eve jk mode.
-
-This is a minor mode.  If called interactively, toggle the
-`Eve-Jk mode' mode.  If the prefix argument is positive, enable
-the mode, and if it is zero or negative, disable the mode.
-
-If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
-the mode if ARG is nil, omitted, or is a positive number.
-Disable the mode if ARG is a negative number.
-
-To check whether the minor mode is enabled in the current buffer,
-evaluate `eve-jk-mode'.
-
-The mode's hook is called both when the mode is enabled and when
-it is disabled.
-
-\(fn &optional ARG)" t nil)
-
 (autoload 'eve-change-mode-to-vi "eve" "\
-Change mode to vi." t nil)
+Change mode to Vi." t nil)
 
 (register-definition-prefixes "eve" '("eve-"))
+
+;;;***
+
+;;;### (autoloads nil "eve-jump" "eve-jump.el" (0 0 0 0))
+;;; Generated autoloads from eve-jump.el
+
+(with-eval-after-load 'eve (require 'eve-jump))
+
+(register-definition-prefixes "eve-jump" '("eve-jump-"))
 
 ;;;***
 
