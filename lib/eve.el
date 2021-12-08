@@ -92,7 +92,7 @@
 (defvar eve-operator-inline-alist nil
   "Alist of operator char which operator operate on inner range.")
 
-(defvar eve-find-last nil
+(defvar eve-find-last ?$
   "Last search char of `eve-f'.")
 
 (defvar eve-find-forward nil
@@ -101,14 +101,41 @@
 (defvar eve-find-to nil
   "Last search type of `eve-f'.")
 
-(defvar eve-search-last nil
-  "Last search string of `eve-/'.")
+(defvar eve-jump-forward-chars
+  (append '(?f ?j ?g ?h ?a)
+          '(?r ?u ?t ?y ?q)
+          '(?v ?m ?b ?n ?z)
+          '(?4 ?7 ?5 ?6 ?1)
+          '(?F ?J ?G ?H ?A)
+          '(?R ?U ?T ?Y ?Q)
+          '(?V ?M ?B ?N ?Z)
+          '(?$ ?& ?% ?^ ?!)
+          '(?' ?` ?\[ ?\] ?\\ ?- ?=))
+  "Char used by `eve-gj', `eve-gw', `eve-gf'.")
 
-(defvar eve-search-forward nil
-  "Last search direction of `eve-/'.")
+(defvar eve-jump-backward-chars
+  (append '(?d ?k ?s ?l ?\;)
+          '(?e ?i ?w ?o ?p)
+          '(?c ?, ?x ?. ?/)
+          '(?3 ?8 ?2 ?9 ?0)
+          '(?D ?K ?S ?L ?:)
+          '(?E ?I ?W ?O ?P)
+          '(?C ?< ?X ?> ??)
+          '(?# ?* ?@ ?\( ?\))
+          '(?\" ?~ ?\{ ?\} ?| ?_ ?+))
+  "Char used by `eve-gj', `eve-gw', `eve-gf'.")
+
+(defvar-local eve-jump-forward-overlays nil
+  "Eve jump current overlays.")
+
+(defvar-local eve-jump-backward-overlays nil
+  "Eve jump current overlays.")
 
 (defvar eve-replace-last nil
   "Last replace char of `eve-r'.")
+
+(defvar eve-jump-last ?$
+  "Last search char of `eve-gf'.")
 
 (defvar eve-tobj-alist
   '((?w . word)
@@ -436,9 +463,6 @@ Dispatch to `eve-tobj' when there is a ope."
   (forward-sexp val)
   (skip-chars-forward " \t\n"))
 
-(eve-define-inclusive-motion "U"
-  (backward-up-list val))
-
 (eve-define-exclusive-motion "b"
   (backward-word val))
 
@@ -454,6 +478,9 @@ Dispatch to `eve-tobj' when there is a ope."
 
 (eve-define-exclusive-motion "E"
   (forward-sexp val))
+
+(eve-define-inclusive-motion "U"
+  (backward-up-list val))
 
 (eve-define-exclusive-motion "0"
   (beginning-of-line))
@@ -600,42 +627,144 @@ Dispatch to `eve-tobj' when there is a ope."
   (let ((eve-find-forward (not eve-find-forward)))
     (eve-\; arg)))
 
-(defun eve-search-string (val)
-  "Search VAL `eve-search-last' by `eve-search-forward'."
-  (unless eve-repeat-flag
-    (setq eve-search-last
-          (read-string (if eve-search-forward "/" "?"))))
-  (let ((point (point)))
-    (condition-case nil
-        (if eve-search-forward
-            (progn
-              (forward-char)
-              (re-search-forward eve-search-last nil nil val)
-              (re-search-backward eve-search-last))
-          (re-search-backward eve-search-last nil nil val))
-      (search-failed
-       (goto-char point)
-       (error "Search failed")))))
-
 (eve-define-exclusive-motion "/"
-  (setq eve-search-forward t)
-  (eve-search-string val))
+  (isearch-forward-regexp)
+  (re-search-backward isearch-string))
 
 (eve-define-exclusive-motion "?"
-  (setq eve-search-forward nil)
-  (eve-search-string val))
+  (isearch-backward-regexp))
 
-(eve-define-command "n"
-  "Repeat `eve-search-string' with ARG."
-  (let ((eve-repeat-flag t))
-    (if eve-search-forward
-        (eve-/ arg)
-      (eve-? arg))))
+(eve-define-exclusive-motion "n"
+  (forward-char)
+  (re-search-forward isearch-string nil nil val)
+  (re-search-backward isearch-string))
 
-(eve-define-command "N"
-  "Repeat `eve-search-string' reverse with ARG."
-  (let ((eve-search-forward (not eve-search-forward)))
-    (eve-n arg)))
+(eve-define-exclusive-motion "N"
+  (re-search-backward isearch-string nil nil val))
+
+
+
+(defun eve-jump-make-overlay (pos)
+  "Make an overlay at POS limited in current window."
+  (let ((overlay (make-overlay pos (1+ pos))))
+    (overlay-put overlay 'window (selected-window))
+    overlay))
+
+(defun eve-jump-put-char (chars overlays)
+  "Put CHARS on overlay in OVERLAYS."
+  (let ((fin (car chars))
+        (chars (cdr chars))
+        overlay char)
+    (while overlays
+      (setq overlay (car overlays)
+            overlays (cdr overlays))
+      (if chars
+          (setq char (car chars)
+                chars (cdr chars))
+        (setq char fin))
+      (overlay-put overlay
+                   (if (string-equal
+                        (buffer-substring
+                         (overlay-start overlay)
+                         (overlay-end overlay))
+                        "\n")
+                       'before-string
+                     'display)
+                   (propertize (char-to-string char) 'face 'match))
+      (overlay-put overlay 'char char))))
+
+(defun eve-jump-narrow (char overlays)
+  "Narrow OVERLAYS with CHAR."
+  (let (overlay noverlays)
+    (while overlays
+      (setq overlay (car overlays)
+            overlays (cdr overlays))
+      (if (eq (overlay-get overlay 'char) char)
+          (setq noverlays (cons overlay noverlays))
+        (delete-overlay overlay)))
+    (nreverse noverlays)))
+
+(defun eve-jump-do-jump ()
+  "Repeat do jump until find single pos or error."
+  (cond ((not (or eve-jump-forward-overlays
+                  eve-jump-backward-overlays))
+         (user-error "No such char"))
+        ((and (not eve-jump-backward-overlays)
+              (car eve-jump-forward-overlays)
+              (not (cdr eve-jump-forward-overlays)))
+         (goto-char (overlay-start (car eve-jump-forward-overlays)))
+         (delete-overlay (car eve-jump-forward-overlays))
+         (setq eve-jump-forward-overlays nil))
+        ((and (not eve-jump-forward-overlays)
+              (car eve-jump-backward-overlays)
+              (not (cdr eve-jump-backward-overlays)))
+         (goto-char (overlay-start (car eve-jump-backward-overlays)))
+         (delete-overlay (car eve-jump-backward-overlays))
+         (setq eve-jump-backward-overlays nil))
+        (t
+         (let ((char (read-char)))
+           (setq eve-jump-forward-overlays
+                 (eve-jump-narrow char eve-jump-forward-overlays)
+                 eve-jump-backward-overlays
+                 (eve-jump-narrow char eve-jump-backward-overlays)))
+         (eve-jump-put-char eve-jump-forward-chars eve-jump-forward-overlays)
+         (eve-jump-put-char eve-jump-backward-chars eve-jump-backward-overlays)
+         (eve-jump-do-jump))))
+
+(defun eve-jump-goto-regexp (regexp)
+  "Setup overlays by REGEXP and then do jump."
+  (let ((beg (window-start))
+        (end (window-end)))
+    (save-excursion
+      (condition-case nil
+          (let ((ctn (not (eobp))))
+            (while ctn
+              (forward-char)
+              (re-search-forward regexp)
+              (re-search-backward regexp)
+              (if (< (point) end)
+                  (setq eve-jump-forward-overlays
+                        (cons (eve-jump-make-overlay (point))
+                              eve-jump-forward-overlays))
+                (setq ctn nil))))
+        (search-failed nil)))
+    (save-excursion
+      (condition-case nil
+          (let ((ctn t))
+            (while ctn
+              (re-search-backward regexp)
+              (if (>= (point) beg)
+                  (setq eve-jump-backward-overlays
+                        (cons (eve-jump-make-overlay (point))
+                              eve-jump-backward-overlays))
+                (setq ctn nil))))
+        (search-failed nil)))
+    (setq eve-jump-forward-overlays (nreverse eve-jump-forward-overlays)
+          eve-jump-backward-overlays (nreverse eve-jump-backward-overlays))
+    (eve-jump-put-char eve-jump-forward-chars eve-jump-forward-overlays)
+    (eve-jump-put-char eve-jump-backward-chars eve-jump-backward-overlays)
+    (when (or eve-jump-forward-overlays
+              eve-jump-backward-overlays)
+      (unwind-protect
+          (eve-jump-do-jump)
+        (mapc 'delete-overlay eve-jump-forward-overlays)
+        (mapc 'delete-overlay eve-jump-backward-overlays)
+        (setq eve-jump-forward-overlays nil
+              eve-jump-backward-overlays nil)))))
+
+(eve-define-exclusive-motion "gf"
+  (unless eve-repeat-flag
+    (setq eve-jump-last (read-char)))
+  (eve-jump-goto-regexp (regexp-quote (char-to-string eve-jump-last))))
+
+(eve-define-exclusive-motion "gw"
+  (eve-jump-goto-regexp "\\_<\\sw"))
+
+(eve-define-line-motion "gj"
+  (eve-jump-goto-regexp "^.\\|^\n"))
+
+(eve-define-exclusive-motion "g/"
+  (eve-jump-goto-regexp isearch-string))
 
 
 

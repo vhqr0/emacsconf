@@ -9,9 +9,9 @@
 
 (with-eval-after-load 'view
   (define-key view-mode-map "g" nil)
-  (dolist (key '("j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
-                 "/" "?" "n" "N" "f" "F" "t" "T" ";" ":"
-                 "gg" "G" "'" "`" "0" "$" "^" "gf" "gw" "gj"))
+  (dolist (key '("_" "j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
+                 "0" "^" "$" "gg" "G" "{" "}" "[" "]" "(" ")" "`" "'"
+                 "f" "F" "t" "T" ";" "," "/" "?" "n" "N" "gf" "gw" "gj" "g/"))
     (define-key view-mode-map key (intern (concat "eve-" key))))
   (define-key view-mode-map "y"  'eve-operator)
   (define-key view-mode-map "-"  'eve-operator)

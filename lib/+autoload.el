@@ -328,12 +328,10 @@ Change mode to Vi." t nil)
 
 ;;;***
 
-;;;### (autoloads nil "eve-jump" "eve-jump.el" (0 0 0 0))
-;;; Generated autoloads from eve-jump.el
+;;;### (autoloads nil "eve-setup" "eve-setup.el" (0 0 0 0))
+;;; Generated autoloads from eve-setup.el
 
-(with-eval-after-load 'eve (require 'eve-jump))
-
-(register-definition-prefixes "eve-jump" '("eve-jump-"))
+(register-definition-prefixes "eve-setup" '("eve-"))
 
 ;;;***
 

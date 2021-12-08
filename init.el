@@ -94,8 +94,14 @@
 (setq isearch-lazy-count t
       isearch-allow-scroll t
       isearch-allow-motion t
+      isearch-yank-on-move t
       isearch-motion-changes-direction t
       isearch-repeat-on-direction-change t)
+
+(setq lazy-highlight-buffer t
+      lazy-highlight-cleanup nil)
+
+(define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
 (global-set-key (kbd "C-x m") 'list-imenu)
 (global-set-key (kbd "C-x y") 'list-kill-ring)
