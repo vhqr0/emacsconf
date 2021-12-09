@@ -8,7 +8,7 @@
 ;; Or start manually:
 ;; (setq eve-setup nil)
 ;; (setq eve-setup-view nil)
-;; (global-set-key (kbd "C-z") 'eve-change-mode-to-vi)
+;; (global-set-key "\C-z" 'eve-change-mode-to-vi)
 ;;
 ;; It's recommended that:
 ;; (setq view-read-only t)
@@ -55,14 +55,15 @@
     (define-key map "9" 'eve-digit)
 
     (define-key map "C" "c$")
-    (define-key map "Y" "y$")
     (define-key map "D" "d$")
+    (define-key map "Y" "y$")
     (define-key map "J" "j\M-^")
     (define-key map "K" 'kill-sexp)
-    (define-key map "H" 'backward-kill-sexp)
+    (define-key map "H" 'mark-sexp)
+    (define-key map "L" 'backward-kill-sexp)
     (define-key map "Q" 'indent-pp-sexp)
-    (define-key map "S" 'delete-pair)
     (define-key map "R" 'raise-sexp)
+    (define-key map "S" 'delete-pair)
     
     (define-key map "u" 'undo)
     (define-key map "m" 'point-to-register)
@@ -359,9 +360,7 @@ E.G.Translate gc to # so gcc can comment a line."
              (setq eve-exec-beg (point)))
            ,@body
            (when ope
-             (setq eve-exec-end (point))
-             (unless (eq eve-exec-end (line-end-position))
-               (setq eve-exec-end (1+ eve-exec-end)))
+             (setq eve-exec-end (if (eolp) (point) (1+ (point))))
              (eve-exec ',func val ope)
              (goto-char eve-exec-save-point)))))))
 
@@ -863,7 +862,7 @@ Dispatch to `eve-tobj' when there is a ope."
           (ope (nth 2 eve-exec-last)))
       (if move
           (funcall move `(,val . ,ope))
-        (error "No previous commad to repeat")))))
+        (error "No previous command to repeat")))))
 
 (eve-define-command "s"
   "Like vim-surround but target determined by `backward-up-list'.
