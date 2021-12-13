@@ -845,6 +845,9 @@ Dispatch to `eve-tobj' when there is a ope."
 (eve-define-exclusive-motion "gw"
   (eve-jump-goto-regexp "\\_<\\sw"))
 
+(eve-define-inclusive-motion "ge"
+  (eve-jump-goto-regexp "\\sw\\_>"))
+
 (eve-define-line-motion "gj"
   (eve-jump-goto-regexp "^.\\|^\n"))
 
@@ -1004,7 +1007,7 @@ ARG: (val . ope), dispatched by ope."
     (dolist (key '("_" "j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
                    "0" "^" "$" "gg" "G" "{" "}" "[" "]" "(" ")" "`" "'"
                    "f" "F" "t" "T" "z" "Z" ";" "," "/" "?" "n" "N"
-                   "gf" "gw" "gj" "g/"))
+                   "gf" "gw" "ge" "gj" "g/"))
       (define-key view-mode-map key (intern (concat "eve-" key))))
     (define-key view-mode-map "y"  'eve-operator)
     (define-key view-mode-map "-"  'eve-operator)

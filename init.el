@@ -67,6 +67,8 @@
 
 (setq-default indent-tabs-mode nil)
 
+(setq show-paren-context-when-offscreen t)
+
 (show-paren-mode 1)
 (electric-pair-mode 1)
 
