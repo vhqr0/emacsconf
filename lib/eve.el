@@ -34,6 +34,7 @@
     (define-key map "j"    'eve-jk)
     (define-key map "\M-z" 'eve-change-mode-to-vi)
     (define-key map "\C-z" 'eve-change-mode-to-emacs)
+    (define-key map "\C-r" 'insert-register)
     map)
   "Eve insert mode map.")
 

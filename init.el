@@ -35,10 +35,12 @@
       vc-handled-backends '(Git)
       vc-make-backup-files t
       version-control t
-      kept-old-versions 0
+      kept-old-versions 10
       kept-new-versions 10
       delete-old-versions t
-      backup-directory-alist '(("." . "~/.bak")))
+      backup-directory-alist '(("." . "~/.bak"))
+      auto-save-file-name-transforms '((".*" "~/.bak/" t))
+      lock-file-name-transforms '((".*" "~/.bak/" t)))
 
 (setq auto-save-visited-interval 2)
 
