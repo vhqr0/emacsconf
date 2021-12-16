@@ -384,6 +384,9 @@ Open file in current directory if ARG not nil.
 
 \(fn ARG)" t nil)
 
+(autoload 'listify-minibuffer-history "listify" "\
+View history in minibuffer with `listify-read'." t nil)
+
 (register-definition-prefixes "listify" '("listify-"))
 
 ;;;***

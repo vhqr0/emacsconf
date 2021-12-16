@@ -4,6 +4,7 @@
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-open)
+;; (define-key minibuffer-local-map (kbd "<f5>") 'listify-minibuffer-history)
 
 ;;; Code:
 (require 'subr-x)
@@ -161,6 +162,16 @@ Open file in current directory if ARG not nil."
           (if (eq last-command-event ?\C-m)
               (find-file choice)
             (find-file-other-window choice)))))))
+
+;;;###autoload
+(defun listify-minibuffer-history ()
+  "View history in minibuffer with `listify-read'."
+  (interactive)
+  (let* ((enable-recursive-minibuffers t)
+         (history (listify-read "history: " (minibuffer-history-value))))
+    (when history
+      (delete-region (line-beginning-position) (line-end-position))
+      (insert history))))
 
 (provide 'listify)
 ;;; listify.el ends here

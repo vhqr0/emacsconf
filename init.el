@@ -50,10 +50,14 @@
 
 (recentf-mode 1)
 
+(savehist-mode 1)
+
 (defalias 'w 'save-buffer)
 (defalias 'make 'compile)
 
 (define-key minibuffer-local-completion-map "\s" "-")
+
+(define-key minibuffer-local-map "\C-r" 'insert-register)
 
 (defun +minibuffer-yank-symbol ()
   (interactive)
@@ -131,6 +135,8 @@
 
 (with-eval-after-load 'view
   (define-key view-mode-map "\C-p" 'listify-open))
+
+(define-key minibuffer-local-map (kbd "<f5>") 'listify-minibuffer-history)
 
 
 

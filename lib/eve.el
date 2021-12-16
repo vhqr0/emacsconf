@@ -425,6 +425,10 @@ Dispatch to `eve-tobj' when there is a ope."
 
 
 
+(defun eve-copy-to-register (beg end)
+  "Copy region (BEG . END) to register."
+  (copy-to-register (register-read-with-preview "copy to register: ") beg end))
+
 (defun eve-eval-region (beg end)
   "Eval region (BEG . END) by `major-mode'."
   (let ((func (cdr (assq major-mode eve-eval-alist))))
@@ -458,15 +462,16 @@ Dispatch to `eve-tobj' when there is a ope."
     (insert (car pair))
     (indent-region beg end)))
 
-(eve-define-operator ?c 'kill-region t)
-(eve-define-operator ?d 'kill-region)
-(eve-define-operator ?y 'copy-region-as-kill)
-(eve-define-operator ?= 'indent-region)
-(eve-define-operator ?- 'narrow-to-region)
-(eve-define-operator ?! 'eve-shell-region)
-(eve-define-operator ?@ 'eve-eval-region)
-(eve-define-operator ?# 'comment-or-uncomment-region)
-(eve-define-operator ?s 'eve-surround-region t t)
+(eve-define-operator ?c  'kill-region t)
+(eve-define-operator ?d  'kill-region)
+(eve-define-operator ?y  'copy-region-as-kill)
+(eve-define-operator ?\" 'eve-copy-to-register)
+(eve-define-operator ?=  'indent-region)
+(eve-define-operator ?-  'narrow-to-region)
+(eve-define-operator ?!  'eve-shell-region)
+(eve-define-operator ?@  'eve-eval-region)
+(eve-define-operator ?#  'comment-or-uncomment-region)
+(eve-define-operator ?s  'eve-surround-region t t)
 
 (eve-define-translate ?# ?c)
 (eve-define-translate ?@ ?y)
