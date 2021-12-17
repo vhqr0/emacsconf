@@ -714,23 +714,25 @@ Dispatch to `eve-tobj' when there is a ope."
 (eve-define-exclusive-motion "?"
   (isearch-backward-regexp))
 
-(eve-define-exclusive-motion "n"
+(defun eve-search-repeat (val)
   (let ((point (point)))
     (condition-case nil
-        (progn (forward-char)
-               (re-search-forward isearch-string nil nil val)
-               (re-search-backward isearch-string))
+        (if isearch-forward
+            (progn
+              (forward-char)
+              (re-search-forward isearch-string nil nil val)
+              (re-search-backward isearch-string))
+          (re-search-backward isearch-string nil nil val))
       (search-failed
        (goto-char point)
        (error "Search failed")))))
 
+(eve-define-exclusive-motion "n"
+  (eve-search-repeat val))
+
 (eve-define-exclusive-motion "N"
-  (let ((point (point)))
-    (condition-case nil
-        (re-search-backward isearch-string nil nil val)
-      (search-failed
-       (goto-char point)
-       (error "Search failed")))))
+  (let ((isearch-forward (not isearch-forward)))
+    (eve-search-repeat val)))
 
 
 

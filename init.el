@@ -69,6 +69,12 @@
 
 (define-key minibuffer-local-map "\M-." '+minibuffer-yank-symbol)
 
+(setq icomplete-compute-delay 2
+      icomplete-max-delay-chars 4
+      icomplete-delay-completions-threshold 10)
+
+(icomplete-mode 1)
+
 
 
 (setq-default indent-tabs-mode nil)
