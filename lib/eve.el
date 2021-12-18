@@ -32,18 +32,19 @@
 (defvar eve-insert-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "j"    'eve-jk)
+    (define-key map "\C-r" 'insert-register)
     (define-key map "\M-z" 'eve-change-mode-to-vi)
     (define-key map "\C-z" 'eve-change-mode-to-emacs)
-    (define-key map "\C-r" 'insert-register)
     map)
   "Eve insert mode map.")
 
 (defvar eve-vi-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [remap self-insert-command] 'undefined)
+    (define-key map "\C-z" 'eve-change-mode-to-emacs)
     (define-key map "\s"   'scroll-up-command)
     (define-key map "\d"   'scroll-down-command)
-    (define-key map "\C-z" 'eve-change-mode-to-emacs)
+    (define-key map (kbd "S-SPC") 'scroll-down-command)
 
     (define-key map "1" 'eve-digit)
     (define-key map "2" 'eve-digit)
@@ -1018,7 +1019,10 @@ ARG: (val . ope), dispatched by ope."
                    "gf" "gw" "ge" "gj" "g/"))
       (define-key view-mode-map key (intern (concat "eve-" key))))
     (define-key view-mode-map "y"  'eve-operator)
+    (define-key view-mode-map "\"" 'eve-operator)
     (define-key view-mode-map "-"  'eve-operator)
+    (define-key view-mode-map "i"  'eve-tobj)
+    (define-key view-mode-map "a"  'eve-tobj)
     (define-key view-mode-map "."  'repeat)
     (define-key view-mode-map "m"  'point-to-register)
     (define-key view-mode-map ":"  'execute-extended-command)

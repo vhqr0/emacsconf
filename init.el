@@ -50,7 +50,9 @@
 
 (recentf-mode 1)
 
-(savehist-mode 1)
+
+
+(global-set-key (kbd "C-M-_") 'dabbrev-completion)
 
 (defalias 'w 'save-buffer)
 (defalias 'make 'compile)
@@ -74,6 +76,8 @@
       icomplete-delay-completions-threshold 10)
 
 (icomplete-mode 1)
+
+(savehist-mode 1)
 
 
 
