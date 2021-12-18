@@ -62,7 +62,7 @@
     (define-key map "J" "j\M-^")
     (define-key map "K" 'kill-sexp)
     (define-key map "H" 'mark-sexp)
-    (define-key map "L" 'backward-kill-sexp)
+    (define-key map "L" 'down-list)
     (define-key map "Q" 'indent-pp-sexp)
     (define-key map "R" 'raise-sexp)
     (define-key map "S" 'delete-pair)
@@ -212,6 +212,17 @@
     (lisp-interaction-mode . eval-region)
     (python-mode . python-shell-send-region))
   "Alist of (major-mode . eval-region-function), used by `eve-eval-region'.")
+
+(defvar eve-god-char-alist
+  '((?\s . "SPC")
+    (tab . "TAB")
+    (backspace . "DEL")
+    (return . "RET")))
+
+(defvar eve-god-translation-default "C-")
+
+(defvar eve-god-translation-alist
+  '(("SPC" . "") ("g" . "M-") ("h" . "C-M-")))
 
 
 
@@ -990,6 +1001,41 @@ ARG: (val . ope), dispatched by ope."
 
 
 
+(defun eve-god-char-to-string (char)
+  (or (cdr (assq char eve-god-char-alist))
+      (char-to-string char)))
+
+(defun eve-god-lookup-key (&optional key prev-key)
+  (let* ((key (eve-god-char-to-string
+               (or key (read-event prev-key))))
+         (trans (cdr (assoc key eve-god-translation-alist)))
+         (keys (if trans
+                   (let* ((prev-key (concat prev-key " " trans))
+                          (key (eve-god-char-to-string (read-event prev-key))))
+                     (concat prev-key key))
+                 (concat prev-key " " eve-god-translation-default key)))
+         (seq (read-kbd-macro keys t))
+         (binding (key-binding seq)))
+    (cond ((commandp binding)
+           (setq last-command-event (aref seq (1- (length seq))))
+           binding)
+          ((keymapp binding)
+           (eve-god-lookup-key (read-event keys) keys))
+          (t
+           (error "God: unknown key binding for `%s'" keys)))))
+
+(eve-define-command "go"
+  "God mode."
+  (let ((binding (eve-god-lookup-key)))
+    (setq prefix-arg `(,arg)
+          this-command binding
+          real-this-command binding)
+    (if (commandp binding t)
+        (call-interactively binding)
+      (execute-kbd-macro binding))))
+
+
+
 (defun eve-setup ()
   "Eve setup."
   (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
@@ -1016,7 +1062,7 @@ ARG: (val . ope), dispatched by ope."
     (dolist (key '("_" "j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
                    "0" "^" "$" "gg" "G" "{" "}" "[" "]" "(" ")" "`" "'"
                    "f" "F" "t" "T" "z" "Z" ";" "," "/" "?" "n" "N"
-                   "gf" "gw" "ge" "gj" "g/"))
+                   "gf" "gw" "ge" "gj" "g/" "go"))
       (define-key view-mode-map key (intern (concat "eve-" key))))
     (define-key view-mode-map "y"  'eve-operator)
     (define-key view-mode-map "\"" 'eve-operator)

@@ -152,8 +152,6 @@
 
 (setq xref-search-program 'ripgrep)
 
-(global-set-key "\M-\"" 'xref-find-apropos)
-
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
