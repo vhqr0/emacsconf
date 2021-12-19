@@ -50,6 +50,10 @@
 
 (recentf-mode 1)
 
+(setq save-place-version-control 'nospecial)
+
+(save-place-mode 1)
+
 
 
 (global-set-key (kbd "C-M-_") 'dabbrev-completion)
@@ -58,8 +62,6 @@
 (defalias 'make 'compile)
 
 (define-key minibuffer-local-completion-map "\s" "-")
-
-(define-key minibuffer-local-map "\C-r" 'insert-register)
 
 (defun +minibuffer-yank-symbol ()
   (interactive)
@@ -88,9 +90,8 @@
 (show-paren-mode 1)
 (electric-pair-mode 1)
 
-(global-set-key (kbd "C-x M-r")   'raise-sexp)
-(global-set-key (kbd "C-x M-d")   'delete-pair)
-(global-set-key (kbd "C-x M-DEL") 'backward-kill-sexp)
+(global-set-key (kbd "C-x M-r") 'raise-sexp)
+(global-set-key (kbd "C-x M-d") 'delete-pair)
 
 
 
@@ -165,14 +166,6 @@
 (setq flymake-cc-command '+flymake-cc-command)
 
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-
-(setq emmet-mode-keymap
-      (let ((map (make-sparse-keymap)))
-        (define-key map (kbd "M-RET") 'emmet-expand-line)
-        (define-key map (kbd "C-c n") 'emmet-next-edit-point)
-        (define-key map (kbd "C-c p") 'emmet-prev-edit-point)
-        (define-key map (kbd "C-c C-c w") 'emmet-wrap-with-markup)
-        map))
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)

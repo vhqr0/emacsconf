@@ -62,7 +62,6 @@
     (define-key map "J" "j\M-^")
     (define-key map "K" 'kill-sexp)
     (define-key map "H" 'mark-sexp)
-    (define-key map "L" 'down-list)
     (define-key map "Q" 'indent-pp-sexp)
     (define-key map "R" 'raise-sexp)
     (define-key map "S" 'delete-pair)
@@ -535,6 +534,9 @@ Dispatch to `eve-tobj' when there is a ope."
 
 (eve-define-inclusive-motion "U"
   (backward-up-list val))
+
+(eve-define-exclusive-motion "L"
+  (down-list val))
 
 (eve-define-exclusive-motion "0"
   (beginning-of-line))
@@ -1059,7 +1061,7 @@ ARG: (val . ope), dispatched by ope."
 (when eve-setup-view
   (with-eval-after-load 'view
     (define-key view-mode-map "g" nil)
-    (dolist (key '("_" "j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U"
+    (dolist (key '("_" "j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U" "L"
                    "0" "^" "$" "gg" "G" "{" "}" "[" "]" "(" ")" "`" "'"
                    "f" "F" "t" "T" "z" "Z" ";" "," "/" "?" "n" "N"
                    "gf" "gw" "ge" "gj" "g/" "go"))
