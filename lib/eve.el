@@ -542,7 +542,7 @@ Dispatch to `eve-tobj' when there is a ope."
   (unless ope
     (forward-char))
   (forward-word val)
-  (unless ope
+  (unless (or ope (use-region-p))
     (backward-char)))
 
 (eve-define-exclusive-motion "E"
@@ -605,16 +605,8 @@ Dispatch to `eve-tobj' when there is a ope."
   (let ((ope (cdr-safe arg)))
     (unless eve-repeat-flag
       (setq eve-tobj-last (read-char)))
-    (let (range)
-      (setq range (cdr (assq eve-tobj-last
-                             eve-tobj-alist)))
-      (cond ((eq range 'pair)
-             (setq range
-                   (save-excursion
-                     (backward-up-list)
-                     (bounds-of-thing-at-point 'sexp))))
-            (range
-             (setq range (bounds-of-thing-at-point range))))
+    (let ((range (bounds-of-thing-at-point
+                  (cdr (assq eve-tobj-last eve-tobj-alist)))))
       (when range
         (if (region-active-p)
             (progn
