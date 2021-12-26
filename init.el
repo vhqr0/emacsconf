@@ -119,11 +119,6 @@
       isearch-motion-changes-direction t
       isearch-repeat-on-direction-change t)
 
-(setq lazy-highlight-buffer t
-      lazy-highlight-cleanup nil)
-
-(defalias 'hls 'lazy-highlight-cleanup)
-
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
 (global-set-key (kbd "C-x m") 'list-imenu)

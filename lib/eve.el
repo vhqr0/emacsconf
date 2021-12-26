@@ -509,12 +509,28 @@ Dispatch to `eve-tobj' when there is a ope."
   (forward-char val))
 
 (eve-define-exclusive-motion "w"
-  (forward-word val)
-  (skip-chars-forward " \t\n"))
+  (let ((point (point)))
+    (condition-case nil
+        (progn
+          (forward-char)
+          (re-search-forward "\\b\\w" nil nil val)
+          (backward-char)
+          (skip-chars-forward " \t\n"))
+      (search-failed
+       (goto-char point)
+       (error "Search failed")))))
 
 (eve-define-exclusive-motion "W"
-  (forward-sexp val)
-  (skip-chars-forward " \t\n"))
+  (let ((point (point)))
+    (condition-case nil
+        (progn
+          (forward-char)
+          (re-search-forward "\\_<\\sw" nil nil val)
+          (backward-char)
+          (skip-chars-forward " \t\n"))
+      (search-failed
+       (goto-char point)
+       (error "Search failed")))))
 
 (eve-define-exclusive-motion "b"
   (backward-word val))
