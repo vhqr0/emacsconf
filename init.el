@@ -110,8 +110,6 @@
 
 
 
-(setq view-read-only t)
-
 (setq isearch-lazy-count t
       isearch-allow-scroll t
       isearch-allow-motion t
@@ -138,9 +136,6 @@
 (with-eval-after-load 'eve
   (define-key eve-vi-mode-map "\C-p" 'listify-open)
   (define-key eve-jk-mode-map "\C-p" 'listify-open))
-
-(with-eval-after-load 'view
-  (define-key view-mode-map "\C-p" 'listify-open))
 
 (define-key minibuffer-local-map (kbd "<f5>") 'listify-minibuffer-history)
 

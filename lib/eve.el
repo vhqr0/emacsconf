@@ -7,19 +7,11 @@
 ;;
 ;; Or start manually:
 ;; (setq eve-setup nil)
-;; (setq eve-setup-view nil)
 ;; (global-set-key "\C-z" 'eve-change-mode-to-vi)
-;;
-;; It's recommended that:
-;; (setq view-read-only t)
-;; (defalias 'w 'save-buffer)
 
 ;;; Code:
 (require 'cl-lib)
 (require 'subr-x)
-
-(eval-when-compile
-  (require 'view))
 
 
 
@@ -92,9 +84,6 @@
 
 (defvar eve-setup t
   "Wether setup eve.")
-
-(defvar eve-setup-view t
-  "Wether setup eve for view mode.")
 
 (defvar-local eve-exec-last nil
   "Last (move val ope) used by `eve-.'.")
@@ -1049,41 +1038,15 @@ ARG: (val . ope), dispatched by ope."
   (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
          (eve-jk-mode 1))
         ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
-         (eve-change-mode-to-vi))))
-
-(defun eve-setup-view ()
-  "Eve setup for view mode."
-  (if view-mode
-      (when (or eve-vi-mode eve-insert-mode)
-        (eve-change-mode-to-emacs))
-    (eve-setup)))
+         (eve-change-mode-to-vi))
+        ((derived-mode-p 'comint-mode 'eshell-mode)
+         (eve-change-mode-to-insert))))
 
 (when eve-setup
   (global-set-key "\C-z" 'eve-change-mode-to-vi)
   (define-key special-mode-map "n" 'next-line)
   (define-key special-mode-map "p" 'previous-line)
   (add-hook 'after-change-major-mode-hook 'eve-setup))
-
-(when eve-setup-view
-  (with-eval-after-load 'view
-    (define-key view-mode-map "g" nil)
-    (dolist (key '("_" "j" "k" "h" "l" "w" "W" "b" "B" "e" "E" "U" "L"
-                   "0" "^" "$" "gg" "G" "{" "}" "[" "]" "(" ")" "`" "'"
-                   "f" "F" "t" "T" "z" "Z" ";" "," "/" "?" "n" "N"
-                   "gf" "gw" "ge" "gj" "g/" "go"))
-      (define-key view-mode-map key (intern (concat "eve-" key))))
-    (define-key view-mode-map "y"  'eve-operator)
-    (define-key view-mode-map "\"" 'eve-operator)
-    (define-key view-mode-map "-"  'eve-operator)
-    (define-key view-mode-map "i"  'eve-tobj)
-    (define-key view-mode-map "a"  'eve-tobj)
-    (define-key view-mode-map "."  'repeat)
-    (define-key view-mode-map "m"  'point-to-register)
-    (define-key view-mode-map "v"  'set-mark-command)
-    (define-key view-mode-map ":"  'execute-extended-command)
-    (define-key view-mode-map "gt" 'tab-next)
-    (define-key view-mode-map "gT" 'tab-previous)
-    (add-hook 'view-mode-hook 'eve-setup-view)))
 
 (provide 'eve)
 ;;; eve.el ends here
