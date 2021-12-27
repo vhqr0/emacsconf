@@ -120,20 +120,27 @@
 (defvar eve-operator-inline-alist nil
   "Alist of operator char which operator operate on inner range.")
 
+(defvar eve-tobj-alist
+  '((?w . word)
+    (?W . sexp)
+    (?f . defun)
+    (?p . paragraph)
+    (?P . page)
+    (?h . buffer)
+    (?b . pair))
+  "Alist of text object.")
+
+(defvar eve-tobj-last nil
+  "Last text object.")
+
 (defvar eve-find-last ?$
   "Last search char of `eve-f'.")
-
-(defvar eve-find-last-2 ?$
-  "Last search char of `eve-z'.")
 
 (defvar eve-find-forward nil
   "Last search direction of `eve-f'.")
 
 (defvar eve-find-to nil
   "Last search type of `eve-f'.")
-
-(defvar eve-find-2 nil
-  "Last search 2 char or not.")
 
 (defvar eve-search-flag nil)
 
@@ -167,24 +174,8 @@
 (defvar-local eve-jump-backward-overlays nil
   "Eve jump current overlays.")
 
-(defvar eve-replace-last nil
-  "Last replace char of `eve-r'.")
-
 (defvar eve-jump-last ?$
   "Last search char of `eve-gf'.")
-
-(defvar eve-tobj-alist
-  '((?w . word)
-    (?W . sexp)
-    (?f . defun)
-    (?p . paragraph)
-    (?P . page)
-    (?h . buffer)
-    (?b . pair))
-  "Alist of text object.")
-
-(defvar eve-tobj-last nil
-  "Last text object.")
 
 (defvar eve-surround-alist
   '((?b . (?\( . ?\)))
@@ -208,6 +199,9 @@
     (lisp-interaction-mode . eval-region)
     (python-mode . python-shell-send-region))
   "Alist of (major-mode . eval-region-function), used by `eve-eval-region'.")
+
+(defvar eve-replace-last nil
+  "Last replace char of `eve-r'.")
 
 (defvar eve-god-char-alist
   '((?\s . "SPC")
@@ -647,38 +641,24 @@ Dispatch to `eve-tobj' when there is a ope."
   "Find VAL `eve-find-last' by `eve-find-forward'."
   (unless eve-repeat-flag
     (setq eve-find-last (read-char)))
-  (setq eve-find-2 nil)
-  (let ((point (point)))
-    (condition-case nil
-        (if eve-find-forward
-            (progn
-              (forward-char (if eve-find-to 2 1))
-              (search-forward (char-to-string eve-find-last) nil nil val)
-              (backward-char))
-          (when eve-find-to
-            (backward-char))
-          (search-backward (char-to-string eve-find-last) nil nil val))
-      (search-failed
-       (goto-char point)
-       (error "Search failed")))))
-
-(defun eve-find-char-2 (val)
-  "Find VAL `eve-find-last-2' and `eve-find-last-1' by `eve-find-forward'."
-  (unless eve-repeat-flag
-    (setq eve-find-last-2 (read-char)
-          eve-find-last (read-char)))
-  (setq eve-find-2 t)
-  (let ((point (point)))
-    (condition-case nil
-        (if eve-find-forward
-            (progn
-              (forward-char 1)
-              (search-forward (format "%c%c" eve-find-last-2 eve-find-last) nil nil val)
-              (backward-char 2))
-          (search-backward (format "%c%c" eve-find-last-2 eve-find-last) nil nil val))
-      (search-failed
-       (goto-char point)
-       (error "Search failed")))))
+  (save-window-excursion
+    (let ((min (point-min)) (max (point-max)))
+      (narrow-to-region (line-beginning-position) (line-end-position))
+      (unwind-protect
+          (let ((point (point)))
+            (condition-case nil
+                (if eve-find-forward
+                    (progn
+                      (forward-char (if eve-find-to 2 1))
+                      (search-forward (char-to-string eve-find-last) nil nil val)
+                      (backward-char))
+                  (when eve-find-to
+                    (backward-char))
+                  (search-backward (char-to-string eve-find-last) nil nil val))
+              (search-failed
+               (goto-char point)
+               (error "Search failed"))))
+        (narrow-to-region min max)))))
 
 (eve-define-inclusive-motion "f"
   (setq eve-find-to nil
@@ -702,23 +682,12 @@ Dispatch to `eve-tobj' when there is a ope."
   (eve-find-char val)
   (forward-char))
 
-(eve-define-exclusive-motion "z"
-  (setq eve-find-forward t)
-  (eve-find-char-2 val))
-
-(eve-define-exclusive-motion "Z"
-  (setq eve-find-forward nil)
-  (eve-find-char-2 val))
-
 (eve-define-command ";"
   "Repeat `eve-find-char' with ARG."
   (let ((eve-repeat-flag t))
-    (cond (eve-find-2
-           (if eve-find-forward (eve-z arg) (eve-Z arg)))
-          (eve-find-to
-           (if eve-find-forward (eve-t arg) (eve-T arg)))
-          (t
-           (if eve-find-forward (eve-f arg) (eve-F arg))))))
+    (if eve-find-to
+        (if eve-find-forward (eve-t arg) (eve-T arg))
+      (if eve-find-forward (eve-f arg) (eve-F arg)))))
 
 (eve-define-command ","
   "Repeat `eve-find-char' reverse with ARG."
@@ -727,7 +696,8 @@ Dispatch to `eve-tobj' when there is a ope."
 
 (defun eve-isearch-exit-advice ()
   (when (and eve-search-flag isearch-forward)
-    (isearch-repeat-backward 0)))
+    (let ((isearch-forward isearch-forward))
+      (isearch-repeat-backward 0))))
 
 (advice-add 'isearch-exit :before 'eve-isearch-exit-advice)
 
@@ -1023,10 +993,13 @@ ARG: (val . ope), dispatched by ope."
       (while ctn
         (let ((char (read-char)))
           (cond ((eq char ?\e)
-                 (backward-char)
+                 (unless (bolp)
+                   (backward-char))
                  (setq ctn nil))
                 ((eq char ?\d)
                  (call-interactively 'backward-delete-char))
+                ((eq char ?\C-m)
+                 (call-interactively 'newline-and-indent))
                 (t
                  (let ((last-command-event char))
                    (call-interactively 'self-insert-command))))))
