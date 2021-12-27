@@ -15,6 +15,7 @@
 ;; (defalias 'w 'save-buffer)
 
 ;;; Code:
+(require 'cl-lib)
 (require 'subr-x)
 
 (eval-when-compile
@@ -56,26 +57,20 @@
     (define-key map "8" 'eve-digit)
     (define-key map "9" 'eve-digit)
 
+    (define-key map "S" "cc")
     (define-key map "C" "c$")
     (define-key map "D" "d$")
     (define-key map "Y" "y$")
     (define-key map "J" "j\M-^")
     (define-key map "K" 'kill-sexp)
-    (define-key map "H" 'mark-sexp)
-    (define-key map "Q" 'indent-pp-sexp)
-    (define-key map "R" 'raise-sexp)
-    (define-key map "S" 'delete-pair)
     
     (define-key map "u" 'undo)
     (define-key map "m" 'point-to-register)
-    (define-key map ":" 'execute-extended-command)
     (define-key map "v" 'set-mark-command)
-    (define-key map "V" "0vj")
+    (define-key map ":" 'execute-extended-command)
 
     (define-key map "gt" 'tab-next)
     (define-key map "gT" 'tab-previous)
-    (define-key map "gn" "\C-c\C-n")
-    (define-key map "gp" "\C-c\C-p")
     
     map)
   "Eve vi mode map.")
@@ -139,6 +134,8 @@
 
 (defvar eve-find-2 nil
   "Last search 2 char or not.")
+
+(defvar eve-search-flag nil)
 
 (defvar eve-jump-forward-chars
   (append '(?f ?j ?g ?h ?a)
@@ -215,13 +212,16 @@
 (defvar eve-god-char-alist
   '((?\s . "SPC")
     (tab . "TAB")
-    (backspace . "DEL")
-    (return . "RET")))
+    (return . "RET")
+    (backspace . "DEL"))
+  "Alist of (char . string) used by `eve-god-char-to-string'.")
 
-(defvar eve-god-translation-default "C-")
+(defvar eve-god-translation-default "C-"
+  "Default prefix used by `eve-god-lookup-key'.")
 
 (defvar eve-god-translation-alist
-  '(("SPC" . "") ("g" . "M-") ("h" . "C-M-")))
+  '(("SPC" . "") ("g" . "M-") ("h" . "C-M-"))
+  "Alist of (char . prefix) used by `eve-god-lookup-key'.")
 
 
 
@@ -309,7 +309,7 @@ NEW-MODE is Vi, Insert or Emacs by default."
       (when move
         (setq eve-exec-last `(,move ,val ,ope))))))
 
-(defun eve-define-operator (key func &optional inline nobind)
+(cl-defun eve-define-operator (key func &key inline nobind)
   "Regist an operator KEY associated to FUNC.
 INLINE means operator in inner line motion.
 NOBIND means dont bind key."
@@ -436,7 +436,7 @@ Dispatch to `eve-tobj' when there is a ope."
 
 
 
-(defun eve-copy-to-register (beg end)
+(defun eve-copy-region-to-register (beg end)
   "Copy region (BEG . END) to register."
   (copy-to-register (register-read-with-preview "copy to register: ") beg end))
 
@@ -473,19 +473,19 @@ Dispatch to `eve-tobj' when there is a ope."
     (insert (car pair))
     (indent-region beg end)))
 
-(eve-define-operator ?c  'kill-region t)
+(eve-define-operator ?c  'kill-region :inline t)
 (eve-define-operator ?d  'kill-region)
 (eve-define-operator ?y  'copy-region-as-kill)
-(eve-define-operator ?\" 'eve-copy-to-register)
-(eve-define-operator ?=  'indent-region)
+(eve-define-operator ?\" 'eve-copy-region-to-register)
 (eve-define-operator ?-  'narrow-to-region)
+(eve-define-operator ?=  'indent-region)
 (eve-define-operator ?!  'eve-shell-region)
-(eve-define-operator ?@  'eve-eval-region)
+(eve-define-operator ?*  'eve-eval-region)
 (eve-define-operator ?#  'comment-or-uncomment-region)
-(eve-define-operator ?s  'eve-surround-region t t)
+(eve-define-operator ?s  'eve-surround-region :inline t :nobind t)
 
+(eve-define-translate ?* ?y)
 (eve-define-translate ?# ?c)
-(eve-define-translate ?@ ?y)
 
 
 
@@ -725,18 +725,22 @@ Dispatch to `eve-tobj' when there is a ope."
   (let ((eve-find-forward (not eve-find-forward)))
     (eve-\; arg)))
 
+(defun eve-isearch-exit-advice ()
+  (when (and eve-search-flag isearch-forward)
+    (isearch-repeat-backward 0)))
+
+(advice-add 'isearch-exit :before 'eve-isearch-exit-advice)
+
 (eve-define-exclusive-motion "/"
-  (isearch-forward-regexp)
-  (let ((point (point)))
-    (condition-case nil
-        (re-search-backward isearch-string)
-      (search-failed
-       (goto-char point)))))
+  (let ((eve-search-flag t))
+    (isearch-forward-regexp)))
 
 (eve-define-exclusive-motion "?"
-  (isearch-backward-regexp))
+  (let ((eve-search-flag t))
+    (isearch-backward-regexp)))
 
 (defun eve-search-repeat (val)
+  "Repeat search VAL `isearch-string'."
   (let ((point (point)))
     (condition-case nil
         (if isearch-forward
@@ -1009,13 +1013,34 @@ ARG: (val . ope), dispatched by ope."
       (dotimes (_ val)
         (insert eve-replace-last)))))
 
+(eve-define-command "R"
+  "Replace mode."
+  (if (region-active-p)
+      (eve-r arg)
+    (let ((overwrite-mode 'overwrite-mode-textual)
+          (ctn t))
+      (force-mode-line-update)
+      (while ctn
+        (let ((char (read-char)))
+          (cond ((eq char ?\e)
+                 (backward-char)
+                 (setq ctn nil))
+                ((eq char ?\d)
+                 (call-interactively 'backward-delete-char))
+                (t
+                 (let ((last-command-event char))
+                   (call-interactively 'self-insert-command))))))
+      (force-mode-line-update))))
+
 
 
 (defun eve-god-char-to-string (char)
+  "God `char-to-string' convert CHAR depend on `eve-god-char-alist'."
   (or (cdr (assq char eve-god-char-alist))
       (char-to-string char)))
 
 (defun eve-god-lookup-key (&optional key prev-key)
+  "God `lookup-key' lookup KEY with prefix PREV-KEY."
   (let* ((key (eve-god-char-to-string
                (or key (read-event prev-key))))
          (trans (cdr (assoc key eve-god-translation-alist)))
@@ -1081,13 +1106,10 @@ ARG: (val . ope), dispatched by ope."
     (define-key view-mode-map "a"  'eve-tobj)
     (define-key view-mode-map "."  'repeat)
     (define-key view-mode-map "m"  'point-to-register)
-    (define-key view-mode-map ":"  'execute-extended-command)
     (define-key view-mode-map "v"  'set-mark-command)
-    (define-key view-mode-map "V"  "0vj")
+    (define-key view-mode-map ":"  'execute-extended-command)
     (define-key view-mode-map "gt" 'tab-next)
     (define-key view-mode-map "gT" 'tab-previous)
-    (define-key view-mode-map "gn" "\C-c\C-n")
-    (define-key view-mode-map "gp" "\C-c\C-p")
     (add-hook 'view-mode-hook 'eve-setup-view)))
 
 (provide 'eve)
