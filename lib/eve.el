@@ -57,6 +57,7 @@
     (define-key map "K" 'kill-sexp)
     
     (define-key map "u" 'undo)
+    (define-key map "+" 'widen)
     (define-key map "m" 'point-to-register)
     (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
@@ -215,6 +216,8 @@ NEW-MODE is Vi, Insert or Emacs by default."
   (eve-vi-mode (if (eq new-mode 'vi) 1 -1))
   (eve-insert-mode (if (eq new-mode 'insert) 1 -1)))
 
+(defalias 'eve-change-mode-to-emacs 'eve-change-mode)
+
 ;;;###autoload
 (defun eve-change-mode-to-vi ()
   "Change mode to Vi."
@@ -225,8 +228,6 @@ NEW-MODE is Vi, Insert or Emacs by default."
   "Change mode to Insert."
   (interactive)
   (eve-change-mode 'insert))
-
-(defalias 'eve-change-mode-to-emacs 'eve-change-mode)
 
 (defun eve-jk ()
   ":imap jk <esc>."
@@ -462,11 +463,17 @@ Dispatch to `eve-tobj' when there is a ope."
 (eve-define-operator ?\" 'eve-copy-region-to-register)
 (eve-define-operator ?-  'narrow-to-region)
 (eve-define-operator ?=  'indent-region)
+(eve-define-operator ?<  'indent-rigidly-left)
+(eve-define-operator ?>  'indent-rigidly-right)
+(eve-define-operator ?u  'downcase-region :nobind t)
+(eve-define-operator ?U  'upcase-region :nobind t)
 (eve-define-operator ?!  'eve-shell-region)
 (eve-define-operator ?*  'eve-eval-region)
 (eve-define-operator ?#  'comment-or-uncomment-region)
 (eve-define-operator ?s  'eve-surround-region :inline t :nobind t)
 
+(eve-define-translate ?u ?u)
+(eve-define-translate ?U ?U)
 (eve-define-translate ?* ?y)
 (eve-define-translate ?# ?c)
 
@@ -533,9 +540,6 @@ Dispatch to `eve-tobj' when there is a ope."
 
 (eve-define-inclusive-motion "U"
   (backward-up-list val))
-
-(eve-define-exclusive-motion "L"
-  (down-list val))
 
 (eve-define-exclusive-motion "0"
   (beginning-of-line))

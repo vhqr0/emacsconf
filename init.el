@@ -50,8 +50,6 @@
 
 (recentf-mode 1)
 
-(setq save-place-version-control 'nospecial)
-
 (save-place-mode 1)
 
 
