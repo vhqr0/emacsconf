@@ -206,7 +206,7 @@
 
 (with-eval-after-load 'dired
   (define-key dired-mode-map "J" 'dired-goto-file)
-  (define-key dired-mode-map "K" 'dired-kill-line)
+  (define-key dired-mode-map "K" 'dired-do-kill-lines)
   (define-key dired-mode-map "V" '+dired-do-xdg-open))
 
 (defun +grep-rg ()
