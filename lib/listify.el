@@ -4,7 +4,9 @@
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-open)
-;; (define-key minibuffer-local-map (kbd "<f5>") 'listify-minibuffer-history)
+;; (define-key minibuffer-local-map "\C-r" 'listify-minibuffer-history)
+;; (define-key comint-mode-map "\C-r" 'listify-comint-history)
+;; (define-key eshell-hist-mode-map "\C-r" 'listify-eshell-history)
 
 ;;; Code:
 (require 'subr-x)
@@ -163,6 +165,10 @@ Open file in current directory if ARG not nil."
               (find-file choice)
             (find-file-other-window choice)))))))
 
+(defvar comint-input-ring)
+(defvar eshell-history-ring)
+(declare-function ring-elements "ring")
+
 ;;;###autoload
 (defun listify-minibuffer-history ()
   "View history in minibuffer with `listify-read'."
@@ -171,6 +177,22 @@ Open file in current directory if ARG not nil."
          (history (listify-read "history: " (minibuffer-history-value))))
     (when history
       (delete-region (line-beginning-position) (line-end-position))
+      (insert history))))
+
+;;;###autoload
+(defun listify-comint-history ()
+  "View history in comint with `listify-read'."
+  (interactive)
+  (let ((history (listify-read "history: " (ring-elements comint-input-ring))))
+    (when history
+      (insert history))))
+
+;;;###autoload
+(defun listify-eshell-history ()
+  "View history in eshell with `listify-read'."
+  (interactive)
+  (let ((history (listify-read "history: " (ring-elements eshell-history-ring))))
+    (when history
       (insert history))))
 
 (provide 'listify)

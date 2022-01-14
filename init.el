@@ -8,6 +8,7 @@
   (load custom-file))
 
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "theme" user-emacs-directory))
 
 (require '+autoload)
 
@@ -15,18 +16,19 @@
   (defvar package-activated-list nil)
   (load package-quickstart-file))
 
+(server-start)
+
 
 
 (setq visible-bell t)
 
 (setq inhibit-splash-screen t)
 
-(setq describe-bindings-outline nil)
-
-(menu-bar-mode -1)
 (blink-cursor-mode -1)
 
-(load-theme 'modus-vivendi)
+(pixel-scroll-precision-mode 1)
+
+(load-theme 'zenburn)
 
 
 
@@ -124,6 +126,14 @@
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
+(global-set-key "\M-o" 'other-window)
+
+(setq tab-bar-select-tab-modifiers '(meta))
+
+(tab-bar-mode 1)
+
+(terminalize-mode 1)
+
 (require 'eve)
 
 
@@ -135,7 +145,13 @@
   (define-key eve-vi-mode-map "\C-p" 'listify-open)
   (define-key eve-jk-mode-map "\C-p" 'listify-open))
 
-(define-key minibuffer-local-map (kbd "<f5>") 'listify-minibuffer-history)
+(define-key minibuffer-local-map "\C-r" 'listify-minibuffer-history)
+
+(with-eval-after-load 'comint
+  (define-key comint-mode-map "\C-r" 'listify-comint-history))
+
+(with-eval-after-load 'em-hist
+  (define-key eshell-hist-mode-map "\C-r" 'listify-eshell-history))
 
 
 
@@ -223,10 +239,3 @@
       wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
-
-(when (getenv "WSLENV")
-  (setq +xclip-program "clip.exe"
-        +xdg-open-program (expand-file-name "bin/wsl-xdg-open" user-emacs-directory)
-        browse-url-generic-program "/mnt/c/Windows/System32/cmd.exe"
-        browse-url-generic-args '("/c" "start")
-        browse-url-browser-function 'browse-url-generic))

@@ -350,7 +350,7 @@ the mode if ARG is nil, omitted, or is a positive number.
 Disable the mode if ARG is a negative number.
 
 To check whether the minor mode is enabled in the current buffer,
-evaluate `(default-value 'gtags-mode)'.
+evaluate `(default-value \\='gtags-mode)'.
 
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
@@ -386,6 +386,12 @@ Open file in current directory if ARG not nil.
 
 (autoload 'listify-minibuffer-history "listify" "\
 View history in minibuffer with `listify-read'." t nil)
+
+(autoload 'listify-comint-history "listify" "\
+View history in comint with `listify-read'." t nil)
+
+(autoload 'listify-eshell-history "listify" "\
+View history in eshell with `listify-read'." t nil)
 
 (register-definition-prefixes "listify" '("listify-"))
 
@@ -437,6 +443,39 @@ it is disabled.
 \(fn &optional ARG)" t nil)
 
 (register-definition-prefixes "markdown-mode" '("defun-markdown-" "gfm-" "markdown"))
+
+;;;***
+
+;;;### (autoloads nil "terminalize" "terminalize.el" (0 0 0 0))
+;;; Generated autoloads from terminalize.el
+
+(defvar terminalize-mode nil "\
+Non-nil if Terminalize mode is enabled.
+See the `terminalize-mode' command
+for a description of this minor mode.")
+
+(custom-autoload 'terminalize-mode "terminalize" nil)
+
+(autoload 'terminalize-mode "terminalize" "\
+Terminalize emacs.
+
+This is a minor mode.  If called interactively, toggle the
+`Terminalize mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='terminalize-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
+\(fn &optional ARG)" t nil)
+
+(register-definition-prefixes "terminalize" '("terminalize-"))
 
 ;;;***
 

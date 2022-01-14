@@ -25,7 +25,6 @@
 (defvar eve-insert-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "j"    'eve-jk)
-    (define-key map "\C-r" 'insert-register)
     (define-key map "\M-z" 'eve-change-mode-to-vi)
     (define-key map "\C-z" 'eve-change-mode-to-emacs)
     map)
@@ -37,7 +36,6 @@
     (define-key map "\C-z" 'eve-change-mode-to-emacs)
     (define-key map "\s"   'scroll-up-command)
     (define-key map "\d"   'scroll-down-command)
-    (define-key map (kbd "S-SPC") 'scroll-down-command)
 
     (define-key map "1" 'eve-digit)
     (define-key map "2" 'eve-digit)
