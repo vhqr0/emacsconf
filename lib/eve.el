@@ -59,9 +59,6 @@
     (define-key map "m" 'point-to-register)
     (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
-
-    (define-key map "gt" 'tab-next)
-    (define-key map "gT" 'tab-previous)
     
     map)
   "Eve vi mode map.")

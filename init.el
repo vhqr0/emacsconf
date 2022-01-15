@@ -58,8 +58,6 @@
 
 
 
-(global-set-key (kbd "C-M-_") 'dabbrev-completion)
-
 (defalias 'w 'save-buffer)
 (defalias 'make 'compile)
 
@@ -112,9 +110,6 @@
 (setq tab-bar-select-tab-modifiers '(meta))
 
 (tab-bar-mode 1)
-
-(define-key tab-bar-switch-repeat-map "t" 'tab-next)
-(define-key tab-bar-switch-repeat-map "T" 'tab-previous)
 
 (terminalize-mode 1)
 
@@ -198,44 +193,16 @@
 
 
 
-(defvar +xclip-program "xclip -selection clip")
+(global-set-key (kbd "C-x w") 'xclip)
 
-(defun +xclip (beg end)
-  (interactive "r")
-  (call-shell-region beg end +xclip-program))
-
-(global-set-key (kbd "C-x w") '+xclip)
-
-(defvar +xdg-open-program "xdg-open")
-
-(defun +xdg-open (&optional file)
-  (interactive `(,(or buffer-file-name default-directory)))
-  (when file
-    (call-process-shell-command (concat +xdg-open-program " " file))))
-
-(define-key ctl-x-x-map "o" '+xdg-open)
+(define-key ctl-x-x-map "o" 'xdg-open)
 
 (setq dired-listing-switches "-alh")
-
-(defun +dired-do-xdg-open ()
-  (interactive)
-  (dolist (file (dired-get-marked-files))
-    (+xdg-open file)))
 
 (with-eval-after-load 'dired
   (define-key dired-mode-map "J" 'dired-goto-file)
   (define-key dired-mode-map "K" 'dired-do-kill-lines)
-  (define-key dired-mode-map "V" '+dired-do-xdg-open))
-
-(defun +grep-rg ()
-  (interactive)
-  (require 'grep)
-  (grep--save-buffers)
-  (compilation-start
-   (read-shell-command "command: " "rg --no-heading " 'grep-history)
-   'grep-mode))
-
-(defalias 'rg '+grep-rg)
+  (define-key dired-mode-map "V" 'dired-do-xdg-open))
 
 (setq wgrep-auto-save-buffer t
       wgrep-change-readonly-file t)
