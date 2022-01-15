@@ -4,9 +4,9 @@
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-open)
-;; (define-key minibuffer-local-map "\C-r" 'listify-minibuffer-history)
-;; (define-key comint-mode-map "\C-r" 'listify-comint-history)
-;; (define-key eshell-hist-mode-map "\C-r" 'listify-eshell-history)
+;; (define-key minibuffer-local-map "\C-r" 'listify-history)
+;; (define-key comint-mode-map "\C-r" 'listify-history)
+;; (define-key eshell-hist-mode-map "\C-r" 'listify-history)
 
 ;;; Code:
 (require 'subr-x)
@@ -170,28 +170,19 @@ Open file in current directory if ARG not nil."
 (declare-function ring-elements "ring")
 
 ;;;###autoload
-(defun listify-minibuffer-history ()
-  "View history in minibuffer with `listify-read'."
+(defun listify-history ()
+  "View history with `listify-read'."
   (interactive)
   (let* ((enable-recursive-minibuffers t)
-         (history (listify-read "history: " (minibuffer-history-value))))
-    (when history
-      (delete-region (line-beginning-position) (line-end-position))
-      (insert history))))
-
-;;;###autoload
-(defun listify-comint-history ()
-  "View history in comint with `listify-read'."
-  (interactive)
-  (let ((history (listify-read "history: " (ring-elements comint-input-ring))))
-    (when history
-      (insert history))))
-
-;;;###autoload
-(defun listify-eshell-history ()
-  "View history in eshell with `listify-read'."
-  (interactive)
-  (let ((history (listify-read "history: " (ring-elements eshell-history-ring))))
+         (historys (cond ((window-minibuffer-p)
+                          (minibuffer-history-value))
+                         ((derived-mode-p 'comint-mode)
+                          (ring-elements comint-input-ring))
+                         ((eq major-mode 'eshell-mode)
+                          (ring-elements eshell-history-ring))
+                         (t
+                          (error "Unknown history type"))))
+         (history (listify-read "history: " (delete-dups historys))))
     (when history
       (insert history))))
 

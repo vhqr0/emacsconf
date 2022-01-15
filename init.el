@@ -16,7 +16,9 @@
   (defvar package-activated-list nil)
   (load package-quickstart-file))
 
-(server-start)
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 
 
@@ -103,10 +105,18 @@
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
+(winner-mode 1)
+
+(global-set-key "\M-o" 'other-window)
+
+(setq tab-bar-select-tab-modifiers '(meta))
+
+(tab-bar-mode 1)
+
 (define-key tab-bar-switch-repeat-map "t" 'tab-next)
 (define-key tab-bar-switch-repeat-map "T" 'tab-previous)
 
-(winner-mode 1)
+(terminalize-mode 1)
 
 
 
@@ -126,14 +136,6 @@
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
-(global-set-key "\M-o" 'other-window)
-
-(setq tab-bar-select-tab-modifiers '(meta))
-
-(tab-bar-mode 1)
-
-(terminalize-mode 1)
-
 (require 'eve)
 
 
@@ -145,13 +147,13 @@
   (define-key eve-vi-mode-map "\C-p" 'listify-open)
   (define-key eve-jk-mode-map "\C-p" 'listify-open))
 
-(define-key minibuffer-local-map "\C-r" 'listify-minibuffer-history)
+(define-key minibuffer-local-map "\C-r" 'listify-history)
 
 (with-eval-after-load 'comint
-  (define-key comint-mode-map "\C-r" 'listify-comint-history))
+  (define-key comint-mode-map "\C-r" 'listify-history))
 
 (with-eval-after-load 'em-hist
-  (define-key eshell-hist-mode-map "\C-r" 'listify-eshell-history))
+  (define-key eshell-hist-mode-map "\C-r" 'listify-history))
 
 
 
