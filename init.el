@@ -16,10 +16,6 @@
   (defvar package-activated-list nil)
   (load package-quickstart-file))
 
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-
 
 
 (setq visible-bell t)

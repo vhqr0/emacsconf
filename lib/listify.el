@@ -184,6 +184,12 @@ Open file in current directory if ARG not nil."
                           (error "Unknown history type"))))
          (history (listify-read "history: " (delete-dups historys))))
     (when history
+      (cond ((or (window-minibuffer-p)
+                 (derived-mode-p 'comint-mode))
+             (delete-region (line-beginning-position) (line-end-position)))
+            ((eq major-mode 'eshell-mode)
+             (eshell-bol)
+             (kill-line)))
       (insert history))))
 
 (provide 'listify)
