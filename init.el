@@ -59,15 +59,7 @@
 
 (define-key minibuffer-local-completion-map "\s" "-")
 
-(defun +minibuffer-yank-symbol ()
-  (interactive)
-  (when (window-minibuffer-p)
-    (let ((symbol (with-selected-window (minibuffer-selected-window)
-                    (thing-at-point 'symbol))))
-      (when symbol
-        (insert symbol)))))
-
-(define-key minibuffer-local-map "\M-." '+minibuffer-yank-symbol)
+(define-key minibuffer-local-map "\M-." 'terminalize-yank-symbol)
 
 (setq icomplete-compute-delay 2
       icomplete-max-delay-chars 4
@@ -100,8 +92,6 @@
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
 (winner-mode 1)
-
-(global-set-key "\M-o" 'other-window)
 
 (setq tab-bar-select-tab-modifiers '(meta))
 

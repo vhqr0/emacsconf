@@ -768,6 +768,7 @@ Dispatch to `eve-tobj' when there is a ope."
         ((and (not eve-jump-backward-overlays)
               (car eve-jump-forward-overlays)
               (not (cdr eve-jump-forward-overlays)))
+         (push-mark)
          (goto-char (overlay-start (car eve-jump-forward-overlays)))
          (delete-overlay (car eve-jump-forward-overlays))
          (setq eve-jump-forward-overlays nil))

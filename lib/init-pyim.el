@@ -1,6 +1,4 @@
-(require 'eve)
 (require 'pyim)
-(require 'pyim-basedict)
 
 (defun pyim-probe-eve-vi-mode ()
   eve-vi-mode)
