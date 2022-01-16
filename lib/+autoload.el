@@ -361,6 +361,15 @@ it is disabled.
 
 ;;;***
 
+;;;### (autoloads nil "init-pyim" "init-pyim.el" (0 0 0 0))
+;;; Generated autoloads from init-pyim.el
+
+(with-eval-after-load 'pyim (require 'init-pyim))
+
+(register-definition-prefixes "init-pyim" '("pyim-probe-eve-vi-mode"))
+
+;;;***
+
 ;;;### (autoloads nil "linux-tools" "linux-tools.el" (0 0 0 0))
 ;;; Generated autoloads from linux-tools.el
 

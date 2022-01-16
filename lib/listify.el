@@ -167,6 +167,7 @@ Open file in current directory if ARG not nil."
 
 (defvar comint-input-ring)
 (defvar eshell-history-ring)
+(declare-function eshell-bol "esh-mode")
 (declare-function ring-elements "ring")
 
 ;;;###autoload

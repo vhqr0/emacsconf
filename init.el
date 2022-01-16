@@ -204,3 +204,5 @@
       wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
+
+(setq default-input-method "pyim")
