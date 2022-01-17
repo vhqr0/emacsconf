@@ -83,11 +83,23 @@ it is disabled.
 ;;;### (autoloads nil "list-misc" "list-misc.el" (0 0 0 0))
 ;;; Generated autoloads from list-misc.el
 
+(defvar list-misc-prefix-map (let ((map (make-sparse-keymap))) (define-key map "y" 'list-kill-ring) (define-key map "r" 'list-history) (define-key map "m" 'list-global-mark-ring) (define-key map "i" 'list-imenu) map))
+
 (autoload 'list-kill-ring "list-misc" nil t nil)
 
-(autoload 'list-imenu "list-misc" nil t nil)
+(autoload 'list-history "list-misc" nil t nil)
 
-(register-definition-prefixes "list-misc" '("list-imenu-select"))
+(autoload 'list-global-mark-ring "list-misc" "\
+
+
+\(fn ARG)" t nil)
+
+(autoload 'list-imenu "list-misc" "\
+
+
+\(fn ARG)" t nil)
+
+(register-definition-prefixes "list-misc" '("list-"))
 
 ;;;***
 

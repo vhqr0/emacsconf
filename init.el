@@ -111,12 +111,11 @@
 
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
-(global-set-key (kbd "C-x m") 'list-imenu)
-(global-set-key (kbd "C-x y") 'list-kill-ring)
-
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
+
+(global-set-key (kbd "C-x l") list-misc-prefix-map)
 
 (require 'eve)
 
@@ -172,12 +171,7 @@
       company-frontends
       '(company-pseudo-tooltip-frontend)
       company-backends
-      '(company-files company-dabbrev-code company-dabbrev))
-
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (setq-local company-backends
-                        `(company-capf ,@company-backends))))
+      '(company-capf company-files company-dabbrev-code company-dabbrev))
 
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
