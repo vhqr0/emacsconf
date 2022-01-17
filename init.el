@@ -8,9 +8,11 @@
   (load custom-file))
 
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lib-tp" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "theme" user-emacs-directory))
 
 (require '+autoload)
+(require '+autoload-tp)
 
 (when (file-exists-p package-quickstart-file)
   (defvar package-activated-list nil)
@@ -29,6 +31,8 @@
 (load-theme 'zenburn)
 
 
+
+(defalias 'w 'save-buffer)
 
 (setq confirm-kill-emacs 'y-or-n-p
       auto-revert-check-vc-info t
@@ -53,9 +57,6 @@
 (save-place-mode 1)
 
 
-
-(defalias 'w 'save-buffer)
-(defalias 'make 'compile)
 
 (define-key minibuffer-local-completion-map "\s" "-")
 
@@ -138,6 +139,8 @@
 
 
 
+(defalias 'make 'compile)
+
 (setq xref-search-program 'ripgrep)
 
 (with-eval-after-load 'flymake
@@ -152,7 +155,9 @@
 
 (setq flymake-cc-command '+flymake-cc-command)
 
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(advice-add 'eglot--snippet-expansion-fn :override (lambda () 'yas-expand-snippet))
+
+(add-hook 'eglot-managed-mode-hook 'yas-minor-mode)
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)

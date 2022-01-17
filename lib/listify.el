@@ -190,7 +190,7 @@ Open file in current directory if ARG not nil."
              (delete-region (line-beginning-position) (line-end-position)))
             ((eq major-mode 'eshell-mode)
              (eshell-bol)
-             (kill-line)))
+             (delete-region (point) (line-end-position))))
       (insert history))))
 
 (provide 'listify)
