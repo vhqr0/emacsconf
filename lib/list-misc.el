@@ -14,8 +14,9 @@
 
 (defvar list-misc-mark-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "\r" 'list-misc-goto-mark)
-    (define-key map "o"  'list-misc-goto-mark-other-window)
+    (define-key map "\C-o" 'list-misc-display-mark)
+    (define-key map "\r"   'list-misc-goto-mark)
+    (define-key map "o"    'list-misc-goto-mark-other-window)
     map))
 
 (define-derived-mode list-misc-text-mode text-mode "List Text"
@@ -23,6 +24,13 @@
 
 (define-derived-mode list-misc-mark-mode special-mode "List Mark"
   "Major mode for list mark based elements.")
+
+(defun list-misc-display-mark ()
+  (interactive)
+  (let ((pos (get-char-property (point) :pos)))
+    (when (markerp pos)
+      (with-selected-window (display-buffer (marker-buffer pos))
+        (goto-char pos)))))
 
 (defun list-misc-goto-mark ()
   (interactive)
@@ -67,7 +75,7 @@
     (let ((inhibit-read-only t))
       (erase-buffer)
       (dolist (history (ring-elements historys))
-        (insert history "\n\n\n\n"))
+        (insert history "\n\n\C-l\n\n"))
       (set-buffer-modified-p nil)
       (goto-char (point-min))
       (list-misc-text-mode))))
@@ -127,8 +135,8 @@
 (defun list-imenu (arg)
   (interactive "P")
   (require 'imenu)
-  (let* ((buffer (current-buffer))
-         (imenu-auto-rescan arg)
+  (let* ((imenu-auto-rescan arg)
+         (buffer (current-buffer))
          (alist (imenu--make-index-alist t)))
     (switch-to-buffer "*list-imenu*")
     (let ((inhibit-read-only t))
