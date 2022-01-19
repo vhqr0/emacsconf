@@ -89,7 +89,7 @@
              (line-beginning-position) (line-end-position))))
   (exit-minibuffer))
 
-(defun listify-read (prompt collection)
+(defun listify-read (prompt collection &optional initial-contents)
   "Read from minibuffer and select with listify PROMPT COLLECTION."
   (save-window-excursion
     (let* ((listify-collection collection)
@@ -101,10 +101,10 @@
               (setq truncate-lines t)
               (hl-line-mode 1)
               (selected-window))))
-      (listify-update "")
+      (listify-update (or initial-contents ""))
       (setq listify-timer (run-with-idle-timer listify-idle-delay t 'listify-update))
       (unwind-protect
-          (read-from-minibuffer prompt nil listify-map)
+          (read-from-minibuffer prompt initial-contents listify-map)
         (kill-buffer (window-buffer listify-window))))))
 
 (defun listify-completion-in-region (beg end collection predicate)
@@ -144,8 +144,11 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
 Open file in current directory if ARG not nil."
   (interactive "P")
   (if arg
-      (let ((choice (listify-read "open: "
-                                  (split-string (shell-command-to-string "rg --files")))))
+      (let* ((default-directory (if (> (prefix-numeric-value arg) 4)
+                                    default-directory
+                                  (or (cdr (project-current)) default-directory)))
+             (choice (listify-read "open: "
+                                   (split-string (shell-command-to-string "rg --files")))))
         (when choice
           (if (eq last-command-event ?\C-m)
               (find-file choice)
@@ -174,24 +177,30 @@ Open file in current directory if ARG not nil."
 (defun listify-history ()
   "View history with `listify-read'."
   (interactive)
-  (let* ((enable-recursive-minibuffers t)
-         (historys (cond ((window-minibuffer-p)
-                          (minibuffer-history-value))
-                         ((derived-mode-p 'comint-mode)
-                          (ring-elements comint-input-ring))
-                         ((eq major-mode 'eshell-mode)
-                          (ring-elements eshell-history-ring))
-                         (t
-                          (error "Unknown history type"))))
-         (history (listify-read "history: " (delete-dups historys))))
-    (when history
-      (cond ((or (window-minibuffer-p)
-                 (derived-mode-p 'comint-mode))
-             (delete-region (line-beginning-position) (line-end-position)))
-            ((eq major-mode 'eshell-mode)
-             (eshell-bol)
-             (delete-region (point) (line-end-position))))
-      (insert history))))
+  (let ((enable-recursive-minibuffers t)
+        beg end historys)
+    (cond ((window-minibuffer-p)
+           (setq beg (line-beginning-position)
+                 end (line-end-position)
+                 historys (minibuffer-history-value)))
+          ((derived-mode-p 'comint-mode)
+           (setq beg (line-beginning-position)
+                 end (line-end-position)
+                 historys (ring-elements comint-input-ring)))
+          ((eq major-mode 'eshell-mode)
+           (setq beg (save-excursion
+                       (eshell-bol)
+                       (point))
+                 end (line-end-position)
+                 historys (ring-elements eshell-history-ring)))
+          (t
+           (error "Unknown history type")))
+    (let ((history (listify-read "history: "
+                                 (delete-dups historys)
+                                 (buffer-substring beg end))))
+      (when history
+        (delete-region beg end)
+        (insert history)))))
 
 (provide 'listify)
 ;;; listify.el ends here
