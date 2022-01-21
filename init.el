@@ -24,6 +24,8 @@
 
 (setq inhibit-splash-screen t)
 
+(tool-bar-mode -1)
+
 (blink-cursor-mode -1)
 
 (pixel-scroll-precision-mode 1)
@@ -170,7 +172,12 @@
       company-frontends
       '(company-pseudo-tooltip-frontend)
       company-backends
-      '(company-capf company-files company-dabbrev-code company-dabbrev))
+      '(company-files company-dabbrev-code company-dabbrev))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (setq-local company-backends
+                        `(company-capf ,@company-backends))))
 
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)

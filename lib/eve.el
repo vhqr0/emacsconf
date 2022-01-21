@@ -52,10 +52,8 @@
     (define-key map "D" "d$")
     (define-key map "Y" "y$")
     (define-key map "J" "j\M-^")
-    (define-key map "K" 'kill-sexp)
     
     (define-key map "u" 'undo)
-    (define-key map "+" 'widen)
     (define-key map "m" 'point-to-register)
     (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
