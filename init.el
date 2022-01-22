@@ -51,7 +51,7 @@
 
 
 
-(define-key minibuffer-local-map "\M-." 'sp-minibuffer-yank-symbol)
+(define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
 
 (define-key minibuffer-local-completion-map "\s" "-")
 
@@ -87,9 +87,9 @@
 
 (winner-mode 1)
 
-(global-set-key (kbd "C-x 7") 'sp-rotate-window)
+(global-set-key (kbd "C-x 7") 'rotate-window)
 
-(setq tab-bar-select-tab-modifiers '(meta))
+(setq tab-bar-select-tab-modifiers '(control))
 
 (tab-bar-mode 1)
 

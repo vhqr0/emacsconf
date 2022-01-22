@@ -114,9 +114,9 @@ View history with `listify-read'." t nil)
 
 (autoload 'rg "simple-plus" nil t nil)
 
-(autoload 'sp-minibuffer-yank-symbol "simple-plus" nil t nil)
+(autoload 'minibuffer-yank-symbol "simple-plus" nil t nil)
 
-(autoload 'sp-rotate-window "simple-plus" "\
+(autoload 'rotate-window "simple-plus" "\
 
 
 \(fn ARG)" t nil)

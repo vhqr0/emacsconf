@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
+(setq byte-compile-docstring-max-column 65536)
+
 (let ((alist file-name-handler-alist))
   (setq file-name-handler-alist nil)
   (add-hook 'after-init-hook

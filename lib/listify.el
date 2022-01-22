@@ -137,11 +137,14 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
                     command)))
     (call-interactively command)))
 
+(defvar dabbrev-case-replace)
+
 ;;;###autoload
 (defun listify-dabbrev-completion ()
   "`dabbrev-completion' with `listify-completion-in-region'."
   (interactive)
-  (let ((completion-in-region-function 'listify-completion-in-region))
+  (let ((dabbrev-case-replace nil)
+        (completion-in-region-function 'listify-completion-in-region))
     (call-interactively 'dabbrev-completion)))
 
 (defvar recentf-list)

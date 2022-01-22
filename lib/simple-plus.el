@@ -13,7 +13,7 @@
 ;;;###autoload
 (defun xdg-open (&optional file)
   (interactive `(,(or buffer-file-name default-directory)))
-  (when file
+  (when (and file (not (file-remote-p file)))
     (call-process-shell-command (concat xdg-open-program " " file))))
 
 (declare-function dired-get-marked-files "dired")
@@ -41,7 +41,7 @@
    'grep-mode))
 
 ;;;###autoload
-(defun sp-minibuffer-yank-symbol ()
+(defun minibuffer-yank-symbol ()
   (interactive)
   (when (window-minibuffer-p)
     (let ((symbol (with-selected-window (minibuffer-selected-window)
@@ -50,7 +50,7 @@
         (insert symbol)))))
 
 ;;;###autoload
-(defun sp-rotate-window (arg)
+(defun rotate-window (arg)
   (interactive "P")
   (if arg
       (let* ((window (selected-window))
