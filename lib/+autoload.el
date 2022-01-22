@@ -46,31 +46,6 @@ it is disabled.
 
 ;;;***
 
-;;;### (autoloads nil "linux-tools" "linux-tools.el" (0 0 0 0))
-;;; Generated autoloads from linux-tools.el
-
-(defvar xclip-program "xclip -selection clip")
-
-(autoload 'xclip "linux-tools" "\
-
-
-\(fn BEG END)" t nil)
-
-(defvar xdg-open-program "xdg-open")
-
-(autoload 'xdg-open "linux-tools" "\
-
-
-\(fn &optional FILE)" t nil)
-
-(autoload 'dired-do-xdg-open "linux-tools" nil t nil)
-
-(defvar rg-program "rg")
-
-(autoload 'rg "linux-tools" nil t nil)
-
-;;;***
-
 ;;;### (autoloads nil "list-misc" "list-misc.el" (0 0 0 0))
 ;;; Generated autoloads from list-misc.el
 
@@ -115,6 +90,26 @@ View history with `listify-read'." t nil)
 
 ;;;### (autoloads nil "simple-plus" "simple-plus.el" (0 0 0 0))
 ;;; Generated autoloads from simple-plus.el
+
+(defvar xclip-program "xclip -selection clip")
+
+(autoload 'xclip "simple-plus" "\
+
+
+\(fn BEG END)" t nil)
+
+(defvar xdg-open-program "xdg-open")
+
+(autoload 'xdg-open "simple-plus" "\
+
+
+\(fn &optional FILE)" t nil)
+
+(autoload 'dired-do-xdg-open "simple-plus" nil t nil)
+
+(defvar rg-program "rg")
+
+(autoload 'rg "simple-plus" nil t nil)
 
 (autoload 'sp-minibuffer-yank-symbol "simple-plus" nil t nil)
 
