@@ -1035,7 +1035,7 @@ ARG: (val . ope), dispatched by ope."
   "Eve setup."
   (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
          (eve-jk-mode 1))
-        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode)
+        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode 'diff-mode)
          (eve-change-mode-to-vi))
         ((derived-mode-p 'comint-mode 'eshell-mode)
          (eve-change-mode-to-insert))))

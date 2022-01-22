@@ -90,16 +90,18 @@
     (let ((inhibit-read-only t))
       (erase-buffer)
       (dolist (mark marks)
-        (insert (propertize (concat (buffer-name (marker-buffer mark))
-                                    ":"
-                                    (number-to-string (marker-position mark))
-                                    ":"
-                                    (with-current-buffer (marker-buffer mark)
-                                      (save-excursion
-                                        (goto-char mark)
-                                        (buffer-substring (line-beginning-position) (line-end-position))))
-                                    "\n")
-                            :pos mark)))
+        (let ((buffer (marker-buffer mark)))
+          (when buffer
+            (insert (propertize (concat (buffer-name buffer)
+                                        ":"
+                                        (number-to-string (marker-position mark))
+                                        ":"
+                                        (with-current-buffer buffer
+                                          (save-excursion
+                                            (goto-char mark)
+                                            (buffer-substring (line-beginning-position) (line-end-position))))
+                                        "\n")
+                                :pos mark)))))
       (set-buffer-modified-p nil)
       (goto-char (point-min))
       (list-misc-mark-mode))))

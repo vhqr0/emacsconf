@@ -9,14 +9,9 @@
 
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lib-tp" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "theme" user-emacs-directory))
 
 (require '+autoload)
 (require '+autoload-tp)
-
-(when (file-exists-p package-quickstart-file)
-  (defvar package-activated-list nil)
-  (load package-quickstart-file))
 
 
 
@@ -24,20 +19,16 @@
 
 (setq inhibit-splash-screen t)
 
-(tool-bar-mode -1)
-
+(menu-bar-mode -1)
 (blink-cursor-mode -1)
 
-(pixel-scroll-precision-mode 1)
-
-(load-theme 'zenburn)
+(load-theme 'modus-vivendi)
 
 
 
 (defalias 'w 'save-buffer)
 
 (setq confirm-kill-emacs 'y-or-n-p
-      auto-revert-check-vc-info t
       vc-handled-backends '(Git)
       vc-make-backup-files t
       version-control t
@@ -60,9 +51,9 @@
 
 
 
-(define-key minibuffer-local-completion-map "\s" "-")
+(define-key minibuffer-local-map "\M-." 'sp-minibuffer-yank-symbol)
 
-(define-key minibuffer-local-map "\M-." 'terminalize-yank-symbol)
+(define-key minibuffer-local-completion-map "\s" "-")
 
 (setq icomplete-compute-delay 2
       icomplete-max-delay-chars 4
@@ -96,11 +87,15 @@
 
 (winner-mode 1)
 
+(global-set-key (kbd "C-x 7") 'sp-rotate-window)
+
 (setq tab-bar-select-tab-modifiers '(meta))
 
 (tab-bar-mode 1)
 
-(terminalize-mode 1)
+(global-set-key (kbd "C-x t e") 'sp-eshell-other-tab)
+
+(global-set-key "\M-E" 'sp-eshell)
 
 
 
@@ -200,4 +195,10 @@
 
 (setq ispell-dictionary "american")
 
-(setq default-input-method "pyim")
+
+(when (getenv "WSLENV")
+  (setq xclip-program "clip.exe"
+        xdg-open-program (expand-file-name "bin/wsl-xdg-open" user-emacs-directory)
+        browse-url-generic-program "/mnt/c/Windows/System32/cmd.exe"
+        browse-url-generic-args '("/c" "start")
+        browse-url-browser-function 'browse-url-generic))

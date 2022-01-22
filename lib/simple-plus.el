@@ -1,24 +1,14 @@
-(defvar eshell-buffer-name)
-
-(defvar terminalize-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "M-R")     'terminalize-rotate)
-    (define-key map (kbd "M-D")     'terminalize-other-window)
-    (define-key map (kbd "C-S-T")   'terminalize-other-tab)
-    (define-key map (kbd "C-S-W")   'terminalize-close)
-    (define-key map (kbd "C-c M-.") 'terminalize-yank-symbol)
-    map))
-
-(defun terminalize-yank-symbol ()
+;;;###autoload
+(defun sp-minibuffer-yank-symbol ()
   (interactive)
-  (let ((symbol (with-selected-window (if (window-minibuffer-p)
-                                          (minibuffer-selected-window)
-                                        (next-window))
-                  (thing-at-point 'symbol))))
-    (when symbol
-      (insert symbol))))
+  (when (window-minibuffer-p)
+    (let ((symbol (with-selected-window (minibuffer-selected-window)
+                    (thing-at-point 'symbol))))
+      (when symbol
+        (insert symbol)))))
 
-(defun terminalize-rotate (arg)
+;;;###autoload
+(defun sp-rotate-window (arg)
   (interactive "P")
   (if arg
       (let* ((window (selected-window))
@@ -50,7 +40,9 @@
                                 (split-window-vertically)))
                (set-window-buffer window prev-window-buffer)))))))
 
-(defun terminalize-buffer ()
+(defvar eshell-buffer-name)
+
+(defun sp-eshell-buffer ()
   (require 'eshell)
   (let ((ctn t)
         (directory default-directory)
@@ -68,7 +60,6 @@
         (setq ctn nil)))
     (when ctn
       (setq buffer (generate-new-buffer eshell-buffer-name)))
-    (message (concat "Terminalize find buffer" (buffer-name buffer)))
     (with-current-buffer buffer
       (setq default-directory directory)
       (widen)
@@ -76,7 +67,8 @@
       (eshell-mode))
     buffer))
 
-(defun terminalize-other-window (arg)
+;;;###autoload
+(defun sp-eshell (arg)
   (interactive "P")
   (let ((buffer (terminalize-buffer)))
     (cond ((and (consp arg) (> (prefix-numeric-value arg) 4))
@@ -94,25 +86,9 @@
                    (t
                     (switch-to-buffer-other-window buffer))))))))
 
-(defun terminalize-other-tab (arg)
-  (interactive "P")
-  (if (or arg (eq last-command 'tab-bar-close-tab))
-      (tab-bar-undo-close-tab)
-    (switch-to-buffer-other-tab (terminalize-buffer))))
-
-(defun terminalize-close (arg)
-  (interactive "P")
-  (if (or arg (= (length (window-list)) 1))
-      (progn
-        (setq this-command 'tab-bar-close-tab)
-        (tab-bar-close-tab))
-    (delete-window)))
-
 ;;;###autoload
-(define-minor-mode terminalize-mode
-  "Terminalize emacs."
-  :global t
-  :keymap terminalize-mode-map
-  :group 'tab-bar)
+(defun sp-eshell-other-tab ()
+  (interactive)
+  (switch-to-buffer-other-tab (sp-eshell-buffer)))
 
-(provide 'terminalize)
+(provide 'simple-plus)

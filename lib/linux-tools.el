@@ -4,7 +4,8 @@
 ;;;###autoload
 (defun xclip (beg end)
   (interactive "r")
-  (call-shell-region beg end xclip-program))
+  (call-shell-region beg end xclip-program)
+  (deactivate-mark))
 
 ;;;###autoload
 (defvar xdg-open-program "xdg-open")

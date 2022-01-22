@@ -46,15 +46,6 @@ it is disabled.
 
 ;;;***
 
-;;;### (autoloads nil "init-pyim" "init-pyim.el" (0 0 0 0))
-;;; Generated autoloads from init-pyim.el
-
-(with-eval-after-load 'pyim (require 'init-pyim))
-
-(register-definition-prefixes "init-pyim" '("pyim-probe-eve-vi-mode"))
-
-;;;***
-
 ;;;### (autoloads nil "linux-tools" "linux-tools.el" (0 0 0 0))
 ;;; Generated autoloads from linux-tools.el
 
@@ -122,36 +113,24 @@ View history with `listify-read'." t nil)
 
 ;;;***
 
-;;;### (autoloads nil "terminalize" "terminalize.el" (0 0 0 0))
-;;; Generated autoloads from terminalize.el
+;;;### (autoloads nil "simple-plus" "simple-plus.el" (0 0 0 0))
+;;; Generated autoloads from simple-plus.el
 
-(defvar terminalize-mode nil "\
-Non-nil if Terminalize mode is enabled.
-See the `terminalize-mode' command
-for a description of this minor mode.")
+(autoload 'sp-minibuffer-yank-symbol "simple-plus" nil t nil)
 
-(custom-autoload 'terminalize-mode "terminalize" nil)
+(autoload 'sp-rotate-window "simple-plus" "\
 
-(autoload 'terminalize-mode "terminalize" "\
-Terminalize emacs.
 
-This is a minor mode.  If called interactively, toggle the
-`Terminalize mode' mode.  If the prefix argument is positive,
-enable the mode, and if it is zero or negative, disable the mode.
+\(fn ARG)" t nil)
 
-If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
-the mode if ARG is nil, omitted, or is a positive number.
-Disable the mode if ARG is a negative number.
+(autoload 'sp-eshell "simple-plus" "\
 
-To check whether the minor mode is enabled in the current buffer,
-evaluate `(default-value \\='terminalize-mode)'.
 
-The mode's hook is called both when the mode is enabled and when
-it is disabled.
+\(fn ARG)" t nil)
 
-\(fn &optional ARG)" t nil)
+(autoload 'sp-eshell-other-tab "simple-plus" nil t nil)
 
-(register-definition-prefixes "terminalize" '("terminalize-"))
+(register-definition-prefixes "simple-plus" '("sp-eshell-buffer"))
 
 ;;;***
 
