@@ -118,6 +118,9 @@
 
 
 
+(global-set-key (kbd "C-M-/") 'listify-dabbrev-completion)
+(global-set-key (kbd "C-M-_") 'listify-dabbrev-completion)
+
 (global-set-key (kbd "<f2>") 'listify-tab-completion)
 (global-set-key (kbd "<f5>") 'listify-open)
 

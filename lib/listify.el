@@ -4,6 +4,7 @@
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-open)
+;; (global-set-key (kbd "C-M-/") 'listify-dabbrev-completion)
 ;; (define-key minibuffer-local-map "\C-r" 'listify-history)
 ;; (define-key comint-mode-map "\C-r" 'listify-history)
 ;; (define-key eshell-hist-mode-map "\C-r" 'listify-history)
@@ -135,6 +136,13 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
                       'completion-at-point
                     command)))
     (call-interactively command)))
+
+;;;###autoload
+(defun listify-dabbrev-completion ()
+  "`dabbrev-completion' with `listify-completion-in-region'."
+  (interactive)
+  (let ((completion-in-region-function 'listify-completion-in-region))
+    (call-interactively 'dabbrev-completion)))
 
 (defvar recentf-list)
 

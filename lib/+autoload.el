@@ -75,6 +75,9 @@ it is disabled.
 (autoload 'listify-tab-completion "listify" "\
 Tab completion with `listify-completion-in-region'." t nil)
 
+(autoload 'listify-dabbrev-completion "listify" "\
+`dabbrev-completion' with `listify-completion-in-region'." t nil)
+
 (autoload 'listify-open "listify" "\
 Open buffer or recent file with `listify-read'.
 Open file in current directory if ARG not nil.
