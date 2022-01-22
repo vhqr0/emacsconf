@@ -196,6 +196,7 @@
 (setq ispell-dictionary "american")
 
 
+
 (when (getenv "WSLENV")
   (setq xclip-program "clip.exe"
         xdg-open-program (expand-file-name "bin/wsl-xdg-open" user-emacs-directory)

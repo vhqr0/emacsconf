@@ -16,6 +16,8 @@
   (when file
     (call-process-shell-command (concat xdg-open-program " " file))))
 
+(declare-function dired-get-marked-files "dired")
+
 ;;;###autoload
 (defun dired-do-xdg-open ()
   (interactive)
