@@ -87,7 +87,7 @@
 
 (winner-mode 1)
 
-(global-set-key (kbd "C-x 7") 'rotate-window)
+(global-set-key (kbd "C-x 9") 'rotate-window)
 
 (setq tab-bar-select-tab-modifiers '(control))
 
@@ -179,8 +179,6 @@
 (define-key company-mode-map "\M-o" 'company-complete)
 
 
-
-(global-set-key (kbd "C-x w") 'xclip)
 
 (define-key ctl-x-x-map "o" 'xdg-open)
 
