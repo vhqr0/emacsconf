@@ -697,14 +697,17 @@ Dispatch to `eve-tobj' when there is a ope."
 
 (defun eve-search-repeat (val)
   "Repeat search VAL `isearch-string'."
-  (let ((point (point)))
+  (let ((point (point))
+        (string (if isearch-regexp
+                    isearch-string
+                  (regexp-quote isearch-string))))
     (condition-case nil
         (if isearch-forward
             (progn
               (forward-char)
-              (re-search-forward isearch-string nil nil val)
-              (re-search-backward isearch-string))
-          (re-search-backward isearch-string nil nil val))
+              (re-search-forward string nil nil val)
+              (re-search-backward string))
+          (re-search-backward string nil nil val))
       (search-failed
        (goto-char point)
        (error "Search failed")))))
@@ -841,9 +844,6 @@ Dispatch to `eve-tobj' when there is a ope."
 
 (eve-define-line-motion "gj"
   (eve-jump-goto-regexp "^.\\|^\n"))
-
-(eve-define-exclusive-motion "g/"
-  (eve-jump-goto-regexp isearch-string))
 
 
 

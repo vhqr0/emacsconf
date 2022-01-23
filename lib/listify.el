@@ -18,7 +18,7 @@
   :prefix "listify-"
   :group 'listify)
 
-(defcustom listify-idle-delay 0.15
+(defcustom listify-idle-delay 0.1
   "The idle delay in seconds to update `listify-window'."
   :type 'number)
 
@@ -108,7 +108,7 @@
           (read-from-minibuffer prompt initial-contents listify-map)
         (kill-buffer (window-buffer listify-window))))))
 
-(defun listify-completion-in-region (beg end collection predicate)
+(defun listify-completion-in-region (beg end collection &optional predicate)
   "Completion in region replacement with `listify-read'.
 BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
   (completion-in-region-mode -1)

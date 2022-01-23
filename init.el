@@ -112,6 +112,8 @@
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 (global-set-key (kbd "C-x l") list-misc-prefix-map)
 
 (require 'eve)
@@ -154,17 +156,12 @@
 
 (setq flymake-cc-command '+flymake-cc-command)
 
-(advice-add 'eglot--snippet-expansion-fn :override (lambda () 'yas-expand-snippet))
-
-(add-hook 'eglot-managed-mode-hook 'yas-minor-mode)
-
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
 
 
 
-(setq company-idle-delay 0.15
-      company-dabbrev-downcase nil
+(setq company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
       company-frontends
@@ -177,8 +174,9 @@
             (setq-local company-backends
                         `(company-capf ,@company-backends))))
 
-(add-hook 'prog-mode-hook 'company-mode)
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(global-company-mode 1)
+
+(define-key company-mode-map "\M-o" 'company-complete)
 
 
 
