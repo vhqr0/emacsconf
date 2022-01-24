@@ -121,14 +121,10 @@ View history with `listify-read'." t nil)
 
 \(fn ARG)" t nil)
 
-(autoload 'sp-eshell "simple-plus" "\
+(autoload 'eshell-dwim "simple-plus" "\
 
 
 \(fn ARG)" t nil)
-
-(autoload 'sp-eshell-other-tab "simple-plus" nil t nil)
-
-(register-definition-prefixes "simple-plus" '("sp-eshell-buffer"))
 
 ;;;***
 

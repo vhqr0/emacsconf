@@ -84,14 +84,16 @@
 
 (defvar eshell-buffer-name)
 
-(defun sp-eshell-buffer ()
+;;;###autoload
+(defun eshell-dwim (arg)
+  (interactive "P")
   (require 'eshell)
-  (let ((ctn t)
+  (let ((flag t)
         (directory default-directory)
         (buffer-list (buffer-list))
         (window-list (mapcar 'window-buffer (window-list)))
         buffer)
-    (while (and ctn buffer-list)
+    (while (and flag buffer-list)
       (setq buffer (car buffer-list)
             buffer-list (cdr buffer-list))
       (when (and (eq (with-current-buffer buffer
@@ -99,20 +101,14 @@
                      'eshell-mode)
                  (not (get-buffer-process buffer))
                  (not (member buffer window-list)))
-        (setq ctn nil)))
-    (when ctn
+        (setq flag nil)))
+    (when flag
       (setq buffer (generate-new-buffer eshell-buffer-name)))
     (with-current-buffer buffer
       (setq default-directory directory)
       (widen)
       (goto-char (point-max))
       (eshell-mode))
-    buffer))
-
-;;;###autoload
-(defun sp-eshell (arg)
-  (interactive "P")
-  (let ((buffer (sp-eshell-buffer)))
     (cond ((and (consp arg) (> (prefix-numeric-value arg) 4))
            (switch-to-buffer buffer))
           (arg
@@ -127,10 +123,5 @@
                     (switch-to-buffer buffer))
                    (t
                     (switch-to-buffer-other-window buffer))))))))
-
-;;;###autoload
-(defun sp-eshell-other-tab ()
-  (interactive)
-  (switch-to-buffer-other-tab (sp-eshell-buffer)))
 
 (provide 'simple-plus)

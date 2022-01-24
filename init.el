@@ -89,13 +89,7 @@
 
 (global-set-key (kbd "C-x 9") 'rotate-window)
 
-(setq tab-bar-select-tab-modifiers '(control))
-
-(tab-bar-mode 1)
-
-(global-set-key (kbd "C-x t e") 'sp-eshell-other-tab)
-
-(global-set-key "\M-E" 'sp-eshell)
+(global-set-key "\M-E" 'eshell-dwim)
 
 
 
