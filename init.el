@@ -141,8 +141,8 @@
 (add-hook 'prog-mode-hook 'tab-completion-mode)
 
 (with-eval-after-load 'flymake
-  (define-key flymake-mode-map "\m-n" 'flymake-goto-next-error)
-  (define-key flymake-mode-map "\m-p" 'flymake-goto-prev-error))
+  (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
+  (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
 
 (with-eval-after-load 'flymake-proc
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
