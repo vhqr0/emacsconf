@@ -2,7 +2,6 @@
 (defvar list-misc-prefix-map
   (let ((map (make-sparse-keymap)))
     (define-key map "y" 'list-kill-ring)
-    (define-key map "r" 'list-history)
     (define-key map "m" 'list-global-mark-ring)
     (define-key map "i" 'list-imenu)
     map))
@@ -61,24 +60,6 @@
 (defvar comint-input-ring)
 (defvar eshell-history-ring)
 (declare-function ring-elements "ring")
-
-;;;###autoload
-(defun list-history ()
-  (interactive)
-  (let ((historys (cond ((derived-mode-p 'comint-mode)
-                         comint-input-ring)
-                        ((eq major-mode 'eshell-mode)
-                         eshell-history-ring)
-                        (t
-                         (error "Unknown history type")))))
-    (switch-to-buffer-other-window "*list-history*")
-    (let ((inhibit-read-only t))
-      (erase-buffer)
-      (dolist (history (ring-elements historys))
-        (insert history "\n\n\C-l\n\n"))
-      (set-buffer-modified-p nil)
-      (goto-char (point-min))
-      (list-misc-text-mode))))
 
 ;;;###autoload
 (defun list-global-mark-ring (arg)

@@ -3,6 +3,17 @@
 ;;; Code:
 
 
+;;;### (autoloads nil "cc-util" "cc-util.el" (0 0 0 0))
+;;; Generated autoloads from cc-util.el
+
+(autoload 'cc-util-flymake-cc-command "cc-util" nil nil nil)
+
+(autoload 'cc-util-complete "cc-util" nil t nil)
+
+(register-definition-prefixes "cc-util" '("cc-util-c"))
+
+;;;***
+
 ;;;### (autoloads nil "eve" "eve.el" (0 0 0 0))
 ;;; Generated autoloads from eve.el
 
@@ -26,7 +37,7 @@ for a description of this minor mode.")
 (custom-autoload 'gtags-mode "gtags" nil)
 
 (autoload 'gtags-mode "gtags" "\
-Gtags xref backend enabled mode.
+Gtags completion at point backend and xref backend enabled mode.
 
 This is a minor mode.  If called interactively, toggle the `gtags
 mode' mode.  If the prefix argument is positive, enable the mode,
@@ -51,11 +62,9 @@ it is disabled.
 ;;;### (autoloads nil "list-misc" "list-misc.el" (0 0 0 0))
 ;;; Generated autoloads from list-misc.el
 
-(defvar list-misc-prefix-map (let ((map (make-sparse-keymap))) (define-key map "y" 'list-kill-ring) (define-key map "r" 'list-history) (define-key map "m" 'list-global-mark-ring) (define-key map "i" 'list-imenu) map))
+(defvar list-misc-prefix-map (let ((map (make-sparse-keymap))) (define-key map "y" 'list-kill-ring) (define-key map "m" 'list-global-mark-ring) (define-key map "i" 'list-imenu) map))
 
 (autoload 'list-kill-ring "list-misc" nil t nil)
-
-(autoload 'list-history "list-misc" nil t nil)
 
 (autoload 'list-global-mark-ring "list-misc" "\
 
@@ -127,6 +136,27 @@ View history with `listify-read'." t nil)
 
 
 \(fn ARG)" t nil)
+
+(autoload 'tab-completion-mode "simple-plus" "\
+Tab completion mode.
+
+This is a minor mode.  If called interactively, toggle the
+`Tab-Completion mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `tab-completion-mode'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
+\(fn &optional ARG)" t nil)
+
+(register-definition-prefixes "simple-plus" '("tab-completion-mode-map"))
 
 ;;;***
 

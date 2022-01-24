@@ -138,39 +138,22 @@
 
 (setq xref-search-program 'ripgrep)
 
+(add-hook 'prog-mode-hook 'tab-completion-mode)
+
 (with-eval-after-load 'flymake
-  (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
-  (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
+  (define-key flymake-mode-map "\m-n" 'flymake-goto-next-error)
+  (define-key flymake-mode-map "\m-p" 'flymake-goto-prev-error))
 
 (with-eval-after-load 'flymake-proc
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
 
-(defun +flymake-cc-command ()
-  `("gcc" "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c") "-fsyntax-only" "-"))
+(setq flymake-cc-command 'cc-util-flymake-cc-command)
 
-(setq flymake-cc-command '+flymake-cc-command)
+(with-eval-after-load 'cc-mode
+  (define-key c-mode-base-map (kbd "C-c c") 'cc-util-complete))
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
-
-
-
-(setq company-dabbrev-downcase nil
-      company-dabbrev-ignore-case t
-      company-dabbrev-code-ignore-case t
-      company-frontends
-      '(company-pseudo-tooltip-frontend)
-      company-backends
-      '(company-files company-dabbrev-code company-dabbrev))
-
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (setq-local company-backends
-                        `(company-capf ,@company-backends))))
-
-(global-company-mode 1)
-
-(define-key company-mode-map "\M-o" 'company-complete)
 
 
 
