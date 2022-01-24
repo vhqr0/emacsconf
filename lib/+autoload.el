@@ -16,6 +16,8 @@ Change mode to Vi." t nil)
 ;;;### (autoloads nil "gtags" "gtags.el" (0 0 0 0))
 ;;; Generated autoloads from gtags.el
 
+(defvar gtags-global-program "global")
+
 (defvar gtags-mode nil "\
 Non-nil if gtags mode is enabled.
 See the `gtags-mode' command
@@ -42,7 +44,7 @@ it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(register-definition-prefixes "gtags" '("gtags-"))
+(register-definition-prefixes "gtags" '("gtags--"))
 
 ;;;***
 

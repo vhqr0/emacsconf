@@ -1,6 +1,7 @@
 (require 'xref)
 (require 'cl-lib)
 
+;;;###autoload
 (defvar gtags-global-program "global")
 
 (defun gtags--line-to-xref (line)
@@ -18,9 +19,7 @@
                                  (shell-quote-argument symbol)))))
 
 (cl-defmethod xref-backend-identifier-at-point ((_backend (eql gtags)))
-  (let ((symbol (symbol-at-point)))
-    (when symbol
-      (symbol-name symbol))))
+  (thing-at-point 'symbol))
 
 (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
   (process-lines gtags-global-program "-c"))
@@ -34,18 +33,36 @@
 (cl-defmethod xref-backend-apropos ((_backend (eql gtags)) symbol)
   (gtags--find-symbol symbol "-gixa"))
 
+(defun gtags--completion-at-point-function ()
+  (let ((bounds (bounds-of-thing-at-point 'symbol)))
+    (when bounds
+      (let* ((beg (car bounds))
+             (end (cdr bounds))
+             (prefix (buffer-substring beg end))
+             (flag (if completion-ignore-case "-ci" "-c")))
+        `(,beg ,end ,(process-lines gtags-global-program flag prefix))))))
+
 ;;;###autoload
 (define-minor-mode gtags-mode
-  "Gtags xref backend enabled mode."
+  "Gtags completion at point backend and xref backend enabled mode."
   :global t
   :lighter " gtags"
   :group 'etags)
 
+(defun gtags--enable-p ()
+  (and gtags-mode
+       (zerop (shell-command (concat gtags-global-program " -p")))))
+
 (advice-add 'etags--xref-backend
             :override (lambda ()
-                        (if (and gtags-mode
-                                 (eq 0 (shell-command (concat gtags-global-program " -p"))))
+                        (if (gtags--enable-p)
                             'gtags
                           'etags)))
+
+(advice-add 'tags-completion-at-point-function
+            :around (lambda (func)
+                      (if (gtags--enable-p)
+                          (gtags--completion-at-point-function)
+                        (funcall func))))
 
 (provide 'gtags)
