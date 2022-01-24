@@ -150,7 +150,10 @@
 (setq flymake-cc-command 'cc-util-flymake-cc-command)
 
 (with-eval-after-load 'cc-mode
-  (define-key c-mode-base-map (kbd "C-c c") 'cc-util-complete))
+  (define-key c-mode-base-map (kbd "C-c m") 'flymake-mode)
+  (define-key c-mode-base-map (kbd "C-c c") 'cc-util-complete)
+  (define-key c-mode-base-map (kbd "C-c h") 'cc-util-help)
+  (define-key c-mode-base-map (kbd "C-c f") 'cc-util-format))
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
