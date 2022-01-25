@@ -19,6 +19,14 @@
   (let ((map (make-sparse-keymap)))
     (define-key map "j" "n")
     (define-key map "k" "p")
+    (define-key map "J" '(menu-item "" nil :filter
+                                    (lambda (_)
+                                      (let (eve-jk-mode-map)
+                                        (lookup-key (current-local-map) "j")))))
+    (define-key map "K" '(menu-item "" nil :filter
+                                    (lambda (_)
+                                      (let (eve-jk-mode-map)
+                                        (lookup-key (current-local-map) "k")))))
     (define-key map ":" 'execute-extended-command)
     map))
 
@@ -532,7 +540,7 @@ Dispatch to `eve-tobj' when there is a ope."
   (forward-sexp val))
 
 (eve-define-inclusive-motion "U"
-  (backward-up-list val))
+  (backward-up-list val t t))
 
 (eve-define-exclusive-motion "0"
   (beginning-of-line))
