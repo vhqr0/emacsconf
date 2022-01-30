@@ -47,9 +47,9 @@
 
 (recentf-mode 1)
 
-(save-place-mode 1)
-
 
+
+(setq completion-ignore-case t)
 
 (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
 
@@ -60,8 +60,6 @@
       icomplete-delay-completions-threshold 10)
 
 (icomplete-mode 1)
-
-(savehist-mode 1)
 
 
 
@@ -154,6 +152,13 @@
   (define-key c-mode-base-map (kbd "C-c c") 'cc-util-complete)
   (define-key c-mode-base-map (kbd "C-c h") 'cc-util-help)
   (define-key c-mode-base-map (kbd "C-c f") 'cc-util-format))
+
+(setq company-idle-delay 0
+      company-minimum-prefix-length 2
+      company-backends '(company-capf))
+
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+(add-hook 'eglot--managed-mode-hook 'company-mode)
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
