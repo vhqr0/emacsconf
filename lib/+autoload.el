@@ -10,7 +10,11 @@
 
 (autoload 'cc-util-complete "cc-util" nil t nil)
 
-(register-definition-prefixes "cc-util" '("cc-util-c"))
+(autoload 'cc-util-help "cc-util" nil t nil)
+
+(autoload 'cc-util-format "cc-util" nil t nil)
+
+(register-definition-prefixes "cc-util" '("cc-util-"))
 
 ;;;***
 
@@ -102,61 +106,40 @@ View history with `listify-read'." t nil)
 
 ;;;***
 
-;;;### (autoloads nil "simple-plus" "simple-plus.el" (0 0 0 0))
-;;; Generated autoloads from simple-plus.el
+;;;### (autoloads nil "simple-x" "simple-x.el" (0 0 0 0))
+;;; Generated autoloads from simple-x.el
 
 (defvar xclip-program "xclip -selection clip")
 
-(autoload 'xclip "simple-plus" "\
+(autoload 'xclip "simple-x" "\
 
 
 \(fn BEG END)" t nil)
 
 (defvar xdg-open-program "xdg-open")
 
-(autoload 'xdg-open "simple-plus" "\
+(autoload 'xdg-open "simple-x" "\
 
 
 \(fn &optional FILE)" t nil)
 
-(autoload 'dired-do-xdg-open "simple-plus" nil t nil)
+(autoload 'dired-do-xdg-open "simple-x" nil t nil)
 
 (defvar rg-program "rg")
 
-(autoload 'rg "simple-plus" nil t nil)
+(autoload 'rg "simple-x" nil t nil)
 
-(autoload 'minibuffer-yank-symbol "simple-plus" nil t nil)
+(autoload 'minibuffer-yank-symbol "simple-x" nil t nil)
 
-(autoload 'rotate-window "simple-plus" "\
-
-
-\(fn ARG)" t nil)
-
-(autoload 'eshell-dwim "simple-plus" "\
+(autoload 'rotate-window "simple-x" "\
 
 
 \(fn ARG)" t nil)
 
-(autoload 'tab-completion-mode "simple-plus" "\
-Tab completion mode.
+(autoload 'eshell-dwim "simple-x" "\
 
-This is a minor mode.  If called interactively, toggle the
-`Tab-Completion mode' mode.  If the prefix argument is positive,
-enable the mode, and if it is zero or negative, disable the mode.
 
-If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
-the mode if ARG is nil, omitted, or is a positive number.
-Disable the mode if ARG is a negative number.
-
-To check whether the minor mode is enabled in the current buffer,
-evaluate `tab-completion-mode'.
-
-The mode's hook is called both when the mode is enabled and when
-it is disabled.
-
-\(fn &optional ARG)" t nil)
-
-(register-definition-prefixes "simple-plus" '("tab-completion-mode-map"))
+\(fn ARG)" t nil)
 
 ;;;***
 

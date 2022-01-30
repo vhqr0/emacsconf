@@ -136,8 +136,6 @@
 
 (setq xref-search-program 'ripgrep)
 
-(add-hook 'prog-mode-hook 'tab-completion-mode)
-
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
@@ -152,6 +150,8 @@
   (define-key c-mode-base-map (kbd "C-c c") 'cc-util-complete)
   (define-key c-mode-base-map (kbd "C-c h") 'cc-util-help)
   (define-key c-mode-base-map (kbd "C-c f") 'cc-util-format))
+
+(setq eglot-extend-to-xref t)
 
 (setq company-idle-delay 0
       company-minimum-prefix-length 2

@@ -124,20 +124,4 @@
                    (t
                     (switch-to-buffer-other-window buffer))))))))
 
-(defvar tab-completion-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "\t"
-                '(menu-item "tab completion" nil :filter
-                            (lambda (_)
-                              (unless (or (region-active-p)
-                                          (<= (current-column)
-                                              (current-indentation)))
-                                'completion-at-point))))
-    map))
-
-;;;###autoload
-(define-minor-mode tab-completion-mode
-  "Tab completion mode."
-  :keymap tab-completion-mode-map)
-
-(provide 'simple-plus)
+(provide 'simple-x)
