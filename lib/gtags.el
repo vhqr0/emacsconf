@@ -51,7 +51,7 @@
 
 (defun gtags--enable-p ()
   (and gtags-mode
-       (zerop (shell-command (concat gtags-global-program " -p")))))
+       (locate-dominating-file default-directory "GTAGS")))
 
 (advice-add 'etags--xref-backend
             :override (lambda ()

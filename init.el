@@ -122,14 +122,6 @@
   (define-key eve-vi-mode-map "\C-p" 'listify-open)
   (define-key eve-jk-mode-map "\C-p" 'listify-open))
 
-(define-key minibuffer-local-map "\C-r" 'listify-history)
-
-(with-eval-after-load 'comint
-  (define-key comint-mode-map "\C-r" 'listify-history))
-
-(with-eval-after-load 'em-hist
-  (define-key eshell-hist-mode-map "\C-r" 'listify-history))
-
 
 
 (defalias 'make 'compile)
@@ -144,6 +136,8 @@
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
 
 (setq flymake-cc-command 'cc-util-flymake-cc-command)
+
+(setq cc-util-completion-in-region-function 'listify-completion-in-region)
 
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "C-c m") 'flymake-mode)

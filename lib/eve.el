@@ -1051,7 +1051,7 @@ ARG: (val . ope), dispatched by ope."
 
 (defun eve-setup ()
   "Eve setup."
-  (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode)
+  (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode 'completion-list-mode)
          (eve-jk-mode 1))
         ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode 'diff-mode)
          (eve-change-mode-to-vi))

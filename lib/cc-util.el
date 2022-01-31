@@ -4,7 +4,7 @@
 
 (defvar cc-util-format-command "clang-format")
 
-(defvar cc-util-completion-in-region-function 'listify-completion-in-region)
+(defvar cc-util-completion-in-region-function nil)
 
 ;;;###autoload
 (defun cc-util-flymake-cc-command ()
@@ -51,7 +51,8 @@
 ;;;###autoload
 (defun cc-util-complete ()
   (interactive)
-  (let ((completion-in-region-function cc-util-completion-in-region-function)
+  (let ((completion-in-region-function (or cc-util-completion-in-region-function
+                                           completion-in-region-function))
         (completion-at-point-functions '(cc-util-completion-at-point-function)))
     (completion-at-point)))
 

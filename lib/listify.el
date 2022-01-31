@@ -5,9 +5,6 @@
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
 ;; (global-set-key (kbd "<f5>") 'listify-open)
 ;; (global-set-key (kbd "C-M-/") 'listify-dabbrev-completion)
-;; (define-key minibuffer-local-map "\C-r" 'listify-history)
-;; (define-key comint-mode-map "\C-r" 'listify-history)
-;; (define-key eshell-hist-mode-map "\C-r" 'listify-history)
 
 ;;; Code:
 (require 'subr-x)
@@ -28,8 +25,10 @@
 
 (defvar listify-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-n") 'listify-next)
-    (define-key map (kbd "C-p") 'listify-prev)
+    (define-key map (kbd "C-n") 'listify-next-line)
+    (define-key map (kbd "C-p") 'listify-previous-line)
+    (define-key map (kbd "M-<") 'listify-beginning-of-buffer)
+    (define-key map (kbd "M->") 'listify-end-of-buffer)
     (define-key map (kbd "C-o") 'listify-exit-minibuffer)
     (define-key map (kbd "RET") 'listify-exit-minibuffer)
     (make-composed-keymap map minibuffer-local-map)))
@@ -45,7 +44,7 @@
             (if (string-empty-p query)
                 (let ((count 0)
                       (current listify-collection))
-                  (while (and (< count 50) current)
+                  (while (and (< count (- (window-height) 2)) current)
                     (insert (car current) "\n")
                     (setq count (1+ count)
                           current (cdr current))))
@@ -53,7 +52,7 @@
                 (condition-case nil
                     (let ((count 0)
                           (current listify-collection))
-                      (while (and (< count 50) current)
+                      (while (and (< count (- (window-height) 2)) current)
                         (when (string-match regexp (car current))
                           (let ((match-data (match-data))
                                 (copyed (copy-sequence (car current))))
@@ -67,18 +66,38 @@
             (hl-line-highlight)))
       (cancel-timer listify-timer))))
 
-(defun listify-next ()
+(defun listify-next-line ()
   "Listify next line."
   (interactive)
   (with-selected-window listify-window
-    (forward-line)
+    (unless (= (- (window-height) 2) (line-number-at-pos))
+      (forward-line))
+    (when (= (point) (point-max))
+      (forward-line -1))
     (hl-line-highlight)))
 
-(defun listify-prev ()
+(defun listify-previous-line ()
   "Listify previous line."
   (interactive)
   (with-selected-window listify-window
     (forward-line -1)
+    (hl-line-highlight)))
+
+(defun listify-beginning-of-buffer ()
+  "Listify beginning of buffer."
+  (interactive)
+  (with-selected-window listify-window
+    (goto-char (point-min))
+    (hl-line-highlight)))
+
+(defun listify-end-of-buffer ()
+  "Listify end of buffer."
+  (interactive)
+  (with-selected-window listify-window
+    (goto-char (point-min))
+    (forward-line (- (window-height) 3))
+    (when (= (point) (point-max))
+      (forward-line -1))
     (hl-line-highlight)))
 
 (defun listify-exit-minibuffer ()
@@ -98,7 +117,8 @@
             (with-selected-window (if (window-minibuffer-p)
                                       (minibuffer-selected-window)
                                     (selected-window))
-              (switch-to-buffer-other-window "*listify*")
+              (select-window (split-window))
+              (switch-to-buffer "*listify*")
               (setq truncate-lines t)
               (hl-line-mode 1)
               (selected-window))))
@@ -111,7 +131,8 @@
 (defun listify-completion-in-region (beg end collection &optional predicate)
   "Completion in region replacement with `listify-read'.
 BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
-  (completion-in-region-mode -1)
+  (when completion-in-region-mode
+    (completion-in-region-mode -1))
   (let* ((enable-recursive-minibuffers t)
          (prefix (buffer-substring beg end))
          (boundary (+ beg (car (completion-boundaries
@@ -127,11 +148,14 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
       (insert (substring-no-properties choice)))))
 
 ;;;###autoload
-(defun listify-tab-completion ()
+(defun listify-tab-completion (arg)
   "Tab completion with `listify-completion-in-region'."
-  (interactive)
+  (interactive "P")
   (let* ((completion-in-region-function 'listify-completion-in-region)
-         (command (lookup-key `(,(current-local-map) ,(current-global-map)) (kbd "TAB")))
+         (command (lookup-key `(,(current-local-map) ,(current-global-map))
+                              (if arg
+                                  (read-key-sequence-vector "command: ")
+                                (kbd "TAB"))))
          (command (if (memq command '(indent-for-tab-command c-indent-line-or-region))
                       'completion-at-point
                     command)))
@@ -152,7 +176,7 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
 ;;;###autoload
 (defun listify-open (arg)
   "Open buffer or recent file with `listify-read'.
-Open file in current directory if ARG not nil."
+Open file in current project if ARG not nil."
   (interactive "P")
   (if arg
       (let* ((default-directory (if (> (prefix-numeric-value arg) 4)
@@ -178,40 +202,6 @@ Open file in current directory if ARG not nil."
           (if (eq last-command-event ?\C-m)
               (find-file choice)
             (find-file-other-window choice)))))))
-
-(defvar comint-input-ring)
-(defvar eshell-history-ring)
-(declare-function eshell-bol "esh-mode")
-(declare-function ring-elements "ring")
-
-;;;###autoload
-(defun listify-history ()
-  "View history with `listify-read'."
-  (interactive)
-  (let ((enable-recursive-minibuffers t)
-        beg end historys)
-    (cond ((window-minibuffer-p)
-           (setq beg (line-beginning-position)
-                 end (line-end-position)
-                 historys (minibuffer-history-value)))
-          ((derived-mode-p 'comint-mode)
-           (setq beg (line-beginning-position)
-                 end (line-end-position)
-                 historys (ring-elements comint-input-ring)))
-          ((eq major-mode 'eshell-mode)
-           (setq beg (save-excursion
-                       (eshell-bol)
-                       (point))
-                 end (line-end-position)
-                 historys (ring-elements eshell-history-ring)))
-          (t
-           (error "Unknown history type")))
-    (let ((history (listify-read "history: "
-                                 (delete-dups historys)
-                                 (buffer-substring beg end))))
-      (when history
-        (delete-region beg end)
-        (insert history)))))
 
 (provide 'listify)
 ;;; listify.el ends here
