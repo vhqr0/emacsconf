@@ -63,27 +63,6 @@ it is disabled.
 
 ;;;***
 
-;;;### (autoloads nil "list-misc" "list-misc.el" (0 0 0 0))
-;;; Generated autoloads from list-misc.el
-
-(defvar list-misc-prefix-map (let ((map (make-sparse-keymap))) (define-key map "y" 'list-kill-ring) (define-key map "m" 'list-global-mark-ring) (define-key map "i" 'list-imenu) map))
-
-(autoload 'list-kill-ring "list-misc" nil t nil)
-
-(autoload 'list-global-mark-ring "list-misc" "\
-
-
-\(fn ARG)" t nil)
-
-(autoload 'list-imenu "list-misc" "\
-
-
-\(fn ARG)" t nil)
-
-(register-definition-prefixes "list-misc" '("list-"))
-
-;;;***
-
 ;;;### (autoloads nil "listify" "listify.el" (0 0 0 0))
 ;;; Generated autoloads from listify.el
 
@@ -112,34 +91,54 @@ View history with `listify-read'." t nil)
 (defvar xclip-program "xclip -selection clip")
 
 (autoload 'xclip "simple-x" "\
-
+Xclip wrap for copy regin (BEG . END).
 
 \(fn BEG END)" t nil)
 
 (defvar xdg-open-program "xdg-open")
 
 (autoload 'xdg-open "simple-x" "\
-
+Xdg wrap for open FILE or current file if called interactively.
 
 \(fn &optional FILE)" t nil)
 
-(autoload 'dired-do-xdg-open "simple-x" nil t nil)
+(autoload 'dired-do-xdg-open "simple-x" "\
+`xdg-open' files in Dired." t nil)
 
 (defvar rg-program "rg")
 
-(autoload 'rg "simple-x" nil t nil)
+(autoload 'rg "simple-x" "\
+Ripgrep wrap for `grep-mode'." t nil)
 
-(autoload 'minibuffer-yank-symbol "simple-x" nil t nil)
+(autoload 'minibuffer-yank-symbol "simple-x" "\
+Yank current symbol to minibuffer." t nil)
 
 (autoload 'rotate-window "simple-x" "\
-
+Rotate current window or swap it if called with prefix ARG.
 
 \(fn ARG)" t nil)
 
 (autoload 'eshell-dwim "simple-x" "\
-
+Eshell in new window or other window if called with prefix ARG.
 
 \(fn ARG)" t nil)
+
+(defvar list-misc-prefix-map (let ((map (make-sparse-keymap))) (define-key map "y" 'list-kill-ring) (define-key map "m" 'list-global-mark-ring) (define-key map "i" 'list-imenu) map))
+
+(autoload 'list-kill-ring "simple-x" "\
+List `kill-ring'." t nil)
+
+(autoload 'list-global-mark-ring "simple-x" "\
+List `global-mark-ring' and `mark-ring' if called with prefix ARG.
+
+\(fn ARG)" t nil)
+
+(autoload 'list-imenu "simple-x" "\
+List imenu, force rescan if called with prefix ARG.
+
+\(fn ARG)" t nil)
+
+(register-definition-prefixes "simple-x" '("list-"))
 
 ;;;***
 
