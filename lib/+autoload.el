@@ -3,44 +3,23 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "cc-util" "cc-util.el" (0 0 0 0))
-;;; Generated autoloads from cc-util.el
+;;;### (autoloads nil "cc-x" "cc-x.el" (0 0 0 0))
+;;; Generated autoloads from cc-x.el
 
-(autoload 'cc-util-flymake-cc-command "cc-util" nil nil nil)
+(autoload 'cc-x-flymake-cc-command "cc-x" nil nil nil)
 
-(autoload 'cc-util-complete "cc-util" nil t nil)
+(autoload 'cc-help "cc-x" nil t nil)
 
-(autoload 'cc-util-help "cc-util" nil t nil)
-
-(autoload 'cc-util-format "cc-util" nil t nil)
-
-(register-definition-prefixes "cc-util" '("cc-util-"))
-
-;;;***
-
-;;;### (autoloads nil "eve" "eve.el" (0 0 0 0))
-;;; Generated autoloads from eve.el
-
-(autoload 'eve-change-mode-to-vi "eve" "\
-Change mode to Vi." t nil)
-
-(register-definition-prefixes "eve" '("eve-"))
-
-;;;***
-
-;;;### (autoloads nil "gtags" "gtags.el" (0 0 0 0))
-;;; Generated autoloads from gtags.el
-
-(defvar gtags-global-program "global")
+(autoload 'cc-format "cc-x" nil t nil)
 
 (defvar gtags-mode nil "\
 Non-nil if gtags mode is enabled.
 See the `gtags-mode' command
 for a description of this minor mode.")
 
-(custom-autoload 'gtags-mode "gtags" nil)
+(custom-autoload 'gtags-mode "cc-x" nil)
 
-(autoload 'gtags-mode "gtags" "\
+(autoload 'gtags-mode "cc-x" "\
 Gtags completion at point backend and xref backend enabled mode.
 
 This is a minor mode.  If called interactively, toggle the `gtags
@@ -59,7 +38,19 @@ it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(register-definition-prefixes "gtags" '("gtags--"))
+(put 'gtags-mode 'safe-local-variable 'booleanp)
+
+(register-definition-prefixes "cc-x" '("cc-" "global-" "gtags-"))
+
+;;;***
+
+;;;### (autoloads nil "eve" "eve.el" (0 0 0 0))
+;;; Generated autoloads from eve.el
+
+(autoload 'eve-change-mode-to-vi "eve" "\
+Change mode to Vi." t nil)
+
+(register-definition-prefixes "eve" '("eve-"))
 
 ;;;***
 

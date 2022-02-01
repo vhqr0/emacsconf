@@ -135,15 +135,12 @@
 (with-eval-after-load 'flymake-proc
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
 
-(setq flymake-cc-command 'cc-util-flymake-cc-command)
-
-(setq cc-util-completion-in-region-function 'listify-completion-in-region)
+(setq flymake-cc-command 'cc-x-flymake-cc-command)
 
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "C-c m") 'flymake-mode)
-  (define-key c-mode-base-map (kbd "C-c c") 'cc-util-complete)
-  (define-key c-mode-base-map (kbd "C-c h") 'cc-util-help)
-  (define-key c-mode-base-map (kbd "C-c f") 'cc-util-format))
+  (define-key c-mode-base-map (kbd "C-c h") 'cc-help)
+  (define-key c-mode-base-map (kbd "C-c f") 'cc-format))
 
 (setq eglot-extend-to-xref t)
 
