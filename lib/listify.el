@@ -131,8 +131,7 @@
 (defun listify-completion-in-region (beg end collection &optional predicate)
   "Completion in region replacement with `listify-read'.
 BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
-  (when completion-in-region-mode
-    (completion-in-region-mode -1))
+  (completion-in-region-mode -1)
   (let* ((enable-recursive-minibuffers t)
          (prefix (buffer-substring beg end))
          (boundary (+ beg (car (completion-boundaries
