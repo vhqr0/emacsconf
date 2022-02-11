@@ -17,9 +17,12 @@
 
 (setq visible-bell t)
 
-(setq inhibit-splash-screen t)
+(setq inhibit-startup-screen t
+      initial-scratch-message ";;; -*- lexical-binding: t -*-\n\n")
 
 (blink-cursor-mode -1)
+
+(menu-bar-mode -1)
 
 (xterm-mouse-mode 1)
 (mouse-wheel-mode 1)

@@ -145,7 +145,7 @@
           '(?V ?M ?B ?N ?Z)
           '(?$ ?& ?% ?^ ?!)
           '(?' ?` ?\[ ?\] ?\\ ?- ?=))
-  "Char used by `eve-gj', `eve-gw', `eve-gf'.")
+  "Char used by `eve-gj', `eve-gw', `eve-gf', `eve-gt'.")
 
 (defvar eve-jump-backward-chars
   (append '(?d ?k ?s ?l ?\;)
@@ -157,7 +157,7 @@
           '(?C ?< ?X ?> ??)
           '(?# ?* ?@ ?\( ?\))
           '(?\" ?~ ?\{ ?\} ?| ?_ ?+))
-  "Char used by `eve-gj', `eve-gw', `eve-gf'.")
+  "Char used by `eve-gj', `eve-gw', `eve-gf', `eve-gt'.")
 
 (defvar-local eve-jump-forward-overlays nil
   "Eve jump current overlays.")
@@ -166,7 +166,7 @@
   "Eve jump current overlays.")
 
 (defvar eve-jump-last ?$
-  "Last search char of `eve-gf'.")
+  "Last search char of `eve-gf', `eve-gt'.")
 
 (defvar eve-surround-alist
   '((?b . (?\( . ?\)))
@@ -849,7 +849,12 @@ Dispatch to `eve-tobj' when there is a ope."
         (setq eve-jump-forward-overlays nil
               eve-jump-backward-overlays nil)))))
 
-(eve-define-exclusive-motion "gf"
+(eve-define-inclusive-motion "gf"
+  (unless eve-repeat-flag
+    (setq eve-jump-last (read-char)))
+  (eve-jump-goto-regexp (regexp-quote (char-to-string eve-jump-last))))
+
+(eve-define-exclusive-motion "gt"
   (unless eve-repeat-flag
     (setq eve-jump-last (read-char)))
   (eve-jump-goto-regexp (regexp-quote (char-to-string eve-jump-last))))
