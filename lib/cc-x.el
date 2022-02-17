@@ -3,8 +3,6 @@
 
 (defvar cc-command '("clang"))
 
-(defvar cc-format-program "clang-format")
-
 (defvar global-program "global")
 
 ;;;###autoload
@@ -46,15 +44,6 @@
       (goto-char (point-min))
       (special-mode))
     (display-buffer buffer)))
-
-;;;###autoload
-(defun cc-format ()
-  (interactive)
-  (let ((row (line-number-at-pos))
-        (col (current-column)))
-    (shell-command-on-region (point-min) (point-max) cc-format-program nil t)
-    (forward-line (1- row))
-    (forward-char (min col (- (line-end-position) (line-beginning-position))))))
 
 (defun global-line-to-xref (line)
   (when (string-match "^\\([^ \t]+\\)[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)" line)

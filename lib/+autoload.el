@@ -10,8 +10,6 @@
 
 (autoload 'cc-help "cc-x" nil t nil)
 
-(autoload 'cc-format "cc-x" nil t nil)
-
 (defvar gtags-mode nil "\
 Non-nil if gtags mode is enabled.
 See the `gtags-mode' command
@@ -40,7 +38,7 @@ it is disabled.
 
 (put 'gtags-mode 'safe-local-variable 'booleanp)
 
-(register-definition-prefixes "cc-x" '("cc-" "global-" "gtags-"))
+(register-definition-prefixes "cc-x" '("cc-command" "global-" "gtags-"))
 
 ;;;***
 
@@ -80,7 +78,7 @@ Open file in current project if ARG not nil.
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "list-" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "formater" "list-" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

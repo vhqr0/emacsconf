@@ -139,8 +139,7 @@
 
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "C-c m") 'flymake-mode)
-  (define-key c-mode-base-map (kbd "C-c h") 'cc-help)
-  (define-key c-mode-base-map (kbd "C-c f") 'cc-format))
+  (define-key c-mode-base-map (kbd "C-c h") 'cc-help))
 
 (setq eglot-extend-to-xref t)
 
