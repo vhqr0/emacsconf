@@ -40,6 +40,7 @@
       kept-old-versions 10
       kept-new-versions 10
       delete-old-versions t
+      backup-by-copying t
       backup-directory-alist '(("." . "~/.bak"))
       auto-save-file-name-transforms '((".*" "~/.bak/" t))
       lock-file-name-transforms '((".*" "~/.bak/" t)))
@@ -55,8 +56,6 @@
 
 
 (setq completion-ignore-case t)
-
-(define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
 
 (define-key minibuffer-local-completion-map "\s" "-")
 
@@ -90,10 +89,6 @@
 
 (winner-mode 1)
 
-(global-set-key (kbd "C-x 9") 'rotate-window)
-
-(global-set-key "\M-E" 'eshell-dwim)
-
 
 
 (setq isearch-lazy-count t
@@ -111,7 +106,7 @@
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-(global-set-key (kbd "C-x l") list-misc-prefix-map)
+(simple-x-default-keybindings)
 
 (require 'eve)
 
@@ -161,12 +156,7 @@
 
 
 
-(define-key ctl-x-x-map "o" 'xdg-open)
-
 (setq dired-listing-switches "-alh")
-
-(with-eval-after-load 'dired
-  (define-key dired-mode-map "V" 'dired-do-xdg-open))
 
 (setq wgrep-auto-save-buffer t
       wgrep-change-readonly-file t)

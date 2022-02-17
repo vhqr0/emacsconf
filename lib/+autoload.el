@@ -78,57 +78,9 @@ Open file in current project if ARG not nil.
 ;;;### (autoloads nil "simple-x" "simple-x.el" (0 0 0 0))
 ;;; Generated autoloads from simple-x.el
 
-(defvar xclip-program "xclip -selection clip")
+(autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(autoload 'xclip "simple-x" "\
-Xclip wrap for copy regin (BEG . END).
-
-\(fn BEG END)" t nil)
-
-(defvar xdg-open-program "xdg-open")
-
-(autoload 'xdg-open "simple-x" "\
-Xdg wrap for open FILE or current file if called interactively.
-
-\(fn &optional FILE)" t nil)
-
-(autoload 'dired-do-xdg-open "simple-x" "\
-`xdg-open' files in Dired." t nil)
-
-(defvar rg-program "rg")
-
-(autoload 'rg "simple-x" "\
-Ripgrep wrap for `grep-mode'." t nil)
-
-(autoload 'minibuffer-yank-symbol "simple-x" "\
-Yank current symbol to minibuffer." t nil)
-
-(autoload 'rotate-window "simple-x" "\
-Rotate current window or swap it if called with prefix ARG.
-
-\(fn ARG)" t nil)
-
-(autoload 'eshell-dwim "simple-x" "\
-Eshell in new window or other window if called with prefix ARG.
-
-\(fn ARG)" t nil)
-
-(defvar list-misc-prefix-map (let ((map (make-sparse-keymap))) (define-key map "y" 'list-kill-ring) (define-key map "m" 'list-global-mark-ring) (define-key map "i" 'list-imenu) map))
-
-(autoload 'list-kill-ring "simple-x" "\
-List `kill-ring'." t nil)
-
-(autoload 'list-global-mark-ring "simple-x" "\
-List `global-mark-ring' and `mark-ring' if called with prefix ARG.
-
-\(fn ARG)" t nil)
-
-(autoload 'list-imenu "simple-x" "\
-List imenu, force rescan if called with prefix ARG.
-
-\(fn ARG)" t nil)
-
-(register-definition-prefixes "simple-x" '("list-"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "list-" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

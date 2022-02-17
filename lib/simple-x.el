@@ -10,20 +10,16 @@
 
 ;; some linux tools wrap
 
-;;;###autoload
 (defvar xclip-program "xclip -selection clip")
 
-;;;###autoload
 (defun xclip (beg end)
   "Xclip wrap for copy regin (BEG . END)."
   (interactive "r")
   (call-shell-region beg end xclip-program)
   (deactivate-mark))
 
-;;;###autoload
 (defvar xdg-open-program "xdg-open")
 
-;;;###autoload
 (defun xdg-open (&optional file)
   "Xdg wrap for open FILE or current file if called interactively."
   (interactive `(,(or buffer-file-name default-directory)))
@@ -32,7 +28,6 @@
 
 (declare-function dired-get-marked-files "dired")
 
-;;;###autoload
 (defun dired-do-xdg-open ()
   "`xdg-open' files in Dired."
   (interactive)
@@ -41,10 +36,8 @@
 
 (declare-function grep--save-buffers "grep")
 
-;;;###autoload
 (defvar rg-program "rg")
 
-;;;###autoload
 (defun rg ()
   "Ripgrep wrap for `grep-mode'."
   (interactive)
@@ -60,7 +53,6 @@
 
 ;; the missing commands
 
-;;;###autoload
 (defun minibuffer-yank-symbol ()
   "Yank current symbol to minibuffer."
   (interactive)
@@ -70,7 +62,6 @@
       (when symbol
         (insert symbol)))))
 
-;;;###autoload
 (defun rotate-window (arg)
   "Rotate current window or swap it if called with prefix ARG."
   (interactive "P")
@@ -106,7 +97,6 @@
 
 (defvar eshell-buffer-name)
 
-;;;###autoload
 (defun eshell-dwim (arg)
   "Eshell in new window or other window if called with prefix ARG."
   (interactive "P")
@@ -122,6 +112,7 @@
       (when (and (eq (with-current-buffer buffer
                        major-mode)
                      'eshell-mode)
+                 (string-prefix-p eshell-buffer-name (buffer-name buffer))
                  (not (get-buffer-process buffer))
                  (not (member buffer window-list)))
         (setq flag nil)))
@@ -151,7 +142,6 @@
 
 ;; some list commands
 
-;;;###autoload
 (defvar list-misc-prefix-map
   (let ((map (make-sparse-keymap)))
     (define-key map "y" 'list-kill-ring)
@@ -201,7 +191,6 @@
       (switch-to-buffer-other-window (marker-buffer pos))
       (goto-char pos))))
 
-;;;###autoload
 (defun list-kill-ring ()
   "List `kill-ring'."
   (interactive)
@@ -214,7 +203,6 @@
   (goto-char (point-min))
   (list-misc-text-mode))
 
-;;;###autoload
 (defun list-global-mark-ring (arg)
   "List `global-mark-ring' and `mark-ring' if called with prefix ARG."
   (interactive "P")
@@ -234,7 +222,8 @@
                                         (with-current-buffer buffer
                                           (save-excursion
                                             (goto-char mark)
-                                            (buffer-substring (line-beginning-position) (line-end-position))))
+                                            (buffer-substring (line-beginning-position)
+                                                              (line-end-position))))
                                         "\n")
                                 :pos mark)))))
       (set-buffer-modified-p nil)
@@ -269,7 +258,6 @@
                                   (t
                                    pos))))))))
 
-;;;###autoload
 (defun list-imenu (arg)
   "List imenu, force rescan if called with prefix ARG."
   (interactive "P")
@@ -284,6 +272,18 @@
     (set-buffer-modified-p nil)
     (goto-char (point-min))
     (list-misc-mark-mode)))
+
+(defvar dired-mode-map)
+
+;;;###autoload
+(defun simple-x-default-keybindings ()
+  (define-key ctl-x-x-map "o" 'xdg-open)
+  (with-eval-after-load 'dired
+    (define-key dired-mode-map "V" 'dired-do-xdg-open))
+  (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
+  (global-set-key (kbd "C-x 9") 'rotate-window)
+  (global-set-key "\M-E" 'eshell-dwim)
+  (global-set-key (kbd "C-x l") list-misc-prefix-map))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here
