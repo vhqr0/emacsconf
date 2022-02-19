@@ -57,17 +57,21 @@
 (defun formater ()
   (interactive)
   (let ((program (cdr (assq major-mode formater-program-alist))))
-    (when program
-      (let ((row (line-number-at-pos))
-            (col (current-column))
-            (beg (if (use-region-p) (region-beginning) (point-min)))
-            (end (if (use-region-p) (region-end) (point-max))))
-        (shell-command-on-region beg end program nil t)
-        (goto-char (point-min))
-        (forward-line (1- row))
-        (forward-char (min col
-                           (- (line-end-position)
-                              (line-beginning-position))))))))
+    (if program
+        (let ((row (line-number-at-pos))
+              (col (current-column))
+              (beg (if (use-region-p) (region-beginning) (point-min)))
+              (end (if (use-region-p) (region-end) (point-max))))
+          (shell-command-on-region beg end program nil t)
+          (goto-char (point-min))
+          (forward-line (1- row))
+          (forward-char (min col
+                             (- (line-end-position)
+                                (line-beginning-position)))))
+      (delete-trailing-whitespace (if (use-region-p) (region-beginning) (point-min))
+                                  (if (use-region-p) (region-end) (point-max)))
+      (indent-region (if (use-region-p) (region-beginning) (point-min))
+                     (if (use-region-p) (region-end) (point-max))))))
 
 
 
@@ -300,7 +304,7 @@
   (define-key ctl-x-x-map "o" 'xdg-open)
   (with-eval-after-load 'dired
     (define-key dired-mode-map "V" 'dired-do-xdg-open))
-  (global-set-key (kbd "C-c f") 'formater)
+  (define-key ctl-x-x-map "=" 'formater)
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
   (global-set-key (kbd "C-x 9") 'rotate-window)
   (global-set-key "\M-E" 'eshell-dwim)

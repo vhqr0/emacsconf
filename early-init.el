@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
-(setq byte-compile-docstring-max-column 65536)
+(setq load-prefer-newer t
+      byte-compile-docstring-max-column 65536)
 
 (let ((alist file-name-handler-alist))
   (setq file-name-handler-alist nil)
@@ -13,6 +14,6 @@
 (add-hook 'after-init-hook
           (lambda ()
             (setq gc-cons-percentage 0.1
-                  gc-cons-threshold 20000000)))
+                  gc-cons-threshold 2000000)))
 
 (setq package-enable-at-startup nil)
