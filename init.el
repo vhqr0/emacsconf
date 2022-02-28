@@ -34,6 +34,7 @@
 (defalias 'w 'save-buffer)
 
 (setq confirm-kill-emacs 'y-or-n-p
+      auto-revert-check-vc-info t
       vc-handled-backends '(Git)
       vc-make-backup-files t
       version-control t
