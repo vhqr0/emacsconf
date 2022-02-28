@@ -60,12 +60,12 @@
     (define-key map "D" "d$")
     (define-key map "Y" "y$")
     (define-key map "J" "j\M-^")
-    
+
     (define-key map "u" 'undo)
     (define-key map "m" 'point-to-register)
     (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
-    
+
     map)
   "Eve vi mode map.")
 
@@ -123,14 +123,24 @@
 (defvar eve-operator-inline-alist nil
   "Alist of operator char which operator operate on inner range.")
 
+(put 'eve-unnarrowed-buffer 'beginning-op
+     (lambda ()
+       (widen)
+       (goto-char (point-min))))
+
+(put 'eve-unnarrowed-buffer 'end-op
+     (lambda ()
+       (goto-char (point-max))))
+
 (defvar eve-tobj-alist
   '((?w . word)
     (?W . sexp)
+    (?s . string)
     (?f . defun)
     (?p . paragraph)
     (?P . page)
     (?h . buffer)
-    (?b . pair))
+    (?H . eve-unnarrowed-buffer))
   "Alist of text object.")
 
 (defvar eve-tobj-last nil
