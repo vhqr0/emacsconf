@@ -87,6 +87,18 @@
 (defvar eve-setup t
   "Wether setup eve.")
 
+(defvar eve-setup-jk-modes
+  '(special-mode compilation-mode dired-mode completion-list-mode)
+  "Eve JK mode enabled modes.")
+
+(defvar eve-setup-vi-modes
+  '(prog-mode text-mode fundamental-mode hexl-mode diff-mode)
+  "Eve Vi mode enabled modes.")
+
+(defvar eve-setup-insert-modes
+  '(comint-mode eshell-mode)
+  "Eve Insert mode enabled modes.")
+
 (defvar-local eve-exec-last nil
   "Last (move val ope) used by `eve-.'.")
 
@@ -1056,11 +1068,11 @@ ARG: (val . ope), dispatched by ope."
 
 (defun eve-setup ()
   "Eve setup."
-  (cond ((derived-mode-p 'special-mode 'compilation-mode 'dired-mode 'completion-list-mode)
+  (cond ((apply 'derived-mode-p eve-setup-jk-modes)
          (eve-jk-mode 1))
-        ((derived-mode-p 'prog-mode 'text-mode 'fundamental-mode 'diff-mode)
+        ((apply 'derived-mode-p eve-setup-vi-modes)
          (eve-change-mode-to-vi))
-        ((derived-mode-p 'comint-mode 'eshell-mode)
+        ((apply 'derived-mode-p eve-setup-insert-modes)
          (eve-change-mode-to-insert))))
 
 (when eve-setup

@@ -49,6 +49,10 @@
 
 (auto-save-visited-mode 1)
 
+(add-hook 'hexl-mode-hook
+          (lambda ()
+            (setq-local auto-save-visited-mode nil)))
+
 (setq recentf-max-saved-items 200)
 
 (recentf-mode 1)
