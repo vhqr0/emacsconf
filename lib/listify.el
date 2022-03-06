@@ -3,8 +3,6 @@
 ;;; Commentary:
 ;; Add this code to your init file:
 ;; (global-set-key (kbd "<f2>") 'listify-tab-completion)
-;; (global-set-key (kbd "<f5>") 'listify-open)
-;; (global-set-key (kbd "C-M-/") 'listify-dabbrev-completion)
 
 ;;; Code:
 (require 'subr-x)
@@ -159,48 +157,6 @@ BEG, END, COLLECTION, PREDICATE see `completion-in-region-function'."
                       'completion-at-point
                     command)))
     (call-interactively command)))
-
-(defvar dabbrev-case-replace)
-
-;;;###autoload
-(defun listify-dabbrev-completion ()
-  "`dabbrev-completion' with `listify-completion-in-region'."
-  (interactive)
-  (let ((dabbrev-case-replace nil)
-        (completion-in-region-function 'listify-completion-in-region))
-    (call-interactively 'dabbrev-completion)))
-
-(defvar recentf-list)
-
-;;;###autoload
-(defun listify-open (arg)
-  "Open buffer or recent file with `listify-read'.
-Open file in current project if ARG not nil."
-  (interactive "P")
-  (if arg
-      (let* ((default-directory (if (> (prefix-numeric-value arg) 4)
-                                    default-directory
-                                  (or (cdr (project-current)) default-directory)))
-             (choice (listify-read "open: "
-                                   (split-string (shell-command-to-string "rg --files")))))
-        (when choice
-          (if (eq last-command-event ?\C-m)
-              (find-file choice)
-            (find-file-other-window choice))))
-    (require 'recentf)
-    (let* ((buffers (seq-filter
-                     (lambda (x)
-                       (not (= (aref x 0) ?\s)))
-                     (mapcar 'buffer-name (buffer-list))))
-           (choice (listify-read "open: " (append buffers recentf-list))))
-      (when choice
-        (if (member choice buffers)
-            (if (eq last-command-event ?\C-m)
-                (switch-to-buffer choice)
-              (switch-to-buffer-other-window choice))
-          (if (eq last-command-event ?\C-m)
-              (find-file choice)
-            (find-file-other-window choice)))))))
 
 (provide 'listify)
 ;;; listify.el ends here

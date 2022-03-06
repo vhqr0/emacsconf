@@ -60,15 +60,6 @@ Tab completion with `listify-completion-in-region'.
 
 \(fn ARG)" t nil)
 
-(autoload 'listify-dabbrev-completion "listify" "\
-`dabbrev-completion' with `listify-completion-in-region'." t nil)
-
-(autoload 'listify-open "listify" "\
-Open buffer or recent file with `listify-read'.
-Open file in current project if ARG not nil.
-
-\(fn ARG)" t nil)
-
 (register-definition-prefixes "listify" '("listify-"))
 
 ;;;***

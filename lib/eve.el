@@ -15,6 +15,8 @@
 
 
 
+(defvar eve-leader-map (make-sparse-keymap))
+
 (defvar eve-jk-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "j" "n")
@@ -28,6 +30,7 @@
                                       (let (eve-jk-mode-map)
                                         (lookup-key (current-local-map) "k")))))
     (define-key map ":" 'execute-extended-command)
+    (define-key map "\\" eve-leader-map)
     map))
 
 (defvar eve-insert-mode-map
@@ -66,6 +69,7 @@
     (define-key map "v" 'set-mark-command)
     (define-key map ":" 'execute-extended-command)
 
+    (define-key map "\\" eve-leader-map)
     map)
   "Eve vi mode map.")
 

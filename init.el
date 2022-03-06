@@ -70,6 +70,15 @@
 
 (icomplete-mode 1)
 
+(global-set-key (kbd "<f2>") 'listify-tab-completion)
+
+(advice-add 'ivy-read :around
+            (lambda (func &rest args)
+              (let ((icomplete-mode nil))
+                (apply func args))))
+
+(setq completion-in-region-function 'ivy-completion-in-region)
+
 
 
 (setq-default indent-tabs-mode nil)
@@ -117,15 +126,32 @@
 
 
 
-(global-set-key (kbd "C-M-/") 'listify-dabbrev-completion)
-(global-set-key (kbd "C-M-_") 'listify-dabbrev-completion)
+(setq ivy-use-virtual-buffers t)
 
-(global-set-key (kbd "<f2>") 'listify-tab-completion)
-(global-set-key (kbd "<f5>") 'listify-open)
+(global-set-key (kbd "C-M-_") 'dabbrev-completion)
 
-(with-eval-after-load 'eve
-  (define-key eve-vi-mode-map "\C-p" 'listify-open)
-  (define-key eve-jk-mode-map "\C-p" 'listify-open))
+(define-key eve-jk-mode-map "\C-p" 'ivy-switch-buffer)
+(define-key eve-vi-mode-map "\C-p" 'ivy-switch-buffer)
+
+(define-key eve-leader-map "." 'ivy-resume)
+(define-key eve-leader-map "b" 'ivy-switch-buffer)
+(define-key eve-leader-map "f" 'counsel-find-file)
+(define-key eve-leader-map "s" 'swiper)
+(define-key eve-leader-map "/" 'swiper-from-isearch)
+(define-key eve-leader-map "g" 'counsel-rg)
+(define-key eve-leader-map "i" 'counsel-imenu)
+(define-key eve-leader-map "x" 'counsel-M-x)
+(define-key eve-leader-map "y" 'counsel-yank-pop)
+(define-key eve-leader-map "m" 'counsel-mark-ring)
+(define-key eve-leader-map "r" 'counsel-register)
+
+(define-key eve-leader-map "hb" 'counsel-descbinds)
+(define-key eve-leader-map "hf" 'counsel-describe-function)
+(define-key eve-leader-map "hv" 'counsel-describe-variable)
+(define-key eve-leader-map "ho" 'counsel-describe-symbol)
+(define-key eve-leader-map "hs" 'counsel-info-lookup-symbol)
+(define-key eve-leader-map "hl" 'counsel-find-library)
+(define-key eve-leader-map "ht" 'counsel-load-theme)
 
 
 
