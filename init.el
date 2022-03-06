@@ -74,8 +74,10 @@
 
 (advice-add 'ivy-read :around
             (lambda (func &rest args)
-              (let ((icomplete-mode nil))
+              (let (icomplete-mode)
                 (apply func args))))
+
+(setq ivy-display-functions-alist '((t)))
 
 (setq completion-in-region-function 'ivy-completion-in-region)
 
@@ -136,6 +138,7 @@
 (define-key eve-leader-map "." 'ivy-resume)
 (define-key eve-leader-map "b" 'ivy-switch-buffer)
 (define-key eve-leader-map "f" 'counsel-find-file)
+(define-key eve-leader-map "p" 'counsel-git)
 (define-key eve-leader-map "s" 'swiper)
 (define-key eve-leader-map "/" 'swiper-from-isearch)
 (define-key eve-leader-map "g" 'counsel-rg)
