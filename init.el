@@ -132,16 +132,22 @@
 
 (global-set-key (kbd "C-M-_") 'dabbrev-completion)
 
-(define-key eve-jk-mode-map "\C-p" 'ivy-switch-buffer)
-(define-key eve-vi-mode-map "\C-p" 'ivy-switch-buffer)
+(define-key eve-leader-map "\s" 'execute-extended-command)
+
+(define-key eve-leader-map "1" 'delete-other-windows)
+(define-key eve-leader-map "2" 'split-window-below)
+(define-key eve-leader-map "3" 'split-window-right)
+(define-key eve-leader-map "0" 'delete-window)
+(define-key eve-leader-map "o" 'other-window)
+(define-key eve-leader-map "j" 'dired-jump)
+(define-key eve-leader-map "g" 'magit)
 
 (define-key eve-leader-map "." 'ivy-resume)
 (define-key eve-leader-map "b" 'ivy-switch-buffer)
 (define-key eve-leader-map "f" 'counsel-find-file)
 (define-key eve-leader-map "p" 'counsel-git)
 (define-key eve-leader-map "s" 'swiper)
-(define-key eve-leader-map "/" 'swiper-from-isearch)
-(define-key eve-leader-map "g" 'counsel-rg)
+(define-key eve-leader-map "S" 'counsel-rg)
 (define-key eve-leader-map "i" 'counsel-imenu)
 (define-key eve-leader-map "x" 'counsel-M-x)
 (define-key eve-leader-map "y" 'counsel-yank-pop)
