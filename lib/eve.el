@@ -1069,8 +1069,7 @@ ARG: (val . ope), dispatched by ope."
 (eve-define-command "go"
   "God mode."
   (let ((binding (eve-god-lookup-key)))
-    (setq prefix-arg `(,arg)
-          this-command binding
+    (setq this-command binding
           real-this-command binding)
     (if (commandp binding t)
         (call-interactively binding)
