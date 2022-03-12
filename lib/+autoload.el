@@ -52,6 +52,13 @@ Change mode to Vi." t nil)
 
 ;;;***
 
+;;;### (autoloads nil "eve-leader" "eve-leader.el" (0 0 0 0))
+;;; Generated autoloads from eve-leader.el
+
+(register-definition-prefixes "eve-leader" '("counsel-prefix-map"))
+
+;;;***
+
 ;;;### (autoloads nil "listify" "listify.el" (0 0 0 0))
 ;;; Generated autoloads from listify.el
 
@@ -69,7 +76,7 @@ Tab completion with `listify-completion-in-region'.
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "formater" "list-" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "formater" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

@@ -29,6 +29,8 @@
                                     (lambda (_)
                                       (let (eve-jk-mode-map)
                                         (lookup-key (current-local-map) "k")))))
+    (define-key map "\M-j" 'scroll-up-command)
+    (define-key map "\M-k" 'scroll-down-command)
     (define-key map ":" 'execute-extended-command)
     (define-key map "\s" eve-leader-map)
     map))
@@ -45,6 +47,9 @@
   (let ((map (make-sparse-keymap)))
     (define-key map [remap self-insert-command] 'undefined)
     (define-key map "\C-z" 'eve-change-mode-to-emacs)
+
+    (define-key map "\M-j" 'scroll-up-command)
+    (define-key map "\M-k" 'scroll-down-command)
 
     (define-key map "1" 'eve-digit)
     (define-key map "2" 'eve-digit)

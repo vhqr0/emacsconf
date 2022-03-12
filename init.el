@@ -46,7 +46,7 @@
       auto-save-file-name-transforms '((".*" "~/.bak/" t))
       lock-file-name-transforms '((".*" "~/.bak/" t)))
 
-(setq auto-save-visited-interval 2)
+(setq auto-save-visited-interval 1)
 
 (auto-save-visited-mode 1)
 
@@ -70,16 +70,14 @@
 
 (icomplete-mode 1)
 
-(global-set-key (kbd "<f2>") 'listify-tab-completion)
-
 (advice-add 'ivy-read :around
             (lambda (func &rest args)
               (let (icomplete-mode)
                 (apply func args))))
 
-(setq ivy-display-functions-alist '((t)))
+(global-set-key (kbd "C-M-_") 'dabbrev-completion)
 
-(setq completion-in-region-function 'ivy-completion-in-region)
+(global-set-key (kbd "<f2>") 'listify-tab-completion)
 
 
 
@@ -125,42 +123,7 @@
 (simple-x-default-keybindings)
 
 (require 'eve)
-
-
-
-(setq ivy-use-virtual-buffers t)
-
-(global-set-key (kbd "C-M-_") 'dabbrev-completion)
-
-(define-key eve-leader-map "\s" 'execute-extended-command)
-
-(define-key eve-leader-map "1" 'delete-other-windows)
-(define-key eve-leader-map "2" 'split-window-below)
-(define-key eve-leader-map "3" 'split-window-right)
-(define-key eve-leader-map "0" 'delete-window)
-(define-key eve-leader-map "o" 'other-window)
-(define-key eve-leader-map "j" 'dired-jump)
-(define-key eve-leader-map "g" 'magit)
-
-(define-key eve-leader-map "." 'ivy-resume)
-(define-key eve-leader-map "b" 'ivy-switch-buffer)
-(define-key eve-leader-map "f" 'counsel-find-file)
-(define-key eve-leader-map "p" 'counsel-git)
-(define-key eve-leader-map "s" 'swiper)
-(define-key eve-leader-map "S" 'counsel-rg)
-(define-key eve-leader-map "i" 'counsel-imenu)
-(define-key eve-leader-map "x" 'counsel-M-x)
-(define-key eve-leader-map "y" 'counsel-yank-pop)
-(define-key eve-leader-map "m" 'counsel-mark-ring)
-(define-key eve-leader-map "r" 'counsel-register)
-
-(define-key eve-leader-map "hb" 'counsel-descbinds)
-(define-key eve-leader-map "hf" 'counsel-describe-function)
-(define-key eve-leader-map "hv" 'counsel-describe-variable)
-(define-key eve-leader-map "ho" 'counsel-describe-symbol)
-(define-key eve-leader-map "hs" 'counsel-info-lookup-symbol)
-(define-key eve-leader-map "hl" 'counsel-find-library)
-(define-key eve-leader-map "ht" 'counsel-load-theme)
+(require 'eve-leader)
 
 
 
