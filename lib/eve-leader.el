@@ -15,6 +15,8 @@
 (define-key eve-leader-map "0" 'delete-window)
 (define-key eve-leader-map "o" 'other-window)
 (define-key eve-leader-map "9" 'rotate-window) ; simple-x
+(define-key eve-leader-map "u" 'winner-undo)   ; winner
+(define-key eve-leader-map "U" 'winner-redo)   ; winner
 (define-key eve-leader-map "4" ctl-x-4-map)
 (define-key eve-leader-map "t" tab-prefix-map)
 

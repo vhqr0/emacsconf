@@ -34,6 +34,14 @@
   (dolist (file (dired-get-marked-files))
     (xdg-open file)))
 
+(defvar sdcv-program "sdcv")
+
+(defun sdcv (&optional word)
+  (interactive)
+  (let ((word (or word (thing-at-point 'word))))
+    (when word
+      (shell-command (concat sdcv-program " " word)))))
+
 (declare-function grep--save-buffers "grep")
 
 (defvar rg-program "rg")
