@@ -119,6 +119,31 @@
                                 (split-window-vertically)))
                (set-window-buffer window prev-window-buffer)))))))
 
+(defvar toggle-letter-case-state 0)
+
+(defun toggle-letter-case ()
+  (interactive)
+  (save-mark-and-excursion
+    (deactivate-mark)
+    (let ((beg (progn
+                 (skip-chars-backward "[:alpha:]")
+                 (point)))
+          (end (progn
+                 (skip-chars-forward "[:alpha:]")
+                 (point))))
+      (when (not (eq last-command this-command))
+        (setq toggle-letter-case-state 0))
+      (cond
+       ((eq toggle-letter-case-state 0)
+        (upcase-initials-region beg end)
+        (setq toggle-letter-case-state 1))
+       ((eq toggle-letter-case-state 1)
+        (upcase-region beg end)
+        (setq toggle-letter-case-state 2))
+       ((eq toggle-letter-case-state 2)
+        (downcase-region beg end)
+        (setq toggle-letter-case-state 0))))))
+
 (defvar eshell-buffer-name)
 
 (defun eshell-dwim (arg)
@@ -174,7 +199,8 @@
   (define-key ctl-x-x-map "=" 'formater)
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
   (global-set-key (kbd "C-x 9") 'rotate-window)
-  (global-set-key "\M-E" 'eshell-dwim))
+  (global-set-key "\M-E" 'eshell-dwim)
+  (global-set-key "\M-B" 'toggle-letter-case))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here
