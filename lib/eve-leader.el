@@ -39,14 +39,6 @@
 
 (define-key search-map "s" 'swiper)
 
-(define-key help-map "b" 'counsel-descbinds)
-(define-key help-map "f" 'counsel-describe-function)
-(define-key help-map "v" 'counsel-describe-variable)
-(define-key help-map "o" 'counsel-describe-symbol)
-(define-key help-map "S" 'counsel-info-lookup-symbol)
-(define-key help-map "t" 'counsel-find-library)
-(define-key help-map "T" 'counsel-load-theme)
-
 (defvar counsel-prefix-map
   (let ((map (make-sparse-keymap)))
     (define-key map "." 'ivy-resume)
@@ -56,6 +48,13 @@
     (define-key map "y" 'counsel-yank-pop)
     (define-key map "m" 'counsel-mark-ring)
     (define-key map "r" 'counsel-register)
+    (define-key map "b" 'counsel-descbinds)
+    (define-key map "f" 'counsel-describe-function)
+    (define-key map "v" 'counsel-describe-variable)
+    (define-key map "o" 'counsel-describe-symbol)
+    (define-key map "s" 'counsel-info-lookup-symbol)
+    (define-key map "t" 'counsel-find-library)
+    (define-key map "T" 'counsel-load-theme)
     map))
 
 (define-key eve-leader-map "l" counsel-prefix-map)
