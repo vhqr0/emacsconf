@@ -1071,14 +1071,17 @@ ARG: (val . ope), dispatched by ope."
           (t
            (error "God: unknown key binding for `%s'" keys)))))
 
-(eve-define-command "go"
+(defun eve-go ()
   "God mode."
+  (interactive)
   (let ((binding (eve-god-lookup-key)))
     (setq this-command binding
           real-this-command binding)
     (if (commandp binding t)
         (call-interactively binding)
       (execute-kbd-macro binding))))
+
+(define-key eve-vi-mode-map "go" 'eve-go)
 
 
 

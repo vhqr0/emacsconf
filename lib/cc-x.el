@@ -62,8 +62,11 @@
 (cl-defmethod xref-backend-identifier-at-point ((_backend (eql gtags)))
   (thing-at-point 'symbol))
 
-(cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
-  (process-lines global-program "-c"))
+;; too slow in linux kernel repo
+;; (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
+;;   (process-lines global-program "-c"))
+
+(cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags))))
 
 (cl-defmethod xref-backend-definitions ((_backend (eql gtags)) symbol)
   (global-find-symbol symbol "-dxa"))
