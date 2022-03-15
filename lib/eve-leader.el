@@ -55,7 +55,7 @@
     (define-key map "v" 'counsel-describe-variable)
     (define-key map "o" 'counsel-describe-symbol)
     (define-key map "s" 'counsel-info-lookup-symbol)
-    (define-key map "t" 'counsel-find-library)
+    (define-key map "t" 'counsel-load-library)
     (define-key map "T" 'counsel-load-theme)
     map))
 
