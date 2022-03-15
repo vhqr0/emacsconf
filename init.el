@@ -103,6 +103,15 @@
 
 (winner-mode 1)
 
+(defvar winner-undo-repeat-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "u" 'winner-undo)
+    (define-key map "U" 'winner-redo)
+    map))
+
+(put 'winner-undo 'repeat-map 'winner-undo-repeat-map)
+(put 'winner-redo 'repeat-map 'winner-undo-repeat-map)
+
 
 
 (setq isearch-lazy-count t

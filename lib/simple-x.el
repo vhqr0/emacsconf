@@ -37,10 +37,13 @@
 (defvar sdcv-program "sdcv")
 
 (defun sdcv (&optional word)
-  (interactive)
-  (let ((word (or word (thing-at-point 'word))))
-    (when word
-      (shell-command (concat sdcv-program " " word)))))
+  (interactive (list (if current-prefix-arg
+                         (read-string "word: ")
+                       (thing-at-point 'word))))
+  (when word
+    (shell-command (concat sdcv-program " " word))))
+
+(defalias 'sd 'sdcv)
 
 (declare-function grep--save-buffers "grep")
 
