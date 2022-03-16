@@ -156,11 +156,17 @@
         (setq toggle-letter-case-state 0))))))
 
 (defvar eshell-buffer-name)
+(declare-function eshell-save-some-history "em-hist")
+(declare-function eshell-save-some-last-dir "em-dirs")
 
 (defun eshell-dwim (arg)
   "Eshell in new window or other window if called with prefix ARG."
   (interactive "P")
   (require 'eshell)
+  (require 'em-hist)
+  (require 'em-dirs)
+  (eshell-save-some-history)
+  (eshell-save-some-last-dir)
   (let ((flag t)
         (directory default-directory)
         (buffer-list (buffer-list))
