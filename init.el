@@ -24,8 +24,13 @@
 
 (menu-bar-mode -1)
 
-(xterm-mouse-mode 1)
-(mouse-wheel-mode 1)
+(when (display-graphic-p)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1))
+
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1)
+  (mouse-wheel-mode 1))
 
 (load-theme 'modus-vivendi)
 
