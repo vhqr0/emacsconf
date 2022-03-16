@@ -99,7 +99,7 @@
   "Eve JK mode enabled modes.")
 
 (defvar eve-setup-vi-modes
-  '(prog-mode text-mode fundamental-mode hexl-mode diff-mode)
+  '(prog-mode text-mode fundamental-mode conf-mode hexl-mode diff-mode)
   "Eve Vi mode enabled modes.")
 
 (defvar eve-setup-insert-modes
