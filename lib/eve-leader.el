@@ -22,6 +22,7 @@
 
 (define-key eve-leader-map "k" 'kill-buffer)
 (define-key eve-leader-map "j" 'dired-jump)
+(define-key eve-leader-map "B" 'ibuffer)
 (define-key eve-leader-map "5" 'query-replace-regexp)
 (define-key eve-leader-map "c" 'compile)
 (define-key eve-leader-map ";" 'eval-expression)

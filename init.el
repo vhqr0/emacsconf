@@ -137,6 +137,13 @@
 (simple-x-default-keybindings)
 
 (require 'eve)
+
+(define-key goto-map "f" 'eve-gf)
+(define-key goto-map "t" 'eve-gt)
+(define-key goto-map "w" 'eve-gw)
+(define-key goto-map "e" 'eve-ge)
+(define-key goto-map "j" 'eve-gj)
+
 (require 'eve-leader)
 
 
@@ -178,3 +185,6 @@
       wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
+
+(with-eval-after-load 'erc-backend
+  (require 'erc-sasl))
