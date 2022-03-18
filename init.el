@@ -108,6 +108,9 @@
 
 (winner-mode 1)
 
+(global-set-key (kbd "C-c u") 'winner-undo)
+(global-set-key (kbd "C-c U") 'winner-redo)
+
 (defvar winner-undo-repeat-map
   (let ((map (make-sparse-keymap)))
     (define-key map "u" 'winner-undo)

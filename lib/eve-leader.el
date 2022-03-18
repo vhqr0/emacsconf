@@ -17,15 +17,20 @@
 (define-key eve-leader-map "9" 'rotate-window) ; simple-x
 (define-key eve-leader-map "u" 'winner-undo)   ; winner
 (define-key eve-leader-map "U" 'winner-redo)   ; winner
+(define-key eve-leader-map "H" 'previous-buffer)
+(define-key eve-leader-map "L" 'next-buffer)
 (define-key eve-leader-map "4" ctl-x-4-map)
 (define-key eve-leader-map "t" tab-prefix-map)
 
+(define-key eve-leader-map ";" 'eval-expression)
 (define-key eve-leader-map "k" 'kill-buffer)
 (define-key eve-leader-map "j" 'dired-jump)
 (define-key eve-leader-map "B" 'ibuffer)
 (define-key eve-leader-map "5" 'query-replace-regexp)
 (define-key eve-leader-map "c" 'compile)
-(define-key eve-leader-map ";" 'eval-expression)
+(define-key eve-leader-map "," 'xref-go-back)
+(define-key eve-leader-map "." 'xref-find-definitions)
+(define-key eve-leader-map "?" 'xref-find-references)
 
 ;; replaced by counsel
 ;; (define-key eve-leader-map "f" 'find-file)
