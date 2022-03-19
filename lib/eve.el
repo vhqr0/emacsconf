@@ -883,10 +883,10 @@ Dispatch to `eve-tobj' when there is a ope."
     (setq eve-jump-last (read-char)))
   (eve-jump-goto-regexp (regexp-quote (char-to-string eve-jump-last))))
 
-(eve-define-exclusive-motion "gt"
+(eve-define-inclusive-motion "gt"
   (unless eve-repeat-flag
     (setq eve-jump-last (read-char)))
-  (eve-jump-goto-regexp (regexp-quote (char-to-string eve-jump-last))))
+  (eve-jump-goto-regexp (concat "." (regexp-quote (char-to-string eve-jump-last)))))
 
 (eve-define-exclusive-motion "gw"
   (eve-jump-goto-regexp "\\_<\\sw"))

@@ -22,6 +22,7 @@
 (define-key eve-leader-map "4" ctl-x-4-map)
 (define-key eve-leader-map "t" tab-prefix-map)
 
+(define-key eve-leader-map "z" 'repeat)
 (define-key eve-leader-map ";" 'eval-expression)
 (define-key eve-leader-map "k" 'kill-buffer)
 (define-key eve-leader-map "j" 'dired-jump)
