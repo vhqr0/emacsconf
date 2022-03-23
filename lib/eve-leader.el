@@ -29,7 +29,7 @@
 (define-key eve-leader-map "B" 'ibuffer)
 (define-key eve-leader-map "5" 'query-replace-regexp)
 (define-key eve-leader-map "c" 'compile)
-(define-key eve-leader-map "," 'xref-go-back)
+(define-key eve-leader-map "," 'xref-pop-marker-stack)
 (define-key eve-leader-map "." 'xref-find-definitions)
 (define-key eve-leader-map "?" 'xref-find-references)
 
