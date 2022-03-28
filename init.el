@@ -10,11 +10,13 @@
 
 (require '+autoload)
 
-(defvar +package '(counsel magit company eglot elpy))
+(defvar +package '(evil evil-surround avy counsel magit company eglot elpy))
 
-(setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                         ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
+(defvar +package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                            ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
+
+(setq package-archives +package-archives)
 
 (let (package-refreshed-p)
   (dolist (pkg +package)
@@ -30,8 +32,7 @@
 
 (setq visible-bell t)
 
-(setq inhibit-startup-screen t
-      initial-scratch-message ";;; -*- lexical-binding: t -*-\n\n")
+(setq inhibit-startup-screen t)
 
 (blink-cursor-mode -1)
 
@@ -47,8 +48,6 @@
   (mouse-wheel-mode 1))
 
 
-
-(defalias 'w 'save-buffer)
 
 (setq confirm-kill-emacs 'y-or-n-p
       auto-revert-check-vc-info t
@@ -131,6 +130,12 @@
 
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
+(define-key goto-map "." 'avy-resume)
+(define-key goto-map "j" 'avy-goto-line)
+(define-key goto-map "f" 'avy-goto-char)
+(define-key goto-map "w" 'avy-goto-symbol-1)
+(define-key goto-map "/" 'avy-goto-char-timer)
+
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
@@ -139,19 +144,9 @@
 
 (simple-x-default-keybindings)
 
-(require 'eve)
-
-(define-key goto-map "f" 'eve-gf)
-(define-key goto-map "t" 'eve-gt)
-(define-key goto-map "w" 'eve-gw)
-(define-key goto-map "e" 'eve-ge)
-(define-key goto-map "j" 'eve-gj)
-
-(require 'eve-leader)
+(require 'evil-setup)
 
 
-
-(defalias 'make 'compile)
 
 (setq xref-search-program 'ripgrep)
 
