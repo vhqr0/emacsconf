@@ -60,14 +60,14 @@
                        'grep-history)
    'grep-mode))
 
-(defvar formater-program-alist
+(defvar external-format-program-alist
   '((c-mode . "clang-format")
     (c++-mode . "clang-format")
     (python-mode . "black -q -")))
 
-(defun formater ()
+(defun external-format ()
   (interactive)
-  (let ((program (cdr (assq major-mode formater-program-alist))))
+  (let ((program (cdr (assq major-mode external-format-program-alist))))
     (if program
         (let ((row (line-number-at-pos))
               (col (current-column))
@@ -130,31 +130,6 @@
                                 (split-window-vertically)))
                (set-window-buffer window prev-window-buffer)))))))
 
-(defvar toggle-letter-case-state 0)
-
-(defun toggle-letter-case ()
-  (interactive)
-  (save-mark-and-excursion
-    (deactivate-mark)
-    (let ((beg (progn
-                 (skip-chars-backward "[:alpha:]")
-                 (point)))
-          (end (progn
-                 (skip-chars-forward "[:alpha:]")
-                 (point))))
-      (when (not (eq last-command this-command))
-        (setq toggle-letter-case-state 0))
-      (cond
-       ((eq toggle-letter-case-state 0)
-        (upcase-initials-region beg end)
-        (setq toggle-letter-case-state 1))
-       ((eq toggle-letter-case-state 1)
-        (upcase-region beg end)
-        (setq toggle-letter-case-state 2))
-       ((eq toggle-letter-case-state 2)
-        (downcase-region beg end)
-        (setq toggle-letter-case-state 0))))))
-
 (defvar eshell-buffer-name)
 (declare-function eshell-save-some-history "em-hist")
 (declare-function eshell-save-some-last-dir "em-dirs")
@@ -213,11 +188,10 @@
   (define-key ctl-x-x-map "o" 'xdg-open)
   (with-eval-after-load 'dired
     (define-key dired-mode-map "V" 'dired-do-xdg-open))
-  (define-key ctl-x-x-map "=" 'formater)
+  (define-key ctl-x-x-map "=" 'external-format)
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
   (global-set-key (kbd "C-x 9") 'rotate-window)
-  (global-set-key "\M-E" 'eshell-dwim)
-  (global-set-key "\M-B" 'toggle-letter-case))
+  (global-set-key "\M-E" 'eshell-dwim))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here

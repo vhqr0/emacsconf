@@ -26,13 +26,12 @@
 
 (when (display-graphic-p)
   (tool-bar-mode -1)
-  (scroll-bar-mode -1))
+  (scroll-bar-mode -1)
+  (pixel-scroll-precision-mode 1))
 
 (unless (display-graphic-p)
   (xterm-mouse-mode 1)
   (mouse-wheel-mode 1))
-
-(load-theme 'modus-vivendi)
 
 
 
@@ -107,18 +106,6 @@
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
 (winner-mode 1)
-
-(global-set-key (kbd "C-c u") 'winner-undo)
-(global-set-key (kbd "C-c U") 'winner-redo)
-
-(defvar winner-undo-repeat-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "u" 'winner-undo)
-    (define-key map "U" 'winner-redo)
-    map))
-
-(put 'winner-undo 'repeat-map 'winner-undo-repeat-map)
-(put 'winner-redo 'repeat-map 'winner-undo-repeat-map)
 
 
 
