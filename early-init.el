@@ -15,5 +15,3 @@
           (lambda ()
             (setq gc-cons-percentage 0.1
                   gc-cons-threshold 2000000)))
-
-(setq package-enable-at-startup nil)

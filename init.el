@@ -1,17 +1,30 @@
 ;;; -*- lexical-binding: t -*-
 
 
-
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (when (file-exists-p custom-file)
   (load custom-file))
 
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "lib-tp" user-emacs-directory))
 
 (require '+autoload)
-(require '+autoload-tp)
+
+(defvar +package '(counsel magit company eglot elpy))
+
+(setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                         ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
+
+(let (package-refreshed-p)
+  (dolist (pkg +package)
+    (unless (package-installed-p pkg)
+      (unless package-refreshed-p
+        (setq package-refreshed-p t)
+        (package-refresh-contents))
+      (package-install pkg)))
+  (when package-refreshed-p
+    (package-quickstart-refresh)))
 
 
 
@@ -152,17 +165,18 @@
 (setq flymake-cc-command 'cc-x-flymake-cc-command)
 
 (with-eval-after-load 'cc-mode
-  (define-key c-mode-base-map (kbd "C-c m") 'flymake-mode)
-  (define-key c-mode-base-map (kbd "C-c h") 'cc-help))
+  (define-key c-mode-base-map (kbd "M-H") 'cc-help))
 
 (setq eglot-extend-to-xref t)
 
 (setq company-idle-delay 0
       company-minimum-prefix-length 2
-      company-backends '(company-capf))
+      company-backends
+      '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
+      company-global-modes
+      '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode))
 
-(add-hook 'emacs-lisp-mode-hook 'company-mode)
-(add-hook 'eglot--managed-mode-hook 'company-mode)
+(global-company-mode 1)
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
