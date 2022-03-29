@@ -16,6 +16,8 @@
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
+(global-set-key "\C-z" 'evil-local-mode)
+
 (defvar evil-leader-map (make-sparse-keymap))
 
 (defvar evil-jk-mode-map

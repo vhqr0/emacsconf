@@ -1,8 +1,6 @@
-(require 'pyim)
-
-(setq pyim-default-scheme 'zirjma)
-
-(pyim-scheme-add
+(with-eval-after-load 'pyim
+  (setq pyim-default-scheme 'zirjma)
+  (pyim-scheme-add
    '(zirjma
      :document "zirjma"
      :class shuangpin
@@ -48,7 +46,6 @@
       ("ez" "ei")
       ("ob" "ou")
       ("oo" "o"))))
-
-(pyim-basedict-enable)
+  (pyim-basedict-enable))
 
 (setq default-input-method "pyim")
