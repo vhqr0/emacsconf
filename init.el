@@ -11,10 +11,13 @@
 (require '+autoload)
 
 (defvar +package
-  '(evil-surround
+  '(evil
+    evil-surround
     avy
-    counsel-projectile
+    counsel
     wgrep
+    projectile
+    counsel-projectile
     magit
     company
     emmet-mode

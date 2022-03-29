@@ -84,26 +84,45 @@
 
 (define-key evil-insert-state-map "j" 'evil-jk)
 
-(defvar evil-eval-alist
+(defvar evil-operator-eval-alist
   '((emacs-lisp-mode . eval-region)
     (lisp-interaction-mode . eval-region)
     (python-mode . python-shell-send-region)))
 
-(evil-define-operator evil-eval (beg end)
+(evil-define-operator evil-operator-eval (beg end)
   :move-point nil
   (interactive "<r>")
-  (let ((func (cdr (assq major-mode evil-eval-alist))))
+  (let ((func (cdr (assq major-mode evil-operator-eval-alist))))
     (if func
         (funcall func beg end)
       (user-error "major mode doesn't support"))))
 
-(evil-define-operator evil-comment (beg end)
+(evil-define-operator evil-operator-comment (beg end)
   :move-point nil
   (interactive "<r>")
   (comment-or-uncomment-region beg end))
 
-(define-key evil-motion-state-map "gy" 'evil-eval)
-(define-key evil-normal-state-map "gc" 'evil-comment)
+(evil-define-operator evil-operator-narrow (beg end)
+  :move-point nil
+  (interactive "<r>")
+  (narrow-to-region beg end))
+
+(define-key evil-motion-state-map "gy" 'evil-operator-eval)
+(define-key evil-normal-state-map "gc" 'evil-operator-comment)
+(define-key evil-motion-state-map "g-" 'evil-operator-narrow)
+
+(evil-define-text-object evil-tobj-defun (const &optional beg end type)
+  (cl-destructuring-bind (beg . end)
+      (bounds-of-thing-at-point 'defun)
+    (evil-range beg end 'line)))
+
+(evil-define-text-object evil-tobj-entire (const &optional beg end type)
+  (evil-range (point-min) (point-max) 'line))
+
+(define-key evil-inner-text-objects-map "f" 'evil-tobj-defun)
+(define-key evil-outer-text-objects-map "f" 'evil-tobj-defun)
+(define-key evil-inner-text-objects-map "h" 'evil-tobj-entire)
+(define-key evil-outer-text-objects-map "h" 'evil-tobj-entire)
 
 (define-key evil-motion-state-map "\s" evil-leader-map)
 
