@@ -57,6 +57,7 @@
 
 (defun evil-setup ()
   (cond ((apply 'derived-mode-p evil-setup-jk-modes)
+         (evil-emacs-state)
          (evil-jk-mode 1))
         ((apply 'derived-mode-p evil-setup-motion-modes)
          (evil-motion-state))
@@ -115,7 +116,7 @@
 (define-key evil-leader-map "x" ctl-x-x-map)
 (define-key evil-leader-map "n" narrow-map)
 (define-key evil-leader-map "v" vc-prefix-map)
-(define-key evil-leader-map "p" project-prefix-map)
+(define-key evil-leader-map "P" project-prefix-map)
 
 (define-key evil-leader-map "1" 'delete-other-windows)
 (define-key evil-leader-map "2" 'split-window-below)
@@ -177,5 +178,10 @@
     map))
 
 (define-key evil-leader-map "l" counsel-prefix-map)
+
+(projectile-mode 1)
+(counsel-projectile-mode 1)
+
+(define-key evil-leader-map "p" 'projectile-command-map)
 
 (provide 'evil-setup)
