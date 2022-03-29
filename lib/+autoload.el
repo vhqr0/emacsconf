@@ -42,20 +42,17 @@ it is disabled.
 
 ;;;***
 
-;;;### (autoloads nil "eve" "eve.el" (0 0 0 0))
-;;; Generated autoloads from eve.el
+;;;### (autoloads nil "erc-sasl" "erc-sasl.el" (0 0 0 0))
+;;; Generated autoloads from erc-sasl.el
 
-(autoload 'eve-change-mode-to-vi "eve" "\
-Change mode to Vi." t nil)
-
-(register-definition-prefixes "eve" '("eve-"))
+(register-definition-prefixes "erc-sasl" '("erc-sasl-login"))
 
 ;;;***
 
-;;;### (autoloads nil "eve-leader" "eve-leader.el" (0 0 0 0))
-;;; Generated autoloads from eve-leader.el
+;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
+;;; Generated autoloads from evil-setup.el
 
-(register-definition-prefixes "eve-leader" '("counsel-prefix-map"))
+(register-definition-prefixes "evil-setup" '("counsel-prefix-map" "evil-"))
 
 ;;;***
 
@@ -76,7 +73,7 @@ Tab completion with `listify-completion-in-region'.
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "formater" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

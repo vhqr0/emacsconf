@@ -10,7 +10,17 @@
 
 (require '+autoload)
 
-(defvar +package '(evil-surround avy counsel-projectile magit company eglot elpy))
+(defvar +package
+  '(evil-surround
+    avy
+    counsel-projectile
+    wgrep
+    magit
+    company
+    emmet-mode
+    markdown-mode
+    eglot
+    elpy))
 
 (defvar +package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                             ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
