@@ -1,3 +1,5 @@
+(setq +package (append +package '(pyim pyim-base-dict posframe)))
+
 (with-eval-after-load 'pyim
   (setq pyim-default-scheme 'zirjma)
   (pyim-scheme-add

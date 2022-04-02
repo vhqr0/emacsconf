@@ -1,14 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
 
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-(when (file-exists-p custom-file)
-  (load custom-file))
-
-(add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
-
-(require '+autoload)
+(defvar +package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                            ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
 
 (defvar +package
   '(evil
@@ -25,9 +21,14 @@
     eglot
     elpy))
 
-(defvar +package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                            ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+(add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
+
+(require '+autoload)
 
 (setq package-archives +package-archives)
 
