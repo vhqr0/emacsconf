@@ -11,6 +11,11 @@
 (require 'evil)
 (require 'evil-surround)
 
+(define-key evil-operator-state-map "s" 'evil-surround-edit)
+(define-key evil-operator-state-map "S" 'evil-Surround-edit)
+(define-key evil-visual-state-map "S" 'evil-surround-region)
+(define-key evil-visual-state-map "gS" 'evil-Surround-region)
+
 (add-hook 'evil-local-mode-hook 'evil-surround-mode)
 
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
