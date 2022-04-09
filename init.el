@@ -12,8 +12,6 @@
     avy
     counsel
     wgrep
-    projectile
-    counsel-projectile
     magit
     company
     emmet-mode
