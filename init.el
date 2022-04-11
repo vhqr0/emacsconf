@@ -7,17 +7,7 @@
                             ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
 
 (defvar +package
-  '(evil
-    evil-surround
-    avy
-    counsel
-    wgrep
-    magit
-    company
-    emmet-mode
-    markdown-mode
-    eglot
-    elpy))
+  '(evil evil-surround avy counsel wgrep magit company emmet-mode markdown-mode eglot elpy))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -27,6 +17,8 @@
 (add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
 
 (require '+autoload)
+
+(require 'package)
 
 (setq package-archives +package-archives)
 
@@ -52,12 +44,7 @@
 
 (when (display-graphic-p)
   (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (pixel-scroll-precision-mode 1))
-
-(unless (display-graphic-p)
-  (xterm-mouse-mode 1)
-  (mouse-wheel-mode 1))
+  (scroll-bar-mode -1))
 
 
 

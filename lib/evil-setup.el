@@ -1,27 +1,21 @@
 (setq evil-want-fine-undo t
-      evil-want-C-u-scroll t
-      evil-want-C-u-delete t
-      evil-want-C-h-delete t
+      evil-want-C-i-jump nil
       evil-want-keybinding nil
       evil-undo-system 'undo-redo)
-
-(unless (display-graphic-p)
-  (setq evil-want-C-i-jump nil))
 
 (require 'evil)
 (require 'evil-surround)
 
-(define-key evil-operator-state-map "s" 'evil-surround-edit)
-(define-key evil-operator-state-map "S" 'evil-Surround-edit)
-(define-key evil-visual-state-map "S" 'evil-surround-region)
-(define-key evil-visual-state-map "gS" 'evil-Surround-region)
-
-(add-hook 'evil-local-mode-hook 'evil-surround-mode)
+(define-key evil-operator-state-map "s"  'evil-surround-edit)
+(define-key evil-operator-state-map "s"  'evil-surround-edit)
+(define-key evil-visual-state-map   "s"  'evil-surround-region)
+(define-key evil-visual-state-map   "gS" 'evil-Surround-region)
 
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
 (global-set-key "\C-z" 'evil-local-mode)
+(global-set-key "\M-z" 'evil-force-normal-state)
 
 (defvar evil-leader-map (make-sparse-keymap))
 
