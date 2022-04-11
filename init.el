@@ -2,12 +2,12 @@
 
 
 
-(defvar +package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                            ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                            ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
+(defvar +package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                            ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                            ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 (defvar +package
-  '(evil evil-surround avy counsel wgrep magit company emmet-mode markdown-mode eglot))
+  '(evil evil-surround avy counsel wgrep magit company eglot markdown-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -171,9 +171,6 @@
       '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode))
 
 (global-company-mode 1)
-
-(add-hook 'sgml-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook 'emmet-mode)
 
 
 

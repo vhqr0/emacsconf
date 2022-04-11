@@ -49,7 +49,7 @@
   '(hexl-mode diff-mode))
 
 (defvar evil-setup-normal-modes
-  '(prog-mode text-mode fundamental-mode conf-mode))
+  '(prog-mode text-mode fundamental-mode conf-mode erc-mode))
 
 (defvar evil-setup-insert-modes
   '(comint-mode eshell-mode))
