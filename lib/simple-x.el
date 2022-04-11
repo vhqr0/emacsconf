@@ -63,7 +63,7 @@
 (defvar external-format-program-alist
   '((c-mode . "clang-format")
     (c++-mode . "clang-format")
-    (python-mode . "black -q -")))
+    (python-mode . "yapf")))
 
 (defun external-format ()
   (interactive)

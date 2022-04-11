@@ -7,7 +7,7 @@
                             ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
 
 (defvar +package
-  '(evil evil-surround avy counsel wgrep magit company emmet-mode markdown-mode eglot elpy))
+  '(evil evil-surround avy counsel wgrep magit company emmet-mode markdown-mode eglot))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
