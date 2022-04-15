@@ -1,7 +1,8 @@
-(setq +package (append +package '(pyim pyim-base-dict posframe)))
+(setq +package (append +package '(pyim pyim-basedict posframe popup)))
 
 (with-eval-after-load 'pyim
-  (setq pyim-default-scheme 'zirjma)
+  (define-key pyim-mode-map "." 'pyim-page-next-page)
+  (define-key pyim-mode-map "," 'pyim-page-previous-page)
   (pyim-scheme-add
    '(zirjma
      :document "zirjma"
@@ -38,16 +39,26 @@
       ("z" "z" "ei")
       ("aa" "a")
       ("ah" "ang")
+      ("ai" "ai")
       ("aj" "an")
       ("ak" "ao")
       ("al" "ai")
+      ("an" "an")
+      ("ao" "ao")
       ("ee" "e")
       ("ef" "en")
       ("eg" "eng")
+      ("ei" "ei")
+      ("en" "en")
       ("er" "er")
       ("ez" "ei")
       ("ob" "ou")
-      ("oo" "o"))))
+      ("oo" "o")
+      ("ou" "ou"))))
+  (setq pyim-default-scheme 'zirjma)
+  (add-to-list 'pyim-punctuation-dict '("\\" "、"))
+  (setq pyim-enable-shortcode nil
+        pyim-pinyin-fuzzy-alist nil)
   (pyim-basedict-enable))
 
 (setq default-input-method "pyim")
