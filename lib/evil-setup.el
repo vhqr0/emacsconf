@@ -6,18 +6,23 @@
 (require 'evil)
 (require 'evil-surround)
 
+
+
+;; surround
+
 (define-key evil-operator-state-map "s"  'evil-surround-edit)
-(define-key evil-operator-state-map "s"  'evil-surround-edit)
-(define-key evil-visual-state-map   "s"  'evil-surround-region)
+(define-key evil-operator-state-map "S"  'evil-Surround-edit)
+(define-key evil-visual-state-map   "S"  'evil-surround-region)
 (define-key evil-visual-state-map   "gS" 'evil-Surround-region)
+
+;; scroll
 
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
-(global-set-key "\C-z" 'evil-local-mode)
-(global-set-key "\M-z" 'evil-force-normal-state)
+
 
-(defvar evil-leader-map (make-sparse-keymap))
+;; jk mode
 
 (defvar evil-jk-mode-map
   (let ((map (make-sparse-keymap)))
@@ -34,13 +39,14 @@
     (define-key map "\M-j" 'evil-scroll-down)
     (define-key map "\M-k" 'evil-scroll-up)
     (define-key map ":"    'evil-ex)
-    (define-key map "\s"    evil-leader-map)
     map))
 
 (define-minor-mode evil-jk-mode
   "Evil JK mode."
   :keymap evil-jk-mode-map
   :lighter " <JK>")
+
+;; setup
 
 (defvar evil-setup-jk-modes
   '(special-mode compilation-mode dired-mode completion-list-mode))
@@ -67,7 +73,26 @@
         (t
          (evil-emacs-state))))
 
+(defun evil-setup-motion-or-normal-state ()
+  (interactive)
+  (cond ((or (apply 'derived-mode-p evil-setup-jk-modes)
+             (apply 'derived-mode-p evil-setup-motion-modes))
+         (evil-motion-state))
+        (t
+         (evil-normal-state))))
+
 (add-hook 'after-change-major-mode-hook 'evil-setup)
+
+(global-set-key "\M-z" [escape])
+(global-set-key "\C-z" 'evil-setup-motion-or-normal-state)
+
+(define-key evil-emacs-state-map "\C-z" nil)
+
+;; jk
+
+(defun evil-jk-j ()
+  (call-interactively
+   (lookup-key `(,(current-local-map) ,(current-global-map)) [?k])))
 
 (defun evil-jk ()
   (interactive)
@@ -76,12 +101,17 @@
            (not (sit-for 0.1 'no-redisplay)))
       (let ((next-char (read-event)))
         (if (eq next-char ?k)
-            (evil-force-normal-state)
-          (insert ?j)
+            (push 'escape unread-command-events)
+          (evil-jk-j)
           (push next-char unread-command-events)))
-    (insert ?j)))
+    (evil-jk-j)))
 
-(define-key evil-insert-state-map "j" 'evil-jk)
+(define-key evil-insert-state-map  "j" 'evil-jk)
+(define-key evil-replace-state-map "j" 'evil-jk)
+
+
+
+;; operator
 
 (defvar evil-operator-eval-alist
   '((emacs-lisp-mode . eval-region)
@@ -94,7 +124,7 @@
   (let ((func (cdr (assq major-mode evil-operator-eval-alist))))
     (if func
         (funcall func beg end)
-      (user-error "major mode doesn't support"))))
+      (user-error "Major mode doesn't support"))))
 
 (evil-define-operator evil-operator-comment (beg end)
   :move-point nil
@@ -110,6 +140,8 @@
 (define-key evil-normal-state-map "gc" 'evil-operator-comment)
 (define-key evil-motion-state-map "g-" 'evil-operator-narrow)
 
+;; textobject
+
 (evil-define-text-object evil-tobj-defun (const &optional beg end type)
   (cl-destructuring-bind (beg . end)
       (bounds-of-thing-at-point 'defun)
@@ -123,6 +155,13 @@
 (define-key evil-inner-text-objects-map "h" 'evil-tobj-entire)
 (define-key evil-outer-text-objects-map "h" 'evil-tobj-entire)
 
+
+
+;; leader
+
+(defvar evil-leader-map (make-sparse-keymap))
+
+(define-key evil-jk-mode-map      "\s" evil-leader-map)
 (define-key evil-motion-state-map "\s" evil-leader-map)
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
