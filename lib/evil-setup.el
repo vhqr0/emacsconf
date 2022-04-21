@@ -182,6 +182,7 @@
 (define-key evil-leader-map "o" 'other-window)
 (define-key evil-leader-map "9" 'rotate-window) ; simple-x
 (define-key evil-leader-map "U" 'winner-undo)   ; winner
+(define-key evil-leader-map "R" 'winner-redo)   ; winner
 (define-key evil-leader-map "H" 'previous-buffer)
 (define-key evil-leader-map "L" 'next-buffer)
 (define-key evil-leader-map "w" evil-window-map)

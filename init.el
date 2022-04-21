@@ -18,9 +18,10 @@
 
 (require '+autoload)
 
-(require 'package)
+(setq package-quickstart t
+      package-archives +package-archives)
 
-(setq package-archives +package-archives)
+(require 'package)
 
 (let (package-refreshed-p)
   (dolist (pkg +package)
