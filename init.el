@@ -7,7 +7,7 @@
                             ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 (defvar +package
-  '(evil evil-surround avy counsel wgrep magit company eglot markdown-mode))
+  '(evil evil-surround avy counsel wgrep magit company company-web emmet-mode eglot markdown-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -167,9 +167,16 @@
       company-backends
       '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
       company-global-modes
-      '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode))
+      '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode html-mode))
 
 (global-company-mode 1)
+
+(add-hook 'html-mode-hook
+          (lambda ()
+            (setq-local company-backends
+                        (append '(company-web-html) company-backends))))
+
+(add-hook 'sgml-mode-hook 'emmet-mode)
 
 
 
