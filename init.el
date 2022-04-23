@@ -165,16 +165,19 @@
 (setq company-idle-delay 0
       company-minimum-prefix-length 2
       company-backends
-      '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
+      '(company-files (company-dabbrev-code company-keywords) company-dabbrev)
       company-global-modes
       '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode mhtml-mode))
 
 (global-company-mode 1)
 
-(add-hook 'html-mode-hook
-          (lambda ()
-            (setq-local company-backends
-                        (append '(company-web-html) company-backends))))
+(defun company-set-local-backend (hook &rest backends)
+  (add-hook hook (lambda ()
+                   (setq-local company-backends
+                               (append backends company-backends)))))
+
+(company-set-local-backend 'emacs-lisp-mode-hook 'company-capf)
+(company-set-local-backend 'mhtml-mode-hook 'company-web-html)
 
 (add-hook 'sgml-mode-hook 'emmet-mode)
 
