@@ -167,7 +167,7 @@
       company-backends
       '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
       company-global-modes
-      '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode html-mode))
+      '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode mhtml-mode))
 
 (global-company-mode 1)
 
