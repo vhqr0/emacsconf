@@ -148,6 +148,8 @@
 
 (setq xref-search-program 'ripgrep)
 
+(define-key prog-mode-map [remap display-local-help] 'eldoc-doc-buffer)
+
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
