@@ -208,7 +208,11 @@
 (define-key evil-leader-map "V" 'magit)
 
 ;;; counsel
-(setq ivy-use-virtual-buffers t)
+(setq ivy-use-virtual-buffers t
+      counsel-describe-symbol-function   'helpful-symbol
+      counsel-describe-variable-function 'helpful-variable
+      counsel-describe-function-function 'helpful-callable
+      counsel-descbinds-function         'helpful-callable)
 
 (define-key evil-leader-map "b" 'ivy-switch-buffer)
 (define-key evil-leader-map "f" 'counsel-find-file)
