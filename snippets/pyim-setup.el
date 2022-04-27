@@ -1,4 +1,4 @@
-(setq +package (append +package '(pyim pyim-basedict posframe popup)))
+(setq +package (append +package '(pyim pyim-basedict posframe popup go-translate)))
 
 (with-eval-after-load 'pyim
   (define-key pyim-mode-map "." 'pyim-page-next-page)
@@ -62,3 +62,6 @@
   (pyim-basedict-enable))
 
 (setq default-input-method "pyim")
+
+(setq gts-translate-list '(("en" "zh")))
+(global-set-key "\M-T" 'gts-do-translate)
