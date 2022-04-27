@@ -49,7 +49,7 @@
 ;; setup
 
 (defvar evil-setup-jk-modes
-  '(special-mode compilation-mode dired-mode completion-list-mode))
+  '(special-mode compilation-mode dired-mode completion-list-mode image-mode doc-view-mode))
 
 (defvar evil-setup-motion-modes
   '(hexl-mode diff-mode))
