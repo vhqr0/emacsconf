@@ -73,7 +73,7 @@ Tab completion with `listify-completion-in-region'.
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

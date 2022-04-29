@@ -130,6 +130,16 @@
                                 (split-window-vertically)))
                (set-window-buffer window prev-window-buffer)))))))
 
+(define-minor-mode fixup-whitespace-nospace-mode
+  "Advice fixup-whitespace leave nospace."
+  :lighter " FWN")
+
+(advice-add 'fixup-whitespace
+            :around (lambda (func &rest args)
+                      (if fixup-whitespace-nospace-mode
+                          (delete-horizontal-space)
+                        (apply func args))))
+
 (defvar eshell-buffer-name)
 (declare-function eshell-save-some-history "em-hist")
 (declare-function eshell-save-some-last-dir "em-dirs")
@@ -189,6 +199,7 @@
   (with-eval-after-load 'dired
     (define-key dired-mode-map "V" 'dired-do-xdg-open))
   (define-key ctl-x-x-map "=" 'external-format)
+  (define-key ctl-x-x-map "^" 'fixup-whitespace-nospace-mode)
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
   (global-set-key (kbd "C-x 9") 'rotate-window)
   (global-set-key "\M-E" 'eshell-dwim))

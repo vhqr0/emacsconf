@@ -166,6 +166,9 @@
 
 (setq company-idle-delay 0
       company-minimum-prefix-length 2
+      company-dabbrev-downcase nil
+      company-dabbrev-ignore-case t
+      company-dabbrev-code-ignore-case t
       company-backends
       '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
       company-global-modes
