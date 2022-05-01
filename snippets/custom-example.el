@@ -1,4 +1,5 @@
-(load-file (expand-file-name "snippets/nano-theme-setup.el" user-emacs-directory))
+(when (display-graphic-p)
+  (load-file (expand-file-name "snippets/fonts-setup.el" user-emacs-directory)))
 (load-file (expand-file-name "snippets/elpy-setup.el" user-emacs-directory))
 (load-file (expand-file-name "snippets/web-setup.el" user-emacs-directory))
 (load-file (expand-file-name "snippets/latex-setup.el" user-emacs-directory))

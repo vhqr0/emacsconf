@@ -37,20 +37,28 @@
 
 (setq visible-bell t)
 
-(setq inhibit-startup-screen t)
+(setq inhibit-startup-screen t
+      initial-scratch-message nil)
 
+(setq use-dialog-box nil
+      use-file-dialog nil
+      confirm-kill-emacs 'y-or-n-p)
+
+(tooltip-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
 (blink-cursor-mode -1)
 
-(menu-bar-mode -1)
-
 (when (display-graphic-p)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
+  (scroll-bar-mode -1)
+  (window-divider-mode 1))
+
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
 
 
 
-(setq confirm-kill-emacs 'y-or-n-p
-      auto-revert-check-vc-info t
+(setq auto-revert-check-vc-info t
       vc-handled-backends '(Git)
       vc-make-backup-files t
       version-control t
