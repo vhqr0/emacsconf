@@ -7,6 +7,4 @@
 (setq elpy-modules
       '(elpy-module-company
         elpy-module-eldoc
-        elpy-module-flymake
-        elpy-module-pyvenv
-        elpy-module-sane-defaults))
+        elpy-module-pyvenv))
