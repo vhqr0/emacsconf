@@ -174,10 +174,15 @@
 (define-key evil-leader-map "n" narrow-map)
 (define-key evil-leader-map "v" vc-prefix-map)
 (define-key evil-leader-map "p" project-prefix-map)
+(define-key evil-leader-map "4" ctl-x-4-map)
+(define-key evil-leader-map "5" ctl-x-5-map)
+(define-key evil-leader-map "t" tab-prefix-map)
+(define-key evil-leader-map "w" evil-window-map)
 
 (define-key evil-leader-map "1" 'delete-other-windows)
 (define-key evil-leader-map "2" 'split-window-below)
 (define-key evil-leader-map "3" 'split-window-right)
+(define-key evil-leader-map "q" 'quit-window)
 (define-key evil-leader-map "0" 'delete-window)
 (define-key evil-leader-map "o" 'other-window)
 (define-key evil-leader-map "9" 'rotate-window) ; simple-x
@@ -185,16 +190,13 @@
 (define-key evil-leader-map "R" 'winner-redo)   ; winner
 (define-key evil-leader-map "H" 'previous-buffer)
 (define-key evil-leader-map "L" 'next-buffer)
-(define-key evil-leader-map "w" evil-window-map)
-(define-key evil-leader-map "4" ctl-x-4-map)
-(define-key evil-leader-map "t" tab-prefix-map)
 
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
 (define-key evil-leader-map "k" 'kill-buffer)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "B" 'ibuffer)
-(define-key evil-leader-map "5" 'query-replace-regexp)
+(define-key evil-leader-map "%" 'query-replace-regexp)
 (define-key evil-leader-map "c" 'compile)
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
@@ -222,6 +224,8 @@
 (defvar counsel-prefix-map
   (let ((map (make-sparse-keymap)))
     (define-key map "." 'ivy-resume)
+    (define-key map "w" 'ivy-push-view)
+    (define-key map "W" 'ivy-pop-view)
     (define-key map "x" 'counsel-M-x)
     (define-key map "g" 'counsel-rg)
     (define-key map "i" 'counsel-imenu)

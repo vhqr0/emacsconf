@@ -56,6 +56,8 @@
 (unless (display-graphic-p)
   (xterm-mouse-mode 1))
 
+(global-set-key (kbd "C-S-T") 'tab-new)
+
 
 
 (setq auto-revert-check-vc-info t
