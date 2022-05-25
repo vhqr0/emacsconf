@@ -172,7 +172,8 @@
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "M-H") 'cc-help))
 
-(setq eglot-extend-to-xref t)
+(setq eglot-extend-to-xref t
+      eglot-events-buffer-size 0)
 
 (setq company-idle-delay 0
       company-minimum-prefix-length 2
@@ -194,3 +195,6 @@
       wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
+
+(with-eval-after-load 'eshell
+  (require 'eshell-z))

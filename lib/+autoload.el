@@ -49,6 +49,18 @@ it is disabled.
 
 ;;;***
 
+;;;### (autoloads nil "eshell-z" "eshell-z.el" (0 0 0 0))
+;;; Generated autoloads from eshell-z.el
+
+(autoload 'eshell-z "eshell-z" "\
+Switch to eshell and change directory to DIR.
+
+\(fn DIR)" t nil)
+
+(register-definition-prefixes "eshell-z" '("eshell" "pcomplete/z"))
+
+;;;***
+
 ;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
 ;;; Generated autoloads from evil-setup.el
 
