@@ -49,14 +49,11 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
-
-(when (display-graphic-p)
-  (window-divider-mode 1))
-
-(unless (display-graphic-p)
-  (xterm-mouse-mode 1))
+(window-divider-mode 1)
+(xterm-mouse-mode 1)
 
 (global-set-key (kbd "C-S-T") 'tab-new)
+(global-set-key (kbd "C-S-W") 'tab-close)
 
 
 
