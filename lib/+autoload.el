@@ -64,19 +64,14 @@ Switch to eshell and change directory to DIR.
 ;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
 ;;; Generated autoloads from evil-setup.el
 
-(register-definition-prefixes "evil-setup" '("counsel-prefix-map" "evil-"))
+(register-definition-prefixes "evil-setup" '("evil-"))
 
 ;;;***
 
-;;;### (autoloads nil "listify" "listify.el" (0 0 0 0))
-;;; Generated autoloads from listify.el
+;;;### (autoloads nil "ivy-setup" "ivy-setup.el" (0 0 0 0))
+;;; Generated autoloads from ivy-setup.el
 
-(autoload 'listify-tab-completion "listify" "\
-Tab completion with `listify-completion-in-region'.
-
-\(fn ARG)" t nil)
-
-(register-definition-prefixes "listify" '("listify-"))
+(register-definition-prefixes "ivy-setup" '("ivy-"))
 
 ;;;***
 

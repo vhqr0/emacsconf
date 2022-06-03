@@ -1,4 +1,5 @@
 *.elc
+/amx-items
 /auto-save-list
 /bookmarks
 /custom.el

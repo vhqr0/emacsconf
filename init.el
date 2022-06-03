@@ -7,7 +7,7 @@
                             ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 (defvar +package
-  '(evil evil-surround avy counsel wgrep helpful magit company eglot markdown-mode))
+  '(evil evil-surround avy counsel wgrep amx helpful magit company eglot markdown-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -94,10 +94,6 @@
               (let (icomplete-mode)
                 (apply func args))))
 
-(global-set-key (kbd "C-M-_") 'dabbrev-completion)
-
-(global-set-key (kbd "<f2>") 'listify-tab-completion)
-
 
 
 (setq-default indent-tabs-mode nil)
@@ -135,12 +131,6 @@
 
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
-(define-key goto-map "." 'avy-resume)
-(define-key goto-map "j" 'avy-goto-line)
-(define-key goto-map "f" 'avy-goto-char)
-(define-key goto-map "w" 'avy-goto-symbol-1)
-(define-key goto-map "/" 'avy-goto-char-timer)
-
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
@@ -150,6 +140,7 @@
 (simple-x-default-keybindings)
 
 (require 'evil-setup)
+(require 'ivy-setup)
 
 
 

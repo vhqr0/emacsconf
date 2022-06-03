@@ -210,39 +210,7 @@
 (define-key evil-leader-map "V" 'magit)
 
 ;;; counsel
-(setq ivy-use-virtual-buffers t
-      counsel-describe-symbol-function   'helpful-symbol
-      counsel-describe-variable-function 'helpful-variable
-      counsel-describe-function-function 'helpful-callable
-      counsel-descbinds-function         'helpful-callable)
-
 (define-key evil-leader-map "b" 'ivy-switch-buffer)
 (define-key evil-leader-map "f" 'counsel-find-file)
-
-(define-key search-map "s" 'swiper)
-
-(defvar counsel-prefix-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "." 'ivy-resume)
-    (define-key map "w" 'ivy-push-view)
-    (define-key map "W" 'ivy-pop-view)
-    (define-key map "x" 'counsel-M-x)
-    (define-key map "g" 'counsel-rg)
-    (define-key map "i" 'counsel-imenu)
-    (define-key map "y" 'counsel-yank-pop)
-    (define-key map "m" 'counsel-mark-ring)
-    (define-key map "M" 'counsel-evil-marks)
-    (define-key map "r" 'counsel-register)
-    (define-key map "R" 'counsel-evil-registers)
-    (define-key map "b" 'counsel-descbinds)
-    (define-key map "f" 'counsel-describe-function)
-    (define-key map "v" 'counsel-describe-variable)
-    (define-key map "o" 'counsel-describe-symbol)
-    (define-key map "s" 'counsel-info-lookup-symbol)
-    (define-key map "t" 'counsel-load-library)
-    (define-key map "T" 'counsel-load-theme)
-    map))
-
-(define-key evil-leader-map "l" counsel-prefix-map)
 
 (provide 'evil-setup)
