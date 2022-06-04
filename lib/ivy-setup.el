@@ -4,16 +4,17 @@
       counsel-describe-function-function 'helpful-callable
       counsel-descbinds-function         'helpful-callable)
 
-(global-set-key "\M-x" 'counsel-M-x)
-(global-set-key "\M-y" 'counsel-yank-pop)
-(global-set-key "\M-X" 'execute-extended-command)
-(global-set-key "\M-Y" 'yank-pop)
+(global-set-key (kbd "<f5>") 'ivy-resume)
 
+(global-set-key "\M-x" 'counsel-M-x)
+
+(defvar comint-mode-map)
+(defvar eshell-hist-mode-map)
 (define-key minibuffer-local-map "\M-R" 'counsel-minibuffer-history)
-(with-eval-after-load 'em-hist
-  (define-key eshell-hist-mode-map "\M-R" 'counsel-esh-history))
 (with-eval-after-load 'comint
   (define-key comint-mode-map "\M-R" 'counsel-shell-history))
+(with-eval-after-load 'em-hist
+  (define-key eshell-hist-mode-map "\M-R" 'counsel-esh-history))
 
 (define-key search-map "s" 'swiper)
 (define-key search-map "S" 'counsel-rg)
@@ -21,6 +22,7 @@
 
 (define-key ctl-x-r-map "v" 'ivy-push-view)
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
+(define-key ctl-x-r-map "p" 'counsel-yank-pop)
 (define-key ctl-x-r-map "i" 'counsel-register)
 (define-key ctl-x-r-map "I" 'counsel-evil-registers)
 
@@ -37,15 +39,11 @@
 (define-key help-map "f" 'counsel-describe-function)
 (define-key help-map "v" 'counsel-describe-variable)
 (define-key help-map "b" 'counsel-descbinds)
-(define-key help-map "O" 'describe-symbol)
-(define-key help-map "F" 'describe-function)
-(define-key help-map "V" 'describe-variable)
-(define-key help-map "B" 'describe-bindings)
-
+(define-key help-map "a" 'counsel-apropos)
+(define-key help-map "F" 'counsel-describe-face)
+(define-key help-map "S" 'counsel-info-lookup-symbol)
 (define-key help-map "t" 'counsel-load-library)
 (define-key help-map "T" 'counsel-load-theme)
-
-(global-set-key (kbd "<f5>") 'ivy-resume)
 
 (defun ivy-tab-completion (arg &optional command)
   "Tab completion with `ivy-read'."

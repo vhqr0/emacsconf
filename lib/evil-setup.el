@@ -1,7 +1,9 @@
-(setq evil-want-fine-undo t
-      evil-want-C-i-jump nil
+(setq evil-want-C-i-jump nil
       evil-want-keybinding nil
-      evil-undo-system 'undo-redo)
+      evil-want-fine-undo t
+      evil-undo-system 'undo-redo
+      evil-symbol-word-search t
+      evil-search-module 'evil-search)
 
 (require 'evil)
 (require 'evil-surround)
@@ -212,5 +214,6 @@
 ;;; counsel
 (define-key evil-leader-map "b" 'ivy-switch-buffer)
 (define-key evil-leader-map "f" 'counsel-find-file)
+(define-key evil-leader-map "F" 'counsel-git)
 
 (provide 'evil-setup)
