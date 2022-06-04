@@ -7,7 +7,22 @@
                             ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 (defvar +package
-  '(evil evil-surround avy counsel amx wgrep helpful magit company eglot markdown-mode))
+  '(evil
+    evil-surround
+    ivy
+    swiper
+    counsel
+    avy
+    ivy-avy
+    hydra
+    ivy-hydra
+    amx
+    wgrep
+    helpful
+    magit
+    company
+    eglot
+    markdown-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 

@@ -34,7 +34,7 @@
                        "-Xclang"
                        ,(format "-code-completion-at=-:%d:%d"
                                 (line-number-at-pos)
-                                (current-column))
+                                (1+ (current-column)))
                        "-"))
             (narrow-to-region min max)))))
     (with-current-buffer buffer
@@ -62,11 +62,9 @@
 (cl-defmethod xref-backend-identifier-at-point ((_backend (eql gtags)))
   (thing-at-point 'symbol))
 
-;; too slow in linux kernel repo
-;; (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
-;;   (process-lines global-program "-c"))
-
-(cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags))))
+(cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
+  (when (memq this-command '(xref-find-definitions xref-find-definitions-other-window))
+    (process-lines global-program "-c")))
 
 (cl-defmethod xref-backend-definitions ((_backend (eql gtags)) symbol)
   (global-find-symbol symbol "-dxa"))
