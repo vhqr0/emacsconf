@@ -9,7 +9,7 @@
      :class shuangpin
      :first-chars "abcdefghijklmnopqrstuvwxyz"
      :rest-chars "abcdefghijklmnopqrstuvwxyz"
-     :prefer-trigger-chars nil
+     :prefer-triggers nil
      :keymaps
      (("a" "a" "a")
       ("b" "b" "ou")

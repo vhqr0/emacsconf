@@ -31,7 +31,6 @@
 (define-key goto-map "f" 'avy-goto-char)
 (define-key goto-map "w" 'avy-goto-symbol-1)
 (define-key goto-map "/" 'avy-goto-char-timer)
-(define-key goto-map "i" 'counsel-imenu)
 (define-key goto-map "m" 'counsel-mark-ring)
 (define-key goto-map "M" 'counsel-evil-marks)
 

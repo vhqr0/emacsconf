@@ -201,8 +201,7 @@
   (define-key ctl-x-x-map "=" 'external-format)
   (define-key ctl-x-x-map "^" 'fixup-whitespace-nospace-mode)
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
-  (global-set-key (kbd "C-x 9") 'rotate-window)
-  (global-set-key "\M-E" 'eshell-dwim))
+  (global-set-key (kbd "C-x 9") 'rotate-window))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here
