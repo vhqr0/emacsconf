@@ -9,6 +9,7 @@
 (defvar +package
   '(evil
     evil-surround
+    expand-region
     ivy
     swiper
     counsel

@@ -64,7 +64,7 @@ Switch to eshell and change directory to DIR.
 ;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
 ;;; Generated autoloads from evil-setup.el
 
-(register-definition-prefixes "evil-setup" '("evil-"))
+(register-definition-prefixes "evil-setup" '("evil-" "god-C-c"))
 
 ;;;***
 

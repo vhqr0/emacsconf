@@ -1,12 +1,12 @@
-(setq ivy-use-virtual-buffers t
+(setq ivy-count-format "(%d/%d) "
+      ivy-use-virtual-buffers t
+      ivy-read-action-function 'ivy-hydra-read-action
       counsel-describe-symbol-function   'helpful-symbol
       counsel-describe-variable-function 'helpful-variable
       counsel-describe-function-function 'helpful-callable
       counsel-descbinds-function         'helpful-callable)
 
 (global-set-key (kbd "<f5>") 'ivy-resume)
-
-(global-set-key "\M-x" 'counsel-M-x)
 
 (defvar comint-mode-map)
 (defvar eshell-hist-mode-map)
@@ -34,12 +34,12 @@
 (define-key goto-map "m" 'counsel-mark-ring)
 (define-key goto-map "M" 'counsel-evil-marks)
 
+(define-key help-map "k" 'helpful-key)
 (define-key help-map "o" 'counsel-describe-symbol)
 (define-key help-map "f" 'counsel-describe-function)
 (define-key help-map "v" 'counsel-describe-variable)
 (define-key help-map "b" 'counsel-descbinds)
 (define-key help-map "a" 'counsel-apropos)
-(define-key help-map "F" 'counsel-describe-face)
 (define-key help-map "S" 'counsel-info-lookup-symbol)
 (define-key help-map "t" 'counsel-load-library)
 (define-key help-map "T" 'counsel-load-theme)
@@ -57,9 +57,11 @@
          (command (if (memq command '(indent-for-tab-command c-indent-line-or-region))
                       'completion-at-point
                     command)))
+    (completion-in-region-mode -1)
     (call-interactively command)))
 
 (defun ivy-dabbrev-completion ()
+  "Dabbrev completion with `ivy-read'."
   (interactive)
   (ivy-tab-completion nil 'dabbrev-completion))
 

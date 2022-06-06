@@ -5,4 +5,5 @@
   (define-key semantic-mode-map (kbd "C-c , v") 'semantic-ia-show-variants)
   (define-key semantic-mode-map (kbd "C-c , c") 'semantic-ia-describe-class))
 
-(setq semantic-new-buffer-setup-functions '((c-mode . semantic-default-c-setup)))
+(setq semantic-new-buffer-setup-functions '((c-mode . semantic-default-c-setup)
+                                            (c++-mode . semantic-default-c-setup)))
