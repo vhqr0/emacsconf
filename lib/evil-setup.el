@@ -189,6 +189,13 @@
 (define-key evil-leader-map "t" tab-prefix-map)
 (define-key evil-leader-map "w" evil-window-map)
 
+(define-key help-map "t" 'find-library)
+(define-key help-map "T" 'load-library)
+
+(define-key ctl-x-x-map "h" 'hl-line-mode)
+(define-key ctl-x-x-map "s" 'whitespace-mode)
+(define-key ctl-x-x-map "l" 'display-line-numbers-mode)
+
 (define-key evil-leader-map "1" 'delete-other-windows)
 (define-key evil-leader-map "2" 'split-window-below)
 (define-key evil-leader-map "3" 'split-window-right)
@@ -202,32 +209,30 @@
 (define-key evil-leader-map "L" 'next-buffer)
 (define-key evil-leader-map "k" 'kill-buffer)
 
+(define-key evil-leader-map "\s" 'execute-extended-command)
+(define-key evil-leader-map "f" 'find-file)
+(define-key evil-leader-map "b" 'switch-to-buffer)
 (define-key evil-leader-map "u" 'universal-argument)
 (define-key evil-leader-map "z" 'repeat)
+(define-key evil-leader-map "y" 'yank-pop)
+(define-key evil-leader-map "m" 'set-mark-command)
 (define-key evil-leader-map ";" 'eval-expression)
+(define-key evil-leader-map "i" 'imenu)
 (define-key evil-leader-map "j" 'dired-jump)
-(define-key evil-leader-map "e" 'eshell-dwim)   ; simple-x
+(define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
 (define-key evil-leader-map "B" 'ibuffer)
 (define-key evil-leader-map "%" 'query-replace-regexp)
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
-(define-key evil-leader-map "=" 'er/expand-region) ; expand-region
 
-;; replaced by counsel
-;; (define-key evil-leader-map "\s" 'execute-extended-command)
-;; (define-key evil-leader-map "f" 'find-file)
-;; (define-key evil-leader-map "b" 'switch-to-buffer)
-;; (define-key evil-leader-map "i" 'imenu)
+;;; expand-region
+(define-key evil-leader-map "=" 'er/expand-region)
 
 ;;; magit
 (define-key evil-leader-map "V" 'magit)
 
 ;;; counsel
-(define-key evil-leader-map "\s" 'counsel-M-x)
-(define-key evil-leader-map "b" 'ivy-switch-buffer)
-(define-key evil-leader-map "f" 'counsel-find-file)
 (define-key evil-leader-map "F" 'counsel-git)
-(define-key evil-leader-map "i" 'counsel-imenu)
 
 (provide 'evil-setup)

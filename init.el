@@ -19,7 +19,6 @@
     ivy-hydra
     amx
     wgrep
-    helpful
     magit
     company
     eglot
@@ -95,23 +94,6 @@
 
 
 
-(setq completion-ignore-case t)
-
-(define-key minibuffer-local-completion-map "\s" "-")
-
-(setq icomplete-compute-delay 2
-      icomplete-max-delay-chars 4
-      icomplete-delay-completions-threshold 10)
-
-(icomplete-mode 1)
-
-(advice-add 'ivy-read :around
-            (lambda (func &rest args)
-              (let (icomplete-mode)
-                (apply func args))))
-
-
-
 (setq-default indent-tabs-mode nil)
 
 (setq show-paren-context-when-offscreen t)
@@ -147,10 +129,6 @@
 
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
-(define-key ctl-x-x-map "h" 'hl-line-mode)
-(define-key ctl-x-x-map "s" 'whitespace-mode)
-(define-key ctl-x-x-map "l" 'display-line-numbers-mode)
-
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (simple-x-default-keybindings)
@@ -159,6 +137,8 @@
 (require 'ivy-setup)
 
 
+
+(setq completion-ignore-case t)
 
 (setq xref-search-program 'ripgrep)
 
