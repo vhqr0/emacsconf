@@ -8,87 +8,31 @@
 (require 'evil)
 (require 'evil-surround)
 
-
+(evil-mode 1)
+(global-evil-surround-mode 1)
 
-;; surround
+(global-set-key "\M-z" [escape])
 
-(define-key evil-operator-state-map "s"  'evil-surround-edit)
-(define-key evil-operator-state-map "S"  'evil-Surround-edit)
-(define-key evil-visual-state-map   "S"  'evil-surround-region)
-(define-key evil-visual-state-map   "gS" 'evil-Surround-region)
-
-;; scroll
+(define-key evil-motion-state-map "i" 'evil-execute-in-emacs-state)
 
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
 
 
-;; jk mode
+;; initial state
 
-(defvar evil-jk-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "j" "n")
-    (define-key map "k" "p")
-    (define-key map "J" '(menu-item "" nil :filter
-                                    (lambda (_)
-                                      (let (evil-jk-mode-map)
-                                        (lookup-key (current-local-map) "j")))))
-    (define-key map "K" '(menu-item "" nil :filter
-                                    (lambda (_)
-                                      (let (evil-jk-mode-map)
-                                        (lookup-key (current-local-map) "k")))))
-    (define-key map "\M-j" 'evil-scroll-down)
-    (define-key map "\M-k" 'evil-scroll-up)
-    (define-key map ":"    'evil-ex)
-    map))
+(defun evil-initial-state-for-buffer-override (&optional buffer default)
+  (with-current-buffer (or buffer (current-buffer))
+    (cond ((derived-mode-p 'comint-mode 'eshell-mode)
+           'insert)
+          (buffer-read-only
+           'motion)
+          (t
+           'normal))))
 
-(define-minor-mode evil-jk-mode
-  "Evil JK mode."
-  :keymap evil-jk-mode-map
-  :lighter " <JK>")
-
-;; setup
-
-(defvar evil-setup-jk-modes
-  '(special-mode compilation-mode dired-mode completion-list-mode image-mode doc-view-mode))
-
-(defvar evil-setup-motion-modes
-  '(hexl-mode diff-mode))
-
-(defvar evil-setup-normal-modes
-  '(prog-mode text-mode fundamental-mode conf-mode erc-mode))
-
-(defvar evil-setup-insert-modes
-  '(comint-mode eshell-mode))
-
-(defun evil-setup ()
-  (cond ((apply 'derived-mode-p evil-setup-jk-modes)
-         (evil-emacs-state)
-         (evil-jk-mode 1))
-        ((apply 'derived-mode-p evil-setup-motion-modes)
-         (evil-motion-state))
-        ((apply 'derived-mode-p evil-setup-normal-modes)
-         (evil-normal-state))
-        ((apply 'derived-mode-p evil-setup-insert-modes)
-         (evil-insert-state))
-        (t
-         (evil-emacs-state))))
-
-(defun evil-setup-motion-or-normal-state ()
-  (interactive)
-  (cond ((or (apply 'derived-mode-p evil-setup-jk-modes)
-             (apply 'derived-mode-p evil-setup-motion-modes))
-         (evil-motion-state))
-        (t
-         (evil-normal-state))))
-
-(add-hook 'after-change-major-mode-hook 'evil-setup)
-
-(global-set-key "\M-z" [escape])
-(global-set-key "\C-z" 'evil-setup-motion-or-normal-state)
-
-(define-key evil-emacs-state-map "\C-z" nil)
+(advice-add 'evil-initial-state-for-buffer
+            :override 'evil-initial-state-for-buffer-override)
 
 ;; jk
 
@@ -161,6 +105,10 @@
 
 ;; leader
 
+(defvar evil-leader-map (make-sparse-keymap))
+
+(define-key evil-motion-state-map "\s" evil-leader-map)
+
 (defun god-C-c ()
   (interactive)
   (let ((bind (key-binding (kbd (format "C-c C-%c" (read-char "C-c C-"))))))
@@ -168,11 +116,6 @@
       (setq this-command bind
             real-this-command bind)
       (call-interactively bind))))
-
-(defvar evil-leader-map (make-sparse-keymap))
-
-(define-key evil-jk-mode-map      "\s" evil-leader-map)
-(define-key evil-motion-state-map "\s" evil-leader-map)
 
 (define-key evil-leader-map "c" 'god-C-c)
 
@@ -208,13 +151,14 @@
 (define-key evil-leader-map "H" 'previous-buffer)
 (define-key evil-leader-map "L" 'next-buffer)
 (define-key evil-leader-map "k" 'kill-buffer)
+(define-key evil-leader-map "\t" 'evil-jump-backward)
+(define-key evil-leader-map [backtab] 'evil-jump-forward)
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "f" 'find-file)
 (define-key evil-leader-map "b" 'switch-to-buffer)
 (define-key evil-leader-map "u" 'universal-argument)
 (define-key evil-leader-map "z" 'repeat)
-(define-key evil-leader-map "y" 'yank-pop)
 (define-key evil-leader-map "m" 'set-mark-command)
 (define-key evil-leader-map ";" 'eval-expression)
 (define-key evil-leader-map "i" 'imenu)
@@ -233,6 +177,7 @@
 (define-key evil-leader-map "V" 'magit)
 
 ;;; counsel
+(define-key evil-leader-map "y" 'counsel-yank-pop)
 (define-key evil-leader-map "F" 'counsel-git)
 
 (provide 'evil-setup)
