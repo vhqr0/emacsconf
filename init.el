@@ -15,6 +15,7 @@
     counsel
     avy
     ivy-avy
+    ace-window
     hydra
     ivy-hydra
     amx
@@ -129,7 +130,13 @@
 
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(define-key goto-map "." 'avy-resume)
+(define-key goto-map "j" 'avy-goto-line)
+(define-key goto-map "f" 'avy-goto-char)
+(define-key goto-map "w" 'avy-goto-symbol-1)
+(define-key goto-map "/" 'avy-goto-char-timer)
+
+(global-set-key "\M-o" 'ace-window)
 
 (simple-x-default-keybindings)
 
@@ -138,11 +145,11 @@
 
 
 
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 (setq completion-ignore-case t)
 
 (setq xref-search-program 'ripgrep)
-
-(define-key prog-mode-map [remap display-local-help] 'eldoc-doc-buffer)
 
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)

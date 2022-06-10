@@ -3,7 +3,8 @@
       evil-want-fine-undo t
       evil-undo-system 'undo-redo
       evil-symbol-word-search t
-      evil-search-module 'evil-search)
+      evil-search-module 'evil-search
+      evil-respect-visual-line-mode t)
 
 (require 'evil)
 (require 'evil-surround)
@@ -190,6 +191,7 @@
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
+(define-key evil-leader-map "d" 'eldoc-doc-buffer)
 
 ;;; expand-region
 (define-key evil-leader-map "=" 'er/expand-region)

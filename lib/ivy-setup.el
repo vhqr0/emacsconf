@@ -13,11 +13,6 @@
 (define-key ctl-x-r-map "i" 'counsel-register)
 (define-key ctl-x-r-map "I" 'counsel-evil-registers)
 
-(define-key goto-map "." 'avy-resume)
-(define-key goto-map "j" 'avy-goto-line)
-(define-key goto-map "f" 'avy-goto-char)
-(define-key goto-map "w" 'avy-goto-symbol-1)
-(define-key goto-map "/" 'avy-goto-char-timer)
 (define-key goto-map "m" 'counsel-mark-ring)
 (define-key goto-map "M" 'counsel-evil-marks)
 
