@@ -13,8 +13,6 @@
 
 (global-set-key "\M-z" [escape])
 
-(define-key evil-motion-state-map "i" 'evil-execute-in-emacs-state)
-
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
@@ -22,10 +20,28 @@
 
 ;; initial state
 
+(evil-define-state special
+  "Special state."
+  :tag " <SP> "
+  :enable (emacs))
+
+(define-key evil-emacs-state-map   "\M-z" 'evil-special-state)
+(define-key evil-special-state-map "\C-z" 'evil-motion-state)
+(define-key evil-motion-state-map "\M-j"  'evil-scroll-down)
+(define-key evil-motion-state-map "\M-k"  'evil-scroll-up)
+(define-key evil-special-state-map ":"    'evil-ex)
+(define-key evil-special-state-map "\\"   'evil-execute-in-emacs-state)
+(define-key evil-special-state-map "j"    "\C-n")
+(define-key evil-special-state-map "k"    "\C-p")
+(define-key evil-special-state-map "J"    "\\j")
+(define-key evil-special-state-map "K"    "\\k")
+
 (defun evil-initial-state-for-buffer-override (&optional buffer default)
   (with-current-buffer (or buffer (current-buffer))
     (cond ((derived-mode-p 'comint-mode 'eshell-mode)
            'insert)
+          ((derived-mode-p 'special-mode 'dired-mode 'compilation-mode 'image-mode 'doc-view-mode)
+           'special)
           (buffer-read-only
            'motion)
           (t
@@ -107,7 +123,8 @@
 
 (defvar evil-leader-map (make-sparse-keymap))
 
-(define-key evil-motion-state-map "\s" evil-leader-map)
+(define-key evil-motion-state-map  "\s" evil-leader-map)
+(define-key evil-special-state-map "\s" evil-leader-map)
 
 (defun god-C-c ()
   (interactive)
@@ -137,7 +154,9 @@
 
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
+(define-key ctl-x-x-map "v" 'visual-line-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
+(define-key ctl-x-x-map "/" 'evil-ex-nohighlight)
 
 (define-key evil-leader-map "1" 'delete-other-windows)
 (define-key evil-leader-map "2" 'split-window-below)
@@ -165,6 +184,8 @@
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
 (define-key evil-leader-map "B" 'ibuffer)
+(define-key evil-leader-map "!" 'shell-command)
+(define-key evil-leader-map "&" 'async-shell-command)
 (define-key evil-leader-map "%" 'query-replace-regexp)
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
