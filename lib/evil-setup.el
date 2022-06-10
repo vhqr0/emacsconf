@@ -27,8 +27,8 @@
 
 (define-key evil-emacs-state-map   "\M-z" 'evil-special-state)
 (define-key evil-special-state-map "\C-z" 'evil-motion-state)
-(define-key evil-motion-state-map "\M-j"  'evil-scroll-down)
-(define-key evil-motion-state-map "\M-k"  'evil-scroll-up)
+(define-key evil-special-state-map "\M-j" 'evil-scroll-down)
+(define-key evil-special-state-map "\M-k" 'evil-scroll-up)
 (define-key evil-special-state-map ":"    'evil-ex)
 (define-key evil-special-state-map "\\"   'evil-execute-in-emacs-state)
 (define-key evil-special-state-map "j"    "\C-n")
