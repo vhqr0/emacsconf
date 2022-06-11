@@ -26,7 +26,6 @@
   :tag " <SP> "
   :enable (emacs))
 
-(define-key evil-emacs-state-map   "\M-z" 'evil-special-state)
 (define-key evil-special-state-map "\C-z" 'evil-motion-state)
 (define-key evil-special-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-special-state-map "\M-k" 'evil-scroll-up)
@@ -34,8 +33,12 @@
 (define-key evil-special-state-map "\\"   'evil-execute-in-emacs-state)
 (define-key evil-special-state-map "j"    "\C-n")
 (define-key evil-special-state-map "k"    "\C-p")
+(define-key evil-special-state-map "h"    "\C-b")
+(define-key evil-special-state-map "l"    "\C-f")
 (define-key evil-special-state-map "J"    "\\j")
 (define-key evil-special-state-map "K"    "\\k")
+(define-key evil-special-state-map "H"    "\\h")
+(define-key evil-special-state-map "L"    "\\l")
 
 (defun evil-initial-state-for-buffer-override (&optional buffer default)
   (with-current-buffer (or buffer (current-buffer))
@@ -149,6 +152,7 @@
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
 (define-key evil-leader-map "w" evil-window-map)
+(define-key evil-leader-map "\r" mule-keymap)
 
 (define-key help-map "t" 'find-library)
 (define-key help-map "T" 'load-library)
@@ -163,21 +167,20 @@
 (define-key evil-leader-map "2" 'split-window-below)
 (define-key evil-leader-map "3" 'split-window-right)
 (define-key evil-leader-map "q" 'quit-window)
-(define-key evil-leader-map "0" 'delete-window)
 (define-key evil-leader-map "o" 'other-window)
+(define-key evil-leader-map "0" 'delete-window)
 (define-key evil-leader-map "9" 'rotate-window) ; simple-x
-(define-key evil-leader-map "U" 'winner-undo)   ; winner
-(define-key evil-leader-map "R" 'winner-redo)   ; winner
-(define-key evil-leader-map "H" 'previous-buffer)
-(define-key evil-leader-map "L" 'next-buffer)
+(define-key evil-leader-map "u" 'winner-undo)   ; winner
+(define-key evil-leader-map "U" 'winner-redo)   ; winner
 (define-key evil-leader-map "k" 'kill-buffer)
+(define-key evil-leader-map [left] 'previous-buffer)
+(define-key evil-leader-map [right] 'next-buffer)
 (define-key evil-leader-map "\t" 'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "f" 'find-file)
 (define-key evil-leader-map "b" 'switch-to-buffer)
-(define-key evil-leader-map "u" 'universal-argument)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map "m" 'set-mark-command)
 (define-key evil-leader-map ";" 'eval-expression)
