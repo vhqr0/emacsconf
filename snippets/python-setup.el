@@ -11,3 +11,6 @@
       '(elpy-module-company
         elpy-module-eldoc
         elpy-module-pyvenv))
+
+(with-eval-after-load 'elpy
+  (define-key elpy-mode-map [remap external-format] 'elpy-format-code))
