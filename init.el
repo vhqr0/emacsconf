@@ -186,6 +186,3 @@
       wgrep-change-readonly-file t)
 
 (setq ispell-dictionary "american")
-
-(with-eval-after-load 'eshell
-  (require 'eshell-z))
