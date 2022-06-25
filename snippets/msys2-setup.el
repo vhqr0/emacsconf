@@ -1,6 +1,8 @@
+;; should run emacs in mingw64-shell
+
 (setq package-check-signature nil)
 
-(setq xdg-open-program "cmd /c start")
+(setq xdg-open-program "c:/Windows/system32/cmd.exe //c start")
 
 (prefer-coding-system 'utf-8-unix)
 
