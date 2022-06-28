@@ -129,6 +129,7 @@
       isearch-repeat-on-direction-change t)
 
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
+(define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
 (define-key goto-map "." 'avy-resume)
 (define-key goto-map "j" 'avy-goto-line)
