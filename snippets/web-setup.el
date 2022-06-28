@@ -1,6 +1,6 @@
 (setq +package (append +package '(emmet-mode company-web)))
 
-(setq prettier-program "prettier")
+(defvar prettier-program "prettier")
 
 (defun prettier-command (default-file-path)
   (format "%s --stdin-filepath %s"
