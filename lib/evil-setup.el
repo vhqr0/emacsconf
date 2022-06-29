@@ -161,6 +161,7 @@
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "v" 'visual-line-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
+(define-key ctl-x-x-map "a" 'auto-save-visited-mode)
 (define-key ctl-x-x-map "/" 'evil-ex-nohighlight)
 
 (define-key evil-leader-map "1" 'delete-other-windows)

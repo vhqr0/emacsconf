@@ -1,5 +1,7 @@
 (setq +package (append +package '(emmet-mode company-web)))
 
+(setq js-indent-level 2)
+
 (defvar prettier-program "prettier")
 
 (defun prettier-command (default-file-path)

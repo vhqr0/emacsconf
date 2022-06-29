@@ -22,6 +22,7 @@
     wgrep
     magit
     company
+    yasnippet
     eglot
     markdown-mode))
 
@@ -74,6 +75,7 @@
 
 
 (setq auto-revert-check-vc-info t
+      magit-auto-revert-mode nil
       vc-handled-backends '(Git)
       vc-make-backup-files t
       version-control t
@@ -166,6 +168,11 @@
 
 (setq eglot-extend-to-xref t
       eglot-events-buffer-size 0)
+
+(add-hook 'eglot-managed-mode-hook 'yas-minor-mode)
+
+(advice-add 'eglot--snippet-expansion-fn
+            :override (lambda () 'yas-expand-snippet))
 
 (setq company-idle-delay 0
       company-minimum-prefix-length 2

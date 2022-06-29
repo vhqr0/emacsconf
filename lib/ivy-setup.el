@@ -32,6 +32,8 @@
     (call-interactively command)))
 
 (global-set-key (kbd "<f2>") 'ivy-tab-completion)
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "<f2>") 'counsel-company))
 
 (ivy-mode 1)
 (counsel-mode 1)
