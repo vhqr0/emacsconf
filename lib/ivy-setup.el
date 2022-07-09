@@ -39,6 +39,7 @@
 (counsel-mode 1)
 
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
+(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
 (define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
 
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)

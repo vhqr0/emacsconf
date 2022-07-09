@@ -121,6 +121,12 @@
 (define-key evil-inner-text-objects-map "h" 'evil-tobj-entire)
 (define-key evil-outer-text-objects-map "h" 'evil-tobj-entire)
 
+;; avy
+
+(define-key evil-motion-state-map "gj" 'avy-goto-line)
+(define-key evil-motion-state-map "gk" 'avy-goto-char-timer)
+(define-key evil-motion-state-map "go" 'avy-goto-symbol-1)
+
 
 
 ;; leader

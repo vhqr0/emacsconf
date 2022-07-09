@@ -133,11 +133,15 @@
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
+(setq avy-background t)
+
 (define-key goto-map "." 'avy-resume)
 (define-key goto-map "j" 'avy-goto-line)
-(define-key goto-map "f" 'avy-goto-char)
-(define-key goto-map "w" 'avy-goto-symbol-1)
-(define-key goto-map "/" 'avy-goto-char-timer)
+(define-key goto-map "k" 'avy-goto-char-timer)
+(define-key goto-map "o" 'avy-goto-symbol-1)
+(define-key isearch-mode-map "\M-g" 'avy-isearch)
+
+(setq aw-dispatch-always t)
 
 (global-set-key "\M-o" 'ace-window)
 
