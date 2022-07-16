@@ -45,7 +45,7 @@ it is disabled.
 ;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
 ;;; Generated autoloads from evil-setup.el
 
-(register-definition-prefixes "evil-setup" '("evil-" "god-C-c"))
+(register-definition-prefixes "evil-setup" '("evil-" "god-C-c" "yas-prefix-map"))
 
 ;;;***
 
@@ -62,6 +62,14 @@ it is disabled.
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
 (register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
+
+;;;***
+
+;;;### (autoloads nil "yasnippet-snippets" "yasnippet-snippets.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from yasnippet-snippets.el
+
+(register-definition-prefixes "yasnippet-snippets" '("yasnippet-snippets--"))
 
 ;;;***
 

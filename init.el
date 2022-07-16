@@ -176,6 +176,7 @@
       eglot-stay-out-of '(company))
 
 (yas-global-mode 1)
+(require 'yasnippet-snippets)
 
 (global-set-key "\C-o" 'aya-open-line)
 (define-key evil-insert-state-map "\C-o" 'aya-open-line)
