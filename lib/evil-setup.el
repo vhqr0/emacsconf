@@ -209,6 +209,17 @@
 ;;; magit
 (define-key evil-leader-map "V" 'magit)
 
+;;; yasnippet
+(defvar yas-prefix-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "s" 'yas-insert-snippet)
+    (define-key map "v" 'yas-visit-snippet-file)
+    (define-key map "n" 'yas-new-snippet)
+    (define-key map "a" 'aya-create)
+    map))
+
+(define-key evil-leader-map "a" yas-prefix-map)
+
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
 (define-key evil-leader-map "F" 'counsel-git)

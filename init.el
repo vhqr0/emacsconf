@@ -21,8 +21,9 @@
     amx
     wgrep
     magit
-    company
     yasnippet
+    auto-yasnippet
+    company
     eglot
     markdown-mode))
 
@@ -171,20 +172,24 @@
   (define-key c-mode-base-map (kbd "C-c C-i") 'cc-help))
 
 (setq eglot-extend-to-xref t
-      eglot-events-buffer-size 0)
+      eglot-events-buffer-size 0
+      eglot-stay-out-of '(company))
 
-(add-hook 'eglot-managed-mode-hook 'yas-minor-mode)
+(yas-global-mode 1)
 
-(advice-add 'eglot--snippet-expansion-fn
-            :override (lambda () 'yas-expand-snippet))
+(global-set-key "\C-o" 'aya-open-line)
+(define-key evil-insert-state-map "\C-o" 'aya-open-line)
+(global-set-key "\M-O" 'aya-expand)
 
 (setq company-idle-delay 0
       company-minimum-prefix-length 2
+      company-tooltip-align-annotations t
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
       company-backends
-      '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
+      '((company-capf :with company-yasnippet)
+        company-files (company-dabbrev-code company-keywords) company-dabbrev)
       company-global-modes
       '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode))
 

@@ -42,13 +42,6 @@ it is disabled.
 
 ;;;***
 
-;;;### (autoloads nil "erc-sasl" "erc-sasl.el" (0 0 0 0))
-;;; Generated autoloads from erc-sasl.el
-
-(register-definition-prefixes "erc-sasl" '("erc-sasl-login"))
-
-;;;***
-
 ;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
 ;;; Generated autoloads from evil-setup.el
 
@@ -59,7 +52,7 @@ it is disabled.
 ;;;### (autoloads nil "ivy-setup" "ivy-setup.el" (0 0 0 0))
 ;;; Generated autoloads from ivy-setup.el
 
-(register-definition-prefixes "ivy-setup" '("ivy-"))
+(register-definition-prefixes "ivy-setup" '("ivy-tab-completion"))
 
 ;;;***
 

@@ -11,8 +11,14 @@
 
 (add-hook 'python-mode-hook
           (lambda ()
-            (setq-local eglot-stay-out-of '(flymake)
+            (setq-local eglot-stay-out-of '(company flymake)
                         eglot-ignored-server-capabilities
                         '(:hoverProvider
                           :signatureHelpProvider
+                          :documentHighlightProvider))))
+
+(add-hook 'js-mode-hook
+          (lambda ()
+            (setq-local eglot-ignored-server-capabilities
+                        '(:hoverProvider
                           :documentHighlightProvider))))
