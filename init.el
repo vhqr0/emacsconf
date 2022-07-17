@@ -176,21 +176,19 @@
       eglot-stay-out-of '(company))
 
 (yas-global-mode 1)
-(require 'yasnippet-snippets)
+(setcdr (assq 'yas-minor-mode minor-mode-alist) '(""))
 
 (global-set-key "\C-o" 'aya-open-line)
 (define-key evil-insert-state-map "\C-o" 'aya-open-line)
-(global-set-key "\M-O" 'aya-expand)
 
 (setq company-idle-delay 0
-      company-minimum-prefix-length 2
+      company-minimum-prefix-length 3
       company-tooltip-align-annotations t
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
       company-backends
-      '((company-capf :with company-yasnippet)
-        company-files (company-dabbrev-code company-keywords) company-dabbrev)
+      '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
       company-global-modes
       '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode))
 

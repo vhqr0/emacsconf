@@ -1,7 +1,9 @@
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "--simple-prompt")
 
-(setq +package (append +package '(elpy)))
+(setq +package (append +package '(highlight-indentation elpy)))
+
+(add-hook 'python-mode-hook 'highlight-indentation-mode)
 
 (setq elpy-remove-modeline-lighter nil
       elpy-project-root-finder-functions

@@ -65,14 +65,6 @@ it is disabled.
 
 ;;;***
 
-;;;### (autoloads nil "yasnippet-snippets" "yasnippet-snippets.el"
-;;;;;;  (0 0 0 0))
-;;; Generated autoloads from yasnippet-snippets.el
-
-(register-definition-prefixes "yasnippet-snippets" '("yasnippet-snippets--"))
-
-;;;***
-
 (provide '+autoload)
 ;; Local Variables:
 ;; version-control: never
