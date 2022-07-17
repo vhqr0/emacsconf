@@ -62,6 +62,8 @@
       use-file-dialog nil
       confirm-kill-emacs 'y-or-n-p)
 
+(setq text-quoting-style 'grave)
+
 (tooltip-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -70,13 +72,9 @@
 (window-divider-mode 1)
 (xterm-mouse-mode 1)
 
-(global-set-key (kbd "C-S-T") 'tab-new)
-(global-set-key (kbd "C-S-W") 'tab-close)
-
 
 
 (setq auto-revert-check-vc-info t
-      magit-auto-revert-mode nil
       vc-handled-backends '(Git)
       vc-make-backup-files t
       version-control t
@@ -200,5 +198,8 @@
 
 (setq wgrep-auto-save-buffer t
       wgrep-change-readonly-file t)
+
+(setq magit-auto-revert-mode nil
+      magit-section-visibility-indicator '("..." . t))
 
 (setq ispell-dictionary "american")

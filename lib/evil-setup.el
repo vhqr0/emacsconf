@@ -35,17 +35,13 @@
 (define-key evil-special-state-map "k"    "\C-p")
 (define-key evil-special-state-map "h"    "\C-b")
 (define-key evil-special-state-map "l"    "\C-f")
-(define-key evil-special-state-map "J"    "\\j")
-(define-key evil-special-state-map "K"    "\\k")
-(define-key evil-special-state-map "H"    "\\h")
-(define-key evil-special-state-map "L"    "\\l")
 
 (defun evil-initial-state-for-buffer-override (&optional buffer default)
   (with-current-buffer (or buffer (current-buffer))
-    (cond ((derived-mode-p 'comint-mode 'eshell-mode)
-           'insert)
-          ((derived-mode-p 'special-mode 'dired-mode 'compilation-mode 'image-mode 'doc-view-mode)
+    (cond ((derived-mode-p 'dired-mode 'magit-mode 'image-mode 'doc-view-mode)
            'special)
+          ((derived-mode-p 'comint-mode 'eshell-mode)
+           'insert)
           (buffer-read-only
            'motion)
           (t
