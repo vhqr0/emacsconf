@@ -193,6 +193,7 @@
 (define-key evil-leader-map "B" 'ibuffer)
 (define-key evil-leader-map "!" 'shell-command)
 (define-key evil-leader-map "&" 'async-shell-command)
+(define-key evil-leader-map "$" 'ispell-word)
 (define-key evil-leader-map "%" 'query-replace-regexp)
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
