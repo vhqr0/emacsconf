@@ -9,6 +9,7 @@
 (defvar +package
   '(evil
     evil-surround
+    evil-snipe
     expand-region
     ivy
     swiper
@@ -194,7 +195,7 @@
 
 
 
-(setq dired-listing-switches "-alh")
+(setq dired-listing-switches "-lha")
 
 (setq wgrep-auto-save-buffer t
       wgrep-change-readonly-file t)

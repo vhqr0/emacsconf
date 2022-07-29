@@ -4,13 +4,22 @@
       evil-undo-system 'undo-redo
       evil-symbol-word-search t
       evil-search-module 'evil-search
-      evil-respect-visual-line-mode t)
+      evil-respect-visual-line-mode t
+      evil-snipe-scope 'visible
+      evil-snipe-smart-case t)
 
 (require 'evil)
 (require 'evil-surround)
 
+(setq-default evil-surround-pairs-alist
+              (append evil-surround-pairs-alist
+                      '((?a . ("<" . ">"))
+                        (?r . ("[" . "]")))))
+
 (evil-mode 1)
 (global-evil-surround-mode 1)
+(evil-snipe-mode 1)
+(evil-snipe-override-mode 1)
 
 (global-set-key "\M-z" [escape])
 
@@ -42,7 +51,7 @@
            'special)
           ((derived-mode-p 'comint-mode 'eshell-mode)
            'insert)
-          (buffer-read-only
+          ((derived-mode-p 'special-mode)
            'motion)
           (t
            'normal))))
