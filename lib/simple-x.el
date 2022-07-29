@@ -65,24 +65,22 @@
     (c++-mode . "clang-format")
     (python-mode . "yapf")))
 
-(defun external-format ()
-  (interactive)
+(defun external-format (beg end)
+  (interactive (list (if (use-region-p) (region-beginning) (point-min))
+                     (if (use-region-p) (region-end) (point-max))))
   (let ((program (cdr (assq major-mode external-format-program-alist))))
-    (if program
-        (let ((row (line-number-at-pos))
-              (col (current-column))
-              (beg (if (use-region-p) (region-beginning) (point-min)))
-              (end (if (use-region-p) (region-end) (point-max))))
-          (shell-command-on-region beg end program nil t)
-          (goto-char (point-min))
-          (forward-line (1- row))
-          (forward-char (min col
-                             (- (line-end-position)
-                                (line-beginning-position)))))
-      (delete-trailing-whitespace (if (use-region-p) (region-beginning) (point-min))
-                                  (if (use-region-p) (region-end) (point-max)))
-      (indent-region (if (use-region-p) (region-beginning) (point-min))
-                     (if (use-region-p) (region-end) (point-max))))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (if program
+          (let ((row (line-number-at-pos))
+                (col (current-column)))
+            (shell-command-on-region (point-min) (point-max) program nil t)
+            (goto-char (point-min))
+            (forward-line (1- row))
+            (narrow-to-region (line-beginning-position) (line-end-position))
+            (forward-char col))
+        (delete-trailing-whitespace (point-min) (point-max))
+        (indent-region (point-min) (point-max))))))
 
 
 

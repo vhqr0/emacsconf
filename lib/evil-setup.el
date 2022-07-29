@@ -107,9 +107,16 @@
   (interactive "<r>")
   (narrow-to-region beg end))
 
+;;; simple-x.el
+(evil-define-operator evil-operator-external-format (beg end)
+  :move-point nil
+  (interactive "<r>")
+  (external-format beg end))
+
 (define-key evil-motion-state-map "gy" 'evil-operator-eval)
 (define-key evil-normal-state-map "gc" 'evil-operator-comment)
 (define-key evil-motion-state-map "g-" 'evil-operator-narrow)
+(define-key evil-motion-state-map "g=" 'evil-operator-external-format)
 
 ;; textobject
 
