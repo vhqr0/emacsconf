@@ -72,13 +72,12 @@
     (save-restriction
       (narrow-to-region beg end)
       (if program
-          (let ((row (line-number-at-pos))
-                (col (current-column)))
+          (let ((row (line-number-at-pos)))
             (shell-command-on-region (point-min) (point-max) program nil t)
             (goto-char (point-min))
             (forward-line (1- row))
             (narrow-to-region (line-beginning-position) (line-end-position))
-            (forward-char col))
+            (back-to-indentation))
         (delete-trailing-whitespace (point-min) (point-max))
         (indent-region (point-min) (point-max))))))
 

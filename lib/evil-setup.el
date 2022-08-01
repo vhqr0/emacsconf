@@ -21,6 +21,8 @@
 (evil-snipe-mode 1)
 (evil-snipe-override-mode 1)
 
+(setcdr (assq 'evil-snipe-local-mode minor-mode-alist) '(""))
+
 (global-set-key "\M-z" [escape])
 
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
@@ -51,7 +53,7 @@
            'special)
           ((derived-mode-p 'comint-mode 'eshell-mode)
            'insert)
-          ((derived-mode-p 'special-mode)
+          ((derived-mode-p 'special-mode 'compilation-mode)
            'motion)
           (t
            'normal))))
@@ -69,7 +71,7 @@
   (interactive)
   (if (and (not executing-kbd-macro)
            (not defining-kbd-macro)
-           (not (sit-for 0.1 'no-redisplay)))
+           (not (sit-for 0.2 'no-redisplay)))
       (let ((next-char (read-event)))
         (if (eq next-char ?k)
             (push 'escape unread-command-events)
