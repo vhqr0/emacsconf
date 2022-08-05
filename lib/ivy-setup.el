@@ -38,14 +38,14 @@
 (ivy-mode 1)
 (counsel-mode 1)
 
+(dolist (mode '(ivy-mode counsel-mode))
+  (setcdr (assq mode minor-mode-alist) '("")))
+
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
 (define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
 (define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
 
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
-
-(dolist (mode '(ivy-mode counsel-mode))
-  (setcdr (assq mode minor-mode-alist) '("")))
 
 (provide 'ivy-setup)
