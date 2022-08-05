@@ -122,6 +122,11 @@
 
 ;; textobject
 
+(evil-define-text-object evil-tobj-filename (const &optional beg end type)
+  (cl-destructuring-bind (beg . end)
+      (bounds-of-thing-at-point 'filename)
+    (evil-range beg end)))
+
 (evil-define-text-object evil-tobj-defun (const &optional beg end type)
   (cl-destructuring-bind (beg . end)
       (bounds-of-thing-at-point 'defun)
@@ -130,6 +135,8 @@
 (evil-define-text-object evil-tobj-entire (const &optional beg end type)
   (evil-range (point-min) (point-max) 'line))
 
+(define-key evil-inner-text-objects-map "F" 'evil-tobj-filename)
+(define-key evil-outer-text-objects-map "F" 'evil-tobj-filename)
 (define-key evil-inner-text-objects-map "f" 'evil-tobj-defun)
 (define-key evil-outer-text-objects-map "f" 'evil-tobj-defun)
 (define-key evil-inner-text-objects-map "h" 'evil-tobj-entire)
@@ -217,9 +224,6 @@
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
 (define-key evil-leader-map "d" 'eldoc-doc-buffer)
-
-;;; expand-region
-(define-key evil-leader-map "=" 'er/expand-region)
 
 ;;; magit
 (define-key evil-leader-map "V" 'magit)

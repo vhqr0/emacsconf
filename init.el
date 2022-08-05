@@ -10,7 +10,6 @@
   '(evil
     evil-surround
     evil-snipe
-    expand-region
     ivy
     swiper
     counsel
@@ -140,7 +139,8 @@
 (define-key goto-map "o" 'avy-goto-symbol-1)
 (define-key isearch-mode-map "\M-g" 'avy-isearch)
 
-(setq aw-dispatch-always t)
+(setq aw-dispatch-always t
+      aw-char-position 'left)
 
 (global-set-key "\M-o" 'ace-window)
 
@@ -178,6 +178,7 @@
 
 (global-set-key "\C-o" 'aya-open-line)
 (define-key evil-insert-state-map "\C-o" 'aya-open-line)
+(global-set-key "\M-O" 'aya-expand)
 
 (setq company-idle-delay 0
       company-minimum-prefix-length 3
