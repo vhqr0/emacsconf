@@ -20,6 +20,7 @@
     amx
     wgrep
     magit
+    rg
     yasnippet
     company
     eglot
@@ -207,5 +208,11 @@
 
 (setq magit-auto-revert-mode nil
       magit-section-visibility-indicator '("..." . t))
+
+(define-key vc-prefix-map "j" 'magit-status)
+
+(setq rg-custom-type-aliases nil)
+
+(define-key search-map "g" 'rg-menu)
 
 (setq ispell-dictionary "american")

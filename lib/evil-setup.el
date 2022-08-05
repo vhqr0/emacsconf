@@ -226,9 +226,6 @@
 (define-key evil-leader-map "?" 'xref-find-references)
 (define-key evil-leader-map "d" 'eldoc-doc-buffer)
 
-;;; magit
-(define-key evil-leader-map "V" 'magit)
-
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
 (define-key evil-leader-map "F" 'counsel-file-jump)
