@@ -167,7 +167,7 @@
 (setq flymake-cc-command 'cc-x-flymake-cc-command)
 
 (with-eval-after-load 'cc-mode
-  (define-key c-mode-base-map (kbd "C-c C-i") 'cc-help))
+  (define-key c-mode-base-map (kbd "C-c C-h") 'cc-help))
 
 (setq eglot-extend-to-xref t
       eglot-events-buffer-size 0

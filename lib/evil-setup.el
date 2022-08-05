@@ -49,7 +49,7 @@
 
 (defun evil-initial-state-for-buffer-override (&optional buffer default)
   (with-current-buffer (or buffer (current-buffer))
-    (cond ((derived-mode-p 'dired-mode 'magit-mode 'image-mode 'doc-view-mode)
+    (cond ((derived-mode-p 'dired-mode 'magit-mode 'image-mode 'doc-view-mode 'pdf-view-mode)
            'special)
           ((derived-mode-p 'comint-mode 'eshell-mode)
            'insert)
