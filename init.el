@@ -10,19 +10,17 @@
   '(evil
     evil-surround
     evil-snipe
+    avy
+    ace-window
     ivy
     swiper
     counsel
-    avy
-    ivy-avy
-    ace-window
     hydra
     ivy-hydra
     amx
     wgrep
     magit
     yasnippet
-    auto-yasnippet
     company
     eglot
     markdown-mode))
@@ -131,7 +129,18 @@
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
-(setq avy-background t)
+(define-key help-map "t" 'find-library)
+(define-key help-map "T" 'load-library)
+
+(define-key ctl-x-x-map "h" 'hl-line-mode)
+(define-key ctl-x-x-map "s" 'whitespace-mode)
+(define-key ctl-x-x-map "v" 'visual-line-mode)
+(define-key ctl-x-x-map "l" 'display-line-numbers-mode)
+(define-key ctl-x-x-map "a" 'auto-save-visited-mode)
+
+(define-key ctl-x-4-map "j" 'dired-jump-other-window)
+
+(setq avy-single-candidate-jump nil)
 
 (define-key goto-map "." 'avy-resume)
 (define-key goto-map "j" 'avy-goto-line)
@@ -139,8 +148,7 @@
 (define-key goto-map "o" 'avy-goto-symbol-1)
 (define-key isearch-mode-map "\M-g" 'avy-isearch)
 
-(setq aw-dispatch-always t
-      aw-char-position 'left)
+(setq aw-dispatch-when-more-than 1)
 
 (global-set-key "\M-o" 'ace-window)
 
@@ -176,13 +184,10 @@
 (yas-global-mode 1)
 (setcdr (assq 'yas-minor-mode minor-mode-alist) '(""))
 
-(global-set-key "\C-o" 'aya-open-line)
-(define-key evil-insert-state-map "\C-o" 'aya-open-line)
-(global-set-key "\M-O" 'aya-expand)
+(define-key abbrev-map "s" 'yas-insert-snippet)
+(define-key abbrev-map "v" 'yas-visit-snippet-file)
 
-(setq company-idle-delay 0
-      company-minimum-prefix-length 3
-      company-tooltip-align-annotations t
+(setq company-tooltip-align-annotations t
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t

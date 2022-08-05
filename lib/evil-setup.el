@@ -5,8 +5,9 @@
       evil-symbol-word-search t
       evil-search-module 'evil-search
       evil-respect-visual-line-mode t
-      evil-snipe-scope 'visible
-      evil-snipe-smart-case t)
+      evil-snipe-scope 'buffer
+      evil-snipe-smart-case t
+      evil-snipe-repeat-keys nil)
 
 (require 'evil)
 (require 'evil-surround)
@@ -27,6 +28,8 @@
 
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
+
+(define-key ctl-x-x-map "/" 'evil-ex-nohighlight)
 
 
 
@@ -132,6 +135,11 @@
       (bounds-of-thing-at-point 'defun)
     (evil-range beg end 'line)))
 
+(evil-define-text-object evil-tobj-page (const &optional beg end type)
+  (cl-destructuring-bind (beg . end)
+      (bounds-of-thing-at-point 'page)
+    (evil-range beg end 'line)))
+
 (evil-define-text-object evil-tobj-entire (const &optional beg end type)
   (evil-range (point-min) (point-max) 'line))
 
@@ -139,6 +147,8 @@
 (define-key evil-outer-text-objects-map "F" 'evil-tobj-filename)
 (define-key evil-inner-text-objects-map "f" 'evil-tobj-defun)
 (define-key evil-outer-text-objects-map "f" 'evil-tobj-defun)
+(define-key evil-inner-text-objects-map "P" 'evil-tobj-page)
+(define-key evil-outer-text-objects-map "P" 'evil-tobj-page)
 (define-key evil-inner-text-objects-map "h" 'evil-tobj-entire)
 (define-key evil-outer-text-objects-map "h" 'evil-tobj-entire)
 
@@ -170,6 +180,7 @@
 (define-key evil-leader-map "h" help-map)
 (define-key evil-leader-map "s" search-map)
 (define-key evil-leader-map "g" goto-map)
+(define-key evil-leader-map "a" abbrev-map)
 (define-key evil-leader-map "r" ctl-x-r-map)
 (define-key evil-leader-map "x" ctl-x-x-map)
 (define-key evil-leader-map "n" narrow-map)
@@ -180,16 +191,6 @@
 (define-key evil-leader-map "t" tab-prefix-map)
 (define-key evil-leader-map "w" evil-window-map)
 (define-key evil-leader-map "\r" mule-keymap)
-
-(define-key help-map "t" 'find-library)
-(define-key help-map "T" 'load-library)
-
-(define-key ctl-x-x-map "h" 'hl-line-mode)
-(define-key ctl-x-x-map "s" 'whitespace-mode)
-(define-key ctl-x-x-map "v" 'visual-line-mode)
-(define-key ctl-x-x-map "l" 'display-line-numbers-mode)
-(define-key ctl-x-x-map "a" 'auto-save-visited-mode)
-(define-key ctl-x-x-map "/" 'evil-ex-nohighlight)
 
 (define-key evil-leader-map "1" 'delete-other-windows)
 (define-key evil-leader-map "2" 'split-window-below)
@@ -228,19 +229,9 @@
 ;;; magit
 (define-key evil-leader-map "V" 'magit)
 
-;;; yasnippet
-(defvar yas-prefix-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "s" 'yas-insert-snippet)
-    (define-key map "v" 'yas-visit-snippet-file)
-    (define-key map "n" 'yas-new-snippet)
-    (define-key map "a" 'aya-create)
-    map))
-
-(define-key evil-leader-map "a" yas-prefix-map)
-
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "F" 'counsel-git)
+(define-key evil-leader-map "F" 'counsel-file-jump)
+(define-key evil-leader-map "G" 'counsel-git)
 
 (provide 'evil-setup)
