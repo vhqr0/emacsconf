@@ -47,18 +47,20 @@
 
 (declare-function grep--save-buffers "grep")
 
-(defvar rg-program "rg")
+(defvar ripgrep-program "rg")
 
-(defun rg ()
+(defun ripgrep ()
   "Ripgrep wrap for `grep-mode'."
   (interactive)
   (require 'grep)
   (grep--save-buffers)
   (compilation-start
    (read-shell-command "command: "
-                       (concat rg-program " --no-heading ")
+                       (concat ripgrep-program " --no-heading ")
                        'grep-history)
    'grep-mode))
+
+(defalias 'rg 'ripgrep)
 
 (defvar external-format-program-alist
   '((c-mode . "clang-format")
