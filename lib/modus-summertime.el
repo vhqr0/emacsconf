@@ -253,3 +253,5 @@
     ('modus-operandi (modus-themes-load-operandi))
     ('modus-vivendi (modus-themes-load-vivendi))
     (_ (modus-themes--load-prompt))))
+
+(provide 'modus-summertime)
