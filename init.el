@@ -199,6 +199,32 @@
 
 (global-company-mode 1)
 
+(defun yas-maybe-expand-company-filter (_cmd)
+  (cond ((not yas-minor-mode)
+         'company-complete-common)
+        ((yas-active-snippets)
+         'yas-next-field-or-maybe-expand)
+        ((let ((yas--condition-cache-timestamp (current-time)))
+           (yas--templates-for-key-at-point))
+         'yas-expand)
+        (t
+         'company-complete-common)))
+
+(defun yas-maybe-prev-company-filter (_cmd)
+  (when (and yas-minor-mode
+             (yas-active-snippets))
+    'yas-prev-field))
+
+(defvar yas-maybe-expand-company
+  '(menu-item "" nil :filter yas-maybe-expand-company-filter))
+
+(defvar yas-maybe-prev-company
+  '(menu-item "" nil :filter yas-maybe-prev-company-filter))
+
+(define-key company-active-map [tab] yas-maybe-expand-company)
+(define-key company-active-map (kbd "TAB") yas-maybe-expand-company)
+(define-key company-active-map [backtab] yas-maybe-prev-company)
+
 
 
 (setq dired-listing-switches "-lha")
