@@ -45,7 +45,7 @@ it is disabled.
 ;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
 ;;; Generated autoloads from evil-setup.el
 
-(register-definition-prefixes "evil-setup" '("evil-" "god-C-c" "yas-prefix-map"))
+(register-definition-prefixes "evil-setup" '("evil-" "god-C-c"))
 
 ;;;***
 
@@ -56,12 +56,22 @@ it is disabled.
 
 ;;;***
 
+;;;### (autoloads nil "modus-summertime" "modus-summertime.el" (0
+;;;;;;  0 0 0))
+;;; Generated autoloads from modus-summertime.el
+
+(autoload 'modus-summertime-toggle "modus-summertime" nil t nil)
+
+(register-definition-prefixes "modus-summertime" '("modus-summertime-"))
+
+;;;***
+
 ;;;### (autoloads nil "simple-x" "simple-x.el" (0 0 0 0))
 ;;; Generated autoloads from simple-x.el
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "ripgrep" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 
