@@ -199,6 +199,8 @@
 
 (global-company-mode 1)
 
+
+
 (defun yas-maybe-expand-company-filter (_cmd)
   (cond ((not yas-minor-mode)
          'company-complete-common)
@@ -240,5 +242,8 @@
 (setq rg-custom-type-aliases nil)
 
 (define-key search-map "g" 'rg-menu)
+
+(with-eval-after-load 'rg
+  (defalias 'rg 'ripgrep))
 
 (setq ispell-dictionary "american")
