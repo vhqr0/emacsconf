@@ -199,6 +199,8 @@
 
 (global-company-mode 1)
 
+(define-key company-mode-map (kbd "<f2>") 'company-complete)
+
 
 
 (defun yas-maybe-expand-company-filter (_cmd)
