@@ -5,7 +5,6 @@
       evil-symbol-word-search t
       evil-search-module 'evil-search
       evil-respect-visual-line-mode t
-      evil-snipe-scope 'buffer
       evil-snipe-smart-case t
       evil-snipe-repeat-keys nil)
 
@@ -143,6 +142,10 @@
 (evil-define-text-object evil-tobj-entire (const &optional beg end type)
   (evil-range (point-min) (point-max) 'line))
 
+(define-key evil-inner-text-objects-map "r" 'evil-inner-bracket)
+(define-key evil-outer-text-objects-map "r" 'evil-a-bracket)
+(define-key evil-inner-text-objects-map "a" 'evil-inner-angle)
+(define-key evil-outer-text-objects-map "a" 'evil-an-angle)
 (define-key evil-inner-text-objects-map "F" 'evil-tobj-filename)
 (define-key evil-outer-text-objects-map "F" 'evil-tobj-filename)
 (define-key evil-inner-text-objects-map "f" 'evil-tobj-defun)
@@ -230,6 +233,6 @@
 (define-key evil-leader-map "y" 'counsel-yank-pop)
 (define-key evil-leader-map "F" 'counsel-file-jump)
 (define-key evil-leader-map "D" 'counsel-dired-jump)
-(define-key evil-leader-map "G" 'counsel-git)
+(define-key evil-leader-map "I" 'counsel-outline)
 
 (provide 'evil-setup)

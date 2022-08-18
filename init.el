@@ -20,7 +20,6 @@
     amx
     wgrep
     magit
-    rg
     yasnippet
     company
     eglot
@@ -130,8 +129,11 @@
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
-(define-key help-map "t" 'find-library)
-(define-key help-map "T" 'load-library)
+(define-key help-map "y" 'find-library)
+(define-key help-map "Y" 'load-library)
+(define-key help-map "T" 'load-theme)
+(define-key help-map "M" 'describe-keymap)
+(define-key help-map "\M-f" 'list-faces-display)
 
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
@@ -236,16 +238,9 @@
 (setq wgrep-auto-save-buffer t
       wgrep-change-readonly-file t)
 
-(setq magit-auto-revert-mode nil
-      magit-section-visibility-indicator '("..." . t))
+(setq magit-section-visibility-indicator '("..." . t))
 
 (define-key vc-prefix-map "j" 'magit-status)
-
-(setq rg-custom-type-aliases nil)
-
-(define-key search-map "g" 'rg-menu)
-
-(with-eval-after-load 'rg
-  (defalias 'rg 'ripgrep))
+(define-key vc-prefix-map "J" 'magit-file-dispatch)
 
 (setq ispell-dictionary "american")

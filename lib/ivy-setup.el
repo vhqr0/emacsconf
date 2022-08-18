@@ -16,6 +16,11 @@
 (define-key goto-map "m" 'counsel-mark-ring)
 (define-key goto-map "M" 'counsel-evil-marks)
 
+(define-key vc-prefix-map "f" 'counsel-git)
+(define-key vc-prefix-map "F" 'counsel-git-log)
+
+(define-key help-map "V" 'counsel-set-variable)
+
 (defun ivy-tab-completion (arg &optional command)
   "Tab completion with `ivy-read'."
   (interactive "P")
