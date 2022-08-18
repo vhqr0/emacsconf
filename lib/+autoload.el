@@ -49,6 +49,16 @@ it is disabled.
 
 ;;;***
 
+;;;### (autoloads nil "evil-tobj-plus" "evil-tobj-plus.el" (0 0 0
+;;;;;;  0))
+;;; Generated autoloads from evil-tobj-plus.el
+
+(autoload 'evil-tobj-plus-default-keybindings "evil-tobj-plus" nil nil nil)
+
+(register-definition-prefixes "evil-tobj-plus" '("evil-"))
+
+;;;***
+
 ;;;### (autoloads nil "ivy-setup" "ivy-setup.el" (0 0 0 0))
 ;;; Generated autoloads from ivy-setup.el
 
@@ -71,7 +81,7 @@ it is disabled.
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "ripgrep" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

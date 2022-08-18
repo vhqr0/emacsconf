@@ -155,6 +155,8 @@
 (define-key evil-inner-text-objects-map "h" 'evil-tobj-entire)
 (define-key evil-outer-text-objects-map "h" 'evil-tobj-entire)
 
+(evil-tobj-plus-default-keybindings)
+
 ;; avy
 
 (define-key evil-motion-state-map "gj" 'avy-goto-line)
