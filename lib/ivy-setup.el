@@ -62,22 +62,4 @@
 
 
 
-(defun counsel-rg-file-jump (&optional initial-input initial-directory)
-  (interactive
-   (list nil
-         (when current-prefix-arg
-           (counsel-read-directory-name "From directory: "))))
-  (let ((find-program rg-program)
-        (counsel-file-jump-args '("--files")))
-    (counsel-file-jump initial-input initial-directory)))
-
-(defun counsel-rg-file-jump-from-find ()
-  (interactive)
-  (ivy-quit-and-run
-    (counsel-rg-file-jump ivy-text (ivy-state-directory ivy-last))))
-
-(define-key counsel-find-file-map "`" 'counsel-rg-file-jump-from-find)
-
-
-
 (provide 'ivy-setup)

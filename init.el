@@ -19,6 +19,9 @@
     ivy-hydra
     amx
     wgrep
+    helm
+    helm-ls-git
+    wgrep-helm
     magit
     yasnippet
     company
@@ -129,11 +132,12 @@
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
-(define-key help-map "y" 'find-library)
-(define-key help-map "Y" 'load-library)
-(define-key help-map "T" 'load-theme)
-(define-key help-map "M" 'describe-keymap)
-(define-key help-map "\M-f" 'list-faces-display)
+(define-key help-map "B" 'describe-keymap)
+(define-key help-map "j" 'find-library)
+(define-key help-map "4j" 'find-library-other-window)
+(define-key help-map "Jl" 'load-library)
+(define-key help-map "Jt" 'load-theme)
+(define-key help-map "Jf" 'load-file)
 
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
@@ -244,3 +248,15 @@
 (define-key vc-prefix-map "J" 'magit-file-dispatch)
 
 (setq ispell-dictionary "american")
+
+(setq helm-grep-ag-command
+      "rg --color=always -S --no-heading --line-number %s -- %s %s")
+
+(defun helm-regs-and-marks ()
+  (interactive)
+  (require 'helm-ring)
+  (helm :sources '(helm-source-register
+                   helm-source-mark-ring
+                   helm-source-global-mark-ring)
+        :resume 'noresume
+        :buffer "*helm regs and marks*"))

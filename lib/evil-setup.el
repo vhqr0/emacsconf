@@ -213,10 +213,7 @@
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
-(define-key evil-leader-map "f" 'find-file)
-(define-key evil-leader-map "b" 'switch-to-buffer)
 (define-key evil-leader-map "z" 'repeat)
-(define-key evil-leader-map "m" 'set-mark-command)
 (define-key evil-leader-map ";" 'eval-expression)
 (define-key evil-leader-map "i" 'imenu)
 (define-key evil-leader-map "j" 'dired-jump)
@@ -231,9 +228,23 @@
 (define-key evil-leader-map "?" 'xref-find-references)
 (define-key evil-leader-map "d" 'eldoc-doc-buffer)
 
-;;; counsel
-(define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "I" 'counsel-outline)
-(define-key evil-leader-map "F" 'counsel-rg-file-jump)
+;; replaced by helm
+;; (define-key evil-leader-map "b" 'switch-to-buffer)
+;; (define-key evil-leader-map "f" 'find-file)
+;; (define-key evil-leader-map "y" 'counsel-yank-pop)
+
+;;; helm
+(define-key evil-leader-map (kbd "<f5>") 'helm-resume)
+(define-key evil-leader-map "b" 'helm-mini)
+(define-key evil-leader-map "f" 'helm-find-files)
+(define-key evil-leader-map "F" 'helm-browse-project)
+(define-key evil-leader-map "G" 'helm-do-grep-ag)
+(define-key evil-leader-map "O" 'helm-occur)
+(define-key evil-leader-map "I" 'helm-imenu-in-all-buffers)
+(define-key evil-leader-map "T" 'helm-etags-select)
+(define-key evil-leader-map "E" 'helm-eshell-prompts-all)
+(define-key evil-leader-map "M" 'helm-man-woman)
+(define-key evil-leader-map "m" 'helm-regs-and-marks)
+(define-key evil-leader-map "y" 'helm-show-kill-ring)
 
 (provide 'evil-setup)
