@@ -16,9 +16,6 @@
 (define-key goto-map "m" 'counsel-mark-ring)
 (define-key goto-map "M" 'counsel-evil-marks)
 
-(define-key vc-prefix-map "f" 'counsel-git)
-(define-key vc-prefix-map "F" 'counsel-git-log)
-
 (define-key help-map "V" 'counsel-set-variable)
 
 (defun ivy-tab-completion (arg &optional command)
@@ -39,6 +36,15 @@
 (global-set-key (kbd "<f2>") 'ivy-tab-completion)
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "<f2>") 'counsel-company))
+
+(defun counsel-rg-file-jump (&optional initial-input initial-directory)
+  (interactive
+   (list nil
+         (when current-prefix-arg
+           (counsel-read-directory-name "From directory: "))))
+  (let ((find-program rg-program)
+        (counsel-file-jump-args '("--files")))
+    (counsel-file-jump initial-input initial-directory)))
 
 (ivy-mode 1)
 (counsel-mode 1)

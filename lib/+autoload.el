@@ -62,7 +62,7 @@ it is disabled.
 ;;;### (autoloads nil "ivy-setup" "ivy-setup.el" (0 0 0 0))
 ;;; Generated autoloads from ivy-setup.el
 
-(register-definition-prefixes "ivy-setup" '("ivy-tab-completion"))
+(register-definition-prefixes "ivy-setup" '("counsel-rg-file-jump" "ivy-tab-completion"))
 
 ;;;***
 

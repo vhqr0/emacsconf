@@ -233,8 +233,7 @@
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "F" 'counsel-file-jump)
-(define-key evil-leader-map "D" 'counsel-dired-jump)
 (define-key evil-leader-map "I" 'counsel-outline)
+(define-key evil-leader-map "F" 'counsel-rg-file-jump)
 
 (provide 'evil-setup)
