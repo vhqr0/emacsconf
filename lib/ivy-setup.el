@@ -2,7 +2,28 @@
       ivy-use-virtual-buffers t
       ivy-read-action-function 'ivy-hydra-read-action)
 
+(require 'ivy)
+(require 'swiper)
+(require 'counsel)
+
+(ivy-mode 1)
+(counsel-mode 1)
+
+(dolist (mode '(ivy-mode counsel-mode))
+  (setcdr (assq mode minor-mode-alist) '("")))
+
+
+
+(define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
+(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
+(define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
+
+(define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
+(define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
+
 (global-set-key (kbd "<f5>") 'ivy-resume)
+
+
 
 (define-key search-map "s" 'swiper)
 (define-key search-map "S" 'counsel-rg)
@@ -17,6 +38,8 @@
 (define-key goto-map "M" 'counsel-evil-marks)
 
 (define-key help-map "V" 'counsel-set-variable)
+
+
 
 (defun ivy-tab-completion (arg &optional command)
   "Tab completion with `ivy-read'."
@@ -37,6 +60,8 @@
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "<f2>") 'counsel-company))
 
+
+
 (defun counsel-rg-file-jump (&optional initial-input initial-directory)
   (interactive
    (list nil
@@ -46,17 +71,13 @@
         (counsel-file-jump-args '("--files")))
     (counsel-file-jump initial-input initial-directory)))
 
-(ivy-mode 1)
-(counsel-mode 1)
+(defun counsel-rg-file-jump-from-find ()
+  (interactive)
+  (ivy-quit-and-run
+    (counsel-rg-file-jump ivy-text (ivy-state-directory ivy-last))))
 
-(dolist (mode '(ivy-mode counsel-mode))
-  (setcdr (assq mode minor-mode-alist) '("")))
+(define-key counsel-find-file-map "`" 'counsel-rg-file-jump-from-find)
 
-(define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
-(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
-(define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
-
-(define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
-(define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
+
 
 (provide 'ivy-setup)
