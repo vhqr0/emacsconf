@@ -248,15 +248,3 @@
 (define-key vc-prefix-map "J" 'magit-file-dispatch)
 
 (setq ispell-dictionary "american")
-
-(setq helm-grep-ag-command
-      "rg --color=always -S --no-heading --line-number %s -- %s %s")
-
-(defun helm-regs-and-marks ()
-  (interactive)
-  (require 'helm-ring)
-  (helm :sources '(helm-source-register
-                   helm-source-mark-ring
-                   helm-source-global-mark-ring)
-        :resume 'noresume
-        :buffer "*helm regs and marks*"))

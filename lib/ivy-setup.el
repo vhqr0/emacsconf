@@ -2,6 +2,10 @@
       ivy-use-virtual-buffers t
       ivy-read-action-function 'ivy-hydra-read-action)
 
+(setq helm-default-info-index-list nil
+      helm-grep-ag-command
+      "rg --color=always -S --no-heading --line-number %s -- %s %s")
+
 (require 'ivy)
 (require 'swiper)
 (require 'counsel)
@@ -59,6 +63,52 @@
 (global-set-key (kbd "<f2>") 'ivy-tab-completion)
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "<f2>") 'counsel-company))
+
+
+
+(defun counsel-rg-file-jump (&optional initial-input initial-directory)
+  (interactive
+   (list nil
+         (when current-prefix-arg
+           (counsel-read-directory-name "From directory: "))))
+  (let ((find-program rg-program)
+        (counsel-file-jump-args '("--files")))
+    (counsel-file-jump initial-input initial-directory)))
+
+(defun counsel-rg-file-jump-from-find ()
+  (interactive)
+  (ivy-quit-and-run
+    (counsel-rg-file-jump ivy-text (ivy-state-directory ivy-last))))
+
+(define-key counsel-find-file-map "`" 'counsel-rg-file-jump-from-find)
+
+
+
+(defun helm-registers-and-marks ()
+  (interactive)
+  (require 'helm-ring)
+  (helm :sources '(helm-source-register
+                   helm-source-mark-ring
+                   helm-source-global-mark-ring)
+        :resume 'noresume
+        :buffer "*helm registers and marks*"))
+
+(with-eval-after-load 'helm-buffers
+  (defclass helm-projects-source (helm-source-sync)
+    ((init :initform (lambda ()
+                       (require 'project)
+                       (project--ensure-read-project-list)))
+     (candidates :initform (lambda ()
+                             (mapcar 'car project--list)))
+     (action :initform (lambda (candidate)
+                         (with-helm-default-directory candidate
+                           (helm-browse-project helm-current-prefix-arg))))))
+  (defvar helm-source-projects
+    (helm-make-source "Projects" 'helm-projects-source))
+  (setq helm-mini-default-sources
+        '(helm-source-buffers-list
+          helm-source-projects
+          helm-source-recentf)))
 
 
 

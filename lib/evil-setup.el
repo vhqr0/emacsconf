@@ -212,13 +212,17 @@
 (define-key evil-leader-map "\t" 'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
+(dolist (pair insert-pair-alist)
+  (define-key evil-leader-map `[,(car pair)] 'insert-pair))
+
 (define-key evil-leader-map "\s" 'execute-extended-command)
+;; (define-key evil-leader-map "f" 'find-file)
+;; (define-key evil-leader-map "b" 'switch-to-buffer)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
 (define-key evil-leader-map "i" 'imenu)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
-(define-key evil-leader-map "B" 'ibuffer)
 (define-key evil-leader-map "!" 'shell-command)
 (define-key evil-leader-map "&" 'async-shell-command)
 (define-key evil-leader-map "$" 'ispell-word)
@@ -228,23 +232,19 @@
 (define-key evil-leader-map "?" 'xref-find-references)
 (define-key evil-leader-map "d" 'eldoc-doc-buffer)
 
-;; replaced by helm
-;; (define-key evil-leader-map "b" 'switch-to-buffer)
-;; (define-key evil-leader-map "f" 'find-file)
-;; (define-key evil-leader-map "y" 'counsel-yank-pop)
-
 ;;; helm
 (define-key evil-leader-map (kbd "<f5>") 'helm-resume)
-(define-key evil-leader-map "b" 'helm-mini)
 (define-key evil-leader-map "f" 'helm-find-files)
-(define-key evil-leader-map "F" 'helm-browse-project)
+(define-key evil-leader-map "b" 'helm-mini)
+(define-key evil-leader-map "B" 'helm-buffers-list)
+(define-key evil-leader-map "P" 'helm-browse-project)
 (define-key evil-leader-map "G" 'helm-do-grep-ag)
 (define-key evil-leader-map "O" 'helm-occur)
 (define-key evil-leader-map "I" 'helm-imenu-in-all-buffers)
 (define-key evil-leader-map "T" 'helm-etags-select)
 (define-key evil-leader-map "E" 'helm-eshell-prompts-all)
 (define-key evil-leader-map "M" 'helm-man-woman)
-(define-key evil-leader-map "m" 'helm-regs-and-marks)
+(define-key evil-leader-map "m" 'helm-registers-and-marks)
 (define-key evil-leader-map "y" 'helm-show-kill-ring)
 
 (provide 'evil-setup)
