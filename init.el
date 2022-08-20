@@ -22,7 +22,6 @@
     helm
     helm-ls-git
     wgrep-helm
-    w3m
     magit
     yasnippet
     company

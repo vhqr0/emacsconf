@@ -2,8 +2,7 @@
       ivy-use-virtual-buffers t
       ivy-read-action-function 'ivy-hydra-read-action)
 
-(setq helm-surfraw-default-browser-function 'w3m-browse-url
-      helm-grep-ag-command
+(setq helm-grep-ag-command
       "rg --color=always -S --no-heading --line-number %s -- %s %s")
 
 (require 'ivy)
