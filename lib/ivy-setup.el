@@ -2,7 +2,7 @@
       ivy-use-virtual-buffers t
       ivy-read-action-function 'ivy-hydra-read-action)
 
-(setq helm-default-info-index-list nil
+(setq helm-surfraw-default-browser-function 'w3m-browse-url
       helm-grep-ag-command
       "rg --color=always -S --no-heading --line-number %s -- %s %s")
 
@@ -84,15 +84,6 @@
 
 
 
-(defun helm-registers-and-marks ()
-  (interactive)
-  (require 'helm-ring)
-  (helm :sources '(helm-source-register
-                   helm-source-mark-ring
-                   helm-source-global-mark-ring)
-        :resume 'noresume
-        :buffer "*helm registers and marks*"))
-
 (with-eval-after-load 'helm-buffers
   (defclass helm-projects-source (helm-source-sync)
     ((init :initform (lambda ()
@@ -107,6 +98,7 @@
     (helm-make-source "Projects" 'helm-projects-source))
   (setq helm-mini-default-sources
         '(helm-source-buffers-list
+          helm-source-bookmarks
           helm-source-projects
           helm-source-recentf)))
 

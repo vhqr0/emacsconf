@@ -22,6 +22,7 @@
     helm
     helm-ls-git
     wgrep-helm
+    w3m
     magit
     yasnippet
     company
@@ -134,10 +135,9 @@
 
 (define-key help-map "B" 'describe-keymap)
 (define-key help-map "j" 'find-library)
-(define-key help-map "4j" 'find-library-other-window)
-(define-key help-map "Jl" 'load-library)
-(define-key help-map "Jt" 'load-theme)
-(define-key help-map "Jf" 'load-file)
+(define-key help-map "yl" 'load-library)
+(define-key help-map "yt" 'load-theme)
+(define-key help-map "yf" 'load-file)
 
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
@@ -245,6 +245,6 @@
 (setq magit-section-visibility-indicator '("..." . t))
 
 (define-key vc-prefix-map "j" 'magit-status)
-(define-key vc-prefix-map "J" 'magit-file-dispatch)
+(define-key vc-prefix-map "f" 'magit-file-dispatch)
 
 (setq ispell-dictionary "american")
