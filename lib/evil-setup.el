@@ -1,14 +1,17 @@
-(setq evil-want-C-i-jump nil
-      evil-want-keybinding nil
+(setq evil-want-keybinding nil
+      evil-want-C-i-jump nil
+      evil-want-C-d-scroll nil
+      evil-want-Y-yank-to-eol t
       evil-want-fine-undo t
       evil-undo-system 'undo-redo
       evil-symbol-word-search t
       evil-search-module 'evil-search
       evil-ex-search-persistent-highlight nil
       evil-respect-visual-line-mode t
-      evil-snipe-scope 'whole-visible
       evil-snipe-smart-case t
-      evil-snipe-repeat-keys nil)
+      evil-snipe-repeat-keys nil
+      evil-snipe-scope 'whole-visible
+      evil-snipe-repeat-scope 'whole-buffer)
 
 (require 'evil)
 (require 'evil-surround)

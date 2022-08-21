@@ -134,9 +134,6 @@
 
 (define-key help-map "B" 'describe-keymap)
 (define-key help-map "j" 'find-library)
-(define-key help-map "yl" 'load-library)
-(define-key help-map "yt" 'load-theme)
-(define-key help-map "yf" 'load-file)
 
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
@@ -193,7 +190,9 @@
 (define-key abbrev-map "s" 'yas-insert-snippet)
 (define-key abbrev-map "v" 'yas-visit-snippet-file)
 
-(setq company-tooltip-align-annotations t
+(setq company-idle-delay 0
+      company-minimum-prefix-length 2
+      company-tooltip-align-annotations t
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
