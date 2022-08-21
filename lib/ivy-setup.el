@@ -18,11 +18,14 @@
 
 
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
-(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
 (define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
 
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
+(define-key counsel-mode-map [remap insert-register] 'counsel-register)
+(define-key counsel-mode-map [remap jump-to-register] 'counsel-register)
+(define-key counsel-mode-map [remap evil-paste-from-register] 'counsel-evil-registers)
+(define-key counsel-mode-map [remap evil-goto-mark] 'counsel-evil-marks)
 
 (global-set-key (kbd "<f5>") 'ivy-resume)
 
@@ -34,13 +37,6 @@
 
 (define-key ctl-x-r-map "v" 'ivy-push-view)
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
-(define-key ctl-x-r-map "i" 'counsel-register)
-(define-key ctl-x-r-map "I" 'counsel-evil-registers)
-
-(define-key goto-map "m" 'counsel-mark-ring)
-(define-key goto-map "M" 'counsel-evil-marks)
-
-(define-key help-map "V" 'counsel-set-variable)
 
 
 

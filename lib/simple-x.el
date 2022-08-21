@@ -145,10 +145,6 @@
   "Eshell in new window or other window if called with prefix ARG."
   (interactive "P")
   (require 'eshell)
-  (require 'em-hist)
-  (require 'em-dirs)
-  (eshell-save-some-history)
-  (eshell-save-some-last-dir)
   (let ((flag t)
         (directory default-directory)
         (buffer-list (buffer-list))
@@ -164,13 +160,14 @@
                  (not (get-buffer-process buffer))
                  (not (member buffer window-list)))
         (setq flag nil)))
-    (when flag
-      (setq buffer (generate-new-buffer eshell-buffer-name)))
-    (with-current-buffer buffer
-      (setq default-directory directory)
-      (widen)
-      (goto-char (point-max))
-      (eshell-mode))
+    (if flag
+        (progn
+          (setq buffer (generate-new-buffer eshell-buffer-name))
+          (with-current-buffer buffer
+            (eshell-mode)))
+      (with-current-buffer buffer
+        (eshell/cd directory)
+        (eshell-reset)))
     (cond ((and (consp arg) (> (prefix-numeric-value arg) 4))
            (switch-to-buffer buffer))
           (arg

@@ -4,7 +4,9 @@
       evil-undo-system 'undo-redo
       evil-symbol-word-search t
       evil-search-module 'evil-search
+      evil-ex-search-persistent-highlight nil
       evil-respect-visual-line-mode t
+      evil-snipe-scope 'whole-visible
       evil-snipe-smart-case t
       evil-snipe-repeat-keys nil)
 
@@ -207,6 +209,7 @@
 (define-key evil-leader-map "u" 'winner-undo)   ; winner
 (define-key evil-leader-map "U" 'winner-redo)   ; winner
 (define-key evil-leader-map "k" 'kill-buffer)
+(define-key evil-leader-map "m" 'pop-to-mark-command)
 (define-key evil-leader-map [left] 'previous-buffer)
 (define-key evil-leader-map [right] 'next-buffer)
 (define-key evil-leader-map "\t" 'evil-jump-backward)
