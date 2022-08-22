@@ -24,29 +24,30 @@
 (define-key counsel-mode-map [remap evil-paste-from-register] 'counsel-evil-registers)
 (define-key counsel-mode-map [remap evil-goto-mark] 'counsel-evil-marks)
 
-(global-set-key (kbd "<f5>") 'ivy-resume)
-
 
 
-(define-key search-map "s" 'swiper)
-(define-key search-map "g" 'counsel-rg)
-(define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
+(global-set-key (kbd "<f5>") 'ivy-resume)
 
 (define-key ctl-x-r-map "v" 'ivy-push-view)
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
 
+(define-key search-map "s" 'swiper)
+(define-key search-map "g" 'counsel-rg)
+
+(define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
+
 
 
 (defun ivy--action-append (x)
-  (forward-char)
+  (unless (eolp) (forward-char))
   (ivy--action-insert x))
 
-(ivy-set-actions t '(("a" ivy--action-append "append")))
+(ivy-add-actions t '(("a" ivy--action-append "append")))
 
 (defun counsel--set-variable (x)
   (counsel-set-variable (intern x)))
 
-(ivy-set-actions 'counsel-describe-variable '(("s" counsel--set-variable "set")))
+(ivy-add-actions 'counsel-describe-variable '(("s" counsel--set-variable "set")))
 
 
 
@@ -66,7 +67,9 @@
     (call-interactively command)))
 
 (global-set-key (kbd "<f2>") 'ivy-tab-completion)
+
 (with-eval-after-load 'company
+  (define-key company-mode-map (kbd "<f2>") 'company-complete)
   (define-key company-active-map (kbd "<f2>") 'counsel-company))
 
 
@@ -88,6 +91,12 @@
 (define-key counsel-find-file-map "`" 'counsel-rg-file-jump-from-find)
 
 
+
+(defvar proced-signal-list)
+
+(declare-function proced-send-signal "proced")
+(declare-function proced-pid-at-point "proced")
+(declare-function proced-update "proced")
 
 (defun counsel--proced-get-processes ()
   (let ((oldbuf (get-buffer "*Proced*"))

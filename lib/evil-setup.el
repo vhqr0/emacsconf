@@ -216,6 +216,7 @@
 (define-key evil-leader-map [left] 'previous-buffer)
 (define-key evil-leader-map [right] 'next-buffer)
 (define-key evil-leader-map "\t" 'evil-jump-backward)
+(define-key evil-leader-map [tab] 'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
 (dolist (pair insert-pair-alist)

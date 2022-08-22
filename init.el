@@ -200,8 +200,6 @@
 
 (global-company-mode 1)
 
-(define-key company-mode-map (kbd "<f2>") 'company-complete)
-
 
 
 (defun yas-maybe-expand-company-filter (_cmd)
@@ -226,8 +224,8 @@
 (defvar yas-maybe-prev-company
   '(menu-item "" nil :filter yas-maybe-prev-company-filter))
 
+(define-key company-active-map "\t" yas-maybe-expand-company)
 (define-key company-active-map [tab] yas-maybe-expand-company)
-(define-key company-active-map (kbd "TAB") yas-maybe-expand-company)
 (define-key company-active-map [backtab] yas-maybe-prev-company)
 
 
