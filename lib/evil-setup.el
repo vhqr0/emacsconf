@@ -242,6 +242,7 @@
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
+(define-key evil-leader-map "l" 'counsel-compilation-errors)
 (define-key evil-leader-map (kbd "<f2>") 'counsel-linux-app)
 (define-key evil-leader-map (kbd "<f3>") 'counsel-kmacro)
 (define-key evil-leader-map (kbd "<f4>") 'counsel-proced)

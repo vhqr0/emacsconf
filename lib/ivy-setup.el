@@ -118,19 +118,25 @@
         (forward-line)))
     (nreverse processes)))
 
+(defun counsel--proced-message (x)
+  (message (car x)))
+
 (defun counsel--proced-kill-process (x)
   (proced-send-signal
-   (completing-read "Send signal (default TERM): "
+   (completing-read "Send signal (default INT): "
                     proced-signal-list
-                    nil nil nil nil "TERM")
-   `((,(cdr x) . ,(car x)))))
+                    nil nil nil nil "INT")
+   `((,(cdr x) . ,(car x))))
+  (counsel--proced-message x))
 
 (defun counsel-proced ()
   (interactive)
   (require 'proced)
   (ivy-read "Processes: " (counsel--proced-get-processes)
-            :action 'counsel--proced-kill-process
+            :action 'counsel--proced-message
             :caller 'counsel-proced))
+
+(ivy-set-actions 'counsel-proced '(("k" counsel--proced-kill-process "kill")))
 
 
 
