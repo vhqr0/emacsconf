@@ -1,5 +1,4 @@
 (load-file (expand-file-name "misc/fonts-setup.el" user-emacs-directory))
-(load-file (expand-file-name "misc/w3m-setup.el" user-emacs-directory))
 (load-file (expand-file-name "misc/semantic-setup.el" user-emacs-directory))
 (load-file (expand-file-name "misc/eglot-setup.el" user-emacs-directory))
 (load-file (expand-file-name "misc/python-setup.el" user-emacs-directory))

@@ -19,9 +19,6 @@
     ivy-hydra
     amx
     wgrep
-    helm
-    helm-ls-git
-    wgrep-helm
     magit
     yasnippet
     company

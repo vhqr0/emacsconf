@@ -232,6 +232,7 @@
 (define-key evil-leader-map "!" 'shell-command)
 (define-key evil-leader-map "&" 'async-shell-command)
 (define-key evil-leader-map "$" 'ispell-word)
+(define-key evil-leader-map "^" 'delete-indentation)
 (define-key evil-leader-map "%" 'query-replace-regexp)
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
@@ -240,34 +241,9 @@
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-
-;;; helm
-(defvar helm-prefix-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "." 'helm-resume)
-    (define-key map "l" 'helm-mini)
-    (define-key map "b" 'helm-buffers-list)
-    (define-key map "f" 'helm-find-files)
-    (define-key map "p" 'helm-browse-project)
-    (define-key map "g" 'helm-do-grep-ag)
-    (define-key map "o" 'helm-occur)
-    (define-key map "i" 'helm-imenu)
-    (define-key map "I" 'helm-imenu-in-all-buffers)
-    (define-key map "s" 'helm-comint-prompts)
-    (define-key map "S" 'helm-comint-prompts-all)
-    (define-key map "e" 'helm-eshell-prompts)
-    (define-key map "E" 'helm-eshell-prompts-all)
-    (define-key map "t" 'helm-etags-select)
-    (define-key map "x" 'helm-M-x)
-    (define-key map "a" 'helm-apropos)
-    (define-key map "y" 'helm-show-kill-ring)
-    (define-key map "r" 'helm-register)
-    (define-key map "m" 'helm-all-mark-rings)
-    (define-key map "?" 'helm-surfraw)
-    (define-key map (kbd "<f2>") 'helm-run-external-command)
-    (define-key map (kbd "<f4>") 'helm-top)
-    map))
-
-(define-key evil-leader-map "l" helm-prefix-map)
+(define-key evil-leader-map (kbd "<f2>") 'counsel-linux-app)
+(define-key evil-leader-map (kbd "<f3>") 'counsel-kmacro)
+(define-key evil-leader-map (kbd "<f4>") 'counsel-proced)
+(define-key evil-leader-map (kbd "<f5>") 'counsel-compile)
 
 (provide 'evil-setup)

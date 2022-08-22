@@ -2,9 +2,6 @@
       ivy-use-virtual-buffers t
       ivy-read-action-function 'ivy-hydra-read-action)
 
-(setq helm-grep-ag-command
-      "rg --color=always -S --no-heading --line-number %s -- %s %s")
-
 (require 'ivy)
 (require 'swiper)
 (require 'counsel)
@@ -32,11 +29,24 @@
 
 
 (define-key search-map "s" 'swiper)
-(define-key search-map "S" 'counsel-rg)
+(define-key search-map "g" 'counsel-rg)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
 (define-key ctl-x-r-map "v" 'ivy-push-view)
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
+
+
+
+(defun ivy--action-append (x)
+  (forward-char)
+  (ivy--action-insert x))
+
+(ivy-set-actions t '(("a" ivy--action-append "append")))
+
+(defun counsel--set-variable (x)
+  (counsel-set-variable (intern x)))
+
+(ivy-set-actions 'counsel-describe-variable '(("s" counsel--set-variable "set")))
 
 
 
@@ -79,23 +89,39 @@
 
 
 
-(with-eval-after-load 'helm-buffers
-  (defclass helm-projects-source (helm-source-sync)
-    ((init :initform (lambda ()
-                       (require 'project)
-                       (project--ensure-read-project-list)))
-     (candidates :initform (lambda ()
-                             (mapcar 'car project--list)))
-     (action :initform (lambda (candidate)
-                         (with-helm-default-directory candidate
-                           (helm-browse-project helm-current-prefix-arg))))))
-  (defvar helm-source-projects
-    (helm-make-source "Projects" 'helm-projects-source))
-  (setq helm-mini-default-sources
-        '(helm-source-buffers-list
-          helm-source-bookmarks
-          helm-source-projects
-          helm-source-recentf)))
+(defun counsel--proced-get-processes ()
+  (let ((oldbuf (get-buffer "*Proced*"))
+        processes)
+    (unless oldbuf
+      (save-window-excursion
+        (proced)))
+    (with-current-buffer "*Proced*"
+      (when oldbuf
+        (proced-update t))
+      (goto-char (point-min))
+      (while (not (eolp))
+        (push (cons
+               (buffer-substring-no-properties
+                (line-beginning-position)
+                (line-end-position))
+               (proced-pid-at-point))
+              processes)
+        (forward-line)))
+    (nreverse processes)))
+
+(defun counsel--proced-kill-process (x)
+  (proced-send-signal
+   (completing-read "Send signal (default TERM): "
+                    proced-signal-list
+                    nil nil nil nil "TERM")
+   `((,(cdr x) . ,(car x)))))
+
+(defun counsel-proced ()
+  (interactive)
+  (require 'proced)
+  (ivy-read "Processes: " (counsel--proced-get-processes)
+            :action 'counsel--proced-kill-process
+            :caller 'counsel-proced))
 
 
 
