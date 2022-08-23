@@ -1,9 +1,9 @@
 (require 'xref)
 (require 'cl-lib)
 
-(defvar cc-command '("clang"))
+
 
-(defvar global-program "global")
+(defvar cc-command '("clang"))
 
 ;;;###autoload
 (defun cc-x-flymake-cc-command ()
@@ -45,6 +45,12 @@
       (special-mode))
     (display-buffer buffer)))
 
+
+
+(defvar global-program "global")
+
+(defvar global--compute-completion-table nil)
+
 (defun global-line-to-xref (line)
   (when (string-match "^\\([^ \t]+\\)[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)" line)
     (xref-make (match-string 4 line)
@@ -63,7 +69,7 @@
   (thing-at-point 'symbol))
 
 (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
-  (when (memq this-command '(xref-find-definitions xref-find-definitions-other-window))
+  (when global--compute-completion-table
     (process-lines global-program "-c")))
 
 (cl-defmethod xref-backend-definitions ((_backend (eql gtags)) symbol)
@@ -83,6 +89,8 @@
              (prefix (buffer-substring beg end))
              (flag (if completion-ignore-case "-ci" "-c")))
         `(,beg ,end ,(process-lines global-program flag prefix))))))
+
+
 
 ;;;###autoload
 (define-minor-mode gtags-mode
@@ -109,3 +117,19 @@
                       (if (gtags-enable-p)
                           (gtags-completion-at-point-function)
                         (funcall func))))
+
+
+
+;;;###autoload
+(defun tags-xref-find-definitions ()
+  (interactive)
+  (let ((global--compute-completion-table t)
+        (xref-backend-functions '(etags--xref-backend)))
+    (call-interactively 'xref-find-definitions)))
+
+;;;###autoload
+(defun tags-xref-find-references ()
+  (interactive)
+  (let ((global--compute-completion-table t)
+        (xref-backend-functions '(etags--xref-backend)))
+    (call-interactively 'xref-find-references)))

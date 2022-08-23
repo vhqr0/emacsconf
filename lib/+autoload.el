@@ -38,6 +38,10 @@ it is disabled.
 
 (put 'gtags-mode 'safe-local-variable 'booleanp)
 
+(autoload 'tags-xref-find-definitions "cc-x" nil t nil)
+
+(autoload 'tags-xref-find-references "cc-x" nil t nil)
+
 (register-definition-prefixes "cc-x" '("cc-command" "global-" "gtags-"))
 
 ;;;***
@@ -62,7 +66,7 @@ it is disabled.
 ;;;### (autoloads nil "ivy-setup" "ivy-setup.el" (0 0 0 0))
 ;;; Generated autoloads from ivy-setup.el
 
-(register-definition-prefixes "ivy-setup" '("counsel-rg-file-jump" "ivy-tab-completion"))
+(register-definition-prefixes "ivy-setup" '("counsel-" "ivy-"))
 
 ;;;***
 
