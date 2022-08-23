@@ -32,7 +32,7 @@
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
 
 (define-key search-map "s" 'swiper)
-(define-key search-map "g" 'counsel-rg)
+(define-key search-map "S" 'counsel-rg)
 
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
