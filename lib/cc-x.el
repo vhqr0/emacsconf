@@ -49,7 +49,7 @@
 
 (defvar global-program "global")
 
-(defvar global--compute-completion-table nil)
+(defvar global-compute-completion-table t)
 
 (defun global-line-to-xref (line)
   (when (string-match "^\\([^ \t]+\\)[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)" line)
@@ -69,7 +69,7 @@
   (thing-at-point 'symbol))
 
 (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
-  (when global--compute-completion-table
+  (when global-compute-completion-table
     (process-lines global-program "-c")))
 
 (cl-defmethod xref-backend-definitions ((_backend (eql gtags)) symbol)
@@ -123,13 +123,13 @@
 ;;;###autoload
 (defun tags-xref-find-definitions ()
   (interactive)
-  (let ((global--compute-completion-table t)
+  (let ((global-compute-completion-table t)
         (xref-backend-functions '(etags--xref-backend)))
     (call-interactively 'xref-find-definitions)))
 
 ;;;###autoload
 (defun tags-xref-find-references ()
   (interactive)
-  (let ((global--compute-completion-table t)
+  (let ((global-compute-completion-table t)
         (xref-backend-functions '(etags--xref-backend)))
     (call-interactively 'xref-find-references)))
