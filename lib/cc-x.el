@@ -51,6 +51,9 @@
 
 (defvar global-compute-completion-table t)
 
+;;;###autoload
+(put 'global-compute-completion-table 'safe-local-variable 'booleanp)
+
 (defun global-line-to-xref (line)
   (when (string-match "^\\([^ \t]+\\)[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)" line)
     (xref-make (match-string 4 line)
@@ -117,19 +120,3 @@
                       (if (gtags-enable-p)
                           (gtags-completion-at-point-function)
                         (funcall func))))
-
-
-
-;;;###autoload
-(defun tags-xref-find-definitions ()
-  (interactive)
-  (let ((global-compute-completion-table t)
-        (xref-backend-functions '(etags--xref-backend)))
-    (call-interactively 'xref-find-definitions)))
-
-;;;###autoload
-(defun tags-xref-find-references ()
-  (interactive)
-  (let ((global-compute-completion-table t)
-        (xref-backend-functions '(etags--xref-backend)))
-    (call-interactively 'xref-find-references)))

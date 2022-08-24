@@ -10,6 +10,8 @@
 
 (autoload 'cc-help "cc-x" nil t nil)
 
+(put 'global-compute-completion-table 'safe-local-variable 'booleanp)
+
 (defvar gtags-mode nil "\
 Non-nil if gtags mode is enabled.
 See the `gtags-mode' command
@@ -37,10 +39,6 @@ it is disabled.
 \(fn &optional ARG)" t nil)
 
 (put 'gtags-mode 'safe-local-variable 'booleanp)
-
-(autoload 'tags-xref-find-definitions "cc-x" nil t nil)
-
-(autoload 'tags-xref-find-references "cc-x" nil t nil)
 
 (register-definition-prefixes "cc-x" '("cc-command" "global-" "gtags-"))
 
@@ -85,7 +83,7 @@ it is disabled.
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "prettier-" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

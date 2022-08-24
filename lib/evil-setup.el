@@ -162,11 +162,6 @@
 
 (evil-tobj-plus-default-keybindings)
 
-;; cc-x
-
-(define-key evil-motion-state-map "gd" 'tags-xref-find-definitions)
-(define-key evil-motion-state-map "gr" 'tags-xref-find-references)
-
 ;; avy
 
 (define-key evil-motion-state-map "gj" 'avy-goto-line)
