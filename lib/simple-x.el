@@ -60,10 +60,28 @@
                        'grep-history)
    'grep-mode))
 
+(defvar prettier-program "prettier")
+
+(defun prettier-compute-program ()
+  (format "%s --stdin-filepath %s"
+          prettier-program
+          (or buffer-file-name
+              (cond ((derived-mode-p 'js-mode)
+                     "index.js")
+                    ((derived-mode-p 'mhtml-mode)
+                     "index.html")
+                    ((derived-mode-p 'css-mode)
+                     "index.css")
+                    (t
+                     (user-error "Major mode doesn't support"))))))
+
 (defvar external-format-program-alist
   '((c-mode . "clang-format")
     (c++-mode . "clang-format")
-    (python-mode . "yapf")))
+    (python-mode . "yapf")
+    (js-mode . prettier-compute-program)
+    (mhtml-mode . prettier-compute-program)
+    (css-mode . prettier-compute-program)))
 
 (defun external-format (beg end)
   (interactive (list (if (use-region-p) (region-beginning) (point-min))
@@ -73,6 +91,8 @@
       (narrow-to-region beg end)
       (if program
           (let ((row (line-number-at-pos)))
+            (when (symbolp program)
+              (setq program (funcall program)))
             (shell-command-on-region (point-min) (point-max) program nil t)
             (goto-char (point-min))
             (forward-line (1- row))
@@ -138,8 +158,8 @@
                         (apply func args))))
 
 (defvar eshell-buffer-name)
-(declare-function eshell-save-some-history "em-hist")
-(declare-function eshell-save-some-last-dir "em-dirs")
+(declare-function eshell-reset "esh-mode")
+(declare-function eshell/cd "em-dirs")
 
 (defun eshell-dwim (arg)
   "Eshell in new window or other window if called with prefix ARG."

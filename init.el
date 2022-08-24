@@ -23,6 +23,7 @@
     yasnippet
     company
     eglot
+    emmet-mode
     markdown-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -180,6 +181,15 @@
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "C-c C-h") 'cc-help))
 
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "--simple-prompt")
+
+(setq js-indent-level 2)
+
+(add-hook 'js-mode-hook 'emmet-mode)
+(add-hook 'mhtml-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook 'emmet-mode)
+
 (setq eglot-extend-to-xref t
       eglot-events-buffer-size 0
       eglot-stay-out-of '(company))
@@ -197,9 +207,19 @@
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
       company-backends
-      '(company-capf company-files (company-dabbrev-code company-keywords) company-dabbrev)
+      '(company-capf
+        company-files
+        (company-dabbrev-code company-keywords)
+        company-dabbrev)
       company-global-modes
-      '(lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode))
+      '(lisp-interaction-mode
+        emacs-lisp-mode
+        c-mode
+        c++-mode
+        python-mode
+        js-mode
+        mhtml-mode
+        css-mode))
 
 (global-company-mode 1)
 

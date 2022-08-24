@@ -1,8 +1,10 @@
 (setq eglot-server-programs
       '(((c-mode c++-mode) . ("clangd" "--header-insertion=never"))
-        (python-mode . ("pylsp"))
-        ;; (python-mode . ("pyright-langserver" "--stdio"))
-        (js-mode . ("typescript-language-server" "--stdio"))))
+        ;; (python-mode . ("pylsp"))
+        (python-mode . ("pyright-langserver" "--stdio"))
+        (js-mode . ("typescript-language-server" "--stdio"))
+        (mhtml-mode . ("vscode-html-language-server" "--stdio"))
+        (css-mode . ("vscode-css-language-server" "--stdio"))))
 
 (add-hook 'c-mode-common-hook
           (lambda ()
