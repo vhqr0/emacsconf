@@ -132,6 +132,7 @@
 
 (define-key help-map "B" 'describe-keymap)
 (define-key help-map "j" 'find-library)
+(define-key help-map "J" 'load-theme)
 
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)

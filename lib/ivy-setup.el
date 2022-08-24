@@ -48,6 +48,7 @@
   (counsel-set-variable (intern x)))
 
 (ivy-add-actions 'counsel-describe-variable '(("s" counsel--set-variable "set")))
+(ivy-add-actions 'counsel-find-library '(("l" load-library "load")))
 
 
 
