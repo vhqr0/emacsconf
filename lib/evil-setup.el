@@ -1,4 +1,5 @@
 (setq evil-want-keybinding nil
+      evil-disable-insert-state-bindings t
       evil-want-C-i-jump nil
       evil-want-C-d-scroll nil
       evil-want-Y-yank-to-eol t
@@ -32,6 +33,8 @@
 
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
+
+(define-key evil-insert-state-map "\C-r" 'evil-paste-from-register)
 
 (define-key ctl-x-x-map "/" 'evil-ex-nohighlight)
 
