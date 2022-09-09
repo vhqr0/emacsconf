@@ -13,7 +13,9 @@
 (defvar xclip-program "xclip -selection clip")
 
 (defun xclip (beg end)
-  "Xclip wrap for copy regin (BEG . END)."
+  "Xclip wrap for copy regin (BEG . END).
+This command is defined for Linux Terminal.
+Linux GUI or Windows is no need."
   (interactive "r")
   (call-shell-region beg end xclip-program)
   (deactivate-mark))
@@ -21,10 +23,13 @@
 (defvar xdg-open-program "xdg-open")
 
 (defun xdg-open (&optional file)
-  "Xdg wrap for open FILE or current file if called interactively."
+  "Xdg wrap for open FILE or current file if called interactively.
+On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
   (interactive `(,(or buffer-file-name default-directory)))
   (when (and file (not (file-remote-p file)))
-    (call-process-shell-command (concat xdg-open-program " " file))))
+    (if (fboundp 'w32-shell-execute)
+        (w32-shell-execute "open" file)
+      (call-process-shell-command (concat xdg-open-program " " file)))))
 
 (declare-function dired-get-marked-files "dired")
 
