@@ -23,8 +23,9 @@
     yasnippet
     company
     eglot
-    emmet-mode
-    markdown-mode))
+    markdown-mode
+    cmake-mode
+    emmet-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -211,20 +212,27 @@
       '(company-capf
         company-files
         (company-dabbrev-code company-keywords)
-        company-dabbrev)
-      company-global-modes
-      '(lisp-interaction-mode
-        emacs-lisp-mode
-        c-mode
-        c++-mode
-        python-mode
-        js-mode
-        mhtml-mode
-        css-mode))
+        company-dabbrev))
 
 (global-company-mode 1)
 
 
+
+(defun set-company-backends (hook backends)
+  (add-hook hook `(lambda ()
+                    (setq-local company-backends ',backends))))
+
+(defun add-company-backends (hook backends)
+  (set-company-backends hook (append backends company-backends)))
+
+(set-company-backends 'eshell-mode-hook '(company-files))
+(add-company-backends 'cmake-mode-hook '(company-cmake))
+
+(defun company-mode-on-override ()
+  (when (or (derived-mode-p 'prog-mode 'text-mode 'eshell-mode))
+    (company-mode 1)))
+
+(advice-add 'company-mode-on :override 'company-mode-on-override)
 
 (defun yas-maybe-expand-company-filter (_cmd)
   (cond ((not yas-minor-mode)
