@@ -167,9 +167,6 @@
 
 (setq xref-search-program 'ripgrep)
 
-(define-key goto-map "d" 'tags-xref-find-definitions)
-(define-key goto-map "r" 'tags-xref-find-references)
-
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
