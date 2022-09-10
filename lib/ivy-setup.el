@@ -80,7 +80,7 @@
    (list nil
          (when current-prefix-arg
            (counsel-read-directory-name "From directory: "))))
-  (let ((find-program rg-program)
+  (let ((find-program (car counsel-rg-base-command))
         (counsel-file-jump-args '("--files")))
     (counsel-file-jump initial-input initial-directory)))
 
