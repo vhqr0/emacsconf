@@ -64,9 +64,7 @@
 (defun global-find-symbol (symbol arg)
   (remove nil
           (mapcar 'global-line-to-xref
-                  (process-lines global-program
-                                 arg
-                                 (shell-quote-argument symbol)))))
+                  (process-lines global-program arg symbol))))
 
 (cl-defmethod xref-backend-identifier-at-point ((_backend (eql gtags)))
   (thing-at-point 'symbol))
