@@ -72,7 +72,7 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-(when (eq system-type 'gnu/linux)
+(unless (eq system-type 'windows-nt)
   (xterm-mouse-mode 1))
 
 
