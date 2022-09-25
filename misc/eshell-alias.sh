@@ -1,6 +1,6 @@
 alias ll ls -alh
 
-alias py python3 $*
+alias py python $*
 
 alias vpy .venv/bin/python $*
 alias vpip .venv/bin/pip $*
