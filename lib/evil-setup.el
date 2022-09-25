@@ -216,6 +216,9 @@
 (define-key evil-leader-map "U" 'winner-redo)   ; winner
 (define-key evil-leader-map "k" 'kill-buffer)
 (define-key evil-leader-map "m" 'pop-to-mark-command)
+(define-key evil-leader-map "-" 'text-scale-decrease)
+(define-key evil-leader-map "=" 'text-scale-increase)
+(define-key evil-leader-map "+" 'text-scale-mode)
 (define-key evil-leader-map [left] 'previous-buffer)
 (define-key evil-leader-map [right] 'next-buffer)
 (define-key evil-leader-map "\t" 'evil-jump-backward)
