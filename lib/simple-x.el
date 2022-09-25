@@ -10,12 +10,13 @@
 
 ;; some linux tools wrap
 
-(defvar xclip-program "xclip -selection clip")
+(defvar xclip-program
+  (if (eq system-type 'windows-nt)
+      "clip.exe"
+    "xclip -selection clip"))
 
 (defun xclip (beg end)
-  "Xclip wrap for copy regin (BEG . END).
-This command is defined for Linux Terminal.
-Linux GUI or Windows is no need."
+  "Xclip or clip.exe on Windows wrap for copy regin (BEG . END)."
   (interactive "r")
   (call-shell-region beg end xclip-program)
   (deactivate-mark))
