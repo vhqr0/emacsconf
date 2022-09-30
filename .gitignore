@@ -1,4 +1,5 @@
 *.elc
+/.org-id-locations
 /amx-items
 /auto-save-list
 /bookmarks
@@ -10,6 +11,7 @@
 /eshell
 /games
 /network-security.data
+/org-roam.db
 /package-quickstart.el
 /projects
 /pyim

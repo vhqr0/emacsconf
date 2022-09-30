@@ -135,6 +135,8 @@
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
+(define-key goto-map "m" 'pop-to-mark-command)
+
 (define-key help-map "B" 'describe-keymap)
 (define-key help-map "j" 'find-library)
 (define-key help-map "J" 'load-theme)

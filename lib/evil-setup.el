@@ -215,7 +215,6 @@
 (define-key evil-leader-map "u" 'winner-undo)   ; winner
 (define-key evil-leader-map "U" 'winner-redo)   ; winner
 (define-key evil-leader-map "k" 'kill-buffer)
-(define-key evil-leader-map "m" 'pop-to-mark-command)
 (define-key evil-leader-map "-" 'text-scale-decrease)
 (define-key evil-leader-map "=" 'text-scale-increase)
 (define-key evil-leader-map "+" 'text-scale-mode)
@@ -233,6 +232,8 @@
 (define-key evil-leader-map "f" 'find-file)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
+(define-key evil-leader-map "m" 'compile)
+(define-key evil-leader-map "M" 'recompile)
 (define-key evil-leader-map "i" 'imenu)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
@@ -248,7 +249,8 @@
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "l" 'counsel-compilation-errors)
+(define-key evil-leader-map "I" 'counsel-outline)
+(define-key evil-leader-map "J" 'counsel-compilation-errors)
 (define-key evil-leader-map (kbd "<f2>") 'counsel-linux-app)
 (define-key evil-leader-map (kbd "<f3>") 'counsel-kmacro)
 (define-key evil-leader-map (kbd "<f4>") 'counsel-proced)
