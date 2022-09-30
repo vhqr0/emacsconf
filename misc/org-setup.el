@@ -1,4 +1,4 @@
-(setq +package (append +package '(htmlize org-roam)))
+(setq +package (append +package '(htmlize org-roam org-roam-ui)))
 
 (with-eval-after-load 'org
   (setq org-default-notes-file (convert-standard-filename "~/.notes.org")
@@ -51,16 +51,18 @@
      :node node
      :props '(:immediate-finish nil))))
 
+(defun counsel-org-roam ()
+  (interactive)
+  (require 'ivy)
+  (require 'org-roam)
+  (let ((nodes (org-roam-node-read--completions)))
+    (ivy-read "Node: "
+	      (org-roam-node-read--completions)
+	      :action 'counsel-org-roam--find
+	      :history 'org-roam-node-history
+	      :caller 'counsel-org-roam)))
+
 (with-eval-after-load 'ivy
-  (defun counsel-org-roam ()
-    (interactive)
-    (require 'org-roam)
-    (let ((nodes (org-roam-node-read--completions)))
-      (ivy-read "Node: "
-		(org-roam-node-read--completions)
-		:action 'counsel-org-roam--find
-		:history 'org-roam-node-history
-		:caller 'counsel-org-roam)))
   (ivy-set-actions 'counsel-org-roam
                    '(("j" counsel-org-roam--find-other-window "other window")
                      ("i" counsel-org-roam--insert "insert")
@@ -76,6 +78,7 @@
     (define-key map "J" 'counsel-org-agenda-headlines)
     (define-key map "c" 'counsel-org-capture)
     (define-key map "l" 'counsel-org-roam)
+    (define-key map "u" 'org-roam-ui-mode)
     map))
 
 (with-eval-after-load 'evil-setup
