@@ -51,21 +51,21 @@
      :node node
      :props '(:immediate-finish nil))))
 
-(defun counsel-org-roam ()
-  (interactive)
-  (require 'org-roam)
-  (let ((nodes (org-roam-node-read--completions)))
-    (ivy-read "Node: "
-              (org-roam-node-read--completions)
-              :action 'counsel-org-roam--find
-              :history 'org-roam-node-history
-              :caller 'counsel-org-roam)))
-
-(ivy-set-actions 'counsel-org-roam
-                 '(("j" counsel-org-roam--find-other-window "other window")
-                   ("i" counsel-org-roam--insert "insert")
-                   ("a" counsel-org-roam--append "append")
-                   ("c" counsel-org-roam--capture "capture")))
+(with-eval-after-load 'ivy
+  (defun counsel-org-roam ()
+    (interactive)
+    (require 'org-roam)
+    (let ((nodes (org-roam-node-read--completions)))
+      (ivy-read "Node: "
+		(org-roam-node-read--completions)
+		:action 'counsel-org-roam--find
+		:history 'org-roam-node-history
+		:caller 'counsel-org-roam)))
+  (ivy-set-actions 'counsel-org-roam
+                   '(("j" counsel-org-roam--find-other-window "other window")
+                     ("i" counsel-org-roam--insert "insert")
+                     ("a" counsel-org-roam--append "append")
+                     ("c" counsel-org-roam--capture "capture"))))
 
 
 
