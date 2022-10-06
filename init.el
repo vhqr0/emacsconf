@@ -20,10 +20,14 @@
     amx
     wgrep
     magit
+    forge
     yasnippet
     company
     eglot
     markdown-mode
+    htmlize
+    org-roam
+    org-roam-ui
     cmake-mode
     emmet-mode))
 
@@ -265,6 +269,10 @@
 (define-key company-active-map "\t" yas-maybe-expand-company)
 (define-key company-active-map [tab] yas-maybe-expand-company)
 (define-key company-active-map [backtab] yas-maybe-prev-company)
+
+
+
+(require 'org-setup)
 
 
 

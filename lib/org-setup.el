@@ -1,5 +1,3 @@
-(setq +package (append +package '(htmlize org-roam org-roam-ui)))
-
 (with-eval-after-load 'org
   (setq org-default-notes-file (convert-standard-filename "~/.notes.org")
         org-agenda-files (list org-default-notes-file))
@@ -73,6 +71,9 @@
 
 (defvar org-prefix-map
   (let ((map (make-sparse-keymap)))
+    (define-key map "m" 'org-store-link)
+    (define-key map "i" 'org-insert-link-global)
+    (define-key map "o" 'org-open-at-point-global)
     (define-key map "a" 'org-agenda)
     (define-key map "j" 'counsel-org-goto-all)
     (define-key map "J" 'counsel-org-agenda-headlines)
@@ -80,6 +81,8 @@
     (define-key map "l" 'counsel-org-roam)
     (define-key map "u" 'org-roam-ui-mode)
     map))
+
+(global-set-key (kbd "C-c l") org-prefix-map)
 
 (with-eval-after-load 'evil-setup
   (define-key evil-leader-map "l" org-prefix-map))

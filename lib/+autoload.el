@@ -78,6 +78,13 @@ it is disabled.
 
 ;;;***
 
+;;;### (autoloads nil "org-setup" "org-setup.el" (0 0 0 0))
+;;; Generated autoloads from org-setup.el
+
+(register-definition-prefixes "org-setup" '("counsel-org-roam" "org-prefix-map"))
+
+;;;***
+
 ;;;### (autoloads nil "simple-x" "simple-x.el" (0 0 0 0))
 ;;; Generated autoloads from simple-x.el
 
