@@ -1,6 +1,8 @@
+(setq org-directory (expand-file-name "~/org")
+      org-agenda-files (list org-directory)
+      org-default-notes-file (expand-file-name "notes.org" org-directory))
+
 (with-eval-after-load 'org
-  (setq org-default-notes-file (convert-standard-filename "~/.notes.org")
-        org-agenda-files (list org-default-notes-file))
   (org-roam-db-autosync-mode 1)
   (define-key org-mode-map [remap eldoc-doc-buffer] 'org-roam-buffer-toggle)
   (define-key org-mode-map [remap evil-ret] 'org-open-at-point)
@@ -79,6 +81,7 @@
     (define-key map "J" 'counsel-org-agenda-headlines)
     (define-key map "c" 'counsel-org-capture)
     (define-key map "l" 'counsel-org-roam)
+    (define-key map "L" 'org-roam-dailies-capture-today)
     (define-key map "u" 'org-roam-ui-mode)
     map))
 
@@ -86,3 +89,5 @@
 
 (with-eval-after-load 'evil-setup
   (define-key evil-leader-map "l" org-prefix-map))
+
+(provide 'org-setup)
