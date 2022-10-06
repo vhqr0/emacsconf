@@ -81,7 +81,8 @@
     (define-key map "J" 'counsel-org-agenda-headlines)
     (define-key map "c" 'counsel-org-capture)
     (define-key map "l" 'counsel-org-roam)
-    (define-key map "L" 'org-roam-dailies-capture-today)
+    (define-key map "C" 'org-roam-dailies-capture-today)
+    (define-key map "L" 'org-roam-dailies-goto-today)
     (define-key map "u" 'org-roam-ui-mode)
     map))
 
