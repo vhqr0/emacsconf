@@ -123,6 +123,13 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
       (when symbol
         (insert symbol)))))
 
+(defun occur-at-point ()
+  "`occur' symbol at point."
+  (interactive)
+  (let ((symbol (thing-at-point 'symbol)))
+    (when symbol
+      (occur (regexp-quote symbol)))))
+
 (defun rotate-window (arg)
   "Rotate current window or swap it if called with prefix ARG."
   (interactive "P")

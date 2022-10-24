@@ -135,6 +135,7 @@
       isearch-motion-changes-direction t
       isearch-repeat-on-direction-change t)
 
+(define-key search-map (kbd "<f2>") 'occur-at-point)
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
