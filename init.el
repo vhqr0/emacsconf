@@ -9,7 +9,6 @@
 (defvar +package
   '(evil
     evil-surround
-    evil-snipe
     avy
     ace-window
     ivy

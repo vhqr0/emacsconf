@@ -6,13 +6,7 @@
       evil-want-fine-undo t
       evil-undo-system 'undo-redo
       evil-symbol-word-search t
-      evil-search-module 'evil-search
-      evil-ex-search-persistent-highlight nil
-      evil-respect-visual-line-mode t
-      evil-snipe-smart-case t
-      evil-snipe-repeat-keys nil
-      evil-snipe-scope 'whole-visible
-      evil-snipe-repeat-scope 'whole-buffer)
+      evil-respect-visual-line-mode t)
 
 (require 'evil)
 (require 'evil-surround)
@@ -24,10 +18,6 @@
 
 (evil-mode 1)
 (global-evil-surround-mode 1)
-(evil-snipe-mode 1)
-(evil-snipe-override-mode 1)
-
-(setcdr (assq 'evil-snipe-local-mode minor-mode-alist) '(""))
 
 (global-set-key "\M-z" [escape])
 
@@ -35,8 +25,6 @@
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
 (define-key evil-insert-state-map "\C-r" 'evil-paste-from-register)
-
-(define-key ctl-x-x-map "/" 'evil-ex-nohighlight)
 
 
 
