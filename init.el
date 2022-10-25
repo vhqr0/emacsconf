@@ -24,6 +24,7 @@
     company
     eglot
     markdown-mode
+    edit-indirect
     htmlize
     org-roam
     org-roam-ui
