@@ -28,9 +28,7 @@
     htmlize
     org-roam
     org-roam-ui
-    cmake-mode
-    emmet-mode
-    web-mode))
+    emmet-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -203,9 +201,6 @@
 (add-hook 'js-mode-hook 'emmet-mode)
 (add-hook 'mhtml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
-(add-hook 'web-mode-hook 'emmet-mode)
-
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 
 (setq eglot-extend-to-xref t
       eglot-events-buffer-size 0
@@ -241,7 +236,6 @@
   (set-company-backends hook (append backends company-backends)))
 
 (set-company-backends 'eshell-mode-hook '(company-files))
-(add-company-backends 'cmake-mode-hook '(company-cmake))
 
 (defun company-mode-on-override ()
   (when (or (derived-mode-p 'prog-mode 'text-mode 'eshell-mode))
