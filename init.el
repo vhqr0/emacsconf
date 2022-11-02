@@ -29,7 +29,8 @@
     org-roam
     org-roam-ui
     cmake-mode
-    emmet-mode))
+    emmet-mode
+    web-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -202,6 +203,9 @@
 (add-hook 'js-mode-hook 'emmet-mode)
 (add-hook 'mhtml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'emmet-mode)
+
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 
 (setq eglot-extend-to-xref t
       eglot-events-buffer-size 0
