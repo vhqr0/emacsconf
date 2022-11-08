@@ -184,6 +184,8 @@
 (define-key projectile-command-map "s" 'projectile-run-shell)
 (define-key evil-leader-map "p" projectile-command-map)
 
+(sml/setup)
+
 
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
