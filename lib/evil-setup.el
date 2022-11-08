@@ -186,7 +186,8 @@
 (define-key evil-leader-map "x" ctl-x-x-map)
 (define-key evil-leader-map "n" narrow-map)
 (define-key evil-leader-map "v" vc-prefix-map)
-(define-key evil-leader-map "p" project-prefix-map)
+;;; use projectile
+;; (define-key evil-leader-map "p" project-prefix-map)
 (define-key evil-leader-map "4" ctl-x-4-map)
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
