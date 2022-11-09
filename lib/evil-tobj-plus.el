@@ -308,84 +308,6 @@ and the line above and below, skipping empty lines."
 
 
 
-;;; syntax-plus
-
-(defun evil-syntax-plus--what-face (&optional pos)
-  "Shows all faces at point"
-  (let* ((pos (or pos (point)))
-         (face (get-text-property pos 'face)))
-    (unless (keywordp (car-safe face)) (list face))))
-
-(defun evil-syntax-plus--whitespacep (c)
-  "This function returns t if c is white spaces, nil otherwise."
-  (= 32 (char-syntax c)))
-
-(defun evil-syntax-plus--create-range (&optional inclusive)
-  (let ((point-face (evil-syntax-plus--what-face))
-        (backward-point (point)) ; last char when stop, including white space
-        (backward-none-space-point (point)) ; last none white space char
-        (forward-point (point)) ; last char when stop, including white space
-        (forward-none-space-point (point)) ; last none white space char
-        (start (point))
-        (end (point)))
-
-    ;; check chars backward,
-    ;; stop when char is not white space and has different face
-    (save-excursion
-      (let ((continue t))
-        (while (and continue (>= (- (point) 1) (point-min)))
-          (backward-char)
-          (let ((backward-point-face (evil-syntax-plus--what-face)))
-            (if (evil-syntax-plus--whitespacep (char-after))
-                (setq backward-point (point))
-              (if (equal point-face backward-point-face)
-                  (progn (setq backward-point (point))
-                         (setq backward-none-space-point (point)))
-                (setq continue nil)))))))
-
-    ;; check chars forward,
-    ;; stop when char is not white space and has different face
-    (save-excursion
-      (let ((continue t))
-        (while (and continue (< (+ (point) 1) (point-max)))
-          (forward-char)
-          (let ((forward-point-face (evil-syntax-plus--what-face)))
-            (if (evil-syntax-plus--whitespacep (char-after))
-                (setq forward-point (point))
-              (if (equal point-face forward-point-face)
-                  (progn (setq forward-point (point))
-                         (setq forward-none-space-point (point)))
-                (setq continue nil)))))))
-
-    (if inclusive
-        ;; for outer object,
-        ;; if both leading and trailing white spaces exist,
-        ;; only trailing whitespaces are included.
-        ;; otherwise, leading/trailing/none white spaces are included.
-        (progn
-          (if (and (/= backward-none-space-point backward-point)
-                   (/= forward-none-space-point forward-point))
-              (setq start backward-none-space-point)
-            (setq start backward-point))
-          (setq end forward-point))
-      ;; for inner object,
-      ;; no leading and trailing white spaces are included
-      (setq start backward-none-space-point)
-      (setq end forward-none-space-point))
-
-    (evil-range start (+ end 1))))
-
-(evil-define-text-object evil-inner-syntax (count &optional beg end type)
-  "Select inner range between a character by which the command is followed."
-  (evil-syntax-plus--create-range))
-
-(evil-define-text-object evil-outer-syntax (count &optional beg end type)
-  "Select range between a character by which the command is followed."
-  (evil-syntax-plus--create-range t))
-
-
-
-
 ;;; bindings
 
 ;;;###autoload
@@ -397,8 +319,6 @@ and the line above and below, skipping empty lines."
   (define-key evil-inner-text-objects-map "I" 'evil-indent-plus-i-indent-up)
   (define-key evil-outer-text-objects-map "I" 'evil-indent-plus-a-indent-up)
   (define-key evil-inner-text-objects-map "J" 'evil-indent-plus-i-indent-up-down)
-  (define-key evil-outer-text-objects-map "J" 'evil-indent-plus-a-indent-up-down)
-  (define-key evil-inner-text-objects-map "S" 'evil-inner-syntax)
-  (define-key evil-outer-text-objects-map "S" 'evil-outer-syntax))
+  (define-key evil-outer-text-objects-map "J" 'evil-indent-plus-a-indent-up-down))
 
 (provide 'evil-tobj-plus)

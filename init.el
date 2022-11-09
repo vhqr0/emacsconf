@@ -19,7 +19,6 @@
     amx
     wgrep
     magit
-    forge
     projectile
     counsel-projectile
     smart-mode-line
@@ -30,7 +29,6 @@
     edit-indirect
     htmlize
     org-roam
-    org-roam-ui
     emmet-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -182,6 +180,7 @@
 (define-key projectile-command-map "x" 'project-execute-extended-command)
 (define-key projectile-command-map "e" 'projectile-run-eshell)
 (define-key projectile-command-map "s" 'projectile-run-shell)
+(define-key projectile-command-map "m" 'projectile-compile-project)
 (define-key evil-leader-map "p" projectile-command-map)
 
 (sml/setup)

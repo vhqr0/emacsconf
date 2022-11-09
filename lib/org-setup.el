@@ -13,82 +13,24 @@
 
 
 
-(defun counsel-org-roam--find(x &optional other-window)
-  (let ((node (if (consp x)
-                  (cdr x)
-                (org-roam-node-create :title x))))
-    (if (org-roam-node-file node)
-        (org-roam-node-visit node other-window)
-      (org-roam-capture-
-       :node node
-       :props '(:finalize find-file)))))
-
-(defun counsel-org-roam--find-other-window(x)
-  (counsel-org-roam--find x t))
-
-(defun counsel-org-roam--insert(x &optional append)
-  (let ((node (if (consp x)
-                  (cdr x)
-                (org-roam-node-create :title x))))
-    (when (and append (not (eolp)))
-      (forward-char))
-    (if (org-roam-node-id node)
-        (insert (org-link-make-string
-                 (concat "id:" (org-roam-node-id node))
-                 (org-roam-node-formatted node)))
-      (org-roam-capture-
-       :node node
-       :props '(:finalize insert-link)))))
-
-(defun counsel-org-roam--append(x)
-  (counsel-org-roam--insert x t))
-
-(defun counsel-org-roam--capture (x)
-  (let ((node (if (consp x)
-                  (cdr x)
-                (org-roam-node-create :title x))))
-    (org-roam-capture-
-     :node node
-     :props '(:immediate-finish nil))))
-
-(defun counsel-org-roam ()
-  (interactive)
-  (require 'ivy)
-  (require 'org-roam)
-  (let ((nodes (org-roam-node-read--completions)))
-    (ivy-read "Node: "
-	      (org-roam-node-read--completions)
-	      :action 'counsel-org-roam--find
-	      :history 'org-roam-node-history
-	      :caller 'counsel-org-roam)))
-
-(with-eval-after-load 'ivy
-  (ivy-set-actions 'counsel-org-roam
-                   '(("j" counsel-org-roam--find-other-window "other window")
-                     ("i" counsel-org-roam--insert "insert")
-                     ("a" counsel-org-roam--append "append")
-                     ("c" counsel-org-roam--capture "capture"))))
-
-
-
 (defvar org-prefix-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "m" 'org-store-link)
-    (define-key map "i" 'org-insert-link-global)
-    (define-key map "o" 'org-open-at-point-global)
     (define-key map "a" 'org-agenda)
+    (define-key map "c" 'counsel-org-capture)
+    (define-key map "w" 'org-store-link)
+    (define-key map "y" 'org-insert-link-global)
+    (define-key map "o" 'org-open-at-point-global)
+    (define-key map "l" 'counsel-org-link)
+    (define-key map "f" 'counsel-org-file)
+    (define-key map "i" 'counsel-org-entity)
     (define-key map "j" 'counsel-org-goto-all)
     (define-key map "J" 'counsel-org-agenda-headlines)
-    (define-key map "c" 'counsel-org-capture)
-    (define-key map "l" 'counsel-org-roam)
-    (define-key map "C" 'org-roam-dailies-capture-today)
-    (define-key map "L" 'org-roam-dailies-goto-today)
-    (define-key map "u" 'org-roam-ui-mode)
+    (define-key map "r" 'counsel-org-roam)
     map))
 
-(global-set-key (kbd "C-c l") org-prefix-map)
+(global-set-key (kbd "C-c o") org-prefix-map)
 
 (with-eval-after-load 'evil-setup
-  (define-key evil-leader-map "l" org-prefix-map))
+  (define-key evil-leader-map "O" org-prefix-map))
 
 (provide 'org-setup)

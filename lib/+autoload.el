@@ -44,6 +44,16 @@ it is disabled.
 
 ;;;***
 
+;;;### (autoloads nil "counsel-org-roam" "counsel-org-roam.el" (0
+;;;;;;  0 0 0))
+;;; Generated autoloads from counsel-org-roam.el
+
+(autoload 'counsel-org-roam "counsel-org-roam" nil t nil)
+
+(register-definition-prefixes "counsel-org-roam" '("counsel-org-roam--capture"))
+
+;;;***
+
 ;;;### (autoloads nil "evil-setup" "evil-setup.el" (0 0 0 0))
 ;;; Generated autoloads from evil-setup.el
 
@@ -64,7 +74,7 @@ it is disabled.
 ;;;### (autoloads nil "ivy-setup" "ivy-setup.el" (0 0 0 0))
 ;;; Generated autoloads from ivy-setup.el
 
-(register-definition-prefixes "ivy-setup" '("counsel-" "ivy-"))
+(register-definition-prefixes "ivy-setup" '("counsel--set-variable" "ivy-"))
 
 ;;;***
 
@@ -81,7 +91,7 @@ it is disabled.
 ;;;### (autoloads nil "org-setup" "org-setup.el" (0 0 0 0))
 ;;; Generated autoloads from org-setup.el
 
-(register-definition-prefixes "org-setup" '("counsel-org-roam" "org-prefix-map"))
+(register-definition-prefixes "org-setup" '("org-prefix-map"))
 
 ;;;***
 
@@ -90,7 +100,7 @@ it is disabled.
 
 (autoload 'simple-x-default-keybindings "simple-x" nil nil nil)
 
-(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "prettier-" "rotate-window" "xclip" "xdg-open"))
+(register-definition-prefixes "simple-x" '("dired-do-xdg-open" "eshell-dwim" "external-format" "fixup-whitespace-nospace-mode" "minibuffer-yank-symbol" "occur-at-point" "prettier-" "rotate-window" "xclip" "xdg-open"))
 
 ;;;***
 

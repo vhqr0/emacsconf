@@ -75,70 +75,4 @@
 
 
 
-(defun counsel-rg-file-jump (&optional initial-input initial-directory)
-  (interactive
-   (list nil
-         (when current-prefix-arg
-           (counsel-read-directory-name "From directory: "))))
-  (let ((find-program (car counsel-rg-base-command))
-        (counsel-file-jump-args '("--files")))
-    (counsel-file-jump initial-input initial-directory)))
-
-(defun counsel-rg-file-jump-from-find ()
-  (interactive)
-  (ivy-quit-and-run
-    (counsel-rg-file-jump ivy-text (ivy-state-directory ivy-last))))
-
-(define-key counsel-find-file-map "`" 'counsel-rg-file-jump-from-find)
-
-
-
-(defvar proced-signal-list)
-
-(declare-function proced-send-signal "proced")
-(declare-function proced-pid-at-point "proced")
-(declare-function proced-update "proced")
-
-(defun counsel--proced-get-processes ()
-  (let ((oldbuf (get-buffer "*Proced*"))
-        processes)
-    (unless oldbuf
-      (save-window-excursion
-        (proced)))
-    (with-current-buffer "*Proced*"
-      (when oldbuf
-        (proced-update t))
-      (goto-char (point-min))
-      (while (not (eolp))
-        (push (cons
-               (buffer-substring-no-properties
-                (line-beginning-position)
-                (line-end-position))
-               (proced-pid-at-point))
-              processes)
-        (forward-line)))
-    (nreverse processes)))
-
-(defun counsel--proced-message (x)
-  (message (car x)))
-
-(defun counsel--proced-kill-process (x)
-  (proced-send-signal
-   (completing-read "Send signal (default INT): "
-                    proced-signal-list
-                    nil nil nil nil "INT")
-   `((,(cdr x) . ,(car x))))
-  (counsel--proced-message x))
-
-(defun counsel-proced ()
-  (interactive)
-  (require 'proced)
-  (ivy-read "Processes: " (counsel--proced-get-processes)
-            :action 'counsel--proced-message
-            :caller 'counsel-proced))
-
-(ivy-set-actions 'counsel-proced '(("k" counsel--proced-kill-process "kill")))
-
-
-
 (provide 'ivy-setup)
