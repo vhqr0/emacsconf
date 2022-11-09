@@ -216,7 +216,7 @@
 (define-key evil-leader-map "f" 'find-file)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
-(define-key evil-leader-map "i" 'imenu)
+(define-key evil-leader-map "l" 'imenu)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
 (define-key evil-leader-map "!" 'shell-command)
@@ -228,9 +228,10 @@
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
 (define-key evil-leader-map "d" 'eldoc-doc-buffer)
+(define-key evil-leader-map "i" 'symbol-overlay-put) ; symbol-overlay
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "I" 'counsel-outline)
+(define-key evil-leader-map "L" 'counsel-outline)
 
 (provide 'evil-setup)

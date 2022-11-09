@@ -146,19 +146,25 @@
 (define-key help-map "j" 'find-library)
 (define-key help-map "J" 'load-theme)
 
+(define-key ctl-x-4-map "j" 'dired-jump-other-window)
+
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "v" 'visual-line-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 (define-key ctl-x-x-map "a" 'auto-save-visited-mode)
 
-(define-key ctl-x-4-map "j" 'dired-jump-other-window)
+(define-key ctl-x-x-map "H" 'symbol-overlay-mode)
 
 (define-key search-map "i" 'symbol-overlay-put)
 (define-key search-map "u" 'symbol-overlay-remove-all)
 
 (with-eval-after-load 'symbol-overlay
-  (define-key symbol-overlay-map "h" nil))
+  (define-key symbol-overlay-map "h" nil)
+  (define-key symbol-overlay-map "w" nil)
+  (define-key symbol-overlay-map "e" nil)
+  (define-key symbol-overlay-map "N" 'symbol-overlay-jump-prev)
+  (define-key symbol-overlay-map "u" 'symbol-overlay-remove-all))
 
 (define-key goto-map "g" 'goto-line-preview)
 
