@@ -160,9 +160,8 @@
 (define-key search-map "u" 'symbol-overlay-remove-all)
 
 (with-eval-after-load 'symbol-overlay
-  (define-key symbol-overlay-map "h" nil)
-  (define-key symbol-overlay-map "w" nil)
-  (define-key symbol-overlay-map "e" nil)
+  (dolist (key '("h" "w" "e"))
+    (define-key symbol-overlay-map key nil))
   (define-key symbol-overlay-map "N" 'symbol-overlay-jump-prev)
   (define-key symbol-overlay-map "u" 'symbol-overlay-remove-all))
 
