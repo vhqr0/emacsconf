@@ -2,6 +2,7 @@
       evil-disable-insert-state-bindings t
       evil-want-C-i-jump nil
       evil-want-C-d-scroll nil
+      evil-want-C-w-delete nil
       evil-want-Y-yank-to-eol t
       evil-want-fine-undo t
       evil-undo-system 'undo-redo
@@ -25,6 +26,8 @@
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
 (define-key evil-insert-state-map "\C-r" 'evil-paste-from-register)
+
+(setq evil-ex-completion-map minibuffer-local-map)
 
 
 
