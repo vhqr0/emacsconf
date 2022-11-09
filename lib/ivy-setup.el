@@ -21,8 +21,6 @@
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 (define-key counsel-mode-map [remap insert-register] 'counsel-register)
 (define-key counsel-mode-map [remap jump-to-register] 'counsel-register)
-(define-key counsel-mode-map [remap evil-paste-from-register] 'counsel-evil-registers)
-(define-key counsel-mode-map [remap evil-goto-mark] 'counsel-evil-marks)
 
 
 
@@ -33,8 +31,11 @@
 
 (define-key search-map "s" 'swiper)
 (define-key search-map "S" 'counsel-rg)
+(define-key search-map "c" 'counsel-compilation-errors)
 
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
+
+(define-key kmacro-keymap "m" 'counsel-kmacro)
 
 
 

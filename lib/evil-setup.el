@@ -153,12 +153,6 @@
 
 (evil-tobj-plus-default-keybindings)
 
-;; avy
-
-(define-key evil-motion-state-map "gj" 'avy-goto-line)
-(define-key evil-motion-state-map "gk" 'avy-goto-char-timer)
-(define-key evil-motion-state-map "go" 'avy-goto-symbol-1)
-
 
 
 ;; leader
@@ -188,6 +182,7 @@
 (define-key evil-leader-map "v" vc-prefix-map)
 ;;; use projectile
 ;; (define-key evil-leader-map "p" project-prefix-map)
+(define-key evil-leader-map "m" kmacro-keymap)
 (define-key evil-leader-map "4" ctl-x-4-map)
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
@@ -221,8 +216,6 @@
 (define-key evil-leader-map "f" 'find-file)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
-(define-key evil-leader-map "m" 'compile)
-(define-key evil-leader-map "M" 'recompile)
 (define-key evil-leader-map "i" 'imenu)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
@@ -238,9 +231,6 @@
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "l" 'counsel-compilation-errors)
 (define-key evil-leader-map "I" 'counsel-outline)
-(define-key evil-leader-map "K" 'counsel-kmacro)
-(define-key evil-leader-map "C" 'counsel-compile)
 
 (provide 'evil-setup)

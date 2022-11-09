@@ -154,17 +154,27 @@
 
 (define-key ctl-x-4-map "j" 'dired-jump-other-window)
 
-(setq avy-single-candidate-jump nil)
+(define-key search-map "i" 'symbol-overlay-put)
+(define-key search-map "u" 'symbol-overlay-remove-all)
+
+(with-eval-after-load 'symbol-overlay
+  (define-key symbol-overlay-map "h" nil))
+
+(define-key goto-map "g" 'goto-line-preview)
+
+(setq avy-single-candidate-jump nil
+      avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
 
 (define-key goto-map "." 'avy-resume)
 (define-key goto-map "j" 'avy-goto-line)
-(define-key goto-map "k" 'avy-goto-char-timer)
-(define-key goto-map "o" 'avy-goto-symbol-1)
+(define-key goto-map "f" 'avy-goto-char-timer)
+(define-key goto-map "w" 'avy-goto-word-0)
+
 (define-key isearch-mode-map "\M-g" 'avy-isearch)
 
 (setq aw-dispatch-when-more-than 1)
 
-(global-set-key "\M-o" 'ace-window)
+(define-key goto-map "o" 'ace-window)
 
 (simple-x-default-keybindings)
 
@@ -180,7 +190,6 @@
 (define-key projectile-command-map "x" 'project-execute-extended-command)
 (define-key projectile-command-map "e" 'projectile-run-eshell)
 (define-key projectile-command-map "s" 'projectile-run-shell)
-(define-key projectile-command-map "m" 'projectile-compile-project)
 (define-key evil-leader-map "p" projectile-command-map)
 
 (sml/setup)
