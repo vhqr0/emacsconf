@@ -154,6 +154,14 @@
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 (define-key ctl-x-x-map "a" 'auto-save-visited-mode)
 
+(defvar list-map (make-sparse-keymap))
+
+(define-key list-map "b" 'ibuffer)
+(define-key list-map "d" 'eldoc-doc-buffer)
+(define-key list-map "m" 'flymake-show-diagnostics-buffer)
+
+
+
 (define-key ctl-x-x-map "H" 'symbol-overlay-mode)
 
 (define-key search-map "i" 'symbol-overlay-put)
@@ -204,6 +212,8 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (setq completion-ignore-case t)
+
+(global-set-key (kbd "C-M-_") 'dabbrev-completion)
 
 (setq xref-search-program 'ripgrep)
 

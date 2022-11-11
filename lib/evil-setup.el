@@ -186,10 +186,10 @@
 ;;; use projectile
 ;; (define-key evil-leader-map "p" project-prefix-map)
 (define-key evil-leader-map "m" kmacro-keymap)
+(define-key evil-leader-map "l" list-map) ; init.el
 (define-key evil-leader-map "4" ctl-x-4-map)
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
-(define-key evil-leader-map "w" evil-window-map)
 (define-key evil-leader-map "\r" mule-keymap)
 
 (define-key evil-leader-map "1" 'delete-other-windows)
@@ -202,38 +202,34 @@
 (define-key evil-leader-map "u" 'winner-undo)   ; winner
 (define-key evil-leader-map "U" 'winner-redo)   ; winner
 (define-key evil-leader-map "k" 'kill-buffer)
-(define-key evil-leader-map "-" 'text-scale-decrease)
-(define-key evil-leader-map "=" 'text-scale-increase)
-(define-key evil-leader-map "+" 'text-scale-mode)
 (define-key evil-leader-map [left] 'previous-buffer)
 (define-key evil-leader-map [right] 'next-buffer)
 (define-key evil-leader-map "\t" 'evil-jump-backward)
 (define-key evil-leader-map [tab] 'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
-(dolist (pair insert-pair-alist)
-  (define-key evil-leader-map `[,(car pair)] 'insert-pair))
-
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "b" 'switch-to-buffer)
 (define-key evil-leader-map "f" 'find-file)
+(define-key evil-leader-map "d" 'dired)
+(define-key evil-leader-map "j" 'dired-jump)
+(define-key evil-leader-map "w" 'write-file)
+(define-key evil-leader-map "i" 'insert-file)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
-(define-key evil-leader-map "i" 'imenu)
-(define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
 (define-key evil-leader-map "!" 'shell-command)
 (define-key evil-leader-map "&" 'async-shell-command)
 (define-key evil-leader-map "$" 'ispell-word)
 (define-key evil-leader-map "^" 'delete-indentation)
-(define-key evil-leader-map "%" 'query-replace-regexp)
+;;; use visual-regexp
+;; (define-key evil-leader-map "%" 'query-replace-regexp)
+(define-key evil-leader-map "%" 'vr/query-replace)
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
-(define-key evil-leader-map "d" 'eldoc-doc-buffer)
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "I" 'counsel-outline)
 
 (provide 'evil-setup)

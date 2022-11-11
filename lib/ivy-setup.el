@@ -28,14 +28,18 @@
 
 (define-key ctl-x-r-map "v" 'ivy-push-view)
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
+(define-key ctl-x-r-map "e" 'counsel-recentf)
 
 (define-key search-map "s" 'swiper)
 (define-key search-map "S" 'counsel-rg)
-(define-key search-map "c" 'counsel-compilation-errors)
-
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
+(define-key goto-map "I" 'counsel-outline)
+
 (define-key kmacro-keymap "m" 'counsel-kmacro)
+
+(define-key list-map "c" 'counsel-locate)
+(define-key list-map "e" 'counsel-compilation-errors)
 
 
 
