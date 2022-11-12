@@ -19,6 +19,7 @@
 
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
+(define-key counsel-mode-map [remap recentf-open-files] 'counsel-recentf)
 (define-key counsel-mode-map [remap insert-register] 'counsel-register)
 (define-key counsel-mode-map [remap jump-to-register] 'counsel-register)
 
@@ -28,7 +29,6 @@
 
 (define-key ctl-x-r-map "v" 'ivy-push-view)
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
-(define-key ctl-x-r-map "e" 'counsel-recentf)
 
 (define-key search-map "s" 'swiper)
 (define-key search-map "S" 'counsel-rg)

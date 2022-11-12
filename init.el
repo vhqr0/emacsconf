@@ -101,6 +101,8 @@
 
 (recentf-mode 1)
 
+(define-key ctl-x-r-map "e" 'recentf-open-files)
+
 
 
 (setq-default indent-tabs-mode nil)
