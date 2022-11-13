@@ -19,9 +19,6 @@
 
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
-(define-key counsel-mode-map [remap recentf-open-files] 'counsel-recentf)
-(define-key counsel-mode-map [remap insert-register] 'counsel-register)
-(define-key counsel-mode-map [remap jump-to-register] 'counsel-register)
 
 
 
@@ -34,12 +31,11 @@
 (define-key search-map "S" 'counsel-rg)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
-(define-key goto-map "I" 'counsel-outline)
-
-(define-key kmacro-keymap "m" 'counsel-kmacro)
-
-(define-key list-map "c" 'counsel-locate)
-(define-key list-map "e" 'counsel-compilation-errors)
+(define-key ctl-x-l-map "e" 'counsel-recentf)
+(define-key ctl-x-l-map "c" 'counsel-locate)
+(define-key ctl-x-l-map "m" 'counsel-mark-ring)
+(define-key ctl-x-l-map "r" 'counsel-register)
+(define-key ctl-x-l-map "k" 'counsel-kmacro)
 
 
 

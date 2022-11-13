@@ -97,11 +97,11 @@
 
 (auto-save-visited-mode 1)
 
+(add-to-list 'minor-mode-alist '(auto-save-visited-mode " ASV"))
+
 (setq recentf-max-saved-items 200)
 
 (recentf-mode 1)
-
-(define-key ctl-x-r-map "e" 'recentf-open-files)
 
 
 
@@ -142,7 +142,7 @@
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
-(define-key goto-map "m" 'pop-to-mark-command)
+
 
 (define-key help-map "B" 'describe-keymap)
 (define-key help-map "j" 'find-library)
@@ -156,11 +156,12 @@
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
 (define-key ctl-x-x-map "a" 'auto-save-visited-mode)
 
-(defvar list-map (make-sparse-keymap))
+(defvar ctl-x-l-map (make-sparse-keymap))
+(define-key ctl-x-map "l" ctl-x-l-map)
 
-(define-key list-map "b" 'ibuffer)
-(define-key list-map "d" 'eldoc-doc-buffer)
-(define-key list-map "m" 'flymake-show-diagnostics-buffer)
+(define-key ctl-x-l-map "b" 'ibuffer)
+(define-key ctl-x-l-map "d" 'eldoc-doc-buffer)
+(define-key ctl-x-l-map "f" 'flymake-show-diagnostics-buffer)
 
 
 

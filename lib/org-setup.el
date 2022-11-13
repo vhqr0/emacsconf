@@ -23,14 +23,11 @@
     (define-key map "l" 'counsel-org-link)
     (define-key map "f" 'counsel-org-file)
     (define-key map "i" 'counsel-org-entity)
-    (define-key map "j" 'counsel-org-goto-all)
-    (define-key map "J" 'counsel-org-agenda-headlines)
+    (define-key map "j" 'counsel-outline)
+    (define-key map "J" 'counsel-org-goto-all)
     (define-key map "r" 'counsel-org-roam)
     map))
 
-(global-set-key (kbd "C-c o") org-prefix-map)
-
-(with-eval-after-load 'evil-setup
-  (define-key evil-leader-map "O" org-prefix-map))
+(define-key ctl-x-l-map "o" org-prefix-map)
 
 (provide 'org-setup)
