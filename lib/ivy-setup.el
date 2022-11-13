@@ -1,6 +1,14 @@
-(setq ivy-count-format "(%d/%d) "
+(setq ivy-height 15
+      ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
       ivy-read-action-function 'ivy-hydra-read-action)
+
+(setq counsel-describe-symbol-function      'helpful-symbol
+      counsel-describe-variable-function    'helpful-variable
+      counsel-describe-function-function    'helpful-callable
+      counsel-descbinds-function            'helpful-callable)
+
+(setq helpful-max-buffers nil)
 
 (require 'ivy)
 (require 'swiper)
@@ -19,6 +27,7 @@
 
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
+(define-key counsel-mode-map [remap describe-key] 'helpful-key)
 
 
 

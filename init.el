@@ -16,6 +16,7 @@
     counsel
     hydra
     ivy-hydra
+    helpful
     amx
     wgrep
     magit
@@ -144,9 +145,8 @@
 
 
 
-(define-key help-map "B" 'describe-keymap)
 (define-key help-map "j" 'find-library)
-(define-key help-map "J" 'load-theme)
+(define-key help-map "t" 'load-theme)
 
 (define-key ctl-x-4-map "j" 'dired-jump-other-window)
 
