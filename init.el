@@ -139,7 +139,6 @@
       isearch-motion-changes-direction t
       isearch-repeat-on-direction-change t)
 
-(define-key search-map (kbd "<f2>") 'occur-at-point)
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
@@ -167,14 +166,28 @@
 
 (define-key ctl-x-x-map "H" 'symbol-overlay-mode)
 
-(define-key search-map "i" 'symbol-overlay-put)
-(define-key search-map "u" 'symbol-overlay-remove-all)
+(defvar symbol-at-point-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "i" 'symbol-overlay-put)
+    (define-key map "u" 'symbol-overlay-remove-all)
+    (define-key map "n" 'symbol-overlay-jump-next)
+    (define-key map "p" 'symbol-overlay-jump-prev)
+    (define-key map "N" 'symbol-overlay-jump-prev)
+    (define-key map "<" 'symbol-overlay-jump-first)
+    (define-key map ">" 'symbol-overlay-jump-prev)
+    (define-key map "d" 'symbol-overlay-jump-to-definition)
+    (define-key map "H" 'symbol-overlay-switch-backward)
+    (define-key map "L" 'symbol-overlay-switch-forward)
+    (define-key map "t" 'symbol-overlay-toggle-in-scope)
+    (define-key map "r" 'symbol-overlay-rename)
+    (define-key map "q" 'symbol-overlay-query-replace)
+    (define-key map "o" 'occur-at-point)
+    (define-key map "s" 'swiper-thing-at-point)
+    map))
 
-(with-eval-after-load 'symbol-overlay
-  (dolist (key '("h" "w" "e"))
-    (define-key symbol-overlay-map key nil))
-  (define-key symbol-overlay-map "N" 'symbol-overlay-jump-prev)
-  (define-key symbol-overlay-map "u" 'symbol-overlay-remove-all))
+(setq symbol-overlay-map symbol-at-point-map)
+
+
 
 (define-key goto-map "g" 'goto-line-preview)
 

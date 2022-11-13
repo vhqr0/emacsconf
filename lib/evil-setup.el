@@ -182,11 +182,13 @@
 (define-key evil-leader-map "r" ctl-x-r-map)
 (define-key evil-leader-map "x" ctl-x-x-map)
 (define-key evil-leader-map "l" ctl-x-l-map) ; init.el
+(define-key evil-leader-map "i" symbol-at-point-map) ; init.el
 (define-key evil-leader-map "n" narrow-map)
 (define-key evil-leader-map "v" vc-prefix-map)
 ;;; use projectile
 ;; (define-key evil-leader-map "p" project-prefix-map)
 (define-key evil-leader-map "m" kmacro-keymap)
+(define-key evil-leader-map "w" evil-window-map)
 (define-key evil-leader-map "4" ctl-x-4-map)
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
@@ -213,8 +215,6 @@
 (define-key evil-leader-map "f" 'find-file)
 (define-key evil-leader-map "d" 'dired)
 (define-key evil-leader-map "j" 'dired-jump)
-(define-key evil-leader-map "w" 'write-file)
-(define-key evil-leader-map "i" 'insert-file)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'evil-ex)
 (define-key evil-leader-map ":" 'eval-expression)

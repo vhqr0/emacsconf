@@ -37,9 +37,9 @@
 (define-key ctl-x-r-map "V" 'ivy-pop-view)
 
 (define-key search-map "s" 'swiper)
-(define-key search-map "S" 'counsel-rg)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
+(define-key ctl-x-l-map "g" 'counsel-rg)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
 (define-key ctl-x-l-map "c" 'counsel-locate)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
