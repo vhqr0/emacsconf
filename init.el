@@ -183,6 +183,7 @@
     (define-key map "q" 'symbol-overlay-query-replace)
     (define-key map "o" 'occur-at-point)
     (define-key map "s" 'swiper-thing-at-point)
+    (define-key map "\C-s" 'symbol-overlay-isearch-literally)
     map))
 
 (setq symbol-overlay-map symbol-at-point-map)
@@ -204,6 +205,8 @@
 (setq aw-dispatch-when-more-than 1)
 
 (define-key goto-map "o" 'ace-window)
+
+
 
 (simple-x-default-keybindings)
 
@@ -283,17 +286,16 @@
 
 
 
-(defun set-company-backends (hook backends)
+(defun company-set-backends (hook backends)
   (add-hook hook `(lambda ()
-                    (setq-local company-backends ',backends))))
+                    (setq-local company-backends ',backends)
+                    (company-mode 1))))
 
-(defun add-company-backends (hook backends)
-  (set-company-backends hook (append backends company-backends)))
-
-(set-company-backends 'eshell-mode-hook '(company-files))
+(company-set-backends 'eshell-mode-hook '(company-files))
+(company-set-backends 'sh-mode-hook '(company-files company-dabbrev))
 
 (defun company-mode-on-override ()
-  (when (or (derived-mode-p 'prog-mode 'text-mode 'eshell-mode))
+  (when (derived-mode-p 'prog-mode 'text-mode)
     (company-mode 1)))
 
 (advice-add 'company-mode-on :override 'company-mode-on-override)

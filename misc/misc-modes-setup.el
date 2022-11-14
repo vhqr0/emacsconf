@@ -1,7 +1,7 @@
 ;;; cmake-mode
 (setq +package (append +package '(cmake-mode)))
 (with-eval-after-load 'cmake-mode
-  (set-company-backends 'cmake-mode-hook '(company-cmake)))
+  (company-set-backends 'cmake-mode-hook '(company-cmake)))
 
 ;;; web-mode
 (setq +package (append +package '(web-mode)))
