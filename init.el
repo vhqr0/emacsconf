@@ -254,7 +254,8 @@
   (setq python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt"))
 
-(setq js-indent-level 2)
+(setq js-indent-level 2
+      css-indent-offset 2)
 
 (add-hook 'js-mode-hook 'emmet-mode)
 (add-hook 'mhtml-mode-hook 'emmet-mode)

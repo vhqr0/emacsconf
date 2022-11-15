@@ -5,5 +5,8 @@
 
 ;;; web-mode
 (setq +package (append +package '(web-mode)))
+(setq web-mode-code-indent-offset 2
+      web-mode-markup-indent-offset 2
+      web-mode-css-indent-offset 2)
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-hook 'web-mode-hook 'emmet-mode)
