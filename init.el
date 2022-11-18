@@ -296,7 +296,7 @@
 (company-set-backends 'sh-mode-hook '(company-files company-dabbrev))
 
 (defun company-mode-on-override ()
-  (when (derived-mode-p 'prog-mode 'text-mode)
+  (when (derived-mode-p 'prog-mode)
     (company-mode 1)))
 
 (advice-add 'company-mode-on :override 'company-mode-on-override)
