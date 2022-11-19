@@ -27,7 +27,15 @@
 
 (define-key evil-insert-state-map "\C-r" 'evil-paste-from-register)
 
-(setq evil-ex-completion-map minibuffer-local-map)
+(setq evil-ex-completion-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "\C-r"   'evil-paste-from-register)
+        (define-key map "\d"     'evil-ex-delete-backward-char)
+        (define-key map "\t"     'evil-ex-completion)
+        (define-key map [tab]    'evil-ex-completion)
+        (define-key map [escape] 'abort-recursive-edit)
+        map))
+(set-keymap-parent evil-ex-completion-map minibuffer-local-map)
 
 
 
@@ -174,7 +182,7 @@
       (call-interactively bind))))
 
 (define-key evil-leader-map "c" 'god-C-c)
-
+(define-key evil-leader-map "`" 'tmm-menubar)
 (define-key evil-leader-map "h" help-map)
 (define-key evil-leader-map "s" search-map)
 (define-key evil-leader-map "g" goto-map)

@@ -1,7 +1,7 @@
 (setq eglot-server-programs
       '(((c-mode c++-mode) . ("clangd" "--header-insertion=never"))
-        ;; (python-mode . ("pylsp"))
-        (python-mode . ("pyright-langserver" "--stdio"))
+        (python-mode . ("pylsp"))
+        ;; (python-mode . ("pyright-langserver" "--stdio"))
         (js-mode . ("typescript-language-server" "--stdio"))
         (mhtml-mode . ("vscode-html-language-server" "--stdio"))
         (css-mode . ("vscode-css-language-server" "--stdio"))))
@@ -14,8 +14,7 @@
 
 (add-hook 'python-mode-hook
           (lambda ()
-            (setq-local eglot-stay-out-of '(company flymake)
-                        eglot-ignored-server-capabilities
+            (setq-local eglot-ignored-server-capabilities
                         '(:hoverProvider
                           :signatureHelpProvider
                           :documentHighlightProvider))))
