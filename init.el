@@ -9,8 +9,6 @@
 (defvar +package
   '(evil
     evil-surround
-    avy
-    ace-window
     ivy
     swiper
     counsel
@@ -22,7 +20,6 @@
     magit
     projectile
     counsel-projectile
-    smart-mode-line
     yasnippet
     company
     eglot
@@ -190,14 +187,12 @@
 
 
 
-(define-key goto-map "g" 'goto-line-preview)
-
 (setq avy-single-candidate-jump nil
       avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
 
 (define-key goto-map "." 'avy-resume)
 (define-key goto-map "j" 'avy-goto-line)
-(define-key goto-map "f" 'avy-goto-char-timer)
+(define-key goto-map "f" 'avy-goto-char)
 (define-key goto-map "w" 'avy-goto-word-0)
 
 (define-key isearch-mode-map "\M-g" 'avy-isearch)
@@ -205,6 +200,8 @@
 (setq aw-dispatch-when-more-than 1)
 
 (define-key goto-map "o" 'ace-window)
+
+(define-key goto-map "l" 'link-hint-open-link)
 
 
 
@@ -216,15 +213,11 @@
 (projectile-mode 1)
 (counsel-projectile-mode 1)
 
-(setcdr (assq 'projectile-mode minor-mode-alist) '(""))
-
 (define-key projectile-command-map "\e" nil)
 (define-key projectile-command-map "x" 'project-execute-extended-command)
 (define-key projectile-command-map "e" 'projectile-run-eshell)
 (define-key projectile-command-map "s" 'projectile-run-shell)
 (define-key evil-leader-map "p" projectile-command-map)
-
-(sml/setup)
 
 
 

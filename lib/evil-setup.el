@@ -231,9 +231,7 @@
 (define-key evil-leader-map "&" 'async-shell-command)
 (define-key evil-leader-map "$" 'ispell-word)
 (define-key evil-leader-map "^" 'delete-indentation)
-;;; use visual-regexp
-;; (define-key evil-leader-map "%" 'query-replace-regexp)
-(define-key evil-leader-map "%" 'vr/query-replace)
+(define-key evil-leader-map "%" 'query-replace-regexp)
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
