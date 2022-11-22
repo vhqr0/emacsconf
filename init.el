@@ -123,6 +123,15 @@
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
+(setq tab-bar-tab-hints t
+      tab-bar-select-tab-modifiers '(control shift))
+
+(dotimes (i 10)
+  (global-set-key (kbd (format "C-c C-%d" i))
+                  (kbd (format "C-S-%d" i))))
+
+(define-key tab-prefix-map "`" 'toggle-frame-tab-bar)
+
 (winner-mode 1)
 
 (windmove-default-keybindings)

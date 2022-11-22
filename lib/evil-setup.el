@@ -46,6 +46,7 @@
   :tag " <SP> "
   :enable (emacs))
 
+(define-key evil-special-state-map "\C-w" evil-window-map)
 (define-key evil-special-state-map "\C-z" 'evil-motion-state)
 (define-key evil-special-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-special-state-map "\M-k" 'evil-scroll-up)
@@ -58,7 +59,7 @@
 
 (defun evil-initial-state-for-buffer-override (&optional buffer default)
   (with-current-buffer (or buffer (current-buffer))
-    (cond ((derived-mode-p 'dired-mode 'magit-mode 'image-mode 'doc-view-mode 'pdf-view-mode)
+    (cond ((derived-mode-p 'dired-mode 'magit-section-mode 'image-mode 'doc-view-mode 'pdf-view-mode)
            'special)
           ((derived-mode-p 'comint-mode 'eshell-mode)
            'insert)
@@ -90,6 +91,9 @@
 
 (define-key evil-insert-state-map  "j" 'evil-jk)
 (define-key evil-replace-state-map "j" 'evil-jk)
+
+(with-eval-after-load 'company
+  (add-to-list 'company-begin-commands 'evil-jk))
 
 
 
@@ -179,7 +183,9 @@
     (when (commandp bind)
       (setq this-command bind
             real-this-command bind)
-      (call-interactively bind))))
+      (if (commandp bind t)
+          (call-interactively bind)
+        (execute-kbd-macro bind)))))
 
 (define-key evil-leader-map "c" 'god-C-c)
 (define-key evil-leader-map "`" 'tmm-menubar)
