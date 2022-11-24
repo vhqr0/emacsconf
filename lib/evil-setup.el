@@ -202,10 +202,10 @@
 ;;; use projectile
 ;; (define-key evil-leader-map "p" project-prefix-map)
 (define-key evil-leader-map "m" kmacro-keymap)
-(define-key evil-leader-map "w" evil-window-map)
 (define-key evil-leader-map "4" ctl-x-4-map)
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
+(define-key evil-leader-map "w" workspace-prefix-map) ; workspace.el
 (define-key evil-leader-map "\r" mule-keymap)
 
 (define-key evil-leader-map "1" 'delete-other-windows)

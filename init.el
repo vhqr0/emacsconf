@@ -250,11 +250,8 @@
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "C-c C-h") 'cc-help))
 
-(defvar +python-skip-set-ipython nil)
-
-(unless +python-skip-set-ipython
-  (setq python-shell-interpreter "ipython"
-        python-shell-interpreter-args "--simple-prompt"))
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "--simple-prompt")
 
 (setq js-indent-level 2
       css-indent-offset 2)

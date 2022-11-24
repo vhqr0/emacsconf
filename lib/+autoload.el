@@ -559,6 +559,115 @@ Rename symbol at point on all its occurrences." t nil)
 
 ;;;***
 
+;;;### (autoloads nil "workspace" "workspace.el" (0 0 0 0))
+;;; Generated autoloads from workspace.el
+
+(autoload 'workspace-switch-to-workspace "workspace" "\
+Read a workspace by NAME to switch in FRAME.
+If FRAME is nil, use selected frame.
+
+\(fn NAME &optional FRAME)" t nil)
+
+(autoload 'workspace-switch-to-next-workspace "workspace" "\
+Switch to next workspace in FRAME.
+If FRAME is nil, use selected frame.
+
+\(fn &optional FRAME)" t nil)
+
+(autoload 'workspace-switch-to-workspace-undo "workspace" "\
+Switch to recent switched workspace in FRAME.
+
+\(fn &optional FRAME)" t nil)
+
+(autoload 'workspace-remove-workspace "workspace" "\
+Read a workspace by NAME to delete.
+If DO-CONFIRM, confirm before delete.
+
+\(fn NAME &optional DO-CONFIRM)" t nil)
+
+(autoload 'workspace-rename-workspace "workspace" "\
+Rename current WORKSPACE to NAME.
+If DO-DUPLICATE, duplicate a new workspace to rename.
+If DO-CONFIRM, confirm before cover other workspace.
+
+\(fn WORKSPACE NAME &optional DO-DUPLICATE DO-CONFIRM)" t nil)
+
+(autoload 'workspace-add-buffer "workspace" "\
+Add current BUFFER-OR-NAME to current WORKSPACE.
+DO-CONFIRM: compatible to other functions to warn when failed.
+
+\(fn WORKSPACE &optional BUFFER-OR-NAME DO-CONFIRM)" t nil)
+
+(autoload 'workspace-remove-buffer "workspace" "\
+Read a BUFFER-OR-NAME to remove from current WORKSPACE buffers.
+DO-CONFIRM: compatible to other functions to warn when failed.
+
+\(fn WORKSPACE &optional BUFFER-OR-NAME DO-CONFIRM)" t nil)
+
+(autoload 'workspace-switch-to-buffer "workspace" "\
+Read a buffer to switch from current workspace buffers.
+If OTHER-WINDOW, switch to buffer other window.
+
+\(fn &optional OTHER-WINDOW)" t nil)
+
+(autoload 'workspace-switch-to-buffer-other-window "workspace" "\
+Other window version of `workspace-switch-to-buffer'." t nil)
+
+(autoload 'workspace-find-file "workspace" "\
+Read a file to find from current workspace files.
+If OTHER-WINDOW, find file other window.
+
+\(fn &optional OTHER-WINDOW)" t nil)
+
+(autoload 'workspace-find-file-other-window "workspace" "\
+Other window version of `workspace-find-file'." t nil)
+
+(autoload 'workspace-save-file "workspace" "\
+Save `workspace-alist' and their files to FILE.
+If DO-CONFIRM, confirm before delete exists file.
+
+\(fn FILE &optional DO-CONFIRM)" t nil)
+
+(autoload 'workspace-load-file "workspace" "\
+Load `workspace-alist' from FILE and recovery workspace files.
+If DO-CONFIRM, confirm save current `workspace-alist' before load.
+
+\(fn FILE &optional DO-CONFIRM)" t nil)
+
+(defvar workspace-mode nil "\
+Non-nil if Workspace mode is enabled.
+See the `workspace-mode' command
+for a description of this minor mode.")
+
+(custom-autoload 'workspace-mode "workspace" nil)
+
+(autoload 'workspace-mode "workspace" "\
+Workspace Mode.
+This mode is aim to display workspace information in modeline lighter.
+It is not necessary but recommended to turn on this mode when you use workspace.
+
+This is a minor mode.  If called interactively, toggle the
+`Workspace mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='workspace-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
+\(fn &optional ARG)" t nil)
+
+(defvar workspace-prefix-map (let ((map (make-sparse-keymap))) (define-key map "m" 'workspace-mode) (define-key map "s" 'workspace-switch-to-workspace) (define-key map "n" 'workspace-switch-to-next-workspace) (define-key map "u" 'workspace-switch-to-workspace-undo) (define-key map "K" 'workspace-remove-workspace) (define-key map "R" 'workspace-rename-workspace) (define-key map "a" 'workspace-add-buffer) (define-key map "k" 'workspace-remove-buffer) (define-key map "b" 'workspace-switch-to-buffer) (define-key map "4b" 'workspace-switch-to-buffer-other-window) (define-key map "f" 'workspace-find-file) (define-key map "4f" 'workspace-find-file-other-window) (define-key map "S" 'workspace-save-file) (define-key map "L" 'workspace-load-file) map))
+
+(register-definition-prefixes "workspace" '("workspace-"))
+
+;;;***
+
 (provide '+autoload)
 ;; Local Variables:
 ;; version-control: never
