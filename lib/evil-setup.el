@@ -188,7 +188,6 @@
         (execute-kbd-macro bind)))))
 
 (define-key evil-leader-map "c" 'god-C-c)
-(define-key evil-leader-map "`" 'tmm-menubar)
 (define-key evil-leader-map "h" help-map)
 (define-key evil-leader-map "s" search-map)
 (define-key evil-leader-map "g" goto-map)
@@ -223,6 +222,9 @@
 (define-key evil-leader-map "\t" 'evil-jump-backward)
 (define-key evil-leader-map [tab] 'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
+
+(dolist (pair insert-pair-alist)
+  (define-key evil-leader-map `[,(car pair)] 'insert-pair))
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "b" 'switch-to-buffer)

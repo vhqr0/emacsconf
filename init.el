@@ -34,9 +34,12 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-(add-to-list 'load-path (expand-file-name "lib" user-emacs-directory))
-
-(require '+autoload)
+(let* ((lib-directory (expand-file-name "lib/" user-emacs-directory))
+       (lib-autoload (expand-file-name "lib-autoload.el" lib-directory)))
+  (add-to-list 'load-path lib-directory)
+  (unless (file-exists-p lib-autoload)
+    (make-directory-autoloads lib-directory lib-autoload))
+  (load-file lib-autoload))
 
 (setq package-quickstart t
       package-archives +package-archives)
@@ -87,9 +90,13 @@
       kept-new-versions 10
       delete-old-versions t
       backup-by-copying t
-      backup-directory-alist '(("." . "~/.bak"))
-      auto-save-file-name-transforms '((".*" "~/.bak/" t))
-      lock-file-name-transforms '((".*" "~/.bak/" t)))
+      delete-by-moving-to-trash t)
+
+(let ((save-files-directory (expand-file-name "save/" user-emacs-directory)))
+  (setq backup-directory-alist `((".*" . ,(expand-file-name "backup/" save-files-directory)))
+        auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-save/" save-files-directory) t))
+        lock-file-name-transforms `((".*" ,(expand-file-name "lock/" save-files-directory) t))
+        trash-directory (expand-file-name "trash/" save-files-directory)))
 
 (setq auto-save-visited-interval 1)
 
