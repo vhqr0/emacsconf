@@ -11,6 +11,32 @@
 ;;
 ;; To use `workspace' in your Emacs, just bind `workspace-prefix-map'.
 ;; And it's recommended to turn on `workspace-mode' to display workspace information.
+;;
+;; Workflow:
+;;
+;; * `workspace-switch-to-workspace': PREFIX s
+;;   Read a workspace name to switch, or create if not exists.
+;;   Each workspace will store it's layout and buffers.
+;;
+;; * `workspace-add-buffer': PREFIX a
+;;   Add current buffer to current workspace.
+;;
+;; * `workspace-remove-buffer': PREFIX k
+;;   Remove a buffer from current workspace.
+;;
+;; * `workspace-switch-to-buffer': PREFIX b
+;;   `switch-to-buffer' narrow to current workspace buffers.
+;;
+;; * `workspace-find-file': PREFIX f
+;;   Find a workspace file, like per-workspace recentf.
+;;
+;; * `workspace-save-file': PREFIX S
+;;   Save all workspaces and their files to a file.
+;;
+;; * `workspace-load-file': PREFIX L
+;;   Load all workspaces and their files from a file.
+;;
+;; You can read all command docstrings in `workspace-prefix-map' to learn more.
 
 ;;; Code:
 (require 'subr-x)
