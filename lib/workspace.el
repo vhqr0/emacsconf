@@ -26,7 +26,7 @@
   :prefix "workspace-"
   :group 'session)
 
-(defcustom workspace-dump-dir (expand-file-name "workspaces" user-emacs-directory)
+(defcustom workspace-dump-dir (expand-file-name "workspaces/" user-emacs-directory)
   "Default workspaces save file directory."
   :type 'directory
   :group 'workspace)
@@ -436,6 +436,7 @@ If DO-CONFIRM, confirm before delete exists file."
   (let ((exists (file-exists-p file)))
     (when (and exists do-confirm)
       (if (y-or-n-p (format "File %s exists, delete it?" file))
+          ;; notice that we use trash here
           (delete-file file t)
         (user-error "Save workspace abort!")))
     (unless (and exists (not do-confirm))

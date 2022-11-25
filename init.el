@@ -348,5 +348,6 @@
 
 (define-key vc-prefix-map "j" 'magit-status)
 (define-key vc-prefix-map "f" 'magit-file-dispatch)
+(define-key vc-prefix-map "?" 'magit-dispatch)
 
 (setq ispell-dictionary "american")
