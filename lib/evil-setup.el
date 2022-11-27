@@ -232,8 +232,7 @@
 (define-key evil-leader-map "d" 'dired)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "z" 'repeat)
-(define-key evil-leader-map ";" 'evil-ex)
-(define-key evil-leader-map ":" 'eval-expression)
+(define-key evil-leader-map ";" 'eval-expression)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
 (define-key evil-leader-map "!" 'shell-command)
 (define-key evil-leader-map "&" 'async-shell-command)

@@ -453,16 +453,17 @@ If OTHER-WINDOW, find file other window."
 ;;; Workspace save&load functions
 
 ;;;###autoload
-(defun workspace-save-file (file &optional do-confirm)
+(defun workspace-save-file (file &optional trash do-confirm)
   "Save `workspace-alist' and their files to FILE.
-If DO-CONFIRM, confirm before delete exists file."
+If DO-CONFIRM, confirm before delete exists file.
+TRASH: see `delete-file'."
   (interactive `(,(read-file-name "Workspace dump file: " workspace-dump-dir)
-                 t))
+                 t t))
   (let ((exists (file-exists-p file)))
     (when (and exists do-confirm)
       (if (y-or-n-p (format "File %s exists, delete it?" file))
           ;; notice that we use trash here
-          (delete-file file t)
+          (delete-file file trash)
         (user-error "Save workspace abort!")))
     (unless (and exists (not do-confirm))
       (with-temp-buffer
