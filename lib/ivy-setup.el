@@ -1,6 +1,6 @@
-(setq ivy-height 15
-      ivy-count-format "(%d/%d) "
+(setq ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
+      ivy-virtual-abbreviate 'full
       ivy-read-action-function 'ivy-hydra-read-action)
 
 (setq counsel-describe-symbol-function      'helpful-symbol
@@ -40,11 +40,12 @@
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
 (define-key ctl-x-l-map "g" 'counsel-rg)
-(define-key ctl-x-l-map "e" 'counsel-recentf)
 (define-key ctl-x-l-map "c" 'counsel-locate)
+(define-key ctl-x-l-map "e" 'counsel-recentf)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
 (define-key ctl-x-l-map "r" 'counsel-register)
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
+(define-key ctl-x-l-map "s" 'counsel-switch-to-shell-buffer)
 
 
 
