@@ -237,9 +237,10 @@
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
 
+(define-key evil-leader-map "\M-d" 'eldoc-doc-buffer)
+(define-key evil-leader-map "\M-m" 'flymake-show-buffer-diagnostics)
+
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
-(define-key evil-leader-map "F" 'counsel-file-jump)
-(define-key evil-leader-map "D" 'counsel-dired-jump)
 
 (provide 'evil-setup)

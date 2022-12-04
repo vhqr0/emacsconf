@@ -172,8 +172,6 @@
 (define-key ctl-x-map "l" ctl-x-l-map)
 
 (define-key ctl-x-l-map "b" 'ibuffer)
-(define-key ctl-x-l-map "d" 'eldoc-doc-buffer)
-(define-key ctl-x-l-map "f" 'flymake-show-diagnostics-buffer)
 
 
 
@@ -194,9 +192,9 @@
     (define-key map "t" 'symbol-overlay-toggle-in-scope)
     (define-key map "r" 'symbol-overlay-rename)
     (define-key map "q" 'symbol-overlay-query-replace)
+    (define-key map "s" 'symbol-overlay-isearch-literally)
     (define-key map "o" 'occur-at-point)
-    (define-key map "s" 'swiper-thing-at-point)
-    (define-key map "\C-s" 'symbol-overlay-isearch-literally)
+    (define-key map "." 'swiper-thing-at-point)
     map))
 
 (setq symbol-overlay-map symbol-at-point-map)

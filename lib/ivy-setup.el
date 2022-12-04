@@ -39,8 +39,13 @@
 (define-key search-map "s" 'swiper)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
+
+
+(define-key ctl-x-l-map "." 'ivy-resume)
 (define-key ctl-x-l-map "g" 'counsel-rg)
 (define-key ctl-x-l-map "c" 'counsel-locate)
+(define-key ctl-x-l-map "f" 'counsel-file-jump)
+(define-key ctl-x-l-map "d" 'counsel-dired-jump)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
 (define-key ctl-x-l-map "i" 'counsel-outline)
 (define-key ctl-x-l-map "j" 'counsel-compilation-errors)
