@@ -230,6 +230,8 @@
 (counsel-projectile-mode 1)
 
 (define-key projectile-command-map "\e" nil)
+(define-key projectile-command-map "m" 'counsel-compile)
+(define-key projectile-command-map "M" 'counsel-compile-env)
 (define-key projectile-command-map "x" 'project-execute-extended-command)
 (define-key projectile-command-map "e" 'projectile-run-eshell)
 (define-key projectile-command-map "s" 'projectile-run-shell)

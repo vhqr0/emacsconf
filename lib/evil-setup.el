@@ -122,16 +122,9 @@
   (interactive "<r>")
   (narrow-to-region beg end))
 
-;;; simple-x.el
-(evil-define-operator evil-operator-external-format (beg end)
-  :move-point nil
-  (interactive "<r>")
-  (external-format beg end))
-
 (define-key evil-motion-state-map "gy" 'evil-operator-eval)
 (define-key evil-normal-state-map "gc" 'evil-operator-comment)
 (define-key evil-motion-state-map "g-" 'evil-operator-narrow)
-(define-key evil-motion-state-map "g=" 'evil-operator-external-format)
 
 ;; textobject
 
@@ -200,7 +193,6 @@
 (define-key evil-leader-map "v" vc-prefix-map)
 ;;; use projectile
 ;; (define-key evil-leader-map "p" project-prefix-map)
-(define-key evil-leader-map "m" kmacro-keymap)
 (define-key evil-leader-map "4" ctl-x-4-map)
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
@@ -233,6 +225,8 @@
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
+(define-key evil-leader-map "m" 'compile)
+(define-key evil-leader-map "M" 'recompile)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
 (define-key evil-leader-map "!" 'shell-command)
 (define-key evil-leader-map "&" 'async-shell-command)
@@ -245,5 +239,7 @@
 
 ;;; counsel
 (define-key evil-leader-map "y" 'counsel-yank-pop)
+(define-key evil-leader-map "F" 'counsel-file-jump)
+(define-key evil-leader-map "D" 'counsel-dired-jump)
 
 (provide 'evil-setup)

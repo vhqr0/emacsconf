@@ -69,6 +69,11 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
                        'grep-history)
    'grep-mode))
 
+
+
+(declare-function eglot-format "eglot")
+(declare-function eglot--server-capable "eglot")
+
 (defvar prettier-program "prettier")
 
 (defun prettier-compute-program ()
@@ -84,7 +89,7 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
                     (t
                      (user-error "Major mode doesn't support"))))))
 
-(defvar external-format-program-alist
+(defvar format-dwim-program-alist
   '((c-mode . "clang-format")
     (c++-mode . "clang-format")
     (python-mode . "yapf")
@@ -92,23 +97,26 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
     (mhtml-mode . prettier-compute-program)
     (css-mode . prettier-compute-program)))
 
-(defun external-format (beg end)
+(defun format-dwim (beg end)
   (interactive (list (if (use-region-p) (region-beginning) (point-min))
                      (if (use-region-p) (region-end) (point-max))))
-  (let ((program (cdr (assq major-mode external-format-program-alist))))
-    (save-restriction
-      (narrow-to-region beg end)
-      (if program
-          (let ((row (line-number-at-pos)))
-            (when (symbolp program)
-              (setq program (funcall program)))
-            (shell-command-on-region (point-min) (point-max) program nil t)
-            (goto-char (point-min))
-            (forward-line (1- row))
-            (narrow-to-region (line-beginning-position) (line-end-position))
-            (back-to-indentation))
-        (delete-trailing-whitespace (point-min) (point-max))
-        (indent-region (point-min) (point-max))))))
+  (if (and (bound-and-true-p eglot--managed-mode)
+           (eglot--server-capable :documentRangeFormattingProvider))
+      (eglot-format beg end)
+    (let ((program (cdr (assq major-mode format-dwim-program-alist))))
+      (save-restriction
+        (narrow-to-region beg end)
+        (if program
+            (let ((row (line-number-at-pos)))
+              (when (symbolp program)
+                (setq program (funcall program)))
+              (shell-command-on-region (point-min) (point-max) program nil t)
+              (goto-char (point-min))
+              (forward-line (1- row))
+              (narrow-to-region (line-beginning-position) (line-end-position))
+              (back-to-indentation))
+          (delete-trailing-whitespace (point-min) (point-max))
+          (indent-region (point-min) (point-max)))))))
 
 
 
@@ -228,7 +236,7 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
   (define-key ctl-x-x-map "o" 'xdg-open)
   (with-eval-after-load 'dired
     (define-key dired-mode-map [remap xdg-open] 'dired-do-xdg-open))
-  (define-key ctl-x-x-map "=" 'external-format)
+  (define-key ctl-x-x-map "=" 'format-dwim)
   (define-key ctl-x-x-map "^" 'fixup-whitespace-nospace-mode)
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
   (global-set-key (kbd "C-x 9") 'rotate-window))

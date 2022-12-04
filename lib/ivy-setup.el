@@ -42,8 +42,12 @@
 (define-key ctl-x-l-map "g" 'counsel-rg)
 (define-key ctl-x-l-map "c" 'counsel-locate)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
+(define-key ctl-x-l-map "i" 'counsel-outline)
+(define-key ctl-x-l-map "j" 'counsel-compilation-errors)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
+(define-key ctl-x-l-map "M" 'counsel-evil-marks)
 (define-key ctl-x-l-map "r" 'counsel-register)
+(define-key ctl-x-l-map "R" 'counsel-evil-registers)
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
 (define-key ctl-x-l-map "s" 'counsel-switch-to-shell-buffer)
 
