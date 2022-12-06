@@ -170,15 +170,27 @@
 (define-key evil-motion-state-map  "\s" evil-leader-map)
 (define-key evil-special-state-map "\s" evil-leader-map)
 
+(defun god-C-c--execute (bind)
+  (interactive)
+  (cond ((commandp bind)
+         (setq this-command bind
+               real-this-command bind)
+         (if (commandp bind t)
+             (call-interactively bind)
+           (execute-kbd-macro bind))
+         bind)
+        ((keymapp bind)
+         (set-transient-map bind))))
+
 (defun god-C-c ()
   (interactive)
-  (let ((bind (key-binding (kbd (format "C-c C-%c" (read-char "C-c C-"))))))
-    (when (commandp bind)
-      (setq this-command bind
-            real-this-command bind)
-      (if (commandp bind t)
-          (call-interactively bind)
-        (execute-kbd-macro bind)))))
+  (let ((char (read-char "C-c C-")))
+    (cond ((god-C-c--execute (key-binding (kbd (format "C-c C-%c" char))))
+           (message (format "C-c C-%c" char)))
+          ((god-C-c--execute (key-binding (kbd (format "C-c %c" char))))
+           (message (format "C-c %c" char)))
+          (t
+           (user-error "no key binding on 'C-c C-%c' or 'C-c %c'" char char)))))
 
 (define-key evil-leader-map "c" 'god-C-c)
 (define-key evil-leader-map "h" help-map)

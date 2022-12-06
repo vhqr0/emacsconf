@@ -43,11 +43,10 @@
 
 (define-key ctl-x-l-map "." 'ivy-resume)
 (define-key ctl-x-l-map "g" 'counsel-rg)
-(define-key ctl-x-l-map "c" 'counsel-locate)
 (define-key ctl-x-l-map "f" 'counsel-file-jump)
 (define-key ctl-x-l-map "d" 'counsel-dired-jump)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
-(define-key ctl-x-l-map "i" 'counsel-outline)
+(define-key ctl-x-l-map "o" 'counsel-outline)
 (define-key ctl-x-l-map "j" 'counsel-compilation-errors)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
 (define-key ctl-x-l-map "M" 'counsel-evil-marks)
