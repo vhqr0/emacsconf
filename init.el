@@ -255,7 +255,7 @@
 (setq flymake-cc-command 'cc-x-flymake-cc-command)
 
 (with-eval-after-load 'cc-mode
-  (define-key c-mode-base-map (kbd "C-c C-h") 'cc-help))
+  (define-key c-mode-base-map (kbd "C-c C-h") 'cc-x-help))
 
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "--simple-prompt")
@@ -284,14 +284,10 @@
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
       company-backends
-      '(company-capf
-        company-files
-        (company-dabbrev-code company-keywords)
-        company-dabbrev))
-
-(global-company-mode 1)
-
-
+      '(company-files
+        (company-capf :with company-yasnippet)
+        (company-dabbrev-code company-keywords :with company-yasnippet)
+        (company-dabbrev company-yasnippet)))
 
 (defun company-set-backends (hook backends)
   (add-hook hook `(lambda ()
@@ -307,31 +303,7 @@
 
 (advice-add 'company-mode-on :override 'company-mode-on-override)
 
-(defun yas-maybe-expand-company-filter (_cmd)
-  (cond ((not yas-minor-mode)
-         'company-complete-common)
-        ((yas-active-snippets)
-         'yas-next-field-or-maybe-expand)
-        ((let ((yas--condition-cache-timestamp (current-time)))
-           (yas--templates-for-key-at-point))
-         'yas-expand)
-        (t
-         'company-complete-common)))
-
-(defun yas-maybe-prev-company-filter (_cmd)
-  (when (and yas-minor-mode
-             (yas-active-snippets))
-    'yas-prev-field))
-
-(defvar yas-maybe-expand-company
-  '(menu-item "" nil :filter yas-maybe-expand-company-filter))
-
-(defvar yas-maybe-prev-company
-  '(menu-item "" nil :filter yas-maybe-prev-company-filter))
-
-(define-key company-active-map "\t" yas-maybe-expand-company)
-(define-key company-active-map [tab] yas-maybe-expand-company)
-(define-key company-active-map [backtab] yas-maybe-prev-company)
+(global-company-mode 1)
 
 
 

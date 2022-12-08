@@ -25,6 +25,8 @@
 (define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
 (define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
+(define-key evil-normal-state-map [remap yank-pop] nil)
+
 (define-key evil-insert-state-map "\C-r" 'evil-paste-from-register)
 
 (setq evil-ex-completion-map
@@ -236,6 +238,7 @@
 (define-key evil-leader-map "d" 'dired)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "z" 'repeat)
+(define-key evil-leader-map "y" 'yank-pop)
 (define-key evil-leader-map ";" 'eval-expression)
 (define-key evil-leader-map "m" 'compile)
 (define-key evil-leader-map "M" 'recompile)
@@ -248,11 +251,5 @@
 (define-key evil-leader-map "," 'xref-pop-marker-stack)
 (define-key evil-leader-map "." 'xref-find-definitions)
 (define-key evil-leader-map "?" 'xref-find-references)
-
-(define-key evil-leader-map "\M-d" 'eldoc-doc-buffer)
-(define-key evil-leader-map "\M-m" 'flymake-show-buffer-diagnostics)
-
-;;; counsel
-(define-key evil-leader-map "y" 'counsel-yank-pop)
 
 (provide 'evil-setup)
