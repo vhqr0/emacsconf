@@ -57,14 +57,9 @@
   :type 'directory
   :group 'workspace)
 
-(defface workspace-face-default
+(defface workspace-face-in
   '((t :inherit italic))
   "Workspace mode lighter default face."
-  :group 'workspace)
-
-(defface workspace-face-nil
-  '((t :inherit bold-italic))
-  "Workspace mode lighter nil face."
   :group 'workspace)
 
 (defface workspace-face-not-in
@@ -84,71 +79,56 @@
   (buffers nil)
   (files nil))
 
-(defvar workspace-alist nil
+(defvar workspace-nil (make-workspace :name "nil"))
+
+(defvar workspace-alist `(("nil" . ,workspace-nil))
   "Alist of workspace (name . workspace).")
 
 
 
 ;;; Basic util functions
 
-(defun workspace-name-safe (workspace)
-  "Safe version of `workspace-name'.
-WORKSPACE: see `workspace-name'."
-  (when workspace (workspace-name workspace)))
-
-(defun workspace-buffers-safe (workspace)
-  "Safe version of `workspace-buffers'.
-WORKSPACE: see `workspace-buffers'."
-  (when workspace (workspace-buffers workspace)))
-
-(defun workspace-files-safe (workspace)
-  "Safe version of `workspace-files'.
-WORKSPACE: see `workspace-files'."
-  (when workspace (workspace-files workspace)))
-
 (defun workspace-current-workspace (&optional frame)
   "`current-window-configuration'-like api for workspace.
 Return the workspace of FRAME.
 If FRAME is nil, use selected frame."
-  (frame-parameter (or frame (selected-frame)) 'workspace))
+  (or (frame-parameter (or frame (selected-frame)) 'workspace)
+      workspace-nil))
 
 (defun workspace-set-workspace (workspace &optional frame)
   "`set-window-configuration'-like api for workspace.
 Set FRAME's workspace to WORKSPACE.
 If FRAME is nil, use selected frame."
-  (let ((frame (or frame (selected-frame))))
+  (let ((frame (or frame (selected-frame)))
+        (wc (workspace-wc workspace))
+        (tabs (workspace-tabs workspace)))
     (set-frame-parameter frame 'workspace workspace)
-    (when workspace
-      (let ((wc (workspace-wc workspace))
-            (tabs (workspace-tabs workspace)))
-        ;; restore window configuration
-        (when wc
-          (with-selected-frame frame
-            (set-window-configuration wc)))
-        ;; restore tab-bar-tabs
-        ;; notice that tabs may be nil
-        (tab-bar-tabs-set tabs frame))))
-  ;; update tab-bar-line for frame
-  (tab-bar--update-tab-bar-lines (list frame)))
+    ;; restore window configuration
+    (when wc
+      (with-selected-frame frame
+        (set-window-configuration wc)))
+    ;; restore tab-bar-tabs
+    ;; notice that tabs may be nil
+    (tab-bar-tabs-set tabs frame)
+    ;; update tab-bar-line for frame
+    (tab-bar--update-tab-bar-lines (list frame))))
 
 (defun workspace-alist-add (workspace)
   "Add WORKSPACE to `workspace-alist' if none."
-  (when workspace
-    (let* ((name (workspace-name workspace))
-           (old-cons (assoc name workspace-alist)))
-      (unless old-cons
-        (setq workspace-alist
-              (cons (cons name workspace) workspace-alist))))))
+  (let* ((name (workspace-name workspace))
+         (old-cons (assoc name workspace-alist)))
+    (unless old-cons
+      (setq workspace-alist
+            (cons (cons name workspace) workspace-alist)))))
 
 (defun workspace-alist-get (name &optional do-create)
   "Get workspace from `workspace-alist' by NAME.
 If DO-CREATE, create workspace if none."
-  (when name
-    (let ((workspace (cdr-safe (assoc name workspace-alist))))
-      (when (and do-create (not workspace))
-        (setq workspace (make-workspace :name name))
-        (workspace-alist-add workspace))
-      workspace)))
+  (let ((workspace (cdr-safe (assoc name workspace-alist))))
+    (when (and do-create (not workspace))
+      (setq workspace (make-workspace :name name))
+      (workspace-alist-add workspace))
+    workspace))
 
 (defun workspace-alist-delete (name)
   "Delete workspace from `workspace-alist' by NAME."
@@ -186,9 +166,8 @@ PROMPT REQUIRE-MATCH DEF: see `completing-read'."
   (interactive)
   (let ((frame (or frame (selected-frame)))
         (workspace (workspace-current-workspace frame)))
-    (when workspace
-      (setf (workspace-wc workspace) (current-window-configuration frame))
-      (setf (workspace-tabs workspace) (tab-bar-tabs frame)))))
+    (setf (workspace-wc workspace) (current-window-configuration frame))
+    (setf (workspace-tabs workspace) (tab-bar-tabs frame))))
 
 ;; store previous workspace before switch
 (defvar workspace-saved-workspace nil)
@@ -210,27 +189,26 @@ PROMPT REQUIRE-MATCH DEF: see `completing-read'."
 If FRAME is nil, use selected frame."
   (interactive `(,(workspace-read-name
                    (format "Switch to workspace (current #%s): "
-                           (or (workspace-name-safe (workspace-current-workspace))
-                               "nil")))))
-  (workspace--switch-to-workspace (workspace-alist-get name t) frame))
+                           (workspace-name (workspace-current-workspace))))))
+  (workspace--switch-to-workspace (if name
+                                      (workspace-alist-get name t)
+                                    workspace-nil)
+                                  frame))
 
 ;;;###autoload
 (defun workspace-switch-to-next-workspace (&optional frame)
   "Switch to next workspace in FRAME.
 If FRAME is nil, use selected frame."
   (interactive)
-  (let ((name (workspace-name-safe (workspace-current-workspace frame))))
-    (if name
-        (let ((alist workspace-alist)
-              elm stop)
-          (while (and alist (not stop))
-            (setq elm (pop alist))
-            (when (string-equal (car elm) name)
-              (setq stop t)
-              (workspace--switch-to-workspace (cdar (or alist workspace-alist)) frame)))
-          (when (and (not stop) workspace-alist)
-            (workspace--switch-to-workspace (cdar workspace-alist) frame)))
-      (when workspace-alist
+  (let ((name (workspace-name (workspace-current-workspace frame))))
+    (let ((alist workspace-alist)
+          elm stop)
+      (while (and alist (not stop))
+        (setq elm (pop alist))
+        (when (string-equal (car elm) name)
+          (setq stop t)
+          (workspace--switch-to-workspace (cdar (or alist workspace-alist)) frame)))
+      (when (and (not stop) workspace-alist)
         (workspace--switch-to-workspace (cdar workspace-alist) frame)))))
 
 ;;;###autoload
@@ -243,9 +221,9 @@ If FRAME is nil, use selected frame."
 (defun workspace-remove-workspace (name &optional do-confirm)
   "Read a workspace by NAME to delete.
 If DO-CONFIRM, confirm before delete."
-  (interactive `(,(let ((name (workspace-name-safe (workspace-current-workspace))))
+  (interactive `(,(let ((name (workspace-name (workspace-current-workspace))))
                     (workspace-read-name
-                     (format "Delete workspace (current #%s):" (or name "nil")) t name))
+                     (format "Delete workspace (current #%s):" name) t name))
                  t))
   (when name
     (let ((workspace (workspace-alist-get name)))
@@ -271,14 +249,11 @@ If DO-CONFIRM, confirm before cover other workspace."
                  ,(read-string (format (if current-prefix-arg
                                            "Duplicate workspace #%s: "
                                          "Rename workspace #%s: ")
-                                       (or (workspace-name-safe (workspace-current-workspace)) "nil")))
+                                       (workspace-name (workspace-current-workspace))))
                  ,current-prefix-arg
                  t))
   (let (do-add)
-    (cond ((not workspace)
-           (when do-confirm
-             (user-error "Current workspace is #nil!")))
-          ((string-empty-p name)
+    (cond ((string-empty-p name)
            (when do-confirm
              (user-error "Workspace name cannot be empty!")))
           ((workspace-alist-get name)
@@ -312,70 +287,59 @@ If DO-CONFIRM, confirm before cover other workspace."
 (defun workspace-read-buffer (workspace prompt &optional def)
   "Read a buffer from WORKSPACE buffers.
 PROMPT DEF: see `completing-read'."
-  (let ((buffers (remove nil (mapcar 'buffer-name (workspace-buffers-safe workspace)))))
+  (let ((buffers (remove nil (mapcar 'buffer-name (workspace-buffers workspace)))))
     (completing-read prompt buffers nil t nil workspace-read-buffer-history def)))
 
 (defun workspace-sync-buffers (workspace)
   "Remove killed buffers from current WORKSPACE buffers."
   (interactive `(,(workspace-current-workspace)))
-  (when workspace
-    (setf (workspace-buffers workspace)
-          (cl-remove-if-not 'buffer-name (workspace-buffers workspace)))))
+  (setf (workspace-buffers workspace)
+        (cl-remove-if-not 'buffer-name (workspace-buffers workspace))))
 
 (defun workspace--buffer-file-name (buffer)
   "Wrap function `buffer-file-name' with `dired-directory' backport.
 BUFFER: see function `buffer-file-name'."
-  (expand-file-name
-   (with-current-buffer buffer
-     (if (eq major-mode 'dired-mode)
-         dired-directory
-       buffer-file-name))))
+  (with-current-buffer buffer
+    (if (eq major-mode 'dired-mode)
+        (expand-file-name dired-directory)
+      buffer-file-name)))
 
 ;;;###autoload
-(defun workspace-add-buffer (workspace &optional buffer-or-name do-confirm)
-  "Add current BUFFER-OR-NAME to current WORKSPACE.
-DO-CONFIRM: compatible to other functions to warn when failed."
-  (interactive `(,(workspace-current-workspace) ,(current-buffer) t))
-  (cond (workspace
-         (let* ((buffers (workspace-buffers workspace))
-                (files (workspace-files workspace))
-                (buffer (if buffer-or-name
-                            (get-buffer buffer-or-name)
-                          (current-buffer)))
-                (file (workspace--buffer-file-name buffer)))
-           (unless (memq buffer buffers)
-             (setf (workspace-buffers workspace) (cons buffer buffers))
-             ;; add workspace file if needed
-             (when (and file (not (member file files)))
-               (setf (workspace-files workspace) (cons file files))))))
-        (do-confirm
-         (user-error "Current workspace is #nil!"))))
+(defun workspace-add-buffer (workspace &optional buffer-or-name)
+  "Add current BUFFER-OR-NAME to current WORKSPACE."
+  (interactive `(,(workspace-current-workspace) ,(current-buffer)))
+  (let* ((buffers (workspace-buffers workspace))
+         (files (workspace-files workspace))
+         (buffer (if buffer-or-name
+                     (get-buffer buffer-or-name)
+                   (current-buffer)))
+         (file (workspace--buffer-file-name buffer)))
+    (unless (memq buffer buffers)
+      (setf (workspace-buffers workspace) (cons buffer buffers))
+      ;; add workspace file if needed
+      (when (and file (not (member file files)))
+        (setf (workspace-files workspace) (cons file files))))))
 
 ;;;###autoload
-(defun workspace-remove-buffer (workspace &optional buffer-or-name do-confirm)
-  "Read a BUFFER-OR-NAME to remove from current WORKSPACE buffers.
-DO-CONFIRM: compatible to other functions to warn when failed."
+(defun workspace-remove-buffer (workspace &optional buffer-or-name)
+  "Read a BUFFER-OR-NAME to remove from current WORKSPACE buffers."
   (interactive `(,(workspace-current-workspace)
                  ,(let ((workspace (workspace-current-workspace)))
                     (workspace-sync-buffers workspace)
                     (workspace-read-buffer workspace
                                            (format "Remove buffer from #%s: "
-                                                   (or (workspace-name-safe workspace) "nil"))
+                                                   (workspace-name workspace))
                                            ;; default to current buffer
-                                           (buffer-name (current-buffer))))
-                 t))
-  (cond (workspace
-         (let* ((buffer (if buffer-or-name
-                            (get-buffer buffer-or-name)
-                          (current-buffer)))
-                (file (workspace--buffer-file-name buffer)))
-           (setf (workspace-buffers workspace) (cl-delete buffer (workspace-buffers workspace)))
-           ;; remove workspace file if needed
-           (when file
-             (setf (workspace-files workspace) (cl-delete file (workspace-files workspace)
-                                                          :test 'string-equal)))))
-        (do-confirm
-         (user-error "Current workspace is #nil!"))))
+                                           (buffer-name (current-buffer))))))
+  (let* ((buffer (if buffer-or-name
+                     (get-buffer buffer-or-name)
+                   (current-buffer)))
+         (file (workspace--buffer-file-name buffer)))
+    (setf (workspace-buffers workspace) (cl-delete buffer (workspace-buffers workspace)))
+    ;; remove workspace file if needed
+    (when file
+      (setf (workspace-files workspace) (cl-delete file (workspace-files workspace)
+                                                   :test 'string-equal)))))
 
 ;;;###autoload
 (defun workspace-switch-to-buffer (&optional other-window)
@@ -410,15 +374,14 @@ If OTHER-WINDOW, switch to buffer other window."
 (defun workspace-read-file (workspace prompt)
   "Read a file from WORKSPACE files.
 PROMPT: see `completing-read'."
-  (let ((files (workspace-files-safe workspace)))
+  (let ((files (workspace-files workspace)))
     (completing-read prompt files nil t nil workspace-read-file-history)))
 
 (defun workspace-sync-files (workspace)
   "Remove not exists files from current WORKSPACE files."
   (interactive `(,(workspace-current-workspace)))
-  (when workspace
-    (setf (workspace-files workspace)
-          (cl-remove-if-not 'file-exists-p (workspace-files workspace)))))
+  (setf (workspace-files workspace)
+        (cl-remove-if-not 'file-exists-p (workspace-files workspace))))
 
 ;;;###autoload
 (defun workspace-find-file (&optional other-window)
@@ -504,15 +467,10 @@ If DO-CONFIRM, confirm save current `workspace-alist' before load."
 (defun workspace-compute-lighter ()
   "Compute `workspace-mode' lighter."
   (let ((workspace (workspace-current-workspace)))
-    (if workspace
-        (propertize (format " #%s" (workspace-name workspace)) 'face
-                    (if (memq (current-buffer) (workspace-buffers workspace))
-                        'workspace-face-default
-                      'workspace-face-not-in))
-      (propertize
-       " #nil"
-       'face
-       'workspace-face-nil))))
+    (propertize (format " #%s" (workspace-name workspace)) 'face
+                (if (memq (current-buffer) (workspace-buffers workspace))
+                    'workspace-face-in
+                  'workspace-face-not-in))))
 
 ;;;###autoload
 (define-minor-mode workspace-mode
