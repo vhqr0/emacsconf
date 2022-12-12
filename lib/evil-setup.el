@@ -229,8 +229,13 @@
 (define-key evil-leader-map [tab] 'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
+(defun insert-pair-1 (&optional arg) (interactive "P") (insert-pair (or arg '(1))))
 (dolist (pair insert-pair-alist)
-  (define-key evil-leader-map `[,(car pair)] 'insert-pair))
+  (define-key evil-leader-map `[,(car pair)] 'insert-pair-1))
+
+(define-key evil-leader-map ")" 'move-past-close-and-reindent)
+(define-key evil-leader-map "\M-r" 'raise-sexp)
+(define-key evil-leader-map "\M-d" 'delete-pair)
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "b" 'switch-to-buffer)

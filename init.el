@@ -292,7 +292,8 @@
 (defun company-set-backends (hook backends)
   (add-hook hook `(lambda ()
                     (setq-local company-backends ',backends)
-                    (company-mode 1))))
+                    (when global-company-mode
+                      (company-mode 1)))))
 
 (company-set-backends 'eshell-mode-hook '(company-files))
 (company-set-backends 'sh-mode-hook '(company-files company-dabbrev))
