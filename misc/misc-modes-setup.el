@@ -10,3 +10,7 @@
       web-mode-css-indent-offset 2)
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-hook 'web-mode-hook 'emmet-mode)
+
+;;; lisp
+(setq +package (append +package '(sly)))
+(setq inferior-lisp-program "sbcl")
