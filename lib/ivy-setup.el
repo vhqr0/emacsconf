@@ -1,6 +1,7 @@
 (setq ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
       ivy-virtual-abbreviate 'full
+      ivy-display-functions-alist '((t))
       ivy-read-action-function 'ivy-hydra-read-action)
 
 (setq counsel-describe-symbol-function      'helpful-symbol
@@ -24,6 +25,12 @@
 
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
 (define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
+(define-key ivy-minibuffer-map "\M-\s" 'ivy-restrict-to-matches)
+
+(autoload 'ivy-avy "ivy-avy" "ivy-avy" t)
+(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
+(dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
+  (define-key map "\M-g" 'swiper-avy))
 
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
@@ -47,9 +54,10 @@
 (define-key ctl-x-l-map "d" 'counsel-dired-jump)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
 (define-key ctl-x-l-map "o" 'counsel-outline)
+(define-key ctl-x-l-map "y" 'counsel-yank-pop)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
-(define-key ctl-x-l-map "M" 'counsel-evil-marks)
 (define-key ctl-x-l-map "r" 'counsel-register)
+(define-key ctl-x-l-map "M" 'counsel-evil-marks)
 (define-key ctl-x-l-map "R" 'counsel-evil-registers)
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
 
