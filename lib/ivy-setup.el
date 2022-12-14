@@ -1,7 +1,6 @@
 (setq ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
       ivy-virtual-abbreviate 'full
-      ivy-display-functions-alist '((t))
       ivy-read-action-function 'ivy-hydra-read-action)
 
 (setq counsel-describe-symbol-function      'helpful-symbol
@@ -32,9 +31,10 @@
 (dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
   (define-key map "\M-g" 'swiper-avy))
 
+(define-key counsel-mode-map [remap describe-key] 'helpful-key)
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
-(define-key counsel-mode-map [remap describe-key] 'helpful-key)
+(define-key counsel-mode-map [remap projectile-compile-project] 'counsel-compile)
 
 
 

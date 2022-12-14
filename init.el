@@ -228,9 +228,8 @@
 (counsel-projectile-mode 1)
 
 (define-key projectile-command-map "\e" nil)
-(define-key projectile-command-map "c" 'counsel-compile)
-(define-key projectile-command-map "m" 'counsel-compile)
 (define-key projectile-command-map "x" 'project-execute-extended-command)
+(define-key projectile-command-map "m" 'projectile-compile-project)
 (define-key projectile-command-map "e" 'projectile-run-eshell)
 (define-key projectile-command-map "s" 'projectile-run-shell)
 (define-key evil-leader-map "p" projectile-command-map)
@@ -255,7 +254,7 @@
 (setq flymake-cc-command 'cc-x-flymake-cc-command)
 
 (with-eval-after-load 'cc-mode
-  (define-key c-mode-base-map (kbd "C-c C-h") 'cc-x-help))
+  (define-key c-mode-base-map (kbd "C-c h") 'cc-x-help))
 
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "--simple-prompt")

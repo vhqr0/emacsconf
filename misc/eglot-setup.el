@@ -4,7 +4,8 @@
         ;; (python-mode . ("pyright-langserver" "--stdio"))
         (js-mode . ("typescript-language-server" "--stdio"))
         (mhtml-mode . ("vscode-html-language-server" "--stdio"))
-        (css-mode . ("vscode-css-language-server" "--stdio"))))
+        (css-mode . ("vscode-css-language-server" "--stdio"))
+        (go-mode . ("gopls"))))
 
 (add-hook 'c-mode-common-hook
           (lambda ()
