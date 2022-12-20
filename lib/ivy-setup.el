@@ -22,19 +22,23 @@
 
 
 
-(define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
-(define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
 (define-key ivy-minibuffer-map "\M-\s" 'ivy-restrict-to-matches)
 
-(autoload 'ivy-avy "ivy-avy" "ivy-avy" t)
-(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
-(dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
-  (define-key map "\M-g" 'swiper-avy))
+(define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
+(define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
+(define-key swiper-isearch-map "\M-." 'swiper-isearch-thing-at-point)
 
 (define-key counsel-mode-map [remap describe-key] 'helpful-key)
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 (define-key counsel-mode-map [remap projectile-compile-project] 'counsel-compile)
+
+
+
+(autoload 'ivy-avy "ivy-avy" "ivy-avy" t)
+(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
+(dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
+  (define-key map [remap ivy-avy] 'swiper-avy))
 
 
 
@@ -45,6 +49,8 @@
 
 (define-key search-map "s" 'swiper)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
+(define-key isearch-mode-map "\M-l" 'swiper-isearch-toggle)
+(define-key swiper-isearch-map "\M-l" 'swiper-isearch-toggle)
 
 
 
