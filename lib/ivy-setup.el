@@ -26,9 +26,9 @@
 
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
 (define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
-(define-key swiper-isearch-map "\M-." 'swiper-isearch-thing-at-point)
 
 (define-key counsel-mode-map [remap describe-key] 'helpful-key)
+(define-key counsel-mode-map [remap dired] 'counsel-dired)
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 (define-key counsel-mode-map [remap projectile-compile-project] 'counsel-compile)
@@ -49,8 +49,6 @@
 
 (define-key search-map "s" 'swiper)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
-(define-key isearch-mode-map "\M-l" 'swiper-isearch-toggle)
-(define-key swiper-isearch-map "\M-l" 'swiper-isearch-toggle)
 
 
 
