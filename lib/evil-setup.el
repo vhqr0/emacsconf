@@ -63,7 +63,7 @@
   (with-current-buffer (or buffer (current-buffer))
     (cond ((derived-mode-p 'dired-mode 'magit-section-mode 'image-mode 'doc-view-mode 'pdf-view-mode)
            'special)
-          ((derived-mode-p 'comint-mode 'eshell-mode)
+          ((derived-mode-p 'comint-mode 'eshell-mode 'term-mode)
            'insert)
           ((derived-mode-p 'special-mode 'compilation-mode)
            'motion)

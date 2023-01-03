@@ -1,6 +1,7 @@
 (setq ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
       ivy-virtual-abbreviate 'full
+      ivy-dispatching-done-columns 3    ; `ivy-hydra-read-action' columns
       ivy-read-action-function 'ivy-hydra-read-action)
 
 (setq counsel-describe-symbol-function      'helpful-symbol
@@ -61,8 +62,6 @@
 (define-key ctl-x-l-map "y" 'counsel-yank-pop)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
 (define-key ctl-x-l-map "r" 'counsel-register)
-(define-key ctl-x-l-map "M" 'counsel-evil-marks)
-(define-key ctl-x-l-map "R" 'counsel-evil-registers)
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
 
 
