@@ -1,5 +1,7 @@
 ;;; 29
 
+(setq +package (append +package '(eglot)))
+
 (define-key goto-map "i" 'imenu)
 
 (global-set-key (kbd "C-x L") 'find-library)

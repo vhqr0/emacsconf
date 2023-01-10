@@ -22,7 +22,6 @@
     counsel-projectile
     yasnippet
     company
-    eglot
     markdown-mode
     edit-indirect
     htmlize
@@ -129,6 +128,9 @@
 (global-set-key (kbd "C-x U") 'undo-redo)
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
+
+(with-eval-after-load 'dired
+  (put 'dired-jump 'repeat-map nil))
 
 (setq tab-bar-tab-hints t
       tab-bar-select-tab-modifiers '(control shift))
