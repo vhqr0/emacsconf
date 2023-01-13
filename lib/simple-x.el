@@ -71,16 +71,15 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
 
 
 
-(declare-function eglot-format "eglot")
-(declare-function eglot--server-capable "eglot")
-
 (defvar prettier-program "prettier")
 
 (defun prettier-compute-program ()
   (format "%s --stdin-filepath %s"
           prettier-program
           (or buffer-file-name
-              (cond ((derived-mode-p 'js-mode)
+              (cond ((derived-mode-p 'js-json-mode)
+                     "index.json")
+                    ((derived-mode-p 'js-mode)
                      "index.js")
                     ((derived-mode-p 'mhtml-mode)
                      "index.html")
@@ -92,7 +91,8 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
 (defvar format-dwim-program-alist
   '((c-mode . "clang-format")
     (c++-mode . "clang-format")
-    (python-mode . "yapf")
+    (python-mode . "black -q -")
+    (js-json-mode . prettier-compute-program)
     (js-mode . prettier-compute-program)
     (mhtml-mode . prettier-compute-program)
     (css-mode . prettier-compute-program)))
@@ -100,24 +100,20 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
 (defun format-dwim (beg end)
   (interactive (list (if (use-region-p) (region-beginning) (point-min))
                      (if (use-region-p) (region-end) (point-max))))
-  (if (and (not current-prefix-arg)
-           (bound-and-true-p eglot--managed-mode)
-           (eglot--server-capable :documentRangeFormattingProvider))
-      (eglot-format beg end)
-    (let ((program (cdr (assq major-mode format-dwim-program-alist))))
-      (save-restriction
-        (narrow-to-region beg end)
-        (if program
-            (let ((row (line-number-at-pos)))
-              (when (symbolp program)
-                (setq program (funcall program)))
-              (shell-command-on-region (point-min) (point-max) program nil t)
-              (goto-char (point-min))
-              (forward-line (1- row))
-              (narrow-to-region (line-beginning-position) (line-end-position))
-              (back-to-indentation))
-          (delete-trailing-whitespace (point-min) (point-max))
-          (indent-region (point-min) (point-max)))))))
+  (let ((program (cdr (assq major-mode format-dwim-program-alist))))
+    (save-restriction
+      (narrow-to-region beg end)
+      (if program
+          (let ((row (line-number-at-pos)))
+            (when (symbolp program)
+              (setq program (funcall program)))
+            (shell-command-on-region (point-min) (point-max) program nil t)
+            (goto-char (point-min))
+            (forward-line (1- row))
+            (narrow-to-region (line-beginning-position) (line-end-position))
+            (back-to-indentation))
+        (delete-trailing-whitespace (point-min) (point-max))
+        (indent-region (point-min) (point-max))))))
 
 
 
