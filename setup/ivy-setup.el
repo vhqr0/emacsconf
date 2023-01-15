@@ -15,6 +15,8 @@
 (require 'swiper)
 (require 'counsel)
 
+(setq ivy--sources-list nil)            ; remove `ivy-switch-buffer' view source
+
 (ivy-mode 1)
 (counsel-mode 1)
 
@@ -45,15 +47,11 @@
 
 (global-set-key (kbd "<f5>") 'ivy-resume)
 
-(define-key ctl-x-r-map "v" 'ivy-push-view)
-(define-key ctl-x-r-map "V" 'ivy-pop-view)
-
 (define-key search-map "s" 'swiper)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
-
-
 (define-key ctl-x-l-map "." 'ivy-resume)
+(define-key ctl-x-l-map "s" 'swiper)
 (define-key ctl-x-l-map "g" 'counsel-rg)
 (define-key ctl-x-l-map "f" 'counsel-file-jump)
 (define-key ctl-x-l-map "d" 'counsel-dired-jump)

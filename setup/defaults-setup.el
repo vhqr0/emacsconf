@@ -36,11 +36,11 @@
       backup-by-copying t
       delete-by-moving-to-trash t)
 
-(let ((save-files-directory (expand-file-name "save/" user-emacs-directory)))
-  (setq backup-directory-alist `((".*" . ,(expand-file-name "backup/" save-files-directory)))
-        auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-save/" save-files-directory) t))
-        lock-file-name-transforms `((".*" ,(expand-file-name "lock/" save-files-directory) t))
-        trash-directory (expand-file-name "trash/" save-files-directory)))
+(setq backup-directory-alist         `((".*" . ,(expand-file-name "backup/"    user-emacs-directory)  ))
+      auto-save-file-name-transforms `((".*"   ,(expand-file-name "auto-save/" user-emacs-directory) t))
+      lock-file-name-transforms      `((".*"   ,(expand-file-name "lock/"      user-emacs-directory) t))
+      trash-directory                           (expand-file-name "trash/"     user-emacs-directory)
+      )
 
 (setq auto-save-visited-interval 1)
 (auto-save-visited-mode 1)
@@ -100,7 +100,18 @@
 
 (setq completion-ignore-case t)
 
-(global-set-key (kbd "C-M-_") 'dabbrev-completion)
+(setq hippie-expand-try-functions-list
+      '(try-complete-file-name-partially
+        try-complete-file-name
+        yas-hippie-try-expand           ; Notice: yasnippet
+        try-expand-line
+        try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
+
+(global-set-key "\M-/" 'hippie-expand)
+(global-set-key (kbd "C-M-_") 'dabbrev-completion) ; for terminal
 
 (setq isearch-lazy-count t
       isearch-allow-scroll t

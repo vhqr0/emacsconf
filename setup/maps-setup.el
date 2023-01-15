@@ -1,5 +1,11 @@
-(define-key help-map "j" 'find-library)
-(define-key help-map "t" 'load-theme)
+(find-function-setup-keys)
+
+(define-key help-map "t"  nil)
+(define-key help-map "tt" 'load-theme)
+(define-key help-map "tf" 'load-file)
+(define-key help-map "tl" 'load-library)
+(define-key help-map "j"  'find-library)
+(define-key help-map "4j" 'find-library-other-window)
 
 (define-key ctl-x-4-map "j" 'dired-jump-other-window)
 

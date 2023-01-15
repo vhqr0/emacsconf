@@ -1,15 +1,16 @@
-(if (eq system-type 'windows-nt)
-    (progn
-      (let ((font (font-spec :name "Courier New")))
-        (when (find-font font)
-          (set-face-attribute 'default nil :font font)))
-      (let ((font (font-spec :name "微软雅黑")))
-        (dolist (charset '(cjk-misc han bopomofo kana hangul))
-          (set-fontset-font t charset font))))
-  (let ((font (font-spec :name "DejaVu Sans Mono")))
-    (when (find-font font)
-      (set-face-attribute 'default nil :font font)))
-  (let ((font (font-spec :name "WenQuanYi Micro Hei")))
-    (when (find-font font)
-      (dolist (charset '(cjk-misc han bopomofo kana hangul))
-        (set-fontset-font t charset font)))))
+(defvar +fonts-en
+  (if (eq system-type 'windows-nt)
+      "Courier New"
+    "DejaVu Sans Mono"))
+(defvar +fonts-cjk
+  (if (eq system-type 'windows-nt)
+      "微软雅黑"
+    "WenQuanYi Micro Hei"))
+
+(let ((font (font-spec :name +fonts-en)))
+  (when (find-font font)
+    (set-face-attribute 'default nil :font font)))
+
+(let ((font (font-spec :name +fonts-cjk)))
+  (dolist (charset '(cjk-misc han bopomofo kana hangul))
+    (set-fontset-font t charset font)))

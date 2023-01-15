@@ -37,7 +37,10 @@
 (define-key abbrev-map "s" 'yas-insert-snippet)
 (define-key abbrev-map "v" 'yas-visit-snippet-file)
 
+
+
 ;; company
+
 (setq company-idle-delay 0.2
       company-minimum-prefix-length 2
       company-tooltip-align-annotations t
