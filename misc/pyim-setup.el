@@ -1,4 +1,5 @@
-(setq +package (append +package '(pyim pyim-basedict posframe popup)))
+(dolist (pkg '(pyim pyim-basedict posframe popup))
+  (add-to-list '+package pkg))
 
 
 

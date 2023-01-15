@@ -14,6 +14,11 @@
 (add-hook 'org-mode-hook 'evil-org-mode)
 
 (with-eval-after-load 'org
+  (require 'org-tempo)
   (org-roam-db-autosync-mode 1))
 
-(provide 'org-setup)
+(defun +org-setup ()
+  (modify-syntax-entry ?< "." org-mode-syntax-table) ; inhibit show paren and electric pair
+  (modify-syntax-entry ?> "." org-mode-syntax-table))
+
+(add-hook 'org-mode-hook '+org-setup)

@@ -66,21 +66,29 @@
 
 
 
-(defun ivy--action-append (x)
+(defun +ivy--action-append (x)
   (unless (eolp) (forward-char))
   (ivy--action-insert x))
 
-(ivy-add-actions t '(("a" ivy--action-append "append")))
+(ivy-add-actions t '(("a" +ivy--action-append "append")))
 
-(defun counsel--set-variable (x)
+(defun +counsel--set-variable (x)
   (counsel-set-variable (intern x)))
 
-(ivy-add-actions 'counsel-describe-variable '(("s" counsel--set-variable "set")))
+(ivy-add-actions 'counsel-describe-variable '(("s" +counsel--set-variable "set")))
 (ivy-add-actions 'counsel-find-library '(("l" load-library "load")))
 
 
 
-(defun ivy-tab-completion (arg &optional command)
+(defun +counsel-commands ()
+  (interactive)
+  (counsel-M-x "^counsel "))
+
+(define-key ctl-x-l-map "x" '+counsel-commands)
+
+
+
+(defun +ivy-tab-completion (arg &optional command)
   "Tab completion with `ivy-read'."
   (interactive "P")
   (let* ((completion-in-region-function 'ivy-completion-in-region)
@@ -95,12 +103,8 @@
     (completion-in-region-mode -1)
     (call-interactively command)))
 
-(global-set-key (kbd "<f2>") 'ivy-tab-completion)
+(global-set-key (kbd "<f2>") '+ivy-tab-completion)
 
 (with-eval-after-load 'company
   (define-key company-mode-map (kbd "<f2>") 'company-complete)
   (define-key company-active-map (kbd "<f2>") 'counsel-company))
-
-
-
-(provide 'ivy-setup)

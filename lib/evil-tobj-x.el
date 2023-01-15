@@ -24,7 +24,7 @@
         ;; search backwards for delimiter, opener, or closer
         (if (not (re-search-backward all-regexp nil t))
             ;; not found
-            (setq begin (- (point-at-bol) 1))
+            (setq begin (- (line-beginning-position) 1))
           ;; found:
           ;; skip over any matching pairs if necessary
           (while (looking-at-p closers-regexp)
@@ -54,7 +54,7 @@
         ;; search forward for a delimiter, opener, or closer
         (if (not (re-search-forward all-regexp nil t))
             ;; not found
-            (setq end (point-at-eol))
+            (setq end (line-end-position))
           ;; found:
           ;; skip over any matching pairs if necessary
           (backward-char)
@@ -151,7 +151,7 @@
         (save-excursion
           (while (< begin 0)
             (if (not (re-search-backward all-regexp nil t))
-                (setq begin (- (point-at-bol) 1))
+                (setq begin (- (line-beginning-position) 1))
               (while (looking-at-p closers-regexp)
                 (evil-jump-item)
                 (backward-char))
@@ -209,7 +209,7 @@ fails. If before is nil, it will return the first line where predicate fails, ot
 the last line where predicate holds."
   (save-excursion
     (goto-char start)
-    (goto-char (point-at-bol))
+    (goto-char (line-beginning-position))
     (let ((bnd (if (> 0 direction)
                    (point-min)
                  (point-max)))
@@ -217,9 +217,9 @@ the last line where predicate holds."
       (when skip (forward-line direction))
       (cl-loop while (and (/= (point) bnd) (funcall predicate))
                do (progn
-                    (when before (setq pt (point-at-bol)))
+                    (when before (setq pt (line-beginning-position)))
                     (forward-line direction)
-                    (unless before (setq pt (point-at-bol)))))
+                    (unless before (setq pt (line-beginning-position)))))
       pt)))
 
 (defun evil-indent-plus--same-indent-range (&optional point)
@@ -257,8 +257,8 @@ If `point' is supplied and non-nil it will return the begin and end of the block
     (list begin end evil-indent-plus--base)))
 
 (defun evil-indent-plus--linify (range)
-  (let ((nbeg (save-excursion (goto-char (cl-first range)) (point-at-bol)))
-        (nend (save-excursion (goto-char (cl-second range)) (point-at-eol))))
+  (let ((nbeg (save-excursion (goto-char (cl-first range)) (line-beginning-position)))
+        (nend (save-excursion (goto-char (cl-second range)) (line-end-position))))
     (evil-range nbeg nend 'line)))
 
 (defun evil-indent-plus--extend (range)
@@ -311,7 +311,7 @@ and the line above and below, skipping empty lines."
 ;;; bindings
 
 ;;;###autoload
-(defun evil-tobj-plus-default-keybindings ()
+(defun evil-tobj-x-default-keybindings ()
   (define-key evil-inner-text-objects-map "," 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "," 'evil-outer-arg)
   (define-key evil-inner-text-objects-map "i" 'evil-indent-plus-i-indent)
@@ -321,4 +321,4 @@ and the line above and below, skipping empty lines."
   (define-key evil-inner-text-objects-map "J" 'evil-indent-plus-i-indent-up-down)
   (define-key evil-outer-text-objects-map "J" 'evil-indent-plus-a-indent-up-down))
 
-(provide 'evil-tobj-plus)
+(provide 'evil-tobj-x)

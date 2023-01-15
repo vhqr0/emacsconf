@@ -1,4 +1,5 @@
-(setq +package (append +package '(pdf-tools auctex cdlatex)))
+(dolist (pkg '(pdf-tools auctex cdlatex))
+  (add-to-list '+package pkg))
 
 (with-eval-after-load 'pdf-tools (pdf-tools-install))
 (autoload 'pdf-view-mode "pdf-view" "pdf view mode" t)

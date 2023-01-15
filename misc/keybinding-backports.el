@@ -1,6 +1,6 @@
 ;;; 29
 
-(setq +package (append +package '(eglot)))
+(add-to-list '+package 'eglot)
 
 (define-key goto-map "i" 'imenu)
 
