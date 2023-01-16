@@ -1,4 +1,8 @@
-;; ui
+;;; -*- lexical-binding: t -*-
+
+
+
+;;* ui
 
 (setq visible-bell t)
 
@@ -22,9 +26,16 @@
 (unless (eq system-type 'windows-nt)
   (xterm-mouse-mode 1))
 
+(setq frame-title-format
+      '((:eval (let ((buffer (if (window-minibuffer-p)
+                                 (window-buffer (minibuffer-selected-window))
+                               (current-buffer))))
+                 (or (buffer-file-name buffer)
+                     (buffer-name buffer))))))
+
 
 
-;; files
+;;* files
 
 (setq auto-revert-check-vc-info t
       vc-handled-backends '(Git)
@@ -51,7 +62,7 @@
 
 
 
-;; indent and pair
+;;* indent and pair
 
 (setq-default indent-tabs-mode nil)
 
@@ -64,7 +75,7 @@
 
 
 
-;; repeat
+;;* repeat
 
 (setq disabled-command-function nil)
 
@@ -79,7 +90,7 @@
 
 
 
-;; layout
+;;* layout
 
 (setq tab-bar-tab-hints t
       tab-bar-select-tab-modifiers '(control shift))
@@ -96,7 +107,7 @@
 
 
 
-;; completion, search, match
+;;* completion, search, match
 
 (setq completion-ignore-case t)
 

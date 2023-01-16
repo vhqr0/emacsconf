@@ -1,4 +1,8 @@
-;; basic
+;;; -*- lexical-binding: t -*-
+
+
+
+;;* basic
 
 (setq evil-disable-insert-state-bindings t
       evil-want-keybinding nil
@@ -46,7 +50,7 @@
 
 
 
-;; initial state
+;;* initial state
 
 (evil-define-state special
   "Special state."
@@ -71,7 +75,7 @@
 (advice-add 'evil-initial-state-for-buffer
             :around '+evil-initial-state-for-buffer-around)
 
-;; jk
+;;* jk
 
 (defun +evil-jk-j ()
   (call-interactively
@@ -97,7 +101,7 @@
 
 
 
-;; operator and textobject
+;;* operator and textobject
 
 (defvar +evil-operator-eval-alist
   '((emacs-lisp-mode . eval-region)
@@ -160,14 +164,14 @@
 
 
 
-;; leader
+;;* leader
 
 (define-key evil-motion-state-map  "\s" evil-leader-map)
 (define-key evil-special-state-map "\s" evil-leader-map)
 
 
 
-;; override
+;;* override
 
 (general-define-key
  :states '(motion normal visual operator)

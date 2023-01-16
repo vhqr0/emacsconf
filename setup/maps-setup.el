@@ -1,3 +1,8 @@
+;;; -*- lexical-binding: t -*-
+
+
+
+;;* basic
 (find-function-setup-keys)
 
 (define-key help-map "t"  nil)
@@ -20,7 +25,7 @@
 (define-key ctl-x-map "l" ctl-x-l-map)
 (define-key ctl-x-l-map "b" 'ibuffer)
 
-;; symbol-overlay
+;;* symbol-overlay
 (defvar symbol-at-point-map
   (let ((map (make-sparse-keymap)))
     (define-key map "i"       'symbol-overlay-put)
@@ -42,7 +47,7 @@
     map))
 (setq symbol-overlay-map symbol-at-point-map)
 
-;; avy
+;;* avy
 (setq avy-single-candidate-jump nil
       avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
 (setq aw-dispatch-when-more-than 1)
@@ -54,8 +59,8 @@
 (define-key goto-map "o" 'ace-window)
 (define-key goto-map "l" 'link-hint-open-link)
 
-;; simple-x
+;;* simple-x
 (simple-x-default-keybindings)
 
-;; evil
+;;* evil-leader
 (defvar evil-leader-map (make-sparse-keymap))

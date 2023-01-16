@@ -1,10 +1,16 @@
-;; display-line-numbers
+;;; -*- lexical-binding: t -*-
+
+
+
+;;* basic
+
+;;** display-line-numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-;; compile
+;;** compile
 (defalias 'make 'compile)
 
-;; project
+;;** project
 (projectile-mode 1)
 (counsel-projectile-mode 1)
 
@@ -15,22 +21,22 @@
 (define-key projectile-command-map "s" 'projectile-run-shell)
 (define-key evil-leader-map "p" projectile-command-map)
 
-;; xref
+;;** xref
 (setq xref-search-program 'ripgrep)
 
-;; flymake
+;;** flymake
 (with-eval-after-load 'flymake
   (define-key flymake-mode-map "\M-n" 'flymake-goto-next-error)
   (define-key flymake-mode-map "\M-p" 'flymake-goto-prev-error))
 (with-eval-after-load 'flymake-proc
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
 
-;; eglot
+;;** eglot
 (setq eglot-extend-to-xref t
       eglot-events-buffer-size 0
       eglot-stay-out-of '(company))
 
-;; yasnippet
+;;** yasnippet
 (setq yas-alias-to-yas/prefix-p nil)
 (yas-global-mode 1)
 (setcdr (assq 'yas-minor-mode minor-mode-alist) '(""))
@@ -39,7 +45,7 @@
 
 
 
-;; company
+;;* company
 
 (setq company-idle-delay 0.2
       company-minimum-prefix-length 2

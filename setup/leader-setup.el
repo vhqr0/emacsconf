@@ -1,3 +1,9 @@
+;;; -*- lexical-binding: t -*-
+
+
+
+;;* god C-c
+
 (defun +god-C-c--execute (bind)
   (interactive)
   (cond ((commandp bind)
@@ -20,6 +26,10 @@
           (t
            (user-error "no key binding on 'C-c C-%c' or 'C-c %c'" char char)))))
 
+
+
+;;* maps
+
 (define-key evil-leader-map "c" '+god-C-c)
 (define-key evil-leader-map "h" help-map)
 (define-key evil-leader-map "s" search-map)
@@ -39,6 +49,10 @@
 (define-key evil-leader-map "w" workspace-prefix-map) ; workspace.el
 (define-key evil-leader-map "\r" mule-keymap)
 
+
+
+;;* layout
+
 (define-key evil-leader-map "1" 'delete-other-windows)
 (define-key evil-leader-map "2" 'split-window-below)
 (define-key evil-leader-map "3" 'split-window-right)
@@ -55,6 +69,10 @@
 (define-key evil-leader-map [tab] 'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
+
+
+;;* pair
+
 (defun +insert-pair-1 (&optional arg) (interactive "P") (insert-pair (or arg '(1))))
 (dolist (pair insert-pair-alist)
   (define-key evil-leader-map `[,(car pair)] '+insert-pair-1))
@@ -62,6 +80,10 @@
 (define-key evil-leader-map ")" 'move-past-close-and-reindent)
 (define-key evil-leader-map "\M-r" 'raise-sexp)
 (define-key evil-leader-map "\M-d" 'delete-pair)
+
+
+
+;;* others
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "b" 'switch-to-buffer)

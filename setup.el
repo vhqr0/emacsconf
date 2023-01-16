@@ -1,4 +1,6 @@
-;; defvars and load custom
+;;; -*- lexical-binding: t -*-
+
+;;* defvars and load custom
 
 (defvar +setup-directory (expand-file-name "setup" +conf-directory))
 (defvar +lib-directory (expand-file-name "lib" +conf-directory))
@@ -39,7 +41,7 @@
 
 
 
-;; setup internal (lib) and external (elpa) packages
+;;* setup internal (lib) and external (elpa) packages
 
 (let ((lib-autoload (expand-file-name "lib-autoload.el" +lib-directory)))
   (add-to-list 'load-path +lib-directory)
@@ -64,7 +66,7 @@
 
 
 
-;; load *-setup
+;;* load *-setup
 
 (load-file (expand-file-name "defaults-setup.el" +setup-directory))
 (load-file (expand-file-name "maps-setup.el" +setup-directory))

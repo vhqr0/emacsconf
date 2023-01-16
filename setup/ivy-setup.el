@@ -1,3 +1,9 @@
+;;; -*- lexical-binding: t -*-
+
+
+
+;;* basic
+
 (setq ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
       ivy-virtual-abbreviate 'full
@@ -25,6 +31,8 @@
 
 
 
+;;* map
+
 (define-key ivy-minibuffer-map "\M-\s" 'ivy-restrict-to-matches)
 
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
@@ -38,12 +46,16 @@
 
 
 
+;;* avy
+
 (autoload 'ivy-avy "ivy-avy" "ivy-avy" t)
 (define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
 (dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
   (define-key map [remap ivy-avy] 'swiper-avy))
 
 
+
+;;* bindings
 
 (global-set-key (kbd "<f5>") 'ivy-resume)
 
@@ -56,13 +68,15 @@
 (define-key ctl-x-l-map "f" 'counsel-file-jump)
 (define-key ctl-x-l-map "d" 'counsel-dired-jump)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
-(define-key ctl-x-l-map "o" 'counsel-outline)
+(define-key ctl-x-l-map "l" 'counsel-outline)
 (define-key ctl-x-l-map "y" 'counsel-yank-pop)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
 (define-key ctl-x-l-map "r" 'counsel-register)
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
 
 
+
+;;* action
 
 (defun +ivy--action-append (x)
   (unless (eolp) (forward-char))
@@ -78,6 +92,8 @@
 
 
 
+;;* counsel-commands
+
 (defun +counsel-commands ()
   (interactive)
   (counsel-M-x "^counsel "))
@@ -85,6 +101,8 @@
 (define-key ctl-x-l-map "x" '+counsel-commands)
 
 
+
+;;* tab-completion
 
 (defun +ivy-tab-completion (arg &optional command)
   "Tab completion with `ivy-read'."
