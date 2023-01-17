@@ -1,4 +1,5 @@
-(load-file (expand-file-name "fonts-setup.el" +misc-directory))
-(load-file (expand-file-name "eglot-setup.el" +misc-directory))
-(load-file (expand-file-name "latex-setup.el" +misc-directory))
-(load-file (expand-file-name "pyim-setup.el" +misc-directory))
+(add-to-list '+package 'ef-themes)
+(add-hook 'after-init-hook 'ef-themes-load-random)
+
+(dolist (setup '("fonts" "latex" "pyim"))
+  (load-file (expand-file-name (concat setup "-setup.el") +misc-directory)))

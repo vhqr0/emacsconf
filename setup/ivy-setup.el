@@ -42,7 +42,6 @@
 (define-key counsel-mode-map [remap dired] 'counsel-dired)
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
-(define-key counsel-mode-map [remap projectile-compile-project] 'counsel-compile)
 
 
 
@@ -74,9 +73,12 @@
 (define-key ctl-x-l-map "r" 'counsel-register)
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
 
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "<f2>") 'counsel-company))
+
 
 
-;;* action
+;;* actions
 
 (defun +ivy--action-append (x)
   (unless (eolp) (forward-char))
@@ -92,11 +94,22 @@
 
 
 
+;;* projectile
+
+(define-key counsel-mode-map [remap projectile-compile-project] 'counsel-compile)
+(define-key counsel-mode-map [remap projectile-switch-project] 'counsel-projectile-switch-project)
+(define-key counsel-mode-map [remap projectile-switch-to-buffer] 'counsel-projectile-switch-to-buffer)
+(define-key counsel-mode-map [remap projectile-find-file] 'counsel-projectile-find-file)
+(define-key counsel-mode-map [remap projectile-find-file-dwim] 'counsel-projectile-find-file-dwim)
+(define-key counsel-mode-map [remap projectile-find-dir] 'counsel-projectile-find-dir)
+
+
+
 ;;* counsel-commands
 
 (defun +counsel-commands ()
   (interactive)
-  (counsel-M-x "^counsel "))
+  (counsel-M-x "^counsel-"))
 
 (define-key ctl-x-l-map "x" '+counsel-commands)
 
@@ -120,7 +133,3 @@
     (call-interactively command)))
 
 (global-set-key (kbd "<f2>") '+ivy-tab-completion)
-
-(with-eval-after-load 'company
-  (define-key company-mode-map (kbd "<f2>") 'company-complete)
-  (define-key company-active-map (kbd "<f2>") 'counsel-company))

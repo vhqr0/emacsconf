@@ -68,12 +68,7 @@
 
 ;;* load *-setup
 
-(load-file (expand-file-name "defaults-setup.el" +setup-directory))
-(load-file (expand-file-name "maps-setup.el" +setup-directory))
-(load-file (expand-file-name "evil-setup.el" +setup-directory))
-(load-file (expand-file-name "leader-setup.el" +setup-directory))
-(load-file (expand-file-name "ivy-setup.el" +setup-directory))
-(load-file (expand-file-name "prog-tools-setup.el" +setup-directory))
-(load-file (expand-file-name "ext-tools-setup.el" +setup-directory))
-(load-file (expand-file-name "simple-modes-setup.el" +setup-directory))
-(load-file (expand-file-name "org-setup.el" +setup-directory))
+(dolist (setup
+         '("defaults" "maps" "evil" "leader" "ivy"
+           "prog-tools" "ext-tools" "simple-modes" "org"))
+  (load-file (expand-file-name (concat setup "-setup.el") +setup-directory)))

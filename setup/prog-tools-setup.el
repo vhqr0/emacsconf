@@ -12,7 +12,6 @@
 
 ;;** project
 (projectile-mode 1)
-(counsel-projectile-mode 1)
 
 (define-key projectile-command-map "\e" nil)
 (define-key projectile-command-map "x" 'project-execute-extended-command)
@@ -34,7 +33,8 @@
 ;;** eglot
 (setq eglot-extend-to-xref t
       eglot-events-buffer-size 0
-      eglot-stay-out-of '(company))
+      eglot-stay-out-of '(company)
+      eglot-ignored-server-capabilities '(:hoverProvider :documentHighlightProvider))
 
 ;;** yasnippet
 (setq yas-alias-to-yas/prefix-p nil)
@@ -75,3 +75,5 @@
 (advice-add 'company-mode-on :override '+company-mode-on-override)
 
 (global-company-mode 1)
+
+(define-key company-mode-map (kbd "<f2>") 'company-complete)

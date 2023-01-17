@@ -91,7 +91,7 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
 (defvar format-dwim-program-alist
   '((c-mode . "clang-format")
     (c++-mode . "clang-format")
-    (python-mode . "black -q -")
+    (python-mode . "yapf") ;; black: "black -q -"
     (js-json-mode . prettier-compute-program)
     (js-mode . prettier-compute-program)
     (mhtml-mode . prettier-compute-program)
