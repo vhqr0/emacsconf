@@ -33,7 +33,7 @@
 
 ;;* map
 
-(define-key ivy-minibuffer-map "\M-\s" 'ivy-restrict-to-matches)
+(define-key ivy-minibuffer-map "\M-s" 'ivy-restrict-to-matches)
 
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
 (define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)

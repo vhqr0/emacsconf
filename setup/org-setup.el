@@ -9,11 +9,11 @@
       org-default-notes-file (expand-file-name "notes.org" org-directory))
 
 (setq org-special-ctrl-a/e t
-      evil-org-key-theme '(navigation return textobjects calendar))
+      evil-org-key-theme '(navigation return textobjects additional shift calendar))
 
-(define-key ctl-x-l-map "oa" 'org-agenda)
-(define-key ctl-x-l-map "oc" 'org-capture)
-(define-key ctl-x-l-map "ow" 'org-store-link)
+(define-key ctl-x-l-map "a" 'org-agenda)
+(define-key ctl-x-l-map "c" 'org-capture)
+(define-key ctl-x-l-map "w" 'org-store-link)
 
 (defun +org-setup ()
   (modify-syntax-entry ?< "." org-mode-syntax-table) ; inhibit show paren and electric pair
@@ -37,10 +37,7 @@
 (setq org-roam-node-display-template
       (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
 
-(define-key ctl-x-l-map "nt" 'org-roam-buffer-toggle)
-(define-key ctl-x-l-map "nf" 'org-roam-node-find)
-(define-key ctl-x-l-map "ni" 'org-roam-node-insert)
-(define-key ctl-x-l-map "nc" 'org-roam-capture)
+(define-key ctl-x-l-map "n" 'counsel-org-roam)
 
 (with-eval-after-load 'org-roam
   (org-roam-db-autosync-mode 1))        ; Notice: load org-roam before edit roam files

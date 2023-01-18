@@ -7,7 +7,7 @@
 (setq evil-disable-insert-state-bindings t
       evil-want-keybinding nil
       evil-want-C-i-jump nil
-      evil-want-C-d-scroll nil
+      evil-want-C-u-scroll t
       evil-want-C-w-delete nil
       evil-want-Y-yank-to-eol t
       evil-want-fine-undo t
@@ -30,9 +30,6 @@
 (setcdr (assq 'evil-collection-unimpaired-mode minor-mode-alist) '(""))
 
 (global-set-key "\M-z" [escape])
-
-(define-key evil-motion-state-map "\M-j" 'evil-scroll-down)
-(define-key evil-motion-state-map "\M-k" 'evil-scroll-up)
 
 (define-key evil-normal-state-map [remap yank-pop] nil)
 
@@ -59,8 +56,6 @@
 
 (define-key evil-special-state-map "\C-w" evil-window-map)
 (define-key evil-special-state-map "\C-z" 'evil-motion-state)
-(define-key evil-special-state-map "\M-j" 'evil-scroll-down)
-(define-key evil-special-state-map "\M-k" 'evil-scroll-up)
 (define-key evil-special-state-map ":"    'evil-ex)
 (define-key evil-special-state-map "\\"   'evil-execute-in-emacs-state)
 (define-key evil-special-state-map "j"    "\C-n")
@@ -176,6 +171,4 @@
 (general-define-key
  :states '(motion normal visual operator)
  :keymaps 'override
- "SPC" evil-leader-map
- "M-j" 'evil-scroll-down
- "M-k" 'evil-scroll-up)
+ "SPC" evil-leader-map)
