@@ -78,8 +78,6 @@
   (define-key evil-leader-map `[,(car pair)] '+insert-pair-1))
 
 (define-key evil-leader-map ")" 'move-past-close-and-reindent)
-(define-key evil-leader-map "\M-r" 'raise-sexp)
-(define-key evil-leader-map "\M-d" 'delete-pair)
 
 
 
