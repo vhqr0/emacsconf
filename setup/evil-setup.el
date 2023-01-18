@@ -69,8 +69,8 @@
 (define-key evil-special-state-map "h"    "\C-b")
 (define-key evil-special-state-map "l"    "\C-f")
 
-(defun +evil-initial-state-for-buffer-around (oldfun &optional buffer)
-  (let ((state (funcall oldfun buffer)))
+(defun +evil-initial-state-for-buffer-around (func &rest args)
+  (let ((state (apply func args)))
     (if (eq state 'emacs) 'special state)))
 
 (advice-add 'evil-initial-state-for-buffer
