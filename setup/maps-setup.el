@@ -3,8 +3,6 @@
 
 
 ;;* basic
-(find-function-setup-keys)
-
 (define-key help-map "t"  nil)
 (define-key help-map "tt" 'load-theme)
 (define-key help-map "tf" 'load-file)

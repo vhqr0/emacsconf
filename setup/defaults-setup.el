@@ -93,11 +93,11 @@
 ;;* layout
 
 (setq tab-bar-tab-hints t
-      tab-bar-select-tab-modifiers '(control shift))
+      tab-bar-select-tab-modifiers '(super))
 
 (dotimes (i 10)
   (global-set-key (kbd (format "C-c C-%d" i))
-                  (kbd (format "C-S-%d" i))))
+                  (kbd (format "s-%d" i))))
 
 (define-key tab-prefix-map "`" 'toggle-frame-tab-bar)
 

@@ -53,10 +53,7 @@ On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
 
 (declare-function grep--save-buffers "grep")
 
-(defvar rg-program
-  (if (eq system-type 'windows-nt)
-      "rg -n --no-heading "
-    "rg --no-heading "))
+(defvar rg-program "rg -n --no-heading ")
 
 (defun rg ()
   "Rg wrap for `grep-mode'."
