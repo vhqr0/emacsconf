@@ -12,3 +12,7 @@
 ;; for git asking password
 (setenv "GIT_ASKPASS" "git-gui--askpass")
 (setenv "SSH_ASKPASS" "git-gui--askpass")
+
+;; assume using unix tools shipped with git: C:\Program Files\Git\usr\bin
+;; fix find resolve to Windows find, rename git find to find2
+(defvar find-program "find2")

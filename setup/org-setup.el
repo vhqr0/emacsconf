@@ -32,6 +32,10 @@
 
 ;;* org-roam
 
+;; use sqlite3 cli to avoid compilation
+;; (add-to-list '+package 'emacsql-sqlite3)
+;; (setq org-roam-database-connector 'sqlite3)
+
 (setq org-roam-directory (expand-file-name "org-roam" user-emacs-directory))
 
 (setq org-roam-node-display-template
