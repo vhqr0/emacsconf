@@ -37,16 +37,13 @@
 (define-key evil-leader-map "a" abbrev-map)
 (define-key evil-leader-map "r" ctl-x-r-map)
 (define-key evil-leader-map "x" ctl-x-x-map)
-(define-key evil-leader-map "l" ctl-x-l-map) ; init.el
-(define-key evil-leader-map "i" symbol-at-point-map) ; init.el
+(define-key evil-leader-map "l" ctl-x-l-map) ; setup
 (define-key evil-leader-map "n" narrow-map)
 (define-key evil-leader-map "v" vc-prefix-map)
-;;; use projectile
-;; (define-key evil-leader-map "p" project-prefix-map)
+(define-key evil-leader-map "p" projectile-command-map) ; projectile
 (define-key evil-leader-map "4" ctl-x-4-map)
 (define-key evil-leader-map "5" ctl-x-5-map)
 (define-key evil-leader-map "t" tab-prefix-map)
-(define-key evil-leader-map "w" workspace-prefix-map) ; workspace.el
 (define-key evil-leader-map "\r" mule-keymap)
 
 
@@ -91,8 +88,6 @@
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "z" 'repeat)
 (define-key evil-leader-map ";" 'eval-expression)
-(define-key evil-leader-map "m" 'compile)
-(define-key evil-leader-map "M" 'recompile)
 (define-key evil-leader-map "e" 'eshell-dwim) ; simple-x
 (define-key evil-leader-map "!" 'shell-command)
 (define-key evil-leader-map "&" 'async-shell-command)

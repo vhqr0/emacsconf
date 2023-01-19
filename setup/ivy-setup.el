@@ -29,6 +29,11 @@
 (dolist (mode '(ivy-mode counsel-mode))
   (setcdr (assq mode minor-mode-alist) '("")))
 
+(advice-add 'ivy-read :around           ; diminish `icomplete' while `ivy-read'
+            (lambda (func &rest args)
+              (let (icomplete-mode)
+                (apply func args))))
+
 
 
 ;;* map
@@ -43,7 +48,11 @@
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 
+(define-key counsel-mode-map [remap execute-extended-command] nil)
 (define-key counsel-mode-map [remap yank-pop] nil)
+
+(dolist (command '(execute-extended-command project-execute-extended-command))
+  (add-to-list 'ivy-completing-read-handlers-alist (cons command 'completing-read-default)))
 
 
 
@@ -69,6 +78,7 @@
 (define-key ctl-x-l-map "f" 'counsel-file-jump)
 (define-key ctl-x-l-map "d" 'counsel-dired-jump)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
+(define-key ctl-x-l-map "x" 'counsel-M-x)
 (define-key ctl-x-l-map "l" 'counsel-outline)
 (define-key ctl-x-l-map "y" 'counsel-yank-pop)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
@@ -104,16 +114,6 @@
 (define-key counsel-mode-map [remap projectile-find-file] 'counsel-projectile-find-file)
 (define-key counsel-mode-map [remap projectile-find-file-dwim] 'counsel-projectile-find-file-dwim)
 (define-key counsel-mode-map [remap projectile-find-dir] 'counsel-projectile-find-dir)
-
-
-
-;;* counsel-commands
-
-(defun +counsel-commands ()
-  (interactive)
-  (counsel-M-x "^counsel-"))
-
-(define-key ctl-x-l-map "x" '+counsel-commands)
 
 
 

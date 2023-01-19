@@ -96,14 +96,23 @@
       tab-bar-select-tab-modifiers '(super))
 
 (dotimes (i 10)
-  (global-set-key (kbd (format "C-c C-%d" i))
-                  (kbd (format "s-%d" i))))
+  (define-key goto-map (format "t%d" i) (kbd (format "s-%d" i))))
 
 (define-key tab-prefix-map "`" 'toggle-frame-tab-bar)
 
 (winner-mode 1)
 
-(windmove-default-keybindings)
+
+
+;;* minibuffer
+
+(define-key minibuffer-local-completion-map "\s" "-")
+
+(setq icomplete-compute-delay 2
+      icomplete-max-delay-chars 4
+      icomplete-delay-completions-threshold 10)
+
+(icomplete-mode 1)
 
 
 
@@ -131,5 +140,19 @@
       isearch-motion-changes-direction t
       isearch-repeat-on-direction-change t)
 
+(define-key search-map (kbd "<f2>") 'occur-at-point)
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
+
+
+
+;;* aliases
+(defalias 'oc 'occur)
+(defalias 'qr 'query-replace-regexp)
+(defalias 'make 'compile)
+(defalias 'remake 'recompile)
+
+
+
+;;* simple-x
+(simple-x-default-keybindings)

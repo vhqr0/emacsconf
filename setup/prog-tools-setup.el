@@ -7,19 +7,6 @@
 ;;** display-line-numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-;;** compile
-(defalias 'make 'compile)
-
-;;** project
-(projectile-mode 1)
-
-(define-key projectile-command-map "\e" nil)
-(define-key projectile-command-map "x" 'project-execute-extended-command)
-(define-key projectile-command-map "m" 'projectile-compile-project)
-(define-key projectile-command-map "e" 'projectile-run-eshell)
-(define-key projectile-command-map "s" 'projectile-run-shell)
-(define-key evil-leader-map "p" projectile-command-map)
-
 ;;** xref
 (setq xref-search-program 'ripgrep)
 
