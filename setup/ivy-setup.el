@@ -43,6 +43,8 @@
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 
+(define-key counsel-mode-map [remap yank-pop] nil)
+
 
 
 ;;* avy

@@ -83,13 +83,13 @@
 
 ;;* others
 
+(define-key evil-leader-map "\C-u" 'universal-argument)
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "b" 'switch-to-buffer)
 (define-key evil-leader-map "f" 'find-file)
 (define-key evil-leader-map "d" 'dired)
 (define-key evil-leader-map "j" 'dired-jump)
 (define-key evil-leader-map "z" 'repeat)
-(define-key evil-leader-map "y" 'yank-pop)
 (define-key evil-leader-map ";" 'eval-expression)
 (define-key evil-leader-map "m" 'compile)
 (define-key evil-leader-map "M" 'recompile)

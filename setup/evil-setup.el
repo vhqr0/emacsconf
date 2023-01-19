@@ -31,8 +31,6 @@
 
 (global-set-key "\M-z" [escape])
 
-(define-key evil-normal-state-map [remap yank-pop] nil)
-
 (define-key evil-insert-state-map "\C-r" 'evil-paste-from-register)
 
 (setq evil-ex-completion-map
