@@ -30,7 +30,8 @@
   "Xdg or explorer.exe wrap for open FILE or current file if called interactively."
   (interactive `(,(or buffer-file-name default-directory)))
   (when (and file (not (file-remote-p file)))
-    (call-process-shell-command (format xdg-open-command-format file))))
+    (call-process-shell-command (format xdg-open-command-format
+                                        (expand-file-name file)))))
 
 (declare-function dired-get-marked-files "dired")
 
