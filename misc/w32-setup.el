@@ -13,13 +13,19 @@
   (setq-local default-process-coding-system '(utf-8-dos . gbk-dos)))
 (advice-add 'grep-process-setup :after '+w32-grep-set-coding-system)
 
-(defmacro +w32-with-process-coding-system-utf-8 (&rest body)
-  `(let ((default-process-coding-system '(utf-8-dos . gbk-dos)))
+(defmacro +w32-with-process-coding-system (coding-system &rest body)
+  (declare (indent 1))
+  `(let ((default-process-coding-system ,coding-system))
      ,@body))
 
 (defun +w32-around-proocess-coding-system-utf-8 (func &rest args)
-  (+w32-with-process-coding-system-utf-8
-   (apply func args)))
+  (+w32-with-process-coding-system '(utf-8-dos . gbk-dos)
+    (apply func args)))
+
+(defun +w32-around-proocess-coding-system-utf-8-both (func &rest args)
+  (+w32-with-process-coding-system '(utf-8-dos . utf-8-dos)
+    (apply func args)))
+
 
 
 
@@ -33,8 +39,11 @@
 ;; fix find resolve to Windows find, rename git find to find2
 (setq find-program "find2")
 
+;; formatter: both utf-8
+(advice-add 'format-dwim :around '+w32-around-proocess-coding-system-utf-8-both)
+
 ;; use wsl sdcv
-(setq sdcv-program "wsl sdcv")
+(setq sdcv-command-format "wsl sdcv %s")
 (advice-add 'sdcv :around '+w32-around-proocess-coding-system-utf-8)
 
 ;; use wsl ispell

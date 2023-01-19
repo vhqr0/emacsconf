@@ -10,7 +10,7 @@
 
 ;; some linux tools wrap
 
-(defvar xclip-program
+(defvar xclip-command
   (if (eq system-type 'windows-nt)
       "clip.exe"
     "xclip -selection clip"))
@@ -18,10 +18,10 @@
 (defun xclip (beg end)
   "Xclip or clip.exe on Windows wrap for copy regin (BEG . END)."
   (interactive "r")
-  (call-shell-region beg end xclip-program)
+  (call-shell-region beg end xclip-command)
   (deactivate-mark))
 
-(defvar xdg-open-program-format
+(defvar xdg-open-command-format
   (if (eq system-type 'windows-nt)
       "explorer.exe file://%s"
     "xdg-open %s"))
@@ -30,7 +30,7 @@
   "Xdg or explorer.exe wrap for open FILE or current file if called interactively."
   (interactive `(,(or buffer-file-name default-directory)))
   (when (and file (not (file-remote-p file)))
-    (call-process-shell-command (format xdg-open-program-format file))))
+    (call-process-shell-command (format xdg-open-command-format file))))
 
 (declare-function dired-get-marked-files "dired")
 
@@ -40,20 +40,20 @@
   (dolist (file (dired-get-marked-files))
     (xdg-open file)))
 
-(defvar sdcv-program "sdcv")
+(defvar sdcv-command-format "sdcv %s")
 
 (defun sdcv (&optional word)
   (interactive (list (if current-prefix-arg
                          (read-string "word: ")
                        (thing-at-point 'word))))
   (when word
-    (shell-command (concat sdcv-program " " word))))
+    (shell-command (format sdcv-command-format word))))
 
 (defalias 'sd 'sdcv)
 
 (declare-function grep--save-buffers "grep")
 
-(defvar rg-program "rg -n --no-heading ")
+(defvar rg-command-prompt "rg -n --no-heading ")
 
 (defun rg ()
   "Rg wrap for `grep-mode'."
@@ -62,17 +62,17 @@
   (grep--save-buffers)
   (compilation-start
    (read-shell-command "command: "
-                       rg-program
+                       rg-command-prompt
                        'grep-history)
    'grep-mode))
 
 
 
-(defvar prettier-program "prettier")
+(defvar prettier-command "prettier")
 
-(defun prettier-compute-program ()
+(defun prettier-compute-command ()
   (format "%s --stdin-filepath %s"
-          prettier-program
+          prettier-command
           (or buffer-file-name
               (cond ((derived-mode-p 'js-json-mode)
                      "index.json")
@@ -85,26 +85,26 @@
                     (t
                      (user-error "Major mode doesn't support"))))))
 
-(defvar format-dwim-program-alist
+(defvar format-dwim-command-alist
   '((c-mode . "clang-format")
     (c++-mode . "clang-format")
     (python-mode . "yapf") ;; black: "black -q -"
-    (js-json-mode . prettier-compute-program)
-    (js-mode . prettier-compute-program)
-    (mhtml-mode . prettier-compute-program)
-    (css-mode . prettier-compute-program)))
+    (js-json-mode . prettier-compute-command)
+    (js-mode . prettier-compute-command)
+    (mhtml-mode . prettier-compute-command)
+    (css-mode . prettier-compute-command)))
 
 (defun format-dwim (beg end)
   (interactive (list (if (use-region-p) (region-beginning) (point-min))
                      (if (use-region-p) (region-end) (point-max))))
-  (let ((program (cdr (assq major-mode format-dwim-program-alist))))
+  (let ((command (cdr (assq major-mode format-dwim-command-alist))))
     (save-restriction
       (narrow-to-region beg end)
-      (if program
+      (if command
           (let ((row (line-number-at-pos)))
-            (when (symbolp program)
-              (setq program (funcall program)))
-            (shell-command-on-region (point-min) (point-max) program nil t)
+            (when (symbolp command)
+              (setq command (funcall command)))
+            (shell-command-on-region (point-min) (point-max) command nil t)
             (goto-char (point-min))
             (forward-line (1- row))
             (narrow-to-region (line-beginning-position) (line-end-position))
