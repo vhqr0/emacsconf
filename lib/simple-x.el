@@ -21,16 +21,16 @@
   (call-shell-region beg end xclip-program)
   (deactivate-mark))
 
-(defvar xdg-open-program "xdg-open")
+(defvar xdg-open-program-format
+  (if (eq system-type 'windows-nt)
+      "explorer.exe file://%s"
+    "xdg-open %s"))
 
 (defun xdg-open (&optional file)
-  "Xdg wrap for open FILE or current file if called interactively.
-On Windows will use `w32-shell-execute' and ignore `xdg-open-program'."
+  "Xdg or explorer.exe wrap for open FILE or current file if called interactively."
   (interactive `(,(or buffer-file-name default-directory)))
   (when (and file (not (file-remote-p file)))
-    (if (fboundp 'w32-shell-execute)
-        (w32-shell-execute "open" file)
-      (call-process-shell-command (concat xdg-open-program " " file)))))
+    (call-process-shell-command (format xdg-open-program-format file))))
 
 (declare-function dired-get-marked-files "dired")
 
