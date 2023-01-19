@@ -36,3 +36,7 @@
 ;; use wsl sdcv
 (setq sdcv-program "wsl sdcv")
 (advice-add 'sdcv :around '+w32-around-proocess-coding-system-utf-8)
+
+;; use wsl ispell
+(setq ispell-program-name (expand-file-name "w32-wsl-ispell.bat" +misc-directory))
+(advice-add 'ispell-call-process :around '+w32-around-proocess-coding-system-utf-8)
