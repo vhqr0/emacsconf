@@ -2,10 +2,14 @@
 
 
 
+(defvar evil-leader-map (make-sparse-keymap))
+
+
+
 ;;* maps
 
 (define-key evil-leader-map "\C-u" 'universal-argument)
-(define-key evil-leader-map "x"    'god-C-x) ; god
+(define-key evil-leader-map "y"    'god-C-x) ; god
 (define-key evil-leader-map "c"    'god-C-c) ; god
 
 (define-key evil-leader-map "h"  help-map)
@@ -13,7 +17,7 @@
 (define-key evil-leader-map "g"  goto-map)
 (define-key evil-leader-map "a"  abbrev-map)
 (define-key evil-leader-map "r"  ctl-x-r-map)
-(define-key evil-leader-map "y"  ctl-x-x-map)
+(define-key evil-leader-map "x"  ctl-x-x-map)
 (define-key evil-leader-map "l"  ctl-x-l-map) ; setup
 (define-key evil-leader-map "n"  narrow-map)
 (define-key evil-leader-map "v"  vc-prefix-map)
@@ -49,8 +53,6 @@
 (defun +insert-pair-1 (&optional arg) (interactive "P") (insert-pair (or arg '(1))))
 (dolist (pair insert-pair-alist)
   (define-key evil-leader-map `[,(car pair)] '+insert-pair-1))
-
-(define-key evil-leader-map ")" 'move-past-close-and-reindent)
 
 
 

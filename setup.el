@@ -69,6 +69,6 @@
 ;;* load *-setup
 
 (dolist (setup
-         '("defaults" "maps" "evil" "leader" "ivy"
+         '("defaults" "leader" "evil" "ivy"
            "prog-tools" "ext-tools" "simple-modes" "org"))
   (load-file (expand-file-name (concat setup "-setup.el") +setup-directory)))

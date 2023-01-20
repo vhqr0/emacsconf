@@ -50,8 +50,7 @@
 (setq backup-directory-alist         `((".*" . ,(expand-file-name "backup/"    user-emacs-directory)  ))
       auto-save-file-name-transforms `((".*"   ,(expand-file-name "auto-save/" user-emacs-directory) t))
       lock-file-name-transforms      `((".*"   ,(expand-file-name "lock/"      user-emacs-directory) t))
-      trash-directory                           (expand-file-name "trash/"     user-emacs-directory)
-      )
+      trash-directory                           (expand-file-name "trash/"     user-emacs-directory)    )
 
 (setq auto-save-visited-interval 1)
 (auto-save-visited-mode 1)
@@ -120,7 +119,7 @@
 
 
 
-;;* completion, search, match
+;;* completion
 
 (setq completion-ignore-case t)
 
@@ -137,6 +136,10 @@
 (global-set-key "\M-/" 'hippie-expand)
 (global-set-key (kbd "C-M-_") 'dabbrev-completion) ; for terminal
 
+
+
+;;* match
+
 (setq isearch-lazy-count t
       isearch-allow-scroll t
       isearch-allow-motion t
@@ -150,6 +153,33 @@
 
 
 
+;;* maps
+
+;;** help
+(define-key help-map "t"  nil)
+(define-key help-map "tt" 'load-theme)
+(define-key help-map "tf" 'load-file)
+(define-key help-map "tl" 'load-library)
+(define-key help-map "j"  'find-library)
+(define-key help-map "4j" 'find-library-other-window)
+
+;;** ctl-x-4-map
+(define-key ctl-x-4-map "j" 'dired-jump-other-window)
+
+;;** ctl-x-x-map
+(define-key ctl-x-x-map "h" 'hl-line-mode)
+(define-key ctl-x-x-map "s" 'whitespace-mode)
+(define-key ctl-x-x-map "v" 'visual-line-mode)
+(define-key ctl-x-x-map "l" 'display-line-numbers-mode)
+(define-key ctl-x-x-map "a" 'auto-save-visited-mode)
+
+;;** ctl-x-l-map
+(defvar ctl-x-l-map (make-sparse-keymap))
+(define-key ctl-x-map "l" ctl-x-l-map)
+(define-key ctl-x-l-map "b" 'ibuffer)
+
+
+
 ;;* aliases
 (defalias 'oc 'occur)
 (defalias 'qr 'query-replace-regexp)
@@ -158,5 +188,26 @@
 
 
 
-;;* simple-x
+;;* extension
+
+;;** simple-x
 (simple-x-default-keybindings)
+
+;;** avy
+(setq avy-single-candidate-jump nil
+      avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
+(setq aw-dispatch-when-more-than 1)
+(define-key isearch-mode-map "\M-g" 'avy-isearch)
+(define-key goto-map "." 'avy-resume)
+(define-key goto-map "j" 'avy-goto-line)
+(define-key goto-map "f" 'avy-goto-char)
+(define-key goto-map "w" 'avy-goto-word-0)
+(define-key goto-map "o" 'ace-window)
+(define-key goto-map "l" 'link-hint-open-link)
+
+;;** projectile
+(projectile-mode 1)
+(define-key projectile-command-map "\e" nil)
+(define-key projectile-command-map "x" 'project-execute-extended-command)
+(define-key projectile-command-map "e" 'projectile-run-eshell)
+(define-key projectile-command-map "s" 'projectile-run-shell)
