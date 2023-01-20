@@ -2,41 +2,16 @@
 
 
 
-;;* god C-c
-
-(defun +god-C-c--execute (bind)
-  (interactive)
-  (cond ((commandp bind)
-         (setq this-command bind
-               real-this-command bind)
-         (if (commandp bind t)
-             (call-interactively bind)
-           (execute-kbd-macro bind))
-         bind)
-        ((keymapp bind)
-         (set-transient-map bind))))
-
-(defun +god-C-c ()
-  (interactive)
-  (let ((char (read-char "C-c C-")))
-    (cond ((+god-C-c--execute (key-binding (kbd (format "C-c C-%c" char))))
-           (message (format "C-c C-%c" char)))
-          ((+god-C-c--execute (key-binding (kbd (format "C-c %c" char))))
-           (message (format "C-c %c" char)))
-          (t
-           (user-error "no key binding on 'C-c C-%c' or 'C-c %c'" char char)))))
-
-
-
 ;;* maps
 
-(define-key evil-leader-map "c" '+god-C-c)
+(define-key evil-leader-map "x" 'god-C-x) ; god
+(define-key evil-leader-map "c" 'god-C-c) ; god
 (define-key evil-leader-map "h" help-map)
 (define-key evil-leader-map "s" search-map)
 (define-key evil-leader-map "g" goto-map)
 (define-key evil-leader-map "a" abbrev-map)
 (define-key evil-leader-map "r" ctl-x-r-map)
-(define-key evil-leader-map "x" ctl-x-x-map)
+(define-key evil-leader-map "y" ctl-x-x-map)
 (define-key evil-leader-map "l" ctl-x-l-map) ; setup
 (define-key evil-leader-map "n" narrow-map)
 (define-key evil-leader-map "v" vc-prefix-map)
