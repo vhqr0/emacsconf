@@ -85,6 +85,10 @@
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
+(with-eval-after-load 'winner
+  (define-key winner-repeat-map "u" 'winner-undo)
+  (define-key winner-repeat-map "U" 'winner-redo))
+
 (with-eval-after-load 'dired
   (put 'dired-jump 'repeat-map nil))
 

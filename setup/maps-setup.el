@@ -12,6 +12,8 @@
 
 (define-key ctl-x-4-map "j" 'dired-jump-other-window)
 
+;;* ctl-x-x-map
+(global-set-key (kbd "C-x y") ctl-x-x-map)
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "v" 'visual-line-mode)
