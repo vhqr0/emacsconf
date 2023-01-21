@@ -118,12 +118,12 @@
 
 ;;* projectile
 
-(define-key counsel-mode-map [remap projectile-compile-project] 'counsel-compile)
-(define-key counsel-mode-map [remap projectile-switch-project] 'counsel-projectile-switch-project)
+(define-key counsel-mode-map [remap projectile-compile-project]  'counsel-compile)
+(define-key counsel-mode-map [remap projectile-switch-project]   'counsel-projectile-switch-project)
 (define-key counsel-mode-map [remap projectile-switch-to-buffer] 'counsel-projectile-switch-to-buffer)
-(define-key counsel-mode-map [remap projectile-find-file] 'counsel-projectile-find-file)
-(define-key counsel-mode-map [remap projectile-find-file-dwim] 'counsel-projectile-find-file-dwim)
-(define-key counsel-mode-map [remap projectile-find-dir] 'counsel-projectile-find-dir)
+(define-key counsel-mode-map [remap projectile-find-file]        'counsel-projectile-find-file)
+(define-key counsel-mode-map [remap projectile-find-file-dwim]   'counsel-projectile-find-file-dwim)
+(define-key counsel-mode-map [remap projectile-find-dir]         'counsel-projectile-find-dir)
 
 
 

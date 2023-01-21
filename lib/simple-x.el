@@ -133,6 +133,14 @@
     (when symbol
       (occur (regexp-quote symbol)))))
 
+(defun narrow-to-paragraph ()
+  "Narrow to current paragraph."
+  (interactive)
+  (save-mark-and-excursion
+    (widen)
+    (call-interactively 'mark-paragraph)
+    (call-interactively 'narrow-to-region)))
+
 (defun rotate-window (arg)
   "Rotate current window or swap it if called with prefix ARG."
   (interactive "P")
@@ -232,9 +240,13 @@
   (with-eval-after-load 'dired
     (define-key dired-mode-map [remap xdg-open] 'dired-do-xdg-open))
   (define-key ctl-x-x-map "=" 'format-dwim)
-  (define-key ctl-x-x-map "^" 'fixup-whitespace-nospace-mode)
+
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
-  (global-set-key (kbd "C-x 9") 'rotate-window))
+  (define-key search-map (kbd "<f2>") 'occur-at-point)
+  (define-key narrow-map "p" 'narrow-to-paragraph)
+  (define-key narrow-map "P" 'narrow-to-page) ; change default binding
+  (global-set-key (kbd "C-x 9") 'rotate-window)
+  (define-key ctl-x-x-map "^" 'fixup-whitespace-nospace-mode))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here

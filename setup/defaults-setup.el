@@ -109,7 +109,7 @@
 
 ;;* minibuffer
 
-(define-key minibuffer-local-completion-map "\s" "-")
+(define-key read-extended-command-mode-map "\s" "-")
 
 (setq icomplete-compute-delay 2
       icomplete-max-delay-chars 4
@@ -147,7 +147,6 @@
       isearch-motion-changes-direction t
       isearch-repeat-on-direction-change t)
 
-(define-key search-map (kbd "<f2>") 'occur-at-point)
 (define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
 (define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
 
