@@ -13,15 +13,15 @@
 (define-key evil-leader-map "c"    'god-C-c) ; god
 
 (define-key evil-leader-map "h"  help-map)
-(define-key evil-leader-map "s"  search-map)
 (define-key evil-leader-map "g"  goto-map)
+(define-key evil-leader-map "s"  search-map)
+(define-key evil-leader-map "n"  narrow-map)
 (define-key evil-leader-map "a"  abbrev-map)
+(define-key evil-leader-map "v"  vc-prefix-map)
+(define-key evil-leader-map "p"  projectile-command-map) ; projectile
 (define-key evil-leader-map "r"  ctl-x-r-map)
 (define-key evil-leader-map "x"  ctl-x-x-map)
 (define-key evil-leader-map "l"  ctl-x-l-map) ; setup
-(define-key evil-leader-map "n"  narrow-map)
-(define-key evil-leader-map "v"  vc-prefix-map)
-(define-key evil-leader-map "p"  projectile-command-map) ; projectile
 (define-key evil-leader-map "4"  ctl-x-4-map)
 (define-key evil-leader-map "5"  ctl-x-5-map)
 (define-key evil-leader-map "t"  tab-prefix-map)
@@ -31,19 +31,18 @@
 
 ;;* layout
 
-(define-key evil-leader-map "1" 'delete-other-windows)
-(define-key evil-leader-map "2" 'split-window-below)
-(define-key evil-leader-map "3" 'split-window-right)
-(define-key evil-leader-map "q" 'quit-window)
-(define-key evil-leader-map "o" 'other-window)
-(define-key evil-leader-map "0" 'delete-window)
-(define-key evil-leader-map "9" 'rotate-window) ; simple-x
-(define-key evil-leader-map "u" 'winner-undo)   ; winner
-(define-key evil-leader-map "k" 'kill-buffer)
-(define-key evil-leader-map [left] 'previous-buffer)
-(define-key evil-leader-map [right] 'next-buffer)
-(define-key evil-leader-map "\t" 'evil-jump-backward)
-(define-key evil-leader-map [tab] 'evil-jump-backward)
+(define-key evil-leader-map "1"       'delete-other-windows)
+(define-key evil-leader-map "2"       'split-window-below)
+(define-key evil-leader-map "3"       'split-window-right)
+(define-key evil-leader-map "q"       'quit-window)
+(define-key evil-leader-map "o"       'other-window)
+(define-key evil-leader-map "0"       'delete-window)
+(define-key evil-leader-map "9"       'rotate-window) ; simple-x
+(define-key evil-leader-map "u"       'winner-undo)   ; winner
+(define-key evil-leader-map [left]    'previous-buffer)
+(define-key evil-leader-map [right]   'next-buffer)
+(define-key evil-leader-map "\t"      'evil-jump-backward)
+(define-key evil-leader-map [tab]     'evil-jump-backward)
 (define-key evil-leader-map [backtab] 'evil-jump-forward)
 
 
@@ -60,6 +59,7 @@
 
 (define-key evil-leader-map "\s" 'execute-extended-command)
 (define-key evil-leader-map "b"  'switch-to-buffer)
+(define-key evil-leader-map "k"  'kill-buffer)
 (define-key evil-leader-map "f"  'find-file)
 (define-key evil-leader-map "d"  'dired)
 (define-key evil-leader-map "j"  'dired-jump)
