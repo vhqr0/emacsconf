@@ -107,6 +107,18 @@
 
 
 
+;;* grep workaround
+
+(defun +counsel-ag-around (func &rest args)
+  (let ((current-prefix-arg (if (>= (prefix-numeric-value current-prefix-arg) 5)
+                                16
+                              current-prefix-arg)))
+    (apply func args)))
+
+(advice-add 'counsel-ag :around '+counsel-ag-around)
+
+
+
 ;;* projectile
 
 (define-key counsel-mode-map [remap projectile-compile-project] 'counsel-compile)
