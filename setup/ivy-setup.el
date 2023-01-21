@@ -10,10 +10,12 @@
       ivy-dispatching-done-columns 3    ; `ivy-hydra-read-action' columns
       ivy-read-action-function 'ivy-hydra-read-action)
 
-(setq counsel-describe-symbol-function      'helpful-symbol
-      counsel-describe-variable-function    'helpful-variable
-      counsel-describe-function-function    'helpful-callable
-      counsel-descbinds-function            'helpful-callable)
+(setq counsel-async-command-delay 0.25)
+
+(setq counsel-describe-symbol-function   'helpful-symbol
+      counsel-describe-variable-function 'helpful-variable
+      counsel-describe-function-function 'helpful-callable
+      counsel-descbinds-function         'helpful-callable)
 
 (setq helpful-max-buffers nil)
 
@@ -75,8 +77,7 @@
 (define-key ctl-x-l-map "." 'ivy-resume)
 (define-key ctl-x-l-map "s" 'swiper)
 (define-key ctl-x-l-map "g" 'counsel-rg)
-(define-key ctl-x-l-map "f" 'counsel-file-jump)
-(define-key ctl-x-l-map "d" 'counsel-dired-jump)
+(define-key ctl-x-l-map "f" 'counsel-fd) ; counsel-fd
 (define-key ctl-x-l-map "e" 'counsel-recentf)
 (define-key ctl-x-l-map "x" 'counsel-M-x)
 (define-key ctl-x-l-map "l" 'counsel-outline)
