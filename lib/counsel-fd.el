@@ -12,6 +12,21 @@
 
 (defvar counsel-fd-history nil)
 
+
+
+(defvar counsel-fd-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "`" 'counsel-locate-from-fd)
+    map))
+
+(defun counsel-locate-from-fd ()
+  "Switch to `counsel-locate' from `counsel-fd'."
+  (interactive)
+  (ivy-quit-and-run
+    (counsel-locate ivy-text)))
+
+
+
 (defun counsel-fd-cmd (input)
   "Return a `fdfind' shell command based on regexp INPUT.
 This uses the user options `counsel-fd-command' and `counsel-fd-options'."
@@ -69,6 +84,7 @@ argument, call `counsel-locate' instead."
                             (with-ivy-window
                               (find-file
                                (concat (file-remote-p default-directory) file)))))
+                :keymap counsel-fd-map
                 :caller 'counsel-fd))))
 
 (ivy-configure 'counsel-locate

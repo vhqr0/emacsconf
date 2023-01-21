@@ -22,6 +22,7 @@
 (require 'ivy)
 (require 'swiper)
 (require 'counsel)
+(autoload 'ivy-avy "ivy-avy" "" t)
 
 (setq ivy--sources-list nil)            ; remove `ivy-switch-buffer' view source
 
@@ -40,10 +41,12 @@
 
 ;;* map
 
-(define-key ivy-minibuffer-map "\M-s" 'ivy-restrict-to-matches)
-
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
+(define-key ivy-minibuffer-map "\M-s" 'ivy-restrict-to-matches)
 (define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
+(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
+(dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
+  (define-key map [remap ivy-avy] 'swiper-avy))
 
 (define-key counsel-mode-map [remap describe-key] 'helpful-key)
 (define-key counsel-mode-map [remap dired] 'counsel-dired)
@@ -55,15 +58,6 @@
 
 (dolist (command '(execute-extended-command project-execute-extended-command))
   (add-to-list 'ivy-completing-read-handlers-alist (cons command 'completing-read-default)))
-
-
-
-;;* avy
-
-(autoload 'ivy-avy "ivy-avy" "ivy-avy" t)
-(define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
-(dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
-  (define-key map [remap ivy-avy] 'swiper-avy))
 
 
 
@@ -91,7 +85,9 @@
 
 
 
-;;* actions
+;;* workaround
+
+;;** actions
 
 (defun +ivy--action-append (x)
   (unless (eolp) (forward-char))
@@ -105,16 +101,17 @@
 (ivy-add-actions 'counsel-describe-variable '(("s" +counsel--set-variable "set")))
 (ivy-add-actions 'counsel-find-library '(("l" load-library "load")))
 
-
+;;** find-file
 
-;;* grep workaround
+(define-key counsel-find-file-map "\C-l" 'counsel-up-directory)
+
+;;** grep
 
 (defun +counsel-ag-around (func &rest args)
   (let ((current-prefix-arg (if (>= (prefix-numeric-value current-prefix-arg) 5)
                                 16
                               current-prefix-arg)))
     (apply func args)))
-
 (advice-add 'counsel-ag :around '+counsel-ag-around)
 
 
