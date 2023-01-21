@@ -43,7 +43,11 @@ INITIAL-INPUT can be given as the initial minibuffer input.
 INITIAL-DIRECTORY, if non-nil, is used as the root directory for search.
 FD-OPTIONS, if non-nil, is replaced to `counsel-fd-options'.
 
-With `\\[universal-argument]' prefix argument, prompt for INITIAL-DIRECTORY and FD-OPTIONS."
+With a `\\[universal-argument]' prefix argument, prompt for
+INITIAL-DIRECTORY and FD-OPTIONS.
+
+ With a `\\[universal-argument] \\[universal-argument]' prefix
+argument, call `counsel-locate' instead."
   (interactive)
   (if (>= (prefix-numeric-value current-prefix-arg) 16)
       (counsel-locate initial-input)
