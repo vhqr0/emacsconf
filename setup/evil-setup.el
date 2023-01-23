@@ -168,10 +168,6 @@
 (define-key evil-motion-state-map  "\s" evil-leader-map)
 (define-key evil-special-state-map "\s" evil-leader-map)
 
-
-
-;;* override
-
 (general-define-key
  :states '(motion normal visual operator)
  :keymaps 'override

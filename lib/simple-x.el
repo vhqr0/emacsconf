@@ -54,7 +54,10 @@
 
 (declare-function grep--save-buffers "grep")
 
-(defvar rg-command-prompt "rg -n --no-heading ")
+;; -n: display line number, disabled in non-terminal by default
+;; -H: display file name, disabled in single-file-search by default
+;; --no-heading: display file name inline, disabled by default
+(defvar rg-command-prompt "rg -n -H --no-heading ")
 
 (defun rg ()
   "Rg wrap for `grep-mode'."

@@ -79,11 +79,7 @@ argument, call `counsel-locate' instead."
                 :initial-input initial-input
                 :dynamic-collection t
                 :history 'counsel-fd-history
-                :action (lambda (file)
-                          (when file
-                            (with-ivy-window
-                              (find-file
-                               (concat (file-remote-p default-directory) file)))))
+                :action 'find-file
                 :keymap counsel-fd-map
                 :caller 'counsel-fd))))
 
