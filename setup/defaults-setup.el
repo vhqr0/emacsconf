@@ -74,6 +74,14 @@
 
 
 
+;;* wrap
+
+(setq-default truncate-lines t)
+
+(setq word-wrap-by-category t)          ; for cjk wrap
+
+
+
 ;;* repeat
 
 (setq disabled-command-function nil)

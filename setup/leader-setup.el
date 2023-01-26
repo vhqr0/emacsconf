@@ -25,6 +25,7 @@
 (define-key evil-leader-map "4"  ctl-x-4-map)
 (define-key evil-leader-map "5"  ctl-x-5-map)
 (define-key evil-leader-map "t"  tab-prefix-map)
+(define-key evil-leader-map "w"  workspace-prefix-map) ; workspace
 (define-key evil-leader-map "\r" mule-keymap)
 
 
