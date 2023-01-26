@@ -68,17 +68,22 @@
 (define-key search-map "s" 'swiper)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
+(define-key ctl-x-r-map "e" 'counsel-recentf)
+
 (define-key ctl-x-l-map "." 'ivy-resume)
 (define-key ctl-x-l-map "s" 'swiper)
 (define-key ctl-x-l-map "g" 'counsel-rg)
 (define-key ctl-x-l-map "f" 'counsel-fd) ; counsel-fd
+(define-key ctl-x-l-map "c" 'counsel-locate)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
 (define-key ctl-x-l-map "x" 'counsel-M-x)
+(define-key ctl-x-l-map "i" 'counsel-imenu)
 (define-key ctl-x-l-map "l" 'counsel-outline)
 (define-key ctl-x-l-map "y" 'counsel-yank-pop)
 (define-key ctl-x-l-map "m" 'counsel-mark-ring)
 (define-key ctl-x-l-map "r" 'counsel-register)
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
+(define-key ctl-x-l-map "n" 'counsel-notes) ; counsel-notes
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "<f2>") 'counsel-company))

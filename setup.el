@@ -30,8 +30,6 @@
     company
     markdown-mode
     edit-indirect
-    htmlize
-    org-roam
     emmet-mode))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -70,5 +68,5 @@
 
 (dolist (setup
          '("defaults" "leader" "evil" "ivy"
-           "prog-tools" "ext-tools" "simple-modes" "org"))
+           "prog-tools" "ext-tools" "simple-modes"))
   (load-file (expand-file-name (concat setup "-setup.el") +setup-directory)))
