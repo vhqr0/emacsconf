@@ -38,4 +38,4 @@ leading and trailing hyphen."
             (keyword (counsel-notes-sluggify (read-from-minibuffer "keyword: "))))
         (find-file (expand-file-name (format "%s_%s_%s.md" time keyword title) counsel-notes-directory)))
     (require 'counsel)
-    (counsel-find-file (file-name-as-directory counsel-notes-directory))))
+    (counsel-find-file nil (file-name-as-directory counsel-notes-directory))))
