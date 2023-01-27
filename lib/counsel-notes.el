@@ -33,9 +33,20 @@ leading and trailing hyphen."
 (defun counsel-notes ()
   (interactive)
   (if current-prefix-arg
-      (let ((time (format-time-string "%y%m%d" (current-time)))
-            (title (counsel-notes-sluggify (read-from-minibuffer "title: ")))
-            (keyword (counsel-notes-sluggify (read-from-minibuffer "keyword: "))))
-        (find-file (expand-file-name (format "%s_%s_%s.md" time keyword title) counsel-notes-directory)))
-    (require 'counsel)
-    (counsel-find-file nil (file-name-as-directory counsel-notes-directory))))
+      (let ((directory (if (>= (prefix-numeric-value current-prefix-arg) 5)
+                           (expand-file-name "posts" counsel-notes-directory)
+                         counsel-notes-directory))
+            (time (current-time))
+            (title (read-from-minibuffer "title: "))
+            (keyword (read-from-minibuffer "keyword: ")))
+        (find-file (expand-file-name
+                    (format "%s_%s_%s.md"
+                            (format-time-string "%y%m%d" time)
+                            (counsel-notes-sluggify keyword)
+                            (counsel-notes-sluggify title))
+                    directory))
+        (insert (format "---\ntitle: %s\ndate: %s\ntag: %s\n---\n"
+                        title (format-time-string "%Y-%m-%d" time) keyword)))
+    (require 'counsel-projectile)
+    (let ((default-directory counsel-notes-directory))
+      (counsel-projectile-find-file))))
