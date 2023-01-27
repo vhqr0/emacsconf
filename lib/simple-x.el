@@ -177,16 +177,6 @@
                                 (split-window-vertically)))
                (set-window-buffer window prev-window-buffer)))))))
 
-(define-minor-mode fixup-whitespace-nospace-mode
-  "Advice fixup-whitespace leave nospace."
-  :lighter " FWN")
-
-(advice-add 'fixup-whitespace
-            :around (lambda (func &rest args)
-                      (if fixup-whitespace-nospace-mode
-                          (delete-horizontal-space)
-                        (apply func args))))
-
 (defvar eshell-buffer-name)
 (declare-function eshell-reset "esh-mode")
 (declare-function eshell/cd "em-dirs")
@@ -248,8 +238,7 @@
   (define-key search-map (kbd "<f2>") 'occur-at-point)
   (define-key narrow-map "p" 'narrow-to-paragraph)
   (define-key narrow-map "P" 'narrow-to-page) ; change default binding
-  (global-set-key (kbd "C-x 9") 'rotate-window)
-  (define-key ctl-x-x-map "^" 'fixup-whitespace-nospace-mode))
+  (global-set-key (kbd "C-x 9") 'rotate-window))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here

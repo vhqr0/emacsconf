@@ -80,6 +80,25 @@
 
 (setq word-wrap-by-category t)          ; for cjk wrap
 
+(defun +fixup-whitespace-override ()
+  "Fixup white space between objects around point.
+Leave one space or none, according to the context.
+
+Override: fix join lines leave space between CJK chars."
+  (interactive "*")
+  (save-excursion
+    (delete-horizontal-space)
+    (unless (or (looking-at "^\\|$\\|\\s)")
+                (save-excursion
+                  (forward-char -1)
+                  (looking-at "$\\|\\s(\\|\\s'"))
+                (and (looking-at "[[:multibyte:]]")
+                     (save-excursion
+                       (forward-char -1)
+                       (looking-at "[[:multibyte:]]"))))
+      (insert ?\s))))
+(advice-add 'fixup-whitespace :override '+fixup-whitespace-override)
+
 
 
 ;;* repeat

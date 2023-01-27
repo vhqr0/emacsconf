@@ -1,5 +1,12 @@
-(dolist (pkg '(pyim pyim-basedict posframe popup))
-  (add-to-list '+package pkg))
+(add-to-list '+package 'pyim)
+(add-to-list '+package 'pyim-basedict)
+
+;; (add-to-list '+package 'posframe)
+;; (add-to-list '+package 'popon)
+;; (setq pyim-page-tooltip '(posframe popon minibuffer))
+;; (with-eval-after-load 'pyim
+;;   (require 'posframe)
+;;   (require 'popon))
 
 
 
