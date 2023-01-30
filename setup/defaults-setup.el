@@ -134,21 +134,11 @@ Override: fix join lines leave space between CJK chars."
 
 
 
-;;* minibuffer
-
-(define-key read-extended-command-mode-map "\s" "-")
-
-(setq icomplete-compute-delay 2
-      icomplete-max-delay-chars 4
-      icomplete-delay-completions-threshold 10)
-
-(icomplete-mode 1)
-
-
-
 ;;* completion
 
-(setq completion-ignore-case t)
+(setq completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      read-file-name-completion-ignore-case t)
 
 (setq hippie-expand-try-functions-list
       '(try-complete-file-name-partially

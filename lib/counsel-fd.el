@@ -83,16 +83,15 @@ argument, call `counsel-locate' instead."
                 :keymap counsel-fd-map
                 :caller 'counsel-fd))))
 
-(ivy-configure 'counsel-locate
+(ivy-configure 'counsel-fd
   :unwind-fn #'counsel-delete-process
   :exit-codes '(1 "Nothing found"))
 
-(ivy-set-actions
- 'counsel-fd
- '(("j" find-file-other-window "other window")
-   ("r" counsel-find-file-as-root "open as root")
-   ("d" counsel-locate-action-dired "dired")
-   ("x" counsel-locate-action-extern "xdg-open")))
+(ivy-set-actions 'counsel-fd
+                 '(("j" find-file-other-window "other window")
+                   ("r" counsel-find-file-as-root "open as root")
+                   ("d" counsel-locate-action-dired "dired")
+                   ("x" counsel-locate-action-extern "xdg-open")))
 
 (provide 'counsel-fd)
 ;;; counsel-fd.el ends here

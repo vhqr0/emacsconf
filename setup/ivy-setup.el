@@ -32,11 +32,6 @@
 (dolist (mode '(ivy-mode counsel-mode))
   (setcdr (assq mode minor-mode-alist) '("")))
 
-(advice-add 'ivy-read :around           ; diminish `icomplete' while `ivy-read'
-            (lambda (func &rest args)
-              (let (icomplete-mode)
-                (apply func args))))
-
 
 
 ;;* map
@@ -56,9 +51,6 @@
 (define-key counsel-mode-map [remap execute-extended-command] nil)
 (define-key counsel-mode-map [remap yank-pop] nil)
 
-(dolist (command '(execute-extended-command project-execute-extended-command))
-  (add-to-list 'ivy-completing-read-handlers-alist (cons command 'completing-read-default)))
-
 
 
 ;;* bindings
@@ -76,7 +68,6 @@
 (define-key ctl-x-l-map "f" 'counsel-fd) ; counsel-fd
 (define-key ctl-x-l-map "c" 'counsel-locate)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
-(define-key ctl-x-l-map "x" 'counsel-M-x)
 (define-key ctl-x-l-map "i" 'counsel-imenu)
 (define-key ctl-x-l-map "l" 'counsel-outline)
 (define-key ctl-x-l-map "y" 'counsel-yank-pop)
