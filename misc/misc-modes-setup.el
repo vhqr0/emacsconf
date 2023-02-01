@@ -19,3 +19,6 @@
 ;;; lisp
 (add-to-list '+package 'sly)
 (setq inferior-lisp-program "sbcl")
+
+;;; latex
+(add-to-list '+package 'auctex)
