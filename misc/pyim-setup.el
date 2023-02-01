@@ -1,12 +1,19 @@
 (add-to-list '+package 'pyim)
 (add-to-list '+package 'pyim-basedict)
 
-;; (add-to-list '+package 'posframe)
-;; (add-to-list '+package 'popon)
-;; (setq pyim-page-tooltip '(posframe popon minibuffer))
-;; (with-eval-after-load 'pyim
-;;   (require 'posframe)
-;;   (require 'popon))
+(defvar +pyim-page-tooltip '(posframe popon))
+
+(unless (listp +pyim-page-tooltip)
+  (setq +pyim-page-tooltip (list +pyim-page-tooltip)))
+
+(dolist (pkg '(posframe popon popup))
+  (when (memq pkg +pyim-page-tooltip)
+    (add-to-list '+package pkg)))
+
+(with-eval-after-load 'pyim
+  (dolist (pkg '(posframe popon popup))
+    (when (memq pkg +pyim-page-tooltip)
+      (require pkg))))
 
 
 
@@ -81,6 +88,7 @@
 (setq pyim-default-scheme 'zirjma
       pyim-enable-shortcode nil
       pyim-pinyin-fuzzy-alist nil
+      pyim-page-tooltip +pyim-page-tooltip
       pyim-punctuation-dict +pyim-punctuation-dict)
 
 (with-eval-after-load 'pyim
