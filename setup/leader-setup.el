@@ -2,10 +2,6 @@
 
 
 
-(defvar evil-leader-map (make-sparse-keymap))
-
-
-
 ;;* maps
 
 (define-key evil-leader-map "\C-u" 'universal-argument)

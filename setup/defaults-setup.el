@@ -140,17 +140,6 @@ Override: fix join lines leave space between CJK chars."
       read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t)
 
-(setq hippie-expand-try-functions-list
-      '(try-complete-file-name-partially
-        try-complete-file-name
-        yas-hippie-try-expand           ; Notice: yasnippet
-        try-expand-line
-        try-expand-dabbrev
-        try-expand-dabbrev-all-buffers
-        try-complete-lisp-symbol-partially
-        try-complete-lisp-symbol))
-
-(global-set-key "\M-/" 'hippie-expand)
 (global-set-key (kbd "C-M-_") 'dabbrev-completion) ; for terminal
 
 
@@ -170,6 +159,9 @@ Override: fix join lines leave space between CJK chars."
 
 
 ;;* maps
+
+;;** ctl-x-map
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;;** help
 (define-key help-map "t"  nil)
@@ -192,7 +184,9 @@ Override: fix join lines leave space between CJK chars."
 ;;** ctl-x-l-map
 (defvar ctl-x-l-map (make-sparse-keymap))
 (define-key ctl-x-map "l" ctl-x-l-map)
-(define-key ctl-x-l-map "b" 'ibuffer)
+
+;;** evil-leader-map
+(defvar evil-leader-map (make-sparse-keymap))
 
 
 

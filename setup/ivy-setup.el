@@ -6,7 +6,6 @@
 
 (setq ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
-      ivy-virtual-abbreviate 'full
       ivy-dispatching-done-columns 3    ; `ivy-hydra-read-action' columns
       ivy-read-action-function 'ivy-hydra-read-action)
 
@@ -48,9 +47,6 @@
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 
-(define-key counsel-mode-map [remap execute-extended-command] nil)
-(define-key counsel-mode-map [remap yank-pop] nil)
-
 
 
 ;;* bindings
@@ -68,6 +64,7 @@
 (define-key ctl-x-l-map "f" 'counsel-fd) ; counsel-fd
 (define-key ctl-x-l-map "c" 'counsel-locate)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
+(define-key ctl-x-l-map "b" 'counsel-bookmark)
 (define-key ctl-x-l-map "i" 'counsel-imenu)
 (define-key ctl-x-l-map "l" 'counsel-outline)
 (define-key ctl-x-l-map "y" 'counsel-yank-pop)
@@ -100,6 +97,14 @@
 ;;** find-file
 
 (define-key counsel-find-file-map "\C-l" 'counsel-up-directory)
+
+;;** yank-pop
+
+(defun +counsel-yank-pop-around (func &rest args)
+  (let ((enable-recursive-minibuffers t)) ; enable in minibuffer
+    (apply func args)))
+
+(advice-add 'counsel-yank-pop :around '+counsel-yank-pop-around)
 
 ;;** grep
 
