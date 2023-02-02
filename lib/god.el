@@ -66,4 +66,38 @@
 ;;;###autoload
 (defun god-C-c () (interactive) (god-execute "C-c"))
 
+
+
+(defvar god-S-translation-alist
+  '((?a  . ?A) (?b  . ?B) (?c  . ?C ) (?d  . ?D )
+    (?e  . ?E) (?f  . ?F) (?g  . ?G ) (?h  . ?H )
+    (?i  . ?I) (?j  . ?J) (?k  . ?K ) (?l  . ?L )
+    (?m  . ?M) (?n  . ?N) (?o  . ?O ) (?p  . ?P )
+    (?q  . ?Q) (?r  . ?R) (?s  . ?S ) (?t  . ?T )
+    (?u  . ?U) (?v  . ?V) (?w  . ?W ) (?x  . ?X )
+    (?y  . ?Y) (?z  . ?Z) (?1  . ?! ) (?2  . ?@ )
+    (?3  . ?#) (?4  . ?$) (?5  . ?% ) (?6  . ?^ )
+    (?7  . ?&) (?8  . ?*) (?9  . ?\() (?0  . ?\))
+    (?`  . ?~) (?-  . ?_) (?=  . ?+ ) (?\[ . ?{ )
+    (?\] . ?}) (?\\ . ?|) (?\; . ?: ) (?'  . ?\")
+    (?,  . ?<) (?.  . ?>) (?/  . ?? )
+    ))
+
+;;;###autoload
+(defun god-S ()
+  (interactive)
+  (let* ((key (read-key "S-"))
+         (trans (cdr (assq key god-S-translation-alist)))
+         (binding (when trans (key-binding (vector trans)))))
+    (if (commandp binding)
+        (if (not (commandp binding t))
+            (execute-kbd-macro binding)
+          (setq last-command-event trans
+                this-command binding
+                real-this-command binding)
+          (call-interactively binding))
+      (user-error "god-S lookup failed"))))
+
+
+
 (provide 'god)
