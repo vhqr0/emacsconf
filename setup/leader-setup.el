@@ -2,10 +2,6 @@
 
 
 
-(require 'god)
-
-
-
 ;;* layout
 
 (define-key god-leader-map "1"       'delete-other-windows)
@@ -45,15 +41,3 @@
 (define-key god-leader-map ","  'xref-pop-marker-stack)
 (define-key god-leader-map "."  'xref-find-definitions)
 (define-key god-leader-map "?"  'xref-find-references)
-
-
-
-;;* set leader
-
-(define-key evil-motion-state-map  "\s" 'god-execute-with-keymap)
-(define-key evil-special-state-map "\s" 'god-execute-with-keymap)
-
-(general-define-key
- :states '(motion normal visual operator)
- :keymaps 'override
- "SPC" 'god-execute-with-keymap)

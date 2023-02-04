@@ -33,13 +33,6 @@
 (global-set-key "\M-z" [escape])
 (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
 
-(define-key evil-window-map "u" 'winner-undo)
-(define-key evil-window-map "U" 'winner-redo)
-(define-key evil-window-map "w" 'ace-window)
-(define-key evil-window-map "\C-w" 'ace-window)
-
-
-
 ;;* initial state
 
 (evil-define-state special
@@ -155,3 +148,23 @@
 (define-key evil-outer-text-objects-map "h"  '+evil-tobj-entire)
 
 (evil-tobj-x-default-keybindings)
+
+
+
+;;* leader
+
+(defun +god-S ()
+  (interactive)
+  (let (god-modifier-alist)
+    (god-execute nil '("S-"))))
+
+(define-key evil-motion-state-map ","  '+god-S)
+(define-key evil-motion-state-map "z," 'evil-repeat-find-char-reverse)
+
+(define-key evil-motion-state-map  "\s" 'god-execute-with-keymap)
+(define-key evil-special-state-map "\s" 'god-execute-with-keymap)
+
+(general-define-key
+ :states '(motion normal visual operator)
+ :keymaps 'override
+ "SPC" 'god-execute-with-keymap)

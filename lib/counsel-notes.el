@@ -33,7 +33,7 @@ leading and trailing hyphen."
 (defun counsel-notes ()
   (interactive)
   (if current-prefix-arg
-      (let ((directory (if (>= (prefix-numeric-value current-prefix-arg) 5)
+      (let ((directory (if (>= (prefix-numeric-value current-prefix-arg) 16)
                            (expand-file-name "posts" counsel-notes-directory)
                          counsel-notes-directory))
             (time (current-time))

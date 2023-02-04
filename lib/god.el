@@ -1,3 +1,4 @@
+;;;###autoload
 (defvar god-leader-map (make-sparse-keymap))
 
 (defvar god-upcase-char-alist
@@ -30,10 +31,10 @@
     ("\C-h" . help)
     ("\C-q" . quoted)
     ("SPC"  . "")
-    ("h"    . "S-")
-    ("M"    . "M-")
-    ("C"    . "C-")
-    ("S"    . "s-")))
+    ("S"    . "S-")
+    ("\C-a" . "M-")
+    ("\C-c" . "C-")
+    ("\C-s" . "s-")))
 
 (defvar god-guess-modifier-list '("C-" "M-" ""))
 

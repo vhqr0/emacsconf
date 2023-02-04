@@ -64,7 +64,7 @@ INITIAL-DIRECTORY and FD-OPTIONS.
  With a `\\[universal-argument] \\[universal-argument]' prefix
 argument, call `counsel-locate' instead."
   (interactive)
-  (if (>= (prefix-numeric-value current-prefix-arg) 5) ; more than one C-u
+  (if (>= (prefix-numeric-value current-prefix-arg) 16) ; more than one C-u
       (counsel-locate initial-input)
     (let ((default-directory (or initial-directory
                                  (and current-prefix-arg

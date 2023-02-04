@@ -111,10 +111,6 @@ Override: fix join lines leave space between CJK chars."
 (define-key undo-repeat-map "U" 'undo-redo)
 (put 'undo-redo 'repeat-map 'undo-repeat-map)
 
-(with-eval-after-load 'winner
-  (define-key winner-repeat-map "u" 'winner-undo)
-  (define-key winner-repeat-map "U" 'winner-redo))
-
 (with-eval-after-load 'dired
   (put 'dired-jump 'repeat-map nil))
 
@@ -163,7 +159,7 @@ Override: fix join lines leave space between CJK chars."
 ;;** ctl-x-map
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-;;** help
+;;** help-map
 (define-key help-map "t"  nil)
 (define-key help-map "tt" 'load-theme)
 (define-key help-map "tf" 'load-file)
