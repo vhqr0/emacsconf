@@ -155,15 +155,3 @@
 (define-key evil-outer-text-objects-map "h"  '+evil-tobj-entire)
 
 (evil-tobj-x-default-keybindings)
-
-
-
-;;* leader
-
-(define-key evil-motion-state-map  "\s" evil-leader-map)
-(define-key evil-special-state-map "\s" evil-leader-map)
-
-(general-define-key
- :states '(motion normal visual operator)
- :keymaps 'override
- "SPC" evil-leader-map)

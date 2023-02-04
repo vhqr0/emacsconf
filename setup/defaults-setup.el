@@ -185,9 +185,6 @@ Override: fix join lines leave space between CJK chars."
 (defvar ctl-x-l-map (make-sparse-keymap))
 (define-key ctl-x-map "l" ctl-x-l-map)
 
-;;** evil-leader-map
-(defvar evil-leader-map (make-sparse-keymap))
-
 
 
 ;;* aliases

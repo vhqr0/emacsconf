@@ -1,3 +1,5 @@
+(defvar god-leader-map (make-sparse-keymap))
+
 (defvar god-upcase-char-alist
   '((?a  . ?A) (?b  . ?B) (?c  . ?C ) (?d  . ?D )
     (?e  . ?E) (?f  . ?F) (?g  . ?G ) (?h  . ?H )
@@ -24,19 +26,18 @@
     (escape . "ESC")))
 
 (defvar god-modifier-alist
-  '(("f1"   . help)
+  '(("<f1>" . help)
     ("\C-h" . help)
-    ("\C-q" . quoted-insert)
-    ("h"    . upcase-insert)
-    ("DEL"  . clear)
+    ("\C-q" . quoted)
     ("SPC"  . "")
+    ("h"    . "S-")
     ("M"    . "M-")
     ("C"    . "C-")
     ("S"    . "s-")))
 
-(defvar god-guess-modifier-list '("C-" "" "M-"))
+(defvar god-guess-modifier-list '("C-" "M-" ""))
 
-(defvar god-guess-initial-list '("" "C-x"))
+(defvar god-guess-initial-list '("C-x"))
 
 (defun god-upcase-char (char)
   (or (cdr (assq char god-upcase-char-alist)) char))
@@ -44,7 +45,7 @@
 (defun god-char-to-string (char)
   (cond ((cdr (assq char god-special-char-alist)))
         ((symbolp char)
-         (symbol-name char))
+         (format "<%s>" (symbol-name char)))
         ((stringp char)
          char)
         ((integerp char)
@@ -59,13 +60,8 @@
     (cond ((eq modifier 'help)
            (execute-kbd-macro (kbd (concat prev-keys " C-h")))
            (god-read-event prev-keys modifier-list))
-          ((eq modifier 'clear)
-           (god-read-event prev-keys))
-          ((eq modifier 'quoted-insert)
+          ((eq modifier 'quoted)
            (cons (god-char-to-string (read-key "\\C-q?"))
-                 modifier-list))
-          ((eq modifier 'upcase-insert)
-           (cons (god-char-to-string (god-upcase-char (read-key "\\C-Q?")))
                  modifier-list))
           ((and (stringp modifier)
                 (not (member modifier modifier-list)))
@@ -105,6 +101,12 @@
          (modifier-list (cdr event)))
     (if (not modifier-list)
         (god-guess prev-keys key)
+      (when (and (member "S-" modifier-list)
+                 (= (length key) 1))
+        (let ((uchar (cdr (assq (string-to-char key) god-upcase-char-alist))))
+          (when uchar
+            (setq key (god-char-to-string uchar)
+                  modifier-list (remove "S-" modifier-list)))))
       (let* ((keys (apply 'concat `(,prev-keys " " ,@(reverse modifier-list) ,key)))
              (keyseq (read-kbd-macro keys)))
         (list (key-binding keyseq) keys keyseq)))))
@@ -145,5 +147,23 @@
             real-this-command binding)
       (call-interactively binding))))
 
+;;;###autoload
+(defun god-execute-with-keymap (&optional keymap)
+  (interactive)
+  (setq keymap (or keymap god-leader-map))
+  (let* ((char (god-read-args))
+         (binding (lookup-key keymap (vector char))))
+    (cond ((keymapp binding)
+           (set-transient-map binding))
+          ((commandp binding t)
+           (setq binding (or (command-remapping binding) binding)
+                 last-command-event char
+                 this-command binding
+                 real-this-command binding)
+           (call-interactively binding))
+          ((commandp binding)
+           (execute-kbd-macro binding))
+          (t
+           (god-execute nil nil char)))))
 
 (provide 'god)
