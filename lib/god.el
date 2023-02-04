@@ -1,74 +1,4 @@
-(defvar god-default-modifier "C-")
-
-(defvar god-modifier-alist
-  '(("\s" . "") ("g" . "M-") ("h" . "C-")))
-
-(defvar god-special-char-alist
-  '((tab . "TAB")
-    (backspace . "DEL")
-    (return . "RET")))
-
-(defun god-char-to-string (char)
-  (cond ((symbolp char)
-         (or (cdr (assq char god-special-char-alist)) ""))
-        ((stringp char)
-         char)
-        ((integerp char)
-         (char-to-string char))
-        (t
-         (user-error "god-char-to-string: invalid char"))))
-
-(defun god-read-event (prev-keys &optional modifiers event)
-  (let* ((event (or event (read-key (concat prev-keys " " modifiers))))
-         (key (god-char-to-string event))
-         (modifier (cdr (assoc key god-modifier-alist))))
-    (cond ((memq event '(?\C-h f1 help))
-           (execute-kbd-macro (kbd (concat prev-keys " C-h")))
-           (god-read-event prev-keys modifiers))
-          (modifier
-           (god-read-event prev-keys (concat modifiers modifier)))
-          (t
-           (cons (or modifiers god-default-modifier) key)))))
-
-(defun god-lookup-key-1 (keys)
-  (let* ((keyseq (read-kbd-macro keys t))
-         (binding (key-binding keyseq)))
-    (when binding
-      (list binding keys keyseq))))
-
-(defun god-lookup-key (prev-keys &optional event)
-  (let* ((event (god-read-event prev-keys nil event))
-         (binding (or (god-lookup-key-1 (concat prev-keys " " (car event) (cdr event)))
-                      (god-lookup-key-1 (concat prev-keys " " (cdr event))))))
-    (cond ((and binding (keymapp (car binding)))
-           (god-lookup-key (cadr binding)))
-          ((and binding (commandp (car binding)))
-           binding)
-          (t
-           (user-error "god-lookup-key: lookup failed")))))
-
-;;;###autoload
-(defun god-execute (&optional prev-keys)
-  (interactive)
-  (let* ((binding (god-lookup-key prev-keys))
-         (keyseq (caddr binding))
-         (binding (car binding)))
-    (if (not (commandp binding t))
-        (execute-kbd-macro binding)
-      (setq last-command-event (aref keyseq (1- (length keyseq)))
-            this-command binding
-            real-this-command binding)
-      (call-interactively binding))))
-
-;;;###autoload
-(defun god-C-x () (interactive) (god-execute "C-x"))
-
-;;;###autoload
-(defun god-C-c () (interactive) (god-execute "C-c"))
-
-
-
-(defvar god-S-translation-alist
+(defvar god-upcase-char-alist
   '((?a  . ?A) (?b  . ?B) (?c  . ?C ) (?d  . ?D )
     (?e  . ?E) (?f  . ?F) (?g  . ?G ) (?h  . ?H )
     (?i  . ?I) (?j  . ?J) (?k  . ?K ) (?l  . ?L )
@@ -80,24 +10,140 @@
     (?7  . ?&) (?8  . ?*) (?9  . ?\() (?0  . ?\))
     (?`  . ?~) (?-  . ?_) (?=  . ?+ ) (?\[ . ?{ )
     (?\] . ?}) (?\\ . ?|) (?\; . ?: ) (?'  . ?\")
-    (?,  . ?<) (?.  . ?>) (?/  . ?? )
-    ))
+    (?,  . ?<) (?.  . ?>) (?/  . ?? )            ))
+
+(defvar god-special-char-alist
+  '((?\s . "SPC")
+    (?\t . "TAB")
+    (?\r . "RET")
+    (?\d . "DEL")
+    (?\e . "ESC")
+    (tab . "TAB")
+    (return . "RET")
+    (backspace . "DEL")
+    (escape . "ESC")))
+
+(defvar god-modifier-alist
+  '(("f1"   . help)
+    ("\C-h" . help)
+    ("\C-q" . quoted-insert)
+    ("h"    . upcase-insert)
+    ("DEL"  . clear)
+    ("SPC"  . "")
+    ("M"    . "M-")
+    ("C"    . "C-")
+    ("S"    . "s-")))
+
+(defvar god-guess-modifier-list '("C-" "" "M-"))
+
+(defvar god-guess-initial-list '("" "C-x"))
+
+(defun god-upcase-char (char)
+  (or (cdr (assq char god-upcase-char-alist)) char))
+
+(defun god-char-to-string (char)
+  (cond ((cdr (assq char god-special-char-alist)))
+        ((symbolp char)
+         (symbol-name char))
+        ((stringp char)
+         char)
+        ((integerp char)
+         (char-to-string char))
+        (t
+         (user-error "god-char-to-string: invalid char"))))
+
+(defun god-read-event (&optional prev-keys modifier-list char)
+  (let* ((char (or char (read-key (apply 'concat `(,prev-keys " " ,@(reverse modifier-list))))))
+         (key (god-char-to-string char))
+         (modifier (cdr (assoc key god-modifier-alist))))
+    (cond ((eq modifier 'help)
+           (execute-kbd-macro (kbd (concat prev-keys " C-h")))
+           (god-read-event prev-keys modifier-list))
+          ((eq modifier 'clear)
+           (god-read-event prev-keys))
+          ((eq modifier 'quoted-insert)
+           (cons (god-char-to-string (read-key "\\C-q?"))
+                 modifier-list))
+          ((eq modifier 'upcase-insert)
+           (cons (god-char-to-string (god-upcase-char (read-key "\\C-Q?")))
+                 modifier-list))
+          ((and (stringp modifier)
+                (not (member modifier modifier-list)))
+           (god-read-event prev-keys (cons modifier modifier-list)))
+          (t
+           (cons key modifier-list)))))
+
+(defun god-guess-initial (key)
+  (let ((bindings (cl-reduce 'append
+                             (mapcar (lambda (initial)
+                                       (mapcar (lambda (modifier)
+                                                 (let* ((keys (concat initial " " modifier key))
+                                                        (keyseq (read-kbd-macro keys t)))
+                                                   (list (key-binding keyseq) keys keyseq)))
+                                               god-guess-modifier-list))
+                                     god-guess-initial-list))))
+    (cl-find-if (lambda (x) (keymapp (car x))) bindings)))
+
+(defun god-guess-modifier (prev-keys key)
+  (let ((bindings (mapcar (lambda (modifier)
+                            (let* ((keys (concat prev-keys " " modifier key))
+                                   (keyseq (read-kbd-macro keys t)))
+                              (list (key-binding keyseq) keys keyseq)))
+                          god-guess-modifier-list)))
+    (or (cl-find-if (lambda (x) (keymapp (car x))) bindings)
+        (cl-find-if (lambda (x) (commandp (car x))) bindings))))
+
+(defun god-guess (prev-keys key)
+  (if (not prev-keys)
+      (or (god-guess-initial key)
+          (god-guess-modifier "" key))
+    (god-guess-modifier prev-keys key)))
+
+(defun god-read-command-1 (&optional prev-keys modifier-list char)
+  (let* ((event (god-read-event prev-keys modifier-list char))
+         (key (car event))
+         (modifier-list (cdr event)))
+    (if (not modifier-list)
+        (god-guess prev-keys key)
+      (let* ((keys (apply 'concat `(,prev-keys " " ,@(reverse modifier-list) ,key)))
+             (keyseq (read-kbd-macro keys)))
+        (list (key-binding keyseq) keys keyseq)))))
+
+(defun god-read-command (&optional prev-keys modifier-list char)
+  (let ((binding (god-read-command-1 prev-keys modifier-list char)))
+    (cond ((and binding (commandp (car binding)))
+           binding)
+          ((and binding (keymapp (car binding)))
+           (god-read-command (cadr binding)))
+          (t
+           (user-error "god-read failed")))))
+
+(defun god-read-args ()
+  (let ((char (read-key))
+        (prev-keys "C-u "))
+    (when (eq char ?u)
+      (setq current-prefix-arg '(4)
+            char (read-key prev-keys))
+      (while (eq char ?u)
+        (setq current-prefix-arg (list (* 4 (car current-prefix-arg)))
+              prev-keys (concat prev-keys "C-u ")
+              char (read-key prev-keys))))
+    char))
 
 ;;;###autoload
-(defun god-S ()
+(defun god-execute (&optional prev-keys modifier-list char)
   (interactive)
-  (let* ((key (read-key "S-"))
-         (trans (cdr (assq key god-S-translation-alist)))
-         (binding (when trans (key-binding (vector trans)))))
-    (if (commandp binding)
-        (if (not (commandp binding t))
-            (execute-kbd-macro binding)
-          (setq last-command-event trans
-                this-command binding
-                real-this-command binding)
-          (call-interactively binding))
-      (user-error "god-S lookup failed"))))
+  (unless (or prev-keys modifier-list char)
+    (setq char (god-read-args)))
+  (let* ((binding (god-read-command prev-keys modifier-list char))
+         (keyseq (caddr binding))
+         (binding (car binding)))
+    (if (not (commandp binding t))
+        (execute-kbd-macro binding)
+      (setq last-command-event (aref keyseq (1- (length keyseq)))
+            this-command binding
+            real-this-command binding)
+      (call-interactively binding))))
 
-
 
 (provide 'god)

@@ -20,7 +20,6 @@
     counsel
     hydra
     ivy-hydra
-    helpful
     amx
     wgrep
     magit

@@ -5,8 +5,7 @@
 ;;* maps
 
 (define-key evil-leader-map "\C-u" 'universal-argument)
-(define-key evil-leader-map "y"    'god-C-x) ; god
-(define-key evil-leader-map "c"    'god-C-c) ; god
+(define-key evil-leader-map "c"    (lambda () (interactive) (god-execute "C-c"))) ; god
 
 (define-key evil-leader-map "h"  help-map)
 (define-key evil-leader-map "g"  goto-map)

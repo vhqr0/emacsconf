@@ -206,7 +206,6 @@ Override: fix join lines leave space between CJK chars."
 ;;** avy
 (setq avy-single-candidate-jump nil
       avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
-(setq aw-dispatch-when-more-than 1)
 (define-key isearch-mode-map "\M-g" 'avy-isearch)
 (define-key goto-map "." 'avy-resume)
 (define-key goto-map "j" 'avy-goto-line)
@@ -221,3 +220,4 @@ Override: fix join lines leave space between CJK chars."
 (define-key projectile-command-map "x" 'project-execute-extended-command)
 (define-key projectile-command-map "e" 'projectile-run-eshell)
 (define-key projectile-command-map "s" 'projectile-run-shell)
+(global-set-key "\C-xp" projectile-command-map)

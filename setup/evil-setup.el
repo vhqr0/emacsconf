@@ -4,11 +4,11 @@
 
 ;;* basic
 
-(setq evil-disable-insert-state-bindings t
-      evil-want-keybinding nil
+(setq evil-want-keybinding nil
+      evil-want-C-w-delete t
+      evil-want-C-u-delete t
       evil-want-C-i-jump nil
       evil-want-C-u-scroll t
-      evil-want-C-w-delete nil
       evil-want-Y-yank-to-eol t
       evil-want-fine-undo t
       evil-undo-system 'undo-redo
@@ -26,22 +26,17 @@
 
 (evil-mode 1)
 (global-evil-surround-mode 1)
+
 (evil-collection-init)
 (setcdr (assq 'evil-collection-unimpaired-mode minor-mode-alist) '(""))
 
 (global-set-key "\M-z" [escape])
+(define-key minibuffer-local-map [escape] 'abort-recursive-edit)
 
-(define-key evil-insert-state-map "\C-r" 'evil-paste-from-register)
-
-(setq evil-ex-completion-map
-      (let ((map (make-sparse-keymap)))
-        (define-key map "\C-r"   'evil-paste-from-register)
-        (define-key map "\d"     'evil-ex-delete-backward-char)
-        (define-key map "\t"     'evil-ex-completion)
-        (define-key map [tab]    'evil-ex-completion)
-        (define-key map [escape] 'abort-recursive-edit)
-        map))
-(set-keymap-parent evil-ex-completion-map minibuffer-local-map)
+(define-key evil-window-map "u" 'winner-undo)
+(define-key evil-window-map "U" 'winner-redo)
+(define-key evil-window-map "w" 'ace-window)
+(define-key evil-window-map "\C-w" 'ace-window)
 
 
 

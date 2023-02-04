@@ -11,13 +11,6 @@
 
 (setq counsel-async-command-delay 0.25)
 
-(setq counsel-describe-symbol-function   'helpful-symbol
-      counsel-describe-variable-function 'helpful-variable
-      counsel-describe-function-function 'helpful-callable
-      counsel-descbinds-function         'helpful-callable)
-
-(setq helpful-max-buffers nil)
-
 (require 'ivy)
 (require 'swiper)
 (require 'counsel)
@@ -42,7 +35,6 @@
 (dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
   (define-key map [remap ivy-avy] 'swiper-avy))
 
-(define-key counsel-mode-map [remap describe-key] 'helpful-key)
 (define-key counsel-mode-map [remap dired] 'counsel-dired)
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)

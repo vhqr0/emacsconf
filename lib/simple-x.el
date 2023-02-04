@@ -137,12 +137,33 @@
       (occur (regexp-quote symbol)))))
 
 (defun narrow-to-paragraph ()
-  "Narrow to current paragraph."
+  "Make text outside current defun invisible."
   (interactive)
-  (save-mark-and-excursion
+  (save-excursion
     (widen)
-    (call-interactively 'mark-paragraph)
-    (call-interactively 'narrow-to-region)))
+    (let ((opoint (point))
+	  beg end)
+      (let ((here (point)))
+        (unless (eolp)
+	  (forward-char))
+        (backward-paragraph)
+        (when (< (point) here)
+          (goto-char here)
+          (backward-paragraph)))
+      (setq beg (point))
+      (forward-paragraph)
+      (setq end (point))
+      (while (looking-at "^\n")
+	(forward-line 1))
+      (unless (> (point) opoint)
+	(goto-char opoint)
+	(forward-paragraph)
+	(setq end (point))
+	(backward-paragraph)
+	(setq beg (point)))
+      (goto-char end)
+      (re-search-backward "^\n" (- (point) 1) t)
+      (narrow-to-region beg end))))
 
 (defun rotate-window (arg)
   "Rotate current window or swap it if called with prefix ARG."
