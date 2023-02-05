@@ -253,7 +253,6 @@
   (define-key ctl-x-x-map "o" 'xdg-open)
   (with-eval-after-load 'dired
     (define-key dired-mode-map [remap xdg-open] 'dired-do-xdg-open))
-  (define-key ctl-x-x-map "=" 'format-dwim)
 
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
   (define-key search-map (kbd "<f2>") 'occur-at-point)

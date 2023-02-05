@@ -112,6 +112,10 @@
   (interactive "<r>")
   (narrow-to-region beg end))
 
+(define-key evil-motion-state-map "gy" '+evil-operator-eval)
+(define-key evil-normal-state-map "gc" '+evil-operator-comment)
+(define-key evil-motion-state-map "g-" '+evil-operator-narrow)
+
 (evil-define-text-object +evil-tobj-filename (const &optional beg end type)
   (cl-destructuring-bind (beg . end)
       (bounds-of-thing-at-point 'filename)
@@ -130,23 +134,18 @@
 (evil-define-text-object +evil-tobj-entire (const &optional beg end type)
   (evil-range (point-min) (point-max) 'line))
 
-(define-key evil-motion-state-map       "gy" '+evil-operator-eval)
-(define-key evil-normal-state-map       "gc" '+evil-operator-comment)
-(define-key evil-motion-state-map       "g-" '+evil-operator-narrow)
-(define-key evil-inner-text-objects-map "r"  'evil-inner-bracket)
-(define-key evil-outer-text-objects-map "r"  'evil-a-bracket)
-(define-key evil-inner-text-objects-map "a"  'evil-inner-angle)
-(define-key evil-outer-text-objects-map "a"  'evil-an-angle)
-(define-key evil-inner-text-objects-map "F"  '+evil-tobj-filename)
-(define-key evil-outer-text-objects-map "F"  '+evil-tobj-filename)
-(define-key evil-inner-text-objects-map "f"  '+evil-tobj-defun)
-(define-key evil-outer-text-objects-map "f"  '+evil-tobj-defun)
-(define-key evil-inner-text-objects-map "P"  '+evil-tobj-page)
-(define-key evil-outer-text-objects-map "P"  '+evil-tobj-page)
-(define-key evil-inner-text-objects-map "h"  '+evil-tobj-entire)
-(define-key evil-outer-text-objects-map "h"  '+evil-tobj-entire)
-
-(evil-tobj-x-default-keybindings)
+(define-key evil-inner-text-objects-map "a" 'evil-inner-angle)
+(define-key evil-outer-text-objects-map "a" 'evil-an-angle)
+(define-key evil-inner-text-objects-map "r" 'evil-inner-bracket)
+(define-key evil-outer-text-objects-map "r" 'evil-a-bracket)
+(define-key evil-inner-text-objects-map "F" '+evil-tobj-filename)
+(define-key evil-outer-text-objects-map "F" '+evil-tobj-filename)
+(define-key evil-inner-text-objects-map "f" '+evil-tobj-defun)
+(define-key evil-outer-text-objects-map "f" '+evil-tobj-defun)
+(define-key evil-inner-text-objects-map "P" '+evil-tobj-page)
+(define-key evil-outer-text-objects-map "P" '+evil-tobj-page)
+(define-key evil-inner-text-objects-map "h" '+evil-tobj-entire)
+(define-key evil-outer-text-objects-map "h" '+evil-tobj-entire)
 
 
 

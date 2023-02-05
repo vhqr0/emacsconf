@@ -24,7 +24,7 @@
     ("\C-a" . "M-")
     ("\C-s" . "S-")))
 
-(defvar god-guess-modifier-list '("C-" "M-" ""))
+(defvar god-guess-modifier-list '("C-" ""))
 
 (defvar god-guess-initial-list '("C-x"))
 

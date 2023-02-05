@@ -4,9 +4,11 @@
 
 ;;* literal override
 
-(define-key god-leader-map "h" help-map)
-(define-key god-leader-map "g" goto-map)
-(define-key god-leader-map "s" search-map)
+(define-key god-leader-map "\e"     esc-map)
+(define-key god-leader-map [escape] esc-map)
+(define-key god-leader-map "h"      help-map)
+(define-key god-leader-map "g"      goto-map)
+(define-key god-leader-map "s"      search-map)
 
 
 
@@ -44,6 +46,7 @@
 (define-key god-leader-map "d"  'dired)
 (define-key god-leader-map "j"  'dired-jump)
 (define-key god-leader-map "e"  'eshell-dwim) ; simple-x
+(define-key god-leader-map "="  'format-dwim) ; simple-x
 (define-key god-leader-map ";"  'eval-expression)
 (define-key god-leader-map "!"  'shell-command)
 (define-key god-leader-map "&"  'async-shell-command)
