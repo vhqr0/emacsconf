@@ -1,20 +1,6 @@
 ;;;###autoload
 (defvar god-leader-map (make-sparse-keymap))
 
-(defvar god-upcase-char-alist
-  '((?a  . ?A) (?b  . ?B) (?c  . ?C ) (?d  . ?D )
-    (?e  . ?E) (?f  . ?F) (?g  . ?G ) (?h  . ?H )
-    (?i  . ?I) (?j  . ?J) (?k  . ?K ) (?l  . ?L )
-    (?m  . ?M) (?n  . ?N) (?o  . ?O ) (?p  . ?P )
-    (?q  . ?Q) (?r  . ?R) (?s  . ?S ) (?t  . ?T )
-    (?u  . ?U) (?v  . ?V) (?w  . ?W ) (?x  . ?X )
-    (?y  . ?Y) (?z  . ?Z) (?1  . ?! ) (?2  . ?@ )
-    (?3  . ?#) (?4  . ?$) (?5  . ?% ) (?6  . ?^ )
-    (?7  . ?&) (?8  . ?*) (?9  . ?\() (?0  . ?\))
-    (?`  . ?~) (?-  . ?_) (?=  . ?+ ) (?\[ . ?{ )
-    (?\] . ?}) (?\\ . ?|) (?\; . ?: ) (?'  . ?\")
-    (?,  . ?<) (?.  . ?>) (?/  . ?? )            ))
-
 (defvar god-special-char-alist
   '((?\s . "SPC")
     (?\t . "TAB")
@@ -31,17 +17,16 @@
     ("\C-h" . help)
     ("\C-q" . quoted)
     ("SPC"  . "")
-    ("S"    . "S-")
-    ("\C-a" . "M-")
+    ("C"    . "H-")
+    ("A"    . "A-")
+    ("S"    . "s-")
     ("\C-c" . "C-")
-    ("\C-s" . "s-")))
+    ("\C-a" . "M-")
+    ("\C-s" . "S-")))
 
 (defvar god-guess-modifier-list '("C-" "M-" ""))
 
 (defvar god-guess-initial-list '("C-x"))
-
-(defun god-upcase-char (char)
-  (or (cdr (assq char god-upcase-char-alist)) char))
 
 (defun god-char-to-string (char)
   (cond ((cdr (assq char god-special-char-alist)))
@@ -102,12 +87,6 @@
          (modifier-list (cdr event)))
     (if (not modifier-list)
         (god-guess prev-keys key)
-      (when (and (member "S-" modifier-list)
-                 (= (length key) 1))
-        (let ((uchar (cdr (assq (string-to-char key) god-upcase-char-alist))))
-          (when uchar
-            (setq key (god-char-to-string uchar)
-                  modifier-list (remove "S-" modifier-list)))))
       (let* ((keys (apply 'concat `(,prev-keys " " ,@(reverse modifier-list) ,key)))
              (keyseq (read-kbd-macro keys)))
         (list (key-binding keyseq) keys keyseq)))))

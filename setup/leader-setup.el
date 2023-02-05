@@ -2,10 +2,11 @@
 
 
 
-;;* remap
+;;* literal override
 
-(define-key god-leader-map "h" help-map) ; for spc h f/o
-(define-key god-leader-map "g" goto-map) ; for spc g i
+(define-key god-leader-map "h" help-map)
+(define-key god-leader-map "g" goto-map)
+(define-key god-leader-map "s" search-map)
 
 
 
@@ -18,6 +19,8 @@
 (define-key god-leader-map "o"       'other-window)
 (define-key god-leader-map "0"       'delete-window)
 (define-key god-leader-map "9"       'rotate-window) ; simple-x
+(define-key god-leader-map [left]    'previous-buffer)
+(define-key god-leader-map [right]   'next-buffer)
 (define-key god-leader-map "\t"      'evil-jump-backward)
 (define-key god-leader-map [tab]     'evil-jump-backward)
 (define-key god-leader-map [backtab] 'evil-jump-forward)
@@ -36,6 +39,7 @@
 
 (define-key god-leader-map "\s" 'execute-extended-command)
 (define-key god-leader-map "b"  'switch-to-buffer)
+(define-key god-leader-map "k"  'kill-buffer)
 (define-key god-leader-map "f"  'find-file)
 (define-key god-leader-map "d"  'dired)
 (define-key god-leader-map "j"  'dired-jump)
