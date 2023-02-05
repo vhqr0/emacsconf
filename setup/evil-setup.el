@@ -65,8 +65,7 @@
 ;;* jk
 
 (defun +evil-jk-j ()
-  (call-interactively
-   (lookup-key `(,(current-local-map) ,(current-global-map)) [?k])))
+  (call-interactively (key-binding [?k])))
 
 (defun +evil-jk ()
   (interactive)

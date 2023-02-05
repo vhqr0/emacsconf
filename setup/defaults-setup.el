@@ -183,14 +183,6 @@ Override: fix join lines leave space between CJK chars."
 
 
 
-;;* aliases
-(defalias 'oc 'occur)
-(defalias 'qr 'query-replace-regexp)
-(defalias 'make 'compile)
-(defalias 'remake 'recompile)
-
-
-
 ;;* extension
 
 ;;** simple-x

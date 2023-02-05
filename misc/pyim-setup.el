@@ -86,10 +86,12 @@
 (setq default-input-method "pyim")
 
 (setq pyim-default-scheme 'zirjma
-      pyim-enable-shortcode nil
       pyim-pinyin-fuzzy-alist nil
-      pyim-page-tooltip +pyim-page-tooltip
-      pyim-punctuation-dict +pyim-punctuation-dict)
+      pyim-enable-shortcode nil
+      pyim-candidates-search-buffer-p nil
+      pyim-indicator-list nil
+      pyim-punctuation-dict +pyim-punctuation-dict
+      pyim-page-tooltip +pyim-page-tooltip)
 
 (with-eval-after-load 'pyim
   (define-key pyim-mode-map "." 'pyim-page-next-page)

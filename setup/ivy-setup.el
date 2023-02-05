@@ -113,15 +113,11 @@
 
 ;;* tab-completion
 
-(defun +ivy-tab-completion (arg &optional command)
+(defun +ivy-tab-completion ()
   "Tab completion with `ivy-read'."
-  (interactive "P")
+  (interactive)
   (let* ((completion-in-region-function 'ivy-completion-in-region)
-         (command (or command
-                      (lookup-key `(,(current-local-map) ,(current-global-map))
-                                  (if arg
-                                      (read-key-sequence-vector "command: ")
-                                    (kbd "TAB")))))
+         (command (key-binding [?\C-i]))
          (command (if (memq command '(indent-for-tab-command c-indent-line-or-region))
                       'completion-at-point
                     command)))

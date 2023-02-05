@@ -2,6 +2,13 @@
 
 
 
+;;* remap
+
+(define-key god-leader-map "h" help-map) ; for spc h f/o
+(define-key god-leader-map "g" goto-map) ; for spc g i
+
+
+
 ;;* layout
 
 (define-key god-leader-map "1"       'delete-other-windows)
