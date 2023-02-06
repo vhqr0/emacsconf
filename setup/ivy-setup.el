@@ -56,7 +56,6 @@
 (define-key ctl-x-l-map "f" 'counsel-fd) ; counsel-fd
 (define-key ctl-x-l-map "c" 'counsel-locate)
 (define-key ctl-x-l-map "e" 'counsel-recentf)
-(define-key ctl-x-l-map "b" 'counsel-bookmark)
 (define-key ctl-x-l-map "i" 'counsel-imenu)
 (define-key ctl-x-l-map "l" 'counsel-outline)
 (define-key ctl-x-l-map "y" 'counsel-yank-pop)

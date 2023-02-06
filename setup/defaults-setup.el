@@ -52,7 +52,18 @@
       lock-file-name-transforms      `((".*"   ,(expand-file-name "lock/"      user-emacs-directory) t))
       trash-directory                           (expand-file-name "trash/"     user-emacs-directory)    )
 
-(setq auto-save-visited-interval 1)
+(defun +auto-save-visited-predicate ()
+  (not (or (and (bound-and-true-p company-mode) ; company
+                company-candidates)
+           (and (bound-and-true-p yas-minor-mode) ; yasnippet
+                yas--active-snippets)
+           (and (bound-and-true-p undo-tree-mode) ; undo-tree
+                (eq (with-current-buffer (window-buffer (selected-window))
+                      undo-tree-visualizer-parent-buffer)
+                    (current-buffer))))))
+
+(setq auto-save-visited-interval 1
+      auto-save-visited-predicate '+auto-save-visited-predicate)
 (auto-save-visited-mode 1)
 (add-to-list 'minor-mode-alist '(auto-save-visited-mode " ASV"))
 
@@ -107,10 +118,6 @@ Override: fix join lines leave space between CJK chars."
 
 (repeat-mode 1)
 
-(global-set-key (kbd "C-x U") 'undo-redo)
-(define-key undo-repeat-map "U" 'undo-redo)
-(put 'undo-redo 'repeat-map 'undo-repeat-map)
-
 (with-eval-after-load 'dired
   (put 'dired-jump 'repeat-map nil))
 
@@ -156,9 +163,6 @@ Override: fix join lines leave space between CJK chars."
 
 ;;* maps
 
-;;** ctl-x-map
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
 ;;** help-map
 (define-key help-map "t"  nil)
 (define-key help-map "tt" 'load-theme)
@@ -180,6 +184,8 @@ Override: fix join lines leave space between CJK chars."
 ;;** ctl-x-l-map
 (defvar ctl-x-l-map (make-sparse-keymap))
 (define-key ctl-x-map "l" ctl-x-l-map)
+(define-key ctl-x-l-map "b" 'ibuffer)
+(define-key ctl-x-l-map "u" 'undo-tree-visualize) ; undo-tree
 
 
 

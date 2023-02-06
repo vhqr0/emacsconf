@@ -11,7 +11,9 @@
       evil-want-C-u-scroll t
       evil-want-Y-yank-to-eol t
       evil-want-fine-undo t
-      evil-undo-system 'undo-redo
+      evil-undo-system 'undo-tree
+      evil-search-module 'evil-search
+      evil-ex-search-persistent-highlight nil
       evil-symbol-word-search t
       evil-respect-visual-line-mode t)
 
@@ -19,10 +21,8 @@
 (require 'evil-surround)
 (require 'evil-collection)
 
-(setq-default evil-surround-pairs-alist
-              (append evil-surround-pairs-alist
-                      '((?a . ("<" . ">"))
-                        (?r . ("[" . "]")))))
+(global-undo-tree-mode 1)
+(setcdr (assq 'undo-tree-mode minor-mode-alist) '(""))
 
 (evil-mode 1)
 (global-evil-surround-mode 1)
@@ -32,6 +32,15 @@
 
 (global-set-key "\M-z" [escape])
 (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
+
+;;* workaround
+
+;; https://github.com/emacs-evil/evil/pull/1128
+(defun +evil-ex-search-after (&optional count)
+  (unless evil-ex-search-persistent-highlight
+    (sit-for 0.3)
+    (evil-ex-delete-hl 'evil-ex-search)))
+(advice-add 'evil-ex-search :after '+evil-ex-search-after)
 
 ;;* initial state
 
@@ -134,10 +143,6 @@
 (evil-define-text-object +evil-tobj-entire (const &optional beg end type)
   (evil-range (point-min) (point-max) 'line))
 
-(define-key evil-inner-text-objects-map "a" 'evil-inner-angle)
-(define-key evil-outer-text-objects-map "a" 'evil-an-angle)
-(define-key evil-inner-text-objects-map "r" 'evil-inner-bracket)
-(define-key evil-outer-text-objects-map "r" 'evil-a-bracket)
 (define-key evil-inner-text-objects-map "F" '+evil-tobj-filename)
 (define-key evil-outer-text-objects-map "F" '+evil-tobj-filename)
 (define-key evil-inner-text-objects-map "f" '+evil-tobj-defun)
