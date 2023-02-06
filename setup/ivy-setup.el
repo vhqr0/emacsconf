@@ -4,6 +4,8 @@
 
 ;;* basic
 
+(autoload 'ivy-avy "ivy-avy" "" t)
+
 (setq ivy-count-format "(%d/%d) "
       ivy-use-virtual-buffers t
       ivy-dispatching-done-columns 3    ; `ivy-hydra-read-action' columns
@@ -11,18 +13,13 @@
 
 (setq counsel-async-command-delay 0.25)
 
-(require 'ivy)
-(require 'swiper)
-(require 'counsel)
-(autoload 'ivy-avy "ivy-avy" "" t)
-
-(setq ivy--sources-list nil)            ; remove `ivy-switch-buffer' view source
-
 (ivy-mode 1)
 (counsel-mode 1)
 
 (dolist (mode '(ivy-mode counsel-mode))
   (setcdr (assq mode minor-mode-alist) '("")))
+
+(setq ivy--sources-list nil)            ; remove `ivy-switch-buffer' view source
 
 
 

@@ -4,6 +4,9 @@
 
 ;;* basic
 
+(setq undo-tree-mode-lighter nil
+      undo-tree-auto-save-history nil)
+
 (setq evil-want-keybinding nil
       evil-want-C-w-delete t
       evil-want-C-u-delete t
@@ -17,12 +20,7 @@
       evil-symbol-word-search t
       evil-respect-visual-line-mode t)
 
-(require 'evil)
-(require 'evil-surround)
-(require 'evil-collection)
-
 (global-undo-tree-mode 1)
-(setcdr (assq 'undo-tree-mode minor-mode-alist) '(""))
 
 (evil-mode 1)
 (global-evil-surround-mode 1)

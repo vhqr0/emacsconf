@@ -11,7 +11,8 @@
                             ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 (defvar +package
-  '(evil
+  '(undo-tree
+    evil
     evil-surround
     evil-collection
     general
