@@ -19,8 +19,6 @@
 (dolist (mode '(ivy-mode counsel-mode))
   (setcdr (assq mode minor-mode-alist) '("")))
 
-(setq ivy--sources-list nil)            ; remove `ivy-switch-buffer' view source
-
 
 
 ;;* map
@@ -45,9 +43,12 @@
 (define-key search-map "s" 'swiper)
 (define-key isearch-mode-map [remap swiper] 'swiper-from-isearch)
 
+(define-key ctl-x-r-map "v" 'ivy-push-view)
+(define-key ctl-x-r-map "V" 'ivy-pop-view)
 (define-key ctl-x-r-map "e" 'counsel-recentf)
 
 (define-key ctl-x-l-map "." 'ivy-resume)
+(define-key ctl-x-l-map "v" 'ivy-switch-view)
 (define-key ctl-x-l-map "s" 'swiper)
 (define-key ctl-x-l-map "g" 'counsel-rg)
 (define-key ctl-x-l-map "f" 'counsel-fd) ; counsel-fd

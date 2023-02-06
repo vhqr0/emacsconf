@@ -72,7 +72,13 @@
 ;;* jk
 
 (defun +evil-jk-j ()
-  (call-interactively (key-binding [?k])))
+  (let* ((binding (key-binding [?k]))
+         (binding (if (commandp binding t)
+                      binding
+                    'self-insert-command)))
+    (setq this-command binding
+          real-this-command binding)
+    (call-interactively binding)))
 
 (defun +evil-jk ()
   (interactive)
@@ -81,7 +87,10 @@
            (not (sit-for 0.2 'no-redisplay)))
       (let ((next-char (read-event)))
         (if (eq next-char ?k)
-            (push 'escape unread-command-events)
+            (progn
+              (setq this-command 'ignore
+                    real-this-command 'ignore)
+              (push 'escape unread-command-events))
           (+evil-jk-j)
           (push next-char unread-command-events)))
     (+evil-jk-j)))
