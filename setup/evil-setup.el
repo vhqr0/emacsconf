@@ -29,7 +29,7 @@
 (setcdr (assq 'evil-collection-unimpaired-mode minor-mode-alist) '(""))
 
 (global-set-key "\M-z" [escape])
-(define-key minibuffer-local-map [escape] 'abort-recursive-edit)
+(define-key minibuffer-local-map [escape] 'keyboard-escape-quit)
 
 ;;* workaround
 

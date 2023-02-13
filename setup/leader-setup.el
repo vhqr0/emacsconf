@@ -4,8 +4,9 @@
 
 ;;* literal override
 
-(define-key god-leader-map "\e"     esc-map)
-(define-key god-leader-map [escape] esc-map)
+(define-key god-leader-map "\e"     'keyboard-escape-quit)
+(define-key god-leader-map [escape] 'keyboard-escape-quit)
+
 (define-key god-leader-map "h"      help-map)
 (define-key god-leader-map "g"      goto-map)
 (define-key god-leader-map "s"      search-map)
