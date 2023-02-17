@@ -101,7 +101,7 @@
            (user-error "god-read failed")))))
 
 (defun god-read-args ()
-  (let ((char (read-key "god: "))
+  (let ((char (read-key "-- god --"))
         (prev-keys "C-u "))
     (when (eq char ?u)
       (setq current-prefix-arg '(4)

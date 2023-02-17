@@ -15,9 +15,11 @@
       "clip.exe"
     "xclip -selection clip"))
 
-(defun xclip (beg end)
+(defun xclip (&optional beg end)
   "Xclip or clip.exe on Windows wrap for copy regin (BEG . END)."
-  (interactive "r")
+  (interactive (if (region-active-p)
+                   (list (region-beginning) (region-end))
+                 (list (point-min) (point-max))))
   (call-shell-region beg end xclip-command)
   (deactivate-mark))
 
@@ -250,6 +252,7 @@
 
 ;;;###autoload
 (defun simple-x-default-keybindings ()
+  (define-key ctl-x-x-map "c" 'xclip)
   (define-key ctl-x-x-map "o" 'xdg-open)
   (with-eval-after-load 'dired
     (define-key dired-mode-map [remap xdg-open] 'dired-do-xdg-open))
