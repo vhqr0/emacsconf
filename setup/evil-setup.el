@@ -10,7 +10,6 @@
 (setq evil-want-keybinding nil
       evil-want-C-w-delete t
       evil-want-C-u-delete t
-      evil-want-C-i-jump nil
       evil-want-C-u-scroll t
       evil-want-Y-yank-to-eol t
       evil-want-fine-undo t
@@ -195,10 +194,11 @@
 (define-key evil-motion-state-map ","  +shift-prefix-map)
 (define-key evil-motion-state-map "z," 'evil-repeat-find-char-reverse)
 
-(define-key evil-motion-state-map  "\s" 'god-execute-with-keymap)
-(define-key evil-special-state-map "\s" 'god-execute-with-keymap)
+(define-key evil-motion-state-map  "\s" +leader-map)
+(define-key evil-special-state-map "\s" +leader-map)
 
 (general-define-key
  :states '(motion normal visual operator)
  :keymaps 'override
- "SPC" 'god-execute-with-keymap)
+ "SPC" +leader-map
+ "," +shift-prefix-map)

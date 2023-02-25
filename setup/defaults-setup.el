@@ -83,6 +83,10 @@
 (global-set-key (kbd "C-c r") 'raise-sexp)
 (global-set-key (kbd "C-c d") 'delete-pair)
 
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode 1)
+(global-hl-line-mode 1)
+
 
 
 ;;* wrap
@@ -127,9 +131,6 @@ Override: fix join lines leave space between CJK chars."
 
 (setq tab-bar-tab-hints t
       tab-bar-select-tab-modifiers '(super))
-
-(dotimes (i 10)
-  (define-key goto-map (format "t%d" i) (kbd (format "s-%d" i))))
 
 (define-key tab-prefix-map "`" 'toggle-frame-tab-bar)
 
@@ -195,15 +196,8 @@ Override: fix join lines leave space between CJK chars."
 (simple-x-default-keybindings)
 
 ;;** avy
-(setq avy-single-candidate-jump nil
-      avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
 (define-key isearch-mode-map "\M-g" 'avy-isearch)
-(define-key goto-map "." 'avy-resume)
 (define-key goto-map "j" 'avy-goto-line)
-(define-key goto-map "f" 'avy-goto-char)
-(define-key goto-map "w" 'avy-goto-word-0)
-(define-key goto-map "o" 'ace-window)
-(define-key goto-map "l" 'link-hint-open-link)
 
 ;;** projectile
 (projectile-mode 1)

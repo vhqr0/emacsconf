@@ -1,57 +1,54 @@
 ;;; -*- lexical-binding: t -*-
 
-
+(defvar +leader-map (make-sparse-keymap))
 
-;;* literal override
-
-(define-key god-leader-map "\e"     'keyboard-escape-quit)
-(define-key god-leader-map [escape] 'keyboard-escape-quit)
-
-(define-key god-leader-map "h"      help-map)
-(define-key god-leader-map "g"      goto-map)
-(define-key god-leader-map "s"      search-map)
+(define-key +leader-map "h" help-map)
+(define-key +leader-map "g" goto-map)
+(define-key +leader-map "s" search-map)
+(define-key +leader-map "n" narrow-map)
+(define-key +leader-map "v" vc-prefix-map)
+(define-key +leader-map "p" project-prefix-map)
+(with-eval-after-load 'projectile       ; projectile
+  (define-key +leader-map "p" projectile-command-map))
+(define-key +leader-map "l" ctl-x-l-map) ; default-setup
+(define-key +leader-map "r" ctl-x-r-map)
+(define-key +leader-map "x" ctl-x-x-map)
+(define-key +leader-map "4" ctl-x-4-map)
+(define-key +leader-map "5" ctl-x-5-map)
+(define-key +leader-map "t" tab-prefix-map)
+(with-eval-after-load 'evil             ; evil
+  (define-key +leader-map "w" evil-window-map))
 
 
 
 ;;* layout
 
-(define-key god-leader-map "1"       'delete-other-windows)
-(define-key god-leader-map "2"       'split-window-below)
-(define-key god-leader-map "3"       'split-window-right)
-(define-key god-leader-map "q"       'quit-window)
-(define-key god-leader-map "o"       'other-window)
-(define-key god-leader-map "0"       'delete-window)
-(define-key god-leader-map "9"       'rotate-window) ; simple-x
-(define-key god-leader-map [left]    'previous-buffer)
-(define-key god-leader-map [right]   'next-buffer)
-(define-key god-leader-map "\t"      'evil-jump-backward)
-(define-key god-leader-map [tab]     'evil-jump-backward)
-(define-key god-leader-map [backtab] 'evil-jump-forward)
-
-
-
-;;* pair
-
-(defun +insert-pair-1 (&optional arg) (interactive "P") (insert-pair (or arg '(1))))
-(dolist (pair insert-pair-alist)
-  (define-key god-leader-map `[,(car pair)] '+insert-pair-1))
+(define-key +leader-map "1"     'delete-other-windows)
+(define-key +leader-map "2"     'split-window-below)
+(define-key +leader-map "3"     'split-window-right)
+(define-key +leader-map "q"     'quit-window)
+(define-key +leader-map "o"     'other-window)
+(define-key +leader-map "0"     'delete-window)
+(define-key +leader-map "9"     'rotate-window) ; simple-x
+(define-key +leader-map [left]  'winner-undo)   ; winner
+(define-key +leader-map [right] 'winner-redo)   ; winner
 
 
 
 ;;* others
 
-(define-key god-leader-map "\s" 'execute-extended-command)
-(define-key god-leader-map "b"  'switch-to-buffer)
-(define-key god-leader-map "k"  'kill-buffer)
-(define-key god-leader-map "f"  'find-file)
-(define-key god-leader-map "j"  'dired-jump)
-(define-key god-leader-map "e"  'eshell-dwim) ; simple-x
-(define-key god-leader-map "="  'format-dwim) ; simple-x
-(define-key god-leader-map ";"  'eval-expression)
-(define-key god-leader-map "!"  'shell-command)
-(define-key god-leader-map "&"  'async-shell-command)
-(define-key god-leader-map "$"  'ispell-word)
-(define-key god-leader-map "%"  'query-replace-regexp)
-(define-key god-leader-map ","  'xref-pop-marker-stack)
-(define-key god-leader-map "."  'xref-find-definitions)
-(define-key god-leader-map "?"  'xref-find-references)
+(define-key +leader-map "\s" 'execute-extended-command)
+(define-key +leader-map "b"  'switch-to-buffer)
+(define-key +leader-map "k"  'kill-buffer)
+(define-key +leader-map "f"  'find-file)
+(define-key +leader-map "j"  'dired-jump)
+(define-key +leader-map "e"  'eshell-dwim) ; simple-x
+(define-key +leader-map "="  'format-dwim) ; simple-x
+(define-key +leader-map ";"  'eval-expression)
+(define-key +leader-map "!"  'shell-command)
+(define-key +leader-map "&"  'async-shell-command)
+(define-key +leader-map "$"  'ispell-word)
+(define-key +leader-map "%"  'query-replace-regexp)
+(define-key +leader-map ","  'xref-pop-marker-stack)
+(define-key +leader-map "."  'xref-find-definitions)
+(define-key +leader-map "?"  'xref-find-references)

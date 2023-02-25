@@ -4,9 +4,6 @@
 
 ;;* basic
 
-;;** display-line-numbers
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-
 ;;** xref
 (setq xref-search-program 'ripgrep)
 
