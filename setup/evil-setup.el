@@ -31,6 +31,10 @@
 (global-set-key "\M-z" [escape])
 (define-key minibuffer-local-map [escape] 'keyboard-escape-quit)
 
+(set-keymap-parent evil-ex-completion-map minibuffer-local-map)
+
+(define-key evil-normal-state-map [remap yank-pop] nil)
+
 ;;* workaround
 
 ;; https://github.com/emacs-evil/evil/pull/1128

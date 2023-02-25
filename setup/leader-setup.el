@@ -44,7 +44,6 @@
 (define-key god-leader-map "b"  'switch-to-buffer)
 (define-key god-leader-map "k"  'kill-buffer)
 (define-key god-leader-map "f"  'find-file)
-(define-key god-leader-map "d"  'dired)
 (define-key god-leader-map "j"  'dired-jump)
 (define-key god-leader-map "e"  'eshell-dwim) ; simple-x
 (define-key god-leader-map "="  'format-dwim) ; simple-x

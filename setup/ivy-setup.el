@@ -23,14 +23,14 @@
 
 ;;* map
 
+(set-keymap-parent ivy-minibuffer-map minibuffer-local-map)
+
 (define-key ivy-minibuffer-map (kbd "<f2>") 'ivy-occur)
 (define-key ivy-minibuffer-map "\M-s" 'ivy-restrict-to-matches)
-(define-key ivy-minibuffer-map "\M-." 'minibuffer-yank-symbol)
 (define-key ivy-minibuffer-map "\M-g" 'ivy-avy)
 (dolist (map (list swiper-map counsel-grep-map counsel-ag-map))
   (define-key map [remap ivy-avy] 'swiper-avy))
 
-(define-key counsel-mode-map [remap dired] 'counsel-dired)
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 
@@ -62,9 +62,6 @@
 (define-key ctl-x-l-map "k" 'counsel-kmacro)
 (define-key ctl-x-l-map "n" 'counsel-notes) ; counsel-notes
 
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "<f2>") 'counsel-company))
-
 
 
 ;;* workaround
@@ -82,6 +79,30 @@
 
 (ivy-add-actions 'counsel-describe-variable '(("s" +counsel--set-variable "set")))
 (ivy-add-actions 'counsel-find-library '(("l" load-library "load")))
+
+;;* rg
+
+(defun +ivy-display-function-window (text)
+  (let ((buffer (get-buffer-create "*ivy-candidate-window*"))
+        (str (with-current-buffer (get-buffer-create " *Minibuf-1*")
+               (let ((point (point))
+                     (string (concat (buffer-string) "  " text)))
+                 (add-face-text-property
+                  (- point 1) point 'ivy-cursor t string)
+                 string))))
+    (with-current-buffer buffer
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (insert str)))
+    (with-ivy-window
+      (display-buffer
+       buffer
+       `((display-buffer-reuse-window display-buffer-below-selected)
+         (window-height . ,(1+ (ivy--height (ivy-state-caller ivy-last)))))))))
+
+(ivy-configure 'counsel-rg
+  :height 20
+  :display-fn '+ivy-display-function-window)
 
 ;;** find-file
 

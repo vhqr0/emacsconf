@@ -16,11 +16,13 @@
     evil-surround
     evil-collection
     general
+    hydra
+    avy
     ivy
     swiper
     counsel
-    hydra
     ivy-hydra
+    ivy-avy
     amx
     wgrep
     magit
