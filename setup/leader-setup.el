@@ -1,54 +1,54 @@
 ;;; -*- lexical-binding: t -*-
 
-(defvar +leader-map (make-sparse-keymap))
+(defvar +leader-prefix-map (make-sparse-keymap))
 
-(define-key +leader-map "h" help-map)
-(define-key +leader-map "g" goto-map)
-(define-key +leader-map "s" search-map)
-(define-key +leader-map "n" narrow-map)
-(define-key +leader-map "v" vc-prefix-map)
-(define-key +leader-map "p" project-prefix-map)
+(define-key +leader-prefix-map "h" help-map)
+(define-key +leader-prefix-map "g" goto-map)
+(define-key +leader-prefix-map "s" search-map)
+(define-key +leader-prefix-map "n" narrow-map)
+(define-key +leader-prefix-map "v" vc-prefix-map)
+(define-key +leader-prefix-map "p" project-prefix-map)
 (with-eval-after-load 'projectile       ; projectile
-  (define-key +leader-map "p" projectile-command-map))
-(define-key +leader-map "l" ctl-x-l-map) ; default-setup
-(define-key +leader-map "r" ctl-x-r-map)
-(define-key +leader-map "x" ctl-x-x-map)
-(define-key +leader-map "4" ctl-x-4-map)
-(define-key +leader-map "5" ctl-x-5-map)
-(define-key +leader-map "t" tab-prefix-map)
+  (define-key +leader-prefix-map "p" projectile-command-map))
+(define-key +leader-prefix-map "l" ctl-x-l-map) ; default-setup
+(define-key +leader-prefix-map "r" ctl-x-r-map)
+(define-key +leader-prefix-map "x" ctl-x-x-map)
+(define-key +leader-prefix-map "4" ctl-x-4-map)
+(define-key +leader-prefix-map "5" ctl-x-5-map)
+(define-key +leader-prefix-map "t" tab-prefix-map)
 (with-eval-after-load 'evil             ; evil
-  (define-key +leader-map "w" evil-window-map))
+  (define-key +leader-prefix-map "w" evil-window-map))
 
 
 
 ;;* layout
 
-(define-key +leader-map "1"     'delete-other-windows)
-(define-key +leader-map "2"     'split-window-below)
-(define-key +leader-map "3"     'split-window-right)
-(define-key +leader-map "q"     'quit-window)
-(define-key +leader-map "o"     'other-window)
-(define-key +leader-map "0"     'delete-window)
-(define-key +leader-map "9"     'rotate-window) ; simple-x
-(define-key +leader-map [left]  'winner-undo)   ; winner
-(define-key +leader-map [right] 'winner-redo)   ; winner
+(define-key +leader-prefix-map "1"     'delete-other-windows)
+(define-key +leader-prefix-map "2"     'split-window-below)
+(define-key +leader-prefix-map "3"     'split-window-right)
+(define-key +leader-prefix-map "q"     'quit-window)
+(define-key +leader-prefix-map "o"     'other-window)
+(define-key +leader-prefix-map "0"     'delete-window)
+(define-key +leader-prefix-map "9"     'rotate-window) ; simple-x
+(define-key +leader-prefix-map [left]  'winner-undo)   ; winner
+(define-key +leader-prefix-map [right] 'winner-redo)   ; winner
 
 
 
 ;;* others
 
-(define-key +leader-map "\s" 'execute-extended-command)
-(define-key +leader-map "b"  'switch-to-buffer)
-(define-key +leader-map "k"  'kill-buffer)
-(define-key +leader-map "f"  'find-file)
-(define-key +leader-map "j"  'dired-jump)
-(define-key +leader-map "e"  'eshell-dwim) ; simple-x
-(define-key +leader-map "="  'format-dwim) ; simple-x
-(define-key +leader-map ";"  'eval-expression)
-(define-key +leader-map "!"  'shell-command)
-(define-key +leader-map "&"  'async-shell-command)
-(define-key +leader-map "$"  'ispell-word)
-(define-key +leader-map "%"  'query-replace-regexp)
-(define-key +leader-map ","  'xref-pop-marker-stack)
-(define-key +leader-map "."  'xref-find-definitions)
-(define-key +leader-map "?"  'xref-find-references)
+(define-key +leader-prefix-map "\s" 'execute-extended-command)
+(define-key +leader-prefix-map "b"  'switch-to-buffer)
+(define-key +leader-prefix-map "k"  'kill-buffer)
+(define-key +leader-prefix-map "f"  'find-file)
+(define-key +leader-prefix-map "j"  'dired-jump)
+(define-key +leader-prefix-map "e"  'eshell-dwim) ; simple-x
+(define-key +leader-prefix-map "="  'format-dwim) ; simple-x
+(define-key +leader-prefix-map ";"  'eval-expression)
+(define-key +leader-prefix-map "!"  'shell-command)
+(define-key +leader-prefix-map "&"  'async-shell-command)
+(define-key +leader-prefix-map "$"  'ispell-word)
+(define-key +leader-prefix-map "%"  'query-replace-regexp)
+(define-key +leader-prefix-map ","  'xref-pop-marker-stack)
+(define-key +leader-prefix-map "."  'xref-find-definitions)
+(define-key +leader-prefix-map "?"  'xref-find-references)

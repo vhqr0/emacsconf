@@ -194,11 +194,11 @@
 (define-key evil-motion-state-map ","  +shift-prefix-map)
 (define-key evil-motion-state-map "z," 'evil-repeat-find-char-reverse)
 
-(define-key evil-motion-state-map  "\s" +leader-map)
-(define-key evil-special-state-map "\s" +leader-map)
+(define-key evil-motion-state-map  "\s" +leader-prefix-map)
+(define-key evil-special-state-map "\s" +leader-prefix-map)
 
 (general-define-key
  :states '(motion normal visual operator)
  :keymaps 'override
- "SPC" +leader-map
- "," +shift-prefix-map)
+ "SPC" +leader-prefix-map
+ ","   +shift-prefix-map)
