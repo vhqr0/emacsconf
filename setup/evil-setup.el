@@ -11,6 +11,7 @@
       evil-want-C-w-delete t
       evil-want-C-u-delete t
       evil-want-C-u-scroll t
+      evil-want-C-g-bindings t
       evil-want-Y-yank-to-eol t
       evil-want-fine-undo t
       evil-undo-system 'undo-tree

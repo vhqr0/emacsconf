@@ -85,6 +85,8 @@
 
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
+
+(setq global-hl-line-sticky-flag t)
 (global-hl-line-mode 1)
 
 
