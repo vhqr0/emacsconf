@@ -38,6 +38,8 @@
 ;;* others
 
 (define-key +leader-prefix-map "\s" 'execute-extended-command)
+(define-key +leader-prefix-map "u"  'universal-argument)
+(define-key +leader-prefix-map "z"  'repeat)
 (define-key +leader-prefix-map "b"  'switch-to-buffer)
 (define-key +leader-prefix-map "k"  'kill-buffer)
 (define-key +leader-prefix-map "f"  'find-file)
