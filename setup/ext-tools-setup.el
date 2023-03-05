@@ -9,7 +9,8 @@
 (define-key vc-prefix-map "?" 'magit-dispatch)
 
 ;;* ls
-(setq dired-listing-switches "-lha")
+(setq dired-dwim-target t
+      dired-listing-switches "-lha")
 
 ;;* grep
 (setq wgrep-auto-save-buffer t
