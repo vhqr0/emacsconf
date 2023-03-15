@@ -104,6 +104,12 @@
   :height 20
   :display-fn '+ivy-display-function-window)
 
+(advice-add 'counsel-rg :around
+            (lambda (func &rest args)
+              (save-window-excursion
+                (delete-other-windows)
+                (apply func args))))
+
 ;;** find-file
 
 (define-key counsel-find-file-map "\C-l" 'counsel-up-directory)
