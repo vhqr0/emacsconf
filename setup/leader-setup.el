@@ -1,6 +1,53 @@
 ;;; -*- lexical-binding: t -*-
 
+
+
+;;* keymaps
+
 (defvar +leader-prefix-map (make-sparse-keymap))
+
+(defvar +shift-translation-alist
+  '((?a  . ?A) (?b  . ?B) (?c  . ?C ) (?d  . ?D )
+    (?e  . ?E) (?f  . ?F) (?g  . ?G ) (?h  . ?H )
+    (?i  . ?I) (?j  . ?J) (?k  . ?K ) (?l  . ?L )
+    (?m  . ?M) (?n  . ?N) (?o  . ?O ) (?p  . ?P )
+    (?q  . ?Q) (?r  . ?R) (?s  . ?S ) (?t  . ?T )
+    (?u  . ?U) (?v  . ?V) (?w  . ?W ) (?x  . ?X )
+    (?y  . ?Y) (?z  . ?Z) (?1  . ?! ) (?2  . ?@ )
+    (?3  . ?#) (?4  . ?$) (?5  . ?% ) (?6  . ?^ )
+    (?7  . ?&) (?8  . ?*) (?9  . ?\() (?0  . ?\))
+    (?`  . ?~) (?-  . ?_) (?=  . ?+ ) (?\[ . ?{ )
+    (?\] . ?}) (?\\ . ?|) (?\; . ?: ) (?'  . ?\")
+    (?,  . ?<) (?.  . ?>) (?/  . ?? )            ))
+
+(defvar +shift-prefix-map
+  (let ((map (make-sparse-keymap)))
+    (dolist (cons +shift-translation-alist)
+      (let ((from (car cons))
+            (to (cdr cons)))
+        (define-key map (vector from)
+                    `(menu-item
+                      "" nil :filter
+                      (lambda (cmd) (key-binding (vector ,to)))))))
+    map))
+
+
+
+;;* universal arguments
+
+(defun +leader-universal-arguments ()
+  (interactive)
+  (let ((arg (if current-prefix-arg
+                 (prefix-numeric-value current-prefix-arg)
+               1)))
+    (setq prefix-arg (list (* 4 arg))))
+  (set-transient-map +leader-prefix-map))
+
+(define-key +leader-prefix-map "u" '+leader-universal-arguments)
+
+
+
+;;* sub prefixes
 
 (define-key +leader-prefix-map "h" help-map)
 (define-key +leader-prefix-map "g" goto-map)
@@ -52,17 +99,3 @@
 (define-key +leader-prefix-map ","  'xref-pop-marker-stack)
 (define-key +leader-prefix-map "."  'xref-find-definitions)
 (define-key +leader-prefix-map "?"  'xref-find-references)
-
-
-
-;;* universal arguments
-
-(defun +leader-universal-arguments ()
-  (interactive)
-  (let ((arg (if current-prefix-arg
-                 (prefix-numeric-value current-prefix-arg)
-               1)))
-    (setq prefix-arg (list (* 4 arg))))
-  (set-transient-map +leader-prefix-map))
-
-(define-key +leader-prefix-map "u" '+leader-universal-arguments)

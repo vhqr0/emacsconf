@@ -15,7 +15,6 @@
     evil
     evil-surround
     evil-collection
-    general
     hydra
     avy
     ivy
