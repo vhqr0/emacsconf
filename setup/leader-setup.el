@@ -37,7 +37,6 @@
 ;;* others
 
 (define-key +leader-prefix-map "\s" 'execute-extended-command)
-(define-key +leader-prefix-map "u"  'universal-argument)
 (define-key +leader-prefix-map "z"  'repeat)
 (define-key +leader-prefix-map "b"  'switch-to-buffer)
 (define-key +leader-prefix-map "k"  'kill-buffer)
@@ -53,3 +52,17 @@
 (define-key +leader-prefix-map ","  'xref-pop-marker-stack)
 (define-key +leader-prefix-map "."  'xref-find-definitions)
 (define-key +leader-prefix-map "?"  'xref-find-references)
+
+
+
+;;* universal arguments
+
+(defun +leader-universal-arguments ()
+  (interactive)
+  (let ((arg (if current-prefix-arg
+                 (prefix-numeric-value current-prefix-arg)
+               1)))
+    (setq prefix-arg (list (* 4 arg))))
+  (set-transient-map +leader-prefix-map))
+
+(define-key +leader-prefix-map "u" '+leader-universal-arguments)
