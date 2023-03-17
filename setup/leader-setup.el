@@ -64,6 +64,7 @@
 (define-key +leader-prefix-map "t" tab-prefix-map)
 (with-eval-after-load 'evil             ; evil
   (define-key +leader-prefix-map "w" evil-window-map))
+(define-key +leader-prefix-map "`" 'tmm-menubar)
 
 
 
