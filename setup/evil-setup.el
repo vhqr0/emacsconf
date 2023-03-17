@@ -61,10 +61,10 @@
 (define-key evil-special-state-map "\C-b" 'evil-scroll-page-up)
 (define-key evil-special-state-map "\C-e" 'evil-scroll-line-down)
 (define-key evil-special-state-map "\C-y" 'evil-scroll-line-up)
-(define-key evil-special-state-map "j"    "\C-n")
-(define-key evil-special-state-map "k"    "\C-p")
-(define-key evil-special-state-map "h"    "\C-b")
-(define-key evil-special-state-map "l"    "\C-f")
+(define-key evil-special-state-map "j"    [down])
+(define-key evil-special-state-map "k"    [up])
+(define-key evil-special-state-map "h"    [left])
+(define-key evil-special-state-map "l"    [right])
 
 (defun +evil-initial-state-for-buffer-around (func &rest args)
   (let ((state (apply func args)))
@@ -160,6 +160,8 @@
 (define-key evil-outer-text-objects-map "f" '+evil-tobj-defun)
 (define-key evil-inner-text-objects-map "P" '+evil-tobj-page)
 (define-key evil-outer-text-objects-map "P" '+evil-tobj-page)
+(define-key evil-inner-text-objects-map "e" '+evil-tobj-entire)
+(define-key evil-outer-text-objects-map "e" '+evil-tobj-entire)
 (define-key evil-inner-text-objects-map "h" '+evil-tobj-entire)
 (define-key evil-outer-text-objects-map "h" '+evil-tobj-entire)
 

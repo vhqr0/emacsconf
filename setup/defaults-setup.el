@@ -132,7 +132,7 @@ Override: fix join lines leave space between CJK chars."
 ;;* layout
 
 (setq tab-bar-tab-hints t
-      tab-bar-select-tab-modifiers '(super))
+      tab-bar-select-tab-modifiers '(meta))
 
 (define-key tab-prefix-map "`" 'toggle-frame-tab-bar)
 

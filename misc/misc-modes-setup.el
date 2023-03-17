@@ -11,11 +11,6 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-hook 'web-mode-hook 'emmet-mode)
 
-;;; go-mode
-(add-to-list '+package 'go-mode)
-(with-eval-after-load 'go-mode
-  (define-key go-mode-map [remap format-dwim] 'gofmt))
-
 ;;; lisp
 (add-to-list '+package 'sly)
 (setq inferior-lisp-program "sbcl")

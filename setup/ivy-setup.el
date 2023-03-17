@@ -80,35 +80,9 @@
 (ivy-add-actions 'counsel-describe-variable '(("s" +counsel--set-variable "set")))
 (ivy-add-actions 'counsel-find-library '(("l" load-library "load")))
 
-;;* rg
+;;** rg
 
-(defun +ivy-display-function-window (text)
-  (let ((buffer (get-buffer-create "*ivy-candidate-window*"))
-        (str (with-current-buffer (get-buffer-create " *Minibuf-1*")
-               (let ((point (point))
-                     (string (concat (buffer-string) "  " text)))
-                 (add-face-text-property
-                  (- point 1) point 'ivy-cursor t string)
-                 string))))
-    (with-current-buffer buffer
-      (let ((inhibit-read-only t))
-        (erase-buffer)
-        (insert str)))
-    (with-ivy-window
-      (display-buffer
-       buffer
-       `((display-buffer-reuse-window display-buffer-below-selected)
-         (window-height . ,(1+ (ivy--height (ivy-state-caller ivy-last)))))))))
-
-(ivy-configure 'counsel-rg
-  :height 20
-  :display-fn '+ivy-display-function-window)
-
-(advice-add 'counsel-rg :around
-            (lambda (func &rest args)
-              (save-window-excursion
-                (delete-other-windows)
-                (apply func args))))
+(ivy-configure 'counsel-rg :height 20)
 
 ;;** find-file
 
