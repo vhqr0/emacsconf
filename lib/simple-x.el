@@ -208,12 +208,11 @@
   "Eshell in new window or other window if called with prefix ARG."
   (interactive "P")
   (require 'eshell)
-  (let ((flag t)
-        (directory default-directory)
+  (let ((directory default-directory)
         (buffer-list (buffer-list))
         (window-list (mapcar 'window-buffer (window-list)))
-        buffer)
-    (while (and flag buffer-list)
+        found buffer)
+    (while (and (not found) buffer-list)
       (setq buffer (car buffer-list)
             buffer-list (cdr buffer-list))
       (when (and (eq (with-current-buffer buffer
@@ -222,15 +221,14 @@
                  (string-prefix-p eshell-buffer-name (buffer-name buffer))
                  (not (get-buffer-process buffer))
                  (not (member buffer window-list)))
-        (setq flag nil)))
-    (if flag
-        (progn
-          (setq buffer (generate-new-buffer eshell-buffer-name))
-          (with-current-buffer buffer
-            (eshell-mode)))
+        (setq found t)))
+    (if found
+        (with-current-buffer buffer
+          (eshell/cd directory)
+          (eshell-reset))
+      (setq buffer (generate-new-buffer eshell-buffer-name))
       (with-current-buffer buffer
-        (eshell/cd directory)
-        (eshell-reset)))
+        (eshell-mode)))
     (cond ((and (consp arg) (> (prefix-numeric-value arg) 4))
            (switch-to-buffer buffer))
           (arg
@@ -245,6 +243,24 @@
                     (switch-to-buffer buffer))
                    (t
                     (switch-to-buffer-other-window buffer))))))))
+
+(defun eshell-toggle ()
+  "Eshell per project toggle below current window."
+  (interactive)
+  (require 'eshell)
+  (let* ((project (cdr (project-current)))
+         (default-directory (or project default-directory))
+         (buffer-name (format "*eshell <%s>*" default-directory))
+         (buffer (get-buffer-create buffer-name))
+         (window (get-buffer-window buffer)))
+    (if window
+        (condition-case nil
+            (delete-window window))
+      (with-current-buffer buffer
+        (unless (eq major-mode 'eshell-mode)
+          (eshell-mode)))
+      (select-window (split-window-below))
+      (set-window-buffer (selected-window) buffer))))
 
 
 
@@ -261,7 +277,8 @@
   (define-key search-map (kbd "<f2>") 'occur-at-point)
   (define-key narrow-map "p" 'narrow-to-paragraph)
   (define-key narrow-map "P" 'narrow-to-page) ; change default binding
-  (global-set-key (kbd "C-x 9") 'rotate-window))
+  (global-set-key (kbd "C-x 9") 'rotate-window)
+  (global-set-key "\M-`" 'eshell-toggle))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here

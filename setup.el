@@ -3,8 +3,8 @@
 ;;* defvars and load custom
 
 (defvar +setup-directory (expand-file-name "setup" +conf-directory))
-(defvar +lib-directory (expand-file-name "lib" +conf-directory))
-(defvar +misc-directory (expand-file-name "misc" +conf-directory))
+(defvar +lib-directory   (expand-file-name "lib"   +conf-directory))
+(defvar +misc-directory  (expand-file-name "misc"  +conf-directory))
 
 (defvar +package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                             ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
@@ -68,6 +68,5 @@
 ;;* load *-setup
 
 (dolist (setup
-         '("defaults" "leader" "evil" "ivy"
-           "prog-tools" "ext-tools" "simple-modes"))
+         '("defaults" "leader" "evil" "ivy" "prog-tools" "ext-tools" "simple-modes"))
   (load-file (expand-file-name (concat setup "-setup.el") +setup-directory)))

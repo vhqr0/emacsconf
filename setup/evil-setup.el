@@ -183,7 +183,7 @@
   :keymap +evil-override-mode-map)
 
 (evil-define-key '(motion normal visual operator) +evil-override-mode-map
-  "\s" +leader-prefix-map
-  ","  +shift-prefix-map)
+  ","  +shift-prefix-map
+  "\s" +leader-prefix-map)
 
 (+evil-override-mode t)
