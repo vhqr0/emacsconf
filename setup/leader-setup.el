@@ -93,6 +93,7 @@
 (define-key +leader-prefix-map "e"  'eshell-dwim) ; simple-x
 (define-key +leader-prefix-map "="  'format-dwim) ; simple-x
 (define-key +leader-prefix-map ";"  'eval-expression)
+(define-key +leader-prefix-map "#"  'server-edit)
 (define-key +leader-prefix-map "!"  'shell-command)
 (define-key +leader-prefix-map "&"  'async-shell-command)
 (define-key +leader-prefix-map "$"  'ispell-word)

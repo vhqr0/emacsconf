@@ -8,6 +8,13 @@
 (define-key vc-prefix-map "f" 'magit-file-dispatch)
 (define-key vc-prefix-map "?" 'magit-dispatch)
 
+;;* shell
+(defun +eshell-export-pager ()
+  (setenv "PAGER" (expand-file-name "pager.py" +misc-directory)))
+
+(add-hook 'eshell-mode-hook '+eshell-export-pager)
+(add-hook 'eshell-mode-hook 'with-editor-export-editor)
+
 ;;* ls
 (setq dired-dwim-target t
       dired-listing-switches "-lha")
