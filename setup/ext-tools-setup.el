@@ -15,6 +15,9 @@
 (add-hook 'eshell-mode-hook '+eshell-export-pager)
 (add-hook 'eshell-mode-hook 'with-editor-export-editor)
 
+;; https://github.com/emacs-evil/evil-collection/issues/545
+(advice-add 'evil-collection-eshell-escape-stay :override 'ignore)
+
 ;;* ls
 (setq dired-dwim-target t
       dired-listing-switches "-lha")

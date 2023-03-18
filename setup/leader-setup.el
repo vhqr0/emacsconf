@@ -47,7 +47,35 @@
 
 
 
+;;* god C-c
+
+(defun +god-C-c--execute (bind)
+  (interactive)
+  (cond ((commandp bind)
+         (setq this-command bind
+               real-this-command bind)
+         (if (commandp bind t)
+             (call-interactively bind)
+           (execute-kbd-macro bind))
+         bind)
+        ((keymapp bind)
+         (set-transient-map bind))))
+
+(defun +god-C-c ()
+  (interactive)
+  (let ((char (read-char "C-c C-")))
+    (cond ((+god-C-c--execute (key-binding (kbd (format "C-c C-%c" char)))))
+          ((+god-C-c--execute (key-binding (kbd (format "C-c %c" char)))))
+          (t
+           (user-error "no key binding on 'C-c C-%c' or 'C-c %c'" char char)))))
+
+(define-key +leader-prefix-map "c" '+god-C-c)
+
+
+
 ;;* sub prefixes
+
+(define-key +leader-prefix-map "`" 'tmm-menubar)
 
 (define-key +leader-prefix-map "h" help-map)
 (define-key +leader-prefix-map "g" goto-map)
@@ -64,7 +92,6 @@
 (define-key +leader-prefix-map "t" tab-prefix-map)
 (with-eval-after-load 'evil             ; evil
   (define-key +leader-prefix-map "w" evil-window-map))
-(define-key +leader-prefix-map "`" 'tmm-menubar)
 
 
 
