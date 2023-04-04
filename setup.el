@@ -29,6 +29,7 @@
     counsel-projectile
     yasnippet
     company
+    hl-indent-scope
     markdown-mode
     edit-indirect
     emmet-mode))
