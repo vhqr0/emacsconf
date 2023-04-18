@@ -148,7 +148,9 @@ Override: fix join lines leave space between CJK chars."
       read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t)
 
-(global-set-key (kbd "C-M-_") 'dabbrev-completion) ; for terminal
+(global-set-key "\C-\M-_" 'dabbrev-completion) ; for terminal
+
+(global-set-key "\C-\s" 'toggle-input-method)
 
 
 

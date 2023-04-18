@@ -35,6 +35,8 @@
 
 (define-key evil-normal-state-map [remap yank-pop] nil)
 
+(define-key evil-insert-state-map "\C-@" nil)
+
 ;;* workaround
 
 ;; https://github.com/emacs-evil/evil/pull/1128
