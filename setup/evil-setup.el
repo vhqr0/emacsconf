@@ -8,6 +8,7 @@
       undo-tree-auto-save-history nil)
 
 (setq evil-want-keybinding nil
+      evil-want-minibuffer t
       evil-want-C-w-delete t
       evil-want-C-u-delete t
       evil-want-C-u-scroll t
@@ -18,7 +19,8 @@
       evil-search-module 'evil-search
       evil-ex-search-persistent-highlight nil
       evil-symbol-word-search t
-      evil-respect-visual-line-mode t)
+      evil-respect-visual-line-mode t
+      evil-collection-setup-minibuffer t)
 
 (global-undo-tree-mode 1)
 

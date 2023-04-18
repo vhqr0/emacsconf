@@ -34,6 +34,17 @@
 (define-key counsel-mode-map [remap comint-history-isearch-backward-regexp] 'counsel-shell-history)
 (define-key counsel-mode-map [remap eshell-previous-matching-input] 'counsel-esh-history)
 
+(with-eval-after-load 'evil-collection-ivy
+  (when evil-collection-setup-minibuffer
+    (evil-collection-define-key 'normal 'ivy-minibuffer-map
+      "\C-o" 'hydra-ivy/body
+      "gg"   'ivy-beginning-of-buffer
+      "G"    'ivy-end-of-buffer
+      "m"    'ivy-mark
+      "M"    'ivy-unmark
+      "t"    'ivy-toggle-marks
+      "\d"   'ivy-unmark-backward)))
+
 
 
 ;;* bindings
