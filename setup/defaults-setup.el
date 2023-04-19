@@ -146,7 +146,9 @@ Override: fix join lines leave space between CJK chars."
 
 (setq completion-ignore-case t
       read-buffer-completion-ignore-case t
-      read-file-name-completion-ignore-case t)
+      read-file-name-completion-ignore-case t
+      completion-styles '(basic partial-completion orderless) ; orderless
+      )
 
 (global-set-key "\C-\M-_" 'dabbrev-completion) ; for terminal
 
@@ -203,7 +205,6 @@ Override: fix join lines leave space between CJK chars."
 (simple-x-default-keybindings)
 
 ;;** avy
-(define-key isearch-mode-map "\M-g" 'avy-isearch)
 (define-key goto-map "j" 'avy-goto-line)
 
 ;;** projectile
@@ -212,4 +213,4 @@ Override: fix join lines leave space between CJK chars."
 (define-key projectile-command-map "x" 'project-execute-extended-command)
 (define-key projectile-command-map "e" 'projectile-run-eshell)
 (define-key projectile-command-map "s" 'projectile-run-shell)
-(global-set-key "\C-xp" projectile-command-map)
+(define-key ctl-x-map "p" projectile-command-map)

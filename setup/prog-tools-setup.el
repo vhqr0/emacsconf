@@ -61,4 +61,3 @@
 (global-company-mode 1)
 
 (define-key company-mode-map (kbd "<f2>") 'company-complete)
-(define-key company-active-map (kbd "<f2>") 'counsel-company)

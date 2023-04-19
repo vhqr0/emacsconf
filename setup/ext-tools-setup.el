@@ -31,3 +31,6 @@
 
 ;;* ispell
 (setq ispell-dictionary "american")
+
+;;* notes
+(define-key ctl-x-l-map "n" 'notes)

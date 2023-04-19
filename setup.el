@@ -15,18 +15,16 @@
     evil
     evil-surround
     evil-collection
-    hydra
     avy
-    ivy
-    swiper
-    counsel
-    ivy-hydra
-    ivy-avy
-    amx
+    orderless
+    vertico
+    marginalia
+    consult
+    embark
+    embark-consult
     wgrep
     magit
     projectile
-    counsel-projectile
     yasnippet
     company
     hl-indent-scope
@@ -69,5 +67,5 @@
 ;;* load *-setup
 
 (dolist (setup
-         '("defaults" "leader" "evil" "ivy" "prog-tools" "ext-tools" "simple-modes"))
+         '("defaults" "leader" "evil" "consult" "prog-tools" "ext-tools" "simple-modes"))
   (load-file (expand-file-name (concat setup "-setup.el") +setup-directory)))
