@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (defvar gtags-global-program "global")
 
 (defconst gtags-line-re "^[^ \t]+[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)")
@@ -8,15 +10,25 @@
 
 (defvar-local gtags-completion-table nil)
 
+(defvar-local gtags-directory nil)
+
+
+
 (defun gtags-refresh ()
   (interactive)
   (clrhash gtags-completion-tables))
 
+(defun gtags-directory (&optional buffer)
+  (with-current-buffer (or buffer (current-buffer))
+    (or gtags-directory
+        (let ((directory (locate-dominating-file default-directory "GTAGS")))
+          (setq gtags-directory (or directory ""))))))
+
 (defun gtags-completion-table (&optional buffer)
   (with-current-buffer (or buffer (current-buffer))
     (or gtags-completion-table
-        (let ((key (locate-dominating-file default-directory "GTAGS")))
-          (when key
+        (let ((key (gtags-directory)))
+          (unless (string-empty-p key)
             (let ((table (gethash key gtags-completion-tables)))
               (unless table
                 (message (concat "gtags: compute completion table from " key))
@@ -64,27 +76,25 @@
 
 
 
+(defun gtags-override-xref ()
+  (if (not (string-empty-p (gtags-directory)))
+      'gtags
+    'etags))
+
+(defun gtags-around-capf (func)
+  (if (not (string-empty-p (gtags-directory)))
+      (gtags-completion-at-point-function)
+    (funcall func)))
+
 ;;;###autoload
 (define-minor-mode gtags-mode
   "Gtags completion at point backend and xref backend enabled mode."
   :global t
   :lighter " gtags"
-  :group 'etags)
-
-(defun gtags-enable-p ()
-  (and gtags-mode
-       (locate-dominating-file default-directory "GTAGS")))
-
-(advice-add 'etags--xref-backend
-            :override (lambda ()
-                        (if (gtags-enable-p)
-                            'gtags
-                          'etags)))
-
-(advice-add 'tags-completion-at-point-function
-            :around (lambda (func)
-                      (if (gtags-enable-p)
-                          (gtags-completion-at-point-function)
-                        (funcall func))))
-
-(provide 'gtags)
+  :group 'etags
+  (if gtags-mode
+      (progn
+        (advice-add 'etags--xref-backend :override 'gtags-override-xref)
+        (advice-add 'tags-completion-at-point-function :around 'gtags-around-capf))
+    (advice-remove 'etags--xref-backend 'gtags-override-xref)
+    (advice-remove 'tags-completion-at-point-function 'gtags-around-capf)))
