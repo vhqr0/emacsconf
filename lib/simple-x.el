@@ -131,42 +131,6 @@
       (when symbol
         (insert symbol)))))
 
-(defun occur-at-point ()
-  "`occur' symbol at point."
-  (interactive)
-  (let ((symbol (thing-at-point 'symbol)))
-    (when symbol
-      (occur (regexp-quote symbol)))))
-
-(defun narrow-to-paragraph ()
-  "Make text outside current defun invisible."
-  (interactive)
-  (save-excursion
-    (widen)
-    (let ((opoint (point))
-	  beg end)
-      (let ((here (point)))
-        (unless (eolp)
-	  (forward-char))
-        (backward-paragraph)
-        (when (< (point) here)
-          (goto-char here)
-          (backward-paragraph)))
-      (setq beg (point))
-      (forward-paragraph)
-      (setq end (point))
-      (while (looking-at "^\n")
-	(forward-line 1))
-      (unless (> (point) opoint)
-	(goto-char opoint)
-	(forward-paragraph)
-	(setq end (point))
-	(backward-paragraph)
-	(setq beg (point)))
-      (goto-char end)
-      (re-search-backward "^\n" (- (point) 1) t)
-      (narrow-to-region beg end))))
-
 (defun rotate-window (arg)
   "Rotate current window or swap it if called with prefix ARG."
   (interactive "P")
@@ -244,24 +208,6 @@
                    (t
                     (switch-to-buffer-other-window buffer))))))))
 
-(defun eshell-toggle ()
-  "Eshell per project toggle below current window."
-  (interactive)
-  (require 'eshell)
-  (let* ((project (cdr (project-current)))
-         (default-directory (or project default-directory))
-         (buffer-name (format "*eshell <%s>*" default-directory))
-         (buffer (get-buffer-create buffer-name))
-         (window (get-buffer-window buffer)))
-    (if window
-        (condition-case nil
-            (delete-window window))
-      (with-current-buffer buffer
-        (unless (eq major-mode 'eshell-mode)
-          (eshell-mode)))
-      (select-window (split-window-below))
-      (set-window-buffer (selected-window) buffer))))
-
 
 
 (defvar dired-mode-map)
@@ -272,13 +218,8 @@
   (define-key ctl-x-x-map "o" 'xdg-open)
   (with-eval-after-load 'dired
     (define-key dired-mode-map [remap xdg-open] 'dired-do-xdg-open))
-
   (define-key minibuffer-local-map "\M-." 'minibuffer-yank-symbol)
-  (define-key search-map (kbd "<f2>") 'occur-at-point)
-  (define-key narrow-map "p" 'narrow-to-paragraph)
-  (define-key narrow-map "P" 'narrow-to-page) ; change default binding
-  (global-set-key (kbd "C-x 9") 'rotate-window)
-  (global-set-key "\M-`" 'eshell-toggle))
+  (global-set-key (kbd "C-x 9") 'rotate-window))
 
 (provide 'simple-x)
 ;;; simple-x.el ends here

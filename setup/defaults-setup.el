@@ -146,9 +146,7 @@ Override: fix join lines leave space between CJK chars."
 
 (setq completion-ignore-case t
       read-buffer-completion-ignore-case t
-      read-file-name-completion-ignore-case t
-      completion-styles '(basic partial-completion orderless) ; orderless
-      )
+      read-file-name-completion-ignore-case t)
 
 (global-set-key "\C-\M-_" 'dabbrev-completion) ; for terminal
 

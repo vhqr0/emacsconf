@@ -3,9 +3,17 @@
 
 
 ;;* cc
-(setq flymake-cc-command 'cc-x-flymake-cc-command)
-(with-eval-after-load 'cc-mode
-  (define-key c-mode-base-map (kbd "C-c h") 'cc-x-help))
+(defvar +flymake-cc-program "clang")
+(defvar +flymake-cc-args nil)
+(defun +flymake-cc-command ()
+  `(,+flymake-cc-program "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c")
+                         "-fsyntax-only"
+                         "-fno-color-diagnostics"
+                         "-fno-caret-diagnostics"
+                         "-fno-diagnostics-show-option"
+                         ,@+flymake-cc-args
+                         "-"))
+(setq flymake-cc-command '+flymake-cc-command)
 
 ;;* python
 (setq python-indent-guess-indent-offset nil ; inhibit verbose

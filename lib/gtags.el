@@ -1,43 +1,66 @@
-(defvar global-program "global")
+(defvar gtags-global-program "global")
 
-(defvar global-compute-completion-table t)
+(defconst gtags-line-re "^[^ \t]+[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)")
 
-(defun global-line-to-xref (line)
-  (when (string-match "^\\([^ \t]+\\)[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)" line)
-    (xref-make (match-string 4 line)
-               (xref-make-file-location (match-string 3 line)
-                                        (string-to-number (match-string 2 line))
-                                        0))))
+(defvar gtags-compute-completion-table t)
 
-(defun global-find-symbol (symbol arg)
-  (remove nil
-          (mapcar 'global-line-to-xref
-                  (process-lines global-program arg symbol))))
+(defvar gtags-completion-tables (make-hash-table :test 'equal))
+
+(defvar-local gtags-completion-table nil)
+
+(defun gtags-refresh ()
+  (interactive)
+  (clrhash gtags-completion-tables))
+
+(defun gtags-completion-table (&optional buffer)
+  (with-current-buffer (or buffer (current-buffer))
+    (or gtags-completion-table
+        (let ((key (locate-dominating-file default-directory "GTAGS")))
+          (when key
+            (let ((table (gethash key gtags-completion-tables)))
+              (unless table
+                (message (concat "gtags: compute completion table from " key))
+                (setq table (process-lines gtags-global-program "-c"))
+                (puthash key table gtags-completion-tables))
+              (setq gtags-completion-table table)))))))
+
+(defun gtags-lazy-completion-table ()
+  (lambda (string pred action)
+    (and gtags-compute-completion-table
+         (complete-with-action action (gtags-completion-table) string pred))))
+
+(defun gtags-line-to-xref (line)
+  (when (string-match gtags-line-re line)
+    (let* ((summary (match-string 3 line))
+           (file (match-string 2 line))
+           (linum (string-to-number (match-string 1 line)))
+           (location (xref-make-file-location file linum 0)))
+      (xref-make summary location))))
+
+(defun gtags-find-symbol (symbol arg)
+  (let* ((lines (process-lines gtags-global-program arg symbol))
+         (xrefs (mapcar 'gtags-line-to-xref lines)))
+    (remove nil xrefs)))
 
 (cl-defmethod xref-backend-identifier-at-point ((_backend (eql gtags)))
   (thing-at-point 'symbol))
 
 (cl-defmethod xref-backend-identifier-completion-table ((_backend (eql gtags)))
-  (when global-compute-completion-table
-    (process-lines global-program "-c")))
+  (gtags-lazy-completion-table))
 
 (cl-defmethod xref-backend-definitions ((_backend (eql gtags)) symbol)
-  (global-find-symbol symbol "-dxa"))
+  (gtags-find-symbol symbol "-dxa"))
 
 (cl-defmethod xref-backend-references ((_backend (eql gtags)) symbol)
-  (global-find-symbol symbol "-rxa"))
+  (gtags-find-symbol symbol "-rxa"))
 
 (cl-defmethod xref-backend-apropos ((_backend (eql gtags)) symbol)
-  (global-find-symbol symbol "-gixa"))
+  (gtags-find-symbol symbol "-gixa"))
 
 (defun gtags-completion-at-point-function ()
   (let ((bounds (bounds-of-thing-at-point 'symbol)))
     (when bounds
-      (let* ((beg (car bounds))
-             (end (cdr bounds))
-             (prefix (buffer-substring beg end))
-             (flag (if completion-ignore-case "-ci" "-c")))
-        `(,beg ,end ,(process-lines global-program flag prefix))))))
+      (list (car bounds) (cdr bounds) (gtags-lazy-completion-table)))))
 
 
 

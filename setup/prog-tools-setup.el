@@ -37,6 +37,10 @@
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
+      company-frontends
+      '(company-pseudo-tooltip-frontend
+        company-preview-if-just-one-frontend
+        company-echo-metadata-frontend)
       company-backends
       '(company-files
         (company-capf :with company-yasnippet)
