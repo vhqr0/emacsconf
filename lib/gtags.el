@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
+
+
 (defvar gtags-global-program "global")
 
 (defconst gtags-line-re "^[^ \t]+[ \t]+\\([0-9]+\\)[ \t]+\\([^ \t]+\\)[ \t]+\\(.*\\)")
@@ -8,15 +10,19 @@
 
 (defvar gtags-completion-tables (make-hash-table :test 'equal))
 
-(defvar-local gtags-completion-table nil)
-
 (defvar-local gtags-directory nil)
+
+(defvar-local gtags-completion-table nil)
 
 
 
 (defun gtags-refresh ()
   (interactive)
-  (clrhash gtags-completion-tables))
+  (clrhash gtags-completion-tables)
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (setq gtags-directory nil
+            gtags-completion-table nil))))
 
 (defun gtags-directory (&optional buffer)
   (with-current-buffer (or buffer (current-buffer))
@@ -98,3 +104,7 @@
         (advice-add 'tags-completion-at-point-function :around 'gtags-around-capf))
     (advice-remove 'etags--xref-backend 'gtags-override-xref)
     (advice-remove 'tags-completion-at-point-function 'gtags-around-capf)))
+
+
+
+(provide 'gtags)
