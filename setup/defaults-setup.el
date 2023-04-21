@@ -55,16 +55,7 @@
 (defvar +auto-save-visited-predicate-hook nil)
 
 (defun +auto-save-visited-predicate ()
-  (not (run-hook-with-args-until-success '+auto-save-visited-predicate-hook))
-  ;; (not (or (and (bound-and-true-p company-mode) ; company
-  ;;               company-candidates)
-  ;;          (and (bound-and-true-p yas-minor-mode) ; yasnippet
-  ;;               yas--active-snippets)
-  ;;          (and (bound-and-true-p undo-tree-mode) ; undo-tree
-  ;;               (eq (with-current-buffer (window-buffer (selected-window))
-  ;;                     undo-tree-visualizer-parent-buffer)
-  ;;                   (current-buffer)))))
-  )
+  (not (run-hook-with-args-until-success '+auto-save-visited-predicate-hook)))
 
 (setq auto-save-visited-interval 1
       auto-save-visited-predicate '+auto-save-visited-predicate)
