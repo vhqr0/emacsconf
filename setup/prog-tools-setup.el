@@ -27,6 +27,10 @@
 (define-key abbrev-map "s" 'yas-insert-snippet)
 (define-key abbrev-map "v" 'yas-visit-snippet-file)
 
+(defun +auto-save-visited-predicate-yasnippet ()
+  (and yas-minor-mode yas--active-snippets))
+(add-hook '+auto-save-visited-predicate-hook '+auto-save-visited-predicate-yasnippet)
+
 
 
 ;;* company
@@ -52,16 +56,18 @@
                     (setq-local company-backends ',backends)
                     (when global-company-mode
                       (company-mode 1)))))
-
 (+company-set-backends 'eshell-mode-hook '(company-files))
 (+company-set-backends 'sh-mode-hook '(company-files company-dabbrev))
 
 (defun +company-mode-on-override ()
   (when (derived-mode-p 'prog-mode)
     (company-mode 1)))
-
 (advice-add 'company-mode-on :override '+company-mode-on-override)
 
 (global-company-mode 1)
 
 (define-key company-mode-map (kbd "<f2>") 'company-complete)
+
+(defun +auto-save-visited-predicate-company ()
+  (and company-mode company-candidates))
+(add-hook '+auto-save-visited-predicate-hook '+auto-save-visited-predicate-company)

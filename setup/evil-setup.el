@@ -7,6 +7,16 @@
 (setq undo-tree-mode-lighter nil
       undo-tree-auto-save-history nil)
 
+(global-undo-tree-mode 1)
+
+(defun +auto-save-visited-predicate-undo-tree ()
+  (and undo-tree-mode
+       (let ((buffer (current-buffer)))
+         (with-current-buffer (window-buffer)
+           (and (eq major-mode 'undo-tree-visualizer-mode)
+                (eq buffer undo-tree-visualizer-parent-buffer))))))
+(add-hook '+auto-save-visited-predicate-hook '+auto-save-visited-predicate-undo-tree)
+
 (setq evil-want-keybinding nil
       evil-want-minibuffer t
       evil-want-C-w-delete t
@@ -21,8 +31,6 @@
       evil-symbol-word-search t
       evil-respect-visual-line-mode t
       evil-collection-setup-minibuffer t)
-
-(global-undo-tree-mode 1)
 
 (evil-mode 1)
 (global-evil-surround-mode 1)
