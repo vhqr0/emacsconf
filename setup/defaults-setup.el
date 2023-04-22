@@ -84,7 +84,7 @@
 (setq global-hl-line-sticky-flag t)
 (global-hl-line-mode 1)
 
-(global-hl-indent-scope-mode t)         ; hl-indent-scope
+(global-hl-indent-scope-mode 1)         ; hl-indent-scope
 
 
 
@@ -198,7 +198,11 @@ Override: fix join lines leave space between CJK chars."
 (simple-x-default-keybindings)
 
 ;;** avy
+(setq avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
+(define-key goto-map ";" 'avy-resume)
+(define-key goto-map "f" 'avy-goto-char)
 (define-key goto-map "j" 'avy-goto-line)
+(define-key goto-map "w" 'avy-goto-word-0)
 
 ;;** projectile
 (projectile-mode 1)

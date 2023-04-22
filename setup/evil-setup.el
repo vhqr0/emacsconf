@@ -198,4 +198,4 @@
   ","  +shift-prefix-map
   "\s" +leader-prefix-map)
 
-(+evil-override-mode t)
+(+evil-override-mode 1)
