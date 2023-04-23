@@ -8,11 +8,11 @@
 (with-eval-after-load 'embark
   (define-key embark-symbol-map "K" 'describe-keymap))
 
-(defun avy-embark-collect--act (pt)
+(defun avy-action-embark (pt)
   (unwind-protect (save-excursion (goto-char pt) (embark-act))
     (select-window (cdr (ring-ref avy-ring 0))) t))
 (with-eval-after-load 'avy
-  (add-to-list 'avy-dispatch-alist '(?o . avy-embark-collect--act)))
+  (add-to-list 'avy-dispatch-alist '(?o . avy-action-embark)))
 
 ;;* vertico
 (vertico-mode 1)
@@ -35,7 +35,7 @@
 
 ;;* consult
 (define-key search-map "s" 'consult-line)
-(define-key search-map "S" 'consult-ripgrep)
+(define-key search-map "g" 'consult-ripgrep)
 
 (with-eval-after-load 'consult
   (consult-customize
