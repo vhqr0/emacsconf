@@ -145,7 +145,8 @@ Override: fix join lines leave space between CJK chars."
 
 (global-set-key "\C-\M-_" 'dabbrev-completion) ; for terminal
 
-(global-set-key "\C-\s" 'toggle-input-method)
+(global-set-key "\C-@"        'toggle-input-method)
+(global-set-key (kbd "C-SPC") 'toggle-input-method)
 
 
 
