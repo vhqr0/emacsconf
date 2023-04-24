@@ -168,8 +168,12 @@
 
 (define-key evil-inner-text-objects-map "F" '+evil-tobj-filename)
 (define-key evil-outer-text-objects-map "F" '+evil-tobj-filename)
+(define-key evil-inner-text-objects-map "u" '+evil-tobj-filename)
+(define-key evil-outer-text-objects-map "u" '+evil-tobj-filename)
 (define-key evil-inner-text-objects-map "f" '+evil-tobj-defun)
 (define-key evil-outer-text-objects-map "f" '+evil-tobj-defun)
+(define-key evil-inner-text-objects-map "d" '+evil-tobj-defun)
+(define-key evil-outer-text-objects-map "d" '+evil-tobj-defun)
 (define-key evil-inner-text-objects-map "P" '+evil-tobj-page)
 (define-key evil-outer-text-objects-map "P" '+evil-tobj-page)
 (define-key evil-inner-text-objects-map "e" '+evil-tobj-entire)
