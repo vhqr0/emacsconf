@@ -5,9 +5,6 @@
 ;;* embark
 (global-set-key "\M-o" 'embark-act)
 
-(with-eval-after-load 'embark
-  (define-key embark-symbol-map "K" 'describe-keymap))
-
 (defun avy-action-embark (pt)
   (unwind-protect (save-excursion (goto-char pt) (embark-act))
     (select-window (cdr (ring-ref avy-ring 0))) t))

@@ -173,6 +173,7 @@ Override: fix join lines leave space between CJK chars."
 (define-key help-map "tl" 'load-library)
 (define-key help-map "j"  'find-library)
 (define-key help-map "4j" 'find-library-other-window)
+(define-key help-map "B"  'describe-keymap)
 
 ;;** ctl-x-4-map
 (define-key ctl-x-4-map "j" 'dired-jump-other-window)

@@ -81,6 +81,7 @@
 (define-key +leader-prefix-map "g" goto-map)
 (define-key +leader-prefix-map "s" search-map)
 (define-key +leader-prefix-map "n" narrow-map)
+(define-key +leader-prefix-map "a" abbrev-map)
 (define-key +leader-prefix-map "v" vc-prefix-map)
 (define-key +leader-prefix-map "p" projectile-command-map) ; projectile
 (define-key +leader-prefix-map "l" ctl-x-l-map) ; default-setup
