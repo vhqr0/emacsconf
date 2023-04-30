@@ -15,11 +15,7 @@
 (vertico-mode 1)
 (marginalia-mode 1)
 
-(defun +vertico-setup-completion-styles ()
-  (setq-local completion-styles '(orderless basic)))
 (advice-add 'vertico--setup :after 'vertico-repeat-save)
-(advice-add 'vertico--setup :after '+vertico-setup-completion-styles)
-
 (global-set-key (kbd "<f5>") 'vertico-repeat)
 
 (define-key vertico-map (kbd "<f2>") 'embark-export)

@@ -143,6 +143,11 @@ Override: fix join lines leave space between CJK chars."
       read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t)
 
+(setq orderless-component-separator 'orderless-escapable-split-on-space)
+(defun +minibuffer-setup-orderless ()   ; orderless
+  (setq-local completion-styles '(orderless basic)))
+(add-hook 'minibuffer-setup-hook '+minibuffer-setup-orderless)
+
 (global-set-key "\C-\M-_" 'dabbrev-completion) ; for terminal
 
 (global-set-key "\C-@"        'toggle-input-method)
