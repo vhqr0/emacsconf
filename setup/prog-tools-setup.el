@@ -37,10 +37,15 @@
 
 (setq company-idle-delay 0.2
       company-minimum-prefix-length 2
+      company-selection-wrap-around t
+      company-show-quick-access t
+      company-tooltip-width-grow-only t
       company-tooltip-align-annotations t
       company-dabbrev-downcase nil
       company-dabbrev-ignore-case t
       company-dabbrev-code-ignore-case t
+      company-transformers
+      '(company-sort-prefer-same-case-prefix)
       company-frontends
       '(company-pseudo-tooltip-frontend
         company-preview-if-just-one-frontend
