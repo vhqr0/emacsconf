@@ -28,6 +28,7 @@
     yasnippet
     company
     hl-indent-scope
+    python-mls
     markdown-mode
     edit-indirect
     emmet-mode))

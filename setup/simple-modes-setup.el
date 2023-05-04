@@ -22,6 +22,7 @@
 (defun +python-comment-inline-offset-setup ()
   (setq-local comment-inline-offset 2))
 (add-hook 'python-mode-hook '+python-comment-inline-offset-setup)
+(add-hook 'inferior-python-mode-hook 'python-mls-mode) ; python-mls
 
 ;;* web
 (setq js-indent-level 2
