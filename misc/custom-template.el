@@ -1,5 +1,8 @@
-(add-to-list '+package 'ef-themes)
-(add-hook 'after-init-hook 'ef-themes-load-random)
+;;; ef-themes
+;; (add-to-list '+package 'ef-themes)
+;; (add-hook 'after-init-hook 'ef-themes-load-random)
+
+(add-hook 'after-init-hook (lambda () (load-theme 'termbright t)))
 
 (dolist (setup '("fonts" "pyim"))
   (load-file (expand-file-name (concat setup "-setup.el") +misc-directory)))

@@ -82,9 +82,6 @@
 (global-display-line-numbers-mode 1)
 
 (setq global-hl-line-sticky-flag t)
-(global-hl-line-mode 1)
-
-(global-hl-indent-scope-mode 1)         ; hl-indent-scope
 
 
 
@@ -186,7 +183,6 @@ Override: fix join lines leave space between CJK chars."
 ;;** ctl-x-x-map
 (define-key ctl-x-x-map "h" 'hl-line-mode)
 (define-key ctl-x-x-map "l" 'display-line-numbers-mode)
-(define-key ctl-x-x-map "H" 'hl-indent-scope-mode) ; hl-indent-scope
 (define-key ctl-x-x-map "s" 'whitespace-mode)
 (define-key ctl-x-x-map "v" 'visual-line-mode)
 (define-key ctl-x-x-map "a" 'auto-save-visited-mode)

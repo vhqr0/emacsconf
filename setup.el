@@ -2,9 +2,10 @@
 
 ;;* defvars and load custom
 
-(defvar +setup-directory (expand-file-name "setup" +conf-directory))
-(defvar +lib-directory   (expand-file-name "lib"   +conf-directory))
-(defvar +misc-directory  (expand-file-name "misc"  +conf-directory))
+(defvar +setup-directory  (expand-file-name "setup"  +conf-directory))
+(defvar +lib-directory    (expand-file-name "lib"    +conf-directory))
+(defvar +misc-directory   (expand-file-name "misc"   +conf-directory))
+(defvar +themes-directory (expand-file-name "themes" +conf-directory))
 
 (defvar +package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                             ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
@@ -27,7 +28,6 @@
     projectile
     yasnippet
     company
-    hl-indent-scope
     python-mls
     markdown-mode
     edit-indirect
@@ -41,6 +41,8 @@
 
 
 ;;* setup internal (lib) and external (elpa) packages
+
+(add-to-list 'custom-theme-load-path +themes-directory)
 
 (let ((lib-autoload (expand-file-name "lib-autoload.el" +lib-directory)))
   (add-to-list 'load-path +lib-directory)
