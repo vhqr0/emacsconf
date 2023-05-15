@@ -73,6 +73,9 @@
  `(font-lock-keyword-face              ,termbright-cyan0)
  `(font-lock-builtin-face              ,termbright-cyan0)
 
+ `(tab-bar                  ,termbright-bgblack0)
+ `(tab-bar-tab              ,termbright-bgblue2)
+ `(tab-bar-tab-inactive     ,termbright-bgblue0)
  `(header-line              ,termbright-bgblue2)
  `(mode-line                ,termbright-bgblue1)
  `(mode-line-inactive       ,termbright-bgblue0)

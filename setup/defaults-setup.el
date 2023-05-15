@@ -208,6 +208,8 @@ Override: fix join lines leave space between CJK chars."
 (define-key goto-map "w" 'avy-goto-word-0)
 
 ;;** projectile
+(setq projectile-switch-project-action 'projectile-commander
+      projectile-current-project-on-switch 'move-to-end)
 (projectile-mode 1)
 (define-key projectile-command-map "\e" nil)
 (define-key projectile-command-map "x" 'project-execute-extended-command)
