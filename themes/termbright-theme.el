@@ -9,12 +9,15 @@
 (deftheme termbright
   "termbright, a more usable theme for white-on-black terminals")
 
-(defvar termbright-bgblue0  '((t (:foreground "white"       :background "blue"                                 ))))
-(defvar termbright-bgblue1  '((t (:foreground "brightwhite" :background "blue"        :weight bold             ))))
-(defvar termbright-bgblue2  '((t (:foreground "brightwhite" :background "blue"        :weight bold :underline t))))
-(defvar termbright-bgblack0 '((t (:foreground "white"       :background "brightblack"                          ))))
-(defvar termbright-bgblack1 '((t (:foreground "brightwhite" :background "brightblack" :weight bold             ))))
-(defvar termbright-bgblack2 '((t (:foreground "brightwhite" :background "brightblack" :weight bold :underline t))))
+(defvar termbright-bgblue0   '((t (:foreground "white"       :background "blue"                                 ))))
+(defvar termbright-bgblue1   '((t (:foreground "brightwhite" :background "blue"        :weight bold             ))))
+(defvar termbright-bgblue2   '((t (:foreground "brightwhite" :background "blue"        :weight bold :underline t))))
+(defvar termbright-bgyellow0 '((t (:foreground "black"       :background "yellow"                               ))))
+(defvar termbright-bgyellow1 '((t (:foreground "brightblack" :background "yellow"      :weight bold             ))))
+(defvar termbright-bgyellow2 '((t (:foreground "brightblack" :background "yellow"      :weight bold :underline t))))
+(defvar termbright-bgblack0  '((t (:foreground "white"       :background "brightblack"                          ))))
+(defvar termbright-bgblack1  '((t (:foreground "brightwhite" :background "brightblack" :weight bold             ))))
+(defvar termbright-bgblack2  '((t (:foreground "brightwhite" :background "brightblack" :weight bold :underline t))))
 
 (defvar termbright-shadow0  '((t (:foreground "green"                                  ))))
 (defvar termbright-shadow1  '((t (:foreground "green"                      :underline t))))
@@ -35,10 +38,10 @@
  'termbright
 
  `(region              ,termbright-bgblue0)
+ `(match               ,termbright-bgyellow1)
  `(highlight           ,termbright-bgblack2)
  `(isearch             ,termbright-bgblack2)
  `(secondary-selection ,termbright-bgblack0)
- `(match               ,termbright-bgblack0)
  `(lazy-highlight      ,termbright-bgblack0)
  `(query-replace       ,termbright-bgblack0)
 
