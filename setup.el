@@ -25,7 +25,6 @@
     embark-consult
     wgrep
     magit
-    projectile
     yasnippet
     company
     python-mls

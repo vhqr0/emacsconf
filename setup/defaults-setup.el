@@ -45,7 +45,9 @@
       kept-new-versions 10
       delete-old-versions t
       backup-by-copying t
-      delete-by-moving-to-trash t)
+      delete-by-moving-to-trash t
+      remote-file-name-inhibit-locks t
+      remote-file-name-inhibit-delete-by-moving-to-trash t)
 
 (setq backup-directory-alist         `((".*" . ,(expand-file-name "backup/"    user-emacs-directory)  ))
       auto-save-file-name-transforms `((".*"   ,(expand-file-name "auto-save/" user-emacs-directory) t))
@@ -58,7 +60,8 @@
   (not (run-hook-with-args-until-success '+auto-save-visited-predicate-hook)))
 
 (setq auto-save-visited-interval 1
-      auto-save-visited-predicate '+auto-save-visited-predicate)
+      auto-save-visited-predicate '+auto-save-visited-predicate
+      remote-file-name-inhibit-auto-save-visited t)
 (auto-save-visited-mode 1)
 (add-to-list 'minor-mode-alist '(auto-save-visited-mode " ASV"))
 
@@ -200,19 +203,12 @@ Override: fix join lines leave space between CJK chars."
 ;;** simple-x
 (simple-x-default-keybindings)
 
+;;** project-x
+(project-x-mode 1)
+
 ;;** avy
 (setq avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
 (define-key goto-map ";" 'avy-resume)
 (define-key goto-map "f" 'avy-goto-char)
 (define-key goto-map "j" 'avy-goto-line)
 (define-key goto-map "w" 'avy-goto-word-0)
-
-;;** projectile
-(setq projectile-switch-project-action 'projectile-commander
-      projectile-current-project-on-switch 'move-to-end)
-(projectile-mode 1)
-(define-key projectile-command-map "\e" nil)
-(define-key projectile-command-map "x" 'project-execute-extended-command)
-(define-key projectile-command-map "e" 'projectile-run-eshell)
-(define-key projectile-command-map "s" 'projectile-run-shell)
-(define-key ctl-x-map "p" projectile-command-map)
