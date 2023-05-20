@@ -3,7 +3,14 @@
 
 
 ;;* git
-(setq magit-section-visibility-indicator '("..." . t))
+(setq magit-bind-magit-project-status nil
+      magit-define-global-key-bindings nil
+      magit-section-visibility-indicator '("..." . t))
+
+(define-key project-prefix-map "m" 'magit-project-status)
+(with-eval-after-load 'project
+  (add-to-list 'project-switch-commands '(magit-project-status "Magit") t))
+
 (define-key vc-prefix-map "j" 'magit-status)
 (define-key vc-prefix-map "f" 'magit-file-dispatch)
 (define-key vc-prefix-map "?" 'magit-dispatch)

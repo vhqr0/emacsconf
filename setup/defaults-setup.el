@@ -82,9 +82,15 @@
 (global-set-key (kbd "C-c d") 'delete-pair)
 
 (setq display-line-numbers-type 'relative)
-(global-display-line-numbers-mode 1)
 
 (setq global-hl-line-sticky-flag t)
+
+(defun +text-setup()
+  (setq-local show-trailing-whitespace t)
+  (display-line-numbers-mode 1))
+
+(dolist (hook '(text-mode-hook prog-mode-hook))
+  (add-hook hook '+text-setup))
 
 
 
