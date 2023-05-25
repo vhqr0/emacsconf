@@ -56,11 +56,14 @@
         (company-dabbrev-code company-keywords :with company-yasnippet)
         (company-dabbrev company-yasnippet)))
 
+(defun +maybe-enable-company-mode ()
+  (when global-company-mode
+    (company-mode 1)))
+
 (defun +company-set-backends (hook backends)
   (add-hook hook `(lambda ()
                     (setq-local company-backends ',backends)
-                    (when global-company-mode
-                      (company-mode 1)))))
+                    (+maybe-enable-company-mode))))
 (+company-set-backends 'eshell-mode-hook '(company-files))
 (+company-set-backends 'sh-mode-hook '(company-files company-dabbrev))
 

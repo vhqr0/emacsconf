@@ -8,13 +8,13 @@
 (add-hook 'js-mode-hook 'emmet-mode)
 (add-hook 'mhtml-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'emmet-mode)
 
 (add-to-list '+package 'web-mode)
 (setq web-mode-code-indent-offset 2
       web-mode-markup-indent-offset 2
       web-mode-css-indent-offset 2)
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-hook 'web-mode-hook 'emmet-mode)
 
 ;;; lisp
 (add-to-list '+package 'sly)

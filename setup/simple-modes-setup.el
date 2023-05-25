@@ -16,12 +16,14 @@
 (setq flymake-cc-command '+flymake-cc-command)
 
 ;;* python
+(defvar +ipython-program "ipython")
 (setq python-indent-guess-indent-offset nil ; inhibit verbose
-      python-shell-interpreter "ipython"
+      python-shell-interpreter +ipython-program
       python-shell-interpreter-args "--simple-prompt")
 (defun +python-comment-inline-offset-setup ()
   (setq-local comment-inline-offset 2))
 (add-hook 'python-mode-hook '+python-comment-inline-offset-setup)
+(add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode)
 (add-hook 'inferior-python-mode-hook 'python-mls-mode) ; python-mls
 
 ;;* web
