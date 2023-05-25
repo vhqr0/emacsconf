@@ -74,6 +74,8 @@
 
 
 
+(defvar clang-format-program "clang-format")
+(defvar yapf-program "yapf")
 (defvar prettier-command "prettier")
 
 (defun prettier-compute-command ()
@@ -92,9 +94,9 @@
                      (user-error "Major mode doesn't support"))))))
 
 (defvar format-dwim-command-alist
-  '((c-mode . "clang-format")
-    (c++-mode . "clang-format")
-    (python-mode . "yapf") ;; black: "black -q -"
+  '((c-mode . clang-format-program)
+    (c++-mode . clang-format-program)
+    (python-mode . yapf-program) ;; black: "black -q -"
     (js-json-mode . prettier-compute-command)
     (js-mode . prettier-compute-command)
     (mhtml-mode . prettier-compute-command)
