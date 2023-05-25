@@ -29,8 +29,7 @@
     company
     python-mls
     markdown-mode
-    edit-indirect
-    emmet-mode))
+    edit-indirect))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 

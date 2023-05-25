@@ -3,7 +3,12 @@
 (with-eval-after-load 'cmake-mode
   (+company-set-backends 'cmake-mode-hook '(company-cmake)))
 
-;;; web-mode
+;;; web
+(add-to-list '+package 'emmet-mode)
+(add-hook 'js-mode-hook 'emmet-mode)
+(add-hook 'mhtml-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook 'emmet-mode)
+
 (add-to-list '+package 'web-mode)
 (setq web-mode-code-indent-offset 2
       web-mode-markup-indent-offset 2

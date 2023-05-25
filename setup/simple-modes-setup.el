@@ -27,9 +27,6 @@
 ;;* web
 (setq js-indent-level 2
       css-indent-offset 2)
-(add-hook 'js-mode-hook 'emmet-mode)
-(add-hook 'mhtml-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook 'emmet-mode)
 
 ;;* markdown
 (setq markdown-fontify-code-blocks-natively t)
