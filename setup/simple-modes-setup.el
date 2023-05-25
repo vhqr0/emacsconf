@@ -23,7 +23,8 @@
 (defun +python-comment-inline-offset-setup ()
   (setq-local comment-inline-offset 2))
 (add-hook 'python-mode-hook '+python-comment-inline-offset-setup)
-(add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode)
+(unless (eq system-type 'windows-nt)
+  (add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode))
 (add-hook 'inferior-python-mode-hook 'python-mls-mode) ; python-mls
 
 ;;* web
