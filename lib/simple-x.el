@@ -133,6 +133,12 @@
       (when symbol
         (insert symbol)))))
 
+(defun kill-current-buffer-dwim ()
+  "Kill current buffer with prompt."
+  (interactive)
+  (when (y-or-n-p (format "kill current buffer<%s>?" (buffer-name)))
+    (kill-buffer)))
+
 (defun rotate-window (arg)
   "Rotate current window or swap it if called with prefix ARG."
   (interactive "P")

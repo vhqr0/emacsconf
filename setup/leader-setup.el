@@ -114,7 +114,7 @@
 (define-key +leader-prefix-map "\s" 'execute-extended-command)
 (define-key +leader-prefix-map "z"  'repeat)
 (define-key +leader-prefix-map "b"  'switch-to-buffer)
-(define-key +leader-prefix-map "k"  'kill-buffer)
+(define-key +leader-prefix-map "k"  'kill-current-buffer-dwim) ; simple-x
 (define-key +leader-prefix-map "f"  'find-file)
 (define-key +leader-prefix-map "j"  'dired-jump)
 (define-key +leader-prefix-map "e"  'eshell-dwim) ; simple-x
