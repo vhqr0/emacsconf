@@ -117,6 +117,7 @@
 (define-key +leader-prefix-map "k"  'kill-current-buffer-dwim) ; simple-x
 (define-key +leader-prefix-map "f"  'find-file)
 (define-key +leader-prefix-map "j"  'dired-jump)
+(define-key +leader-prefix-map "i"  'ibs)         ; simple-x
 (define-key +leader-prefix-map "e"  'eshell-dwim) ; simple-x
 (define-key +leader-prefix-map "="  'format-dwim) ; simple-x
 (define-key +leader-prefix-map ";"  'eval-expression)

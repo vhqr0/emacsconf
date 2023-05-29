@@ -180,7 +180,7 @@ Override: fix join lines leave space between CJK chars."
 (define-key help-map "tl" 'load-library)
 (define-key help-map "j"  'find-library)
 (define-key help-map "4j" 'find-library-other-window)
-(define-key help-map "B"  'describe-keymap)
+(define-key help-map "5j" 'find-library-other-frame)
 
 ;;** ctl-x-4-map
 (define-key ctl-x-4-map "j" 'dired-jump-other-window)
@@ -208,9 +208,19 @@ Override: fix join lines leave space between CJK chars."
 ;;** project-x
 (project-x-mode 1)
 
+;;** embark
+(global-set-key "\M-o" 'embark-act)
+
 ;;** avy
 (setq avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
 (define-key goto-map ";" 'avy-resume)
 (define-key goto-map "f" 'avy-goto-char)
 (define-key goto-map "j" 'avy-goto-line)
 (define-key goto-map "w" 'avy-goto-word-0)
+
+(defun avy-action-embark (pt)
+  (unwind-protect (save-excursion (goto-char pt) (embark-act))
+    (select-window (cdr (ring-ref avy-ring 0))) t))
+
+(with-eval-after-load 'avy
+  (add-to-list 'avy-dispatch-alist '(?o . avy-action-embark)))

@@ -74,6 +74,8 @@
 
 
 
+;;; format-dwim
+
 (defvar clang-format-command "clang-format")
 (defvar yapf-command "yapf")
 (defvar prettier-command "prettier")
@@ -133,11 +135,15 @@
       (when symbol
         (insert symbol)))))
 
-(defun kill-current-buffer-dwim ()
+(defun kill-current-buffer-dwim (arg)
   "Kill current buffer with prompt."
-  (interactive)
-  (when (y-or-n-p (format "kill current buffer<%s>?" (buffer-name)))
-    (kill-buffer)))
+  (interactive "P")
+  (if arg
+      (call-interactively 'kill-buffer)
+    (let ((c (read-char "Kill current buffer <%s>? [y]" (buffer-name))))
+      (if (memq c '(?\r ?y))
+          (kill-buffer)
+        (message "Aborted")))))
 
 (defun rotate-window (arg)
   "Rotate current window or swap it if called with prefix ARG."
@@ -171,6 +177,10 @@
                                   (split-window-horizontally)
                                 (split-window-vertically)))
                (set-window-buffer window prev-window-buffer)))))))
+
+
+
+;;; eshell-dwim
 
 (defvar eshell-buffer-name)
 (declare-function eshell-reset "esh-mode")
@@ -215,6 +225,65 @@
                     (switch-to-buffer buffer))
                    (t
                     (switch-to-buffer-other-window buffer))))))))
+
+;;; ibs
+(defvar ibs-buffer-name "*ibs*")
+
+(defvar ibs-key-list
+  '(?j ?f ?k ?d ?h ?g ?l ?s ?u ?r ?y ?t ?i ?e ?o ?w ?m ?v ?n ?b ?, ?c ?7 ?4 ?6 ?5 ?8 ?3 ?9 ?2 ?0 ?1 ?\; ?a ?. ?x ?/ ?z))
+
+(defun ibs-buffer-list ()
+  (sort
+   (cl-remove-if-not
+    (lambda (b) (not (string-prefix-p " " (buffer-name b))))
+    (buffer-list))
+   (lambda (b1 b2)
+     (not (time-less-p (with-current-buffer b1 (or buffer-display-time 0))
+                       (with-current-buffer b2 (or buffer-display-time 0)))))))
+
+(defun ibs-buffer-alist ()
+  (let* ((key-list ibs-key-list)
+         (buffer-list (append (ibs-buffer-list) recentf-list))
+         (key key-list)
+         (buffer buffer-list)
+         alist)
+    (while (and key buffer)
+      (setq alist (cons (cons (car key)
+                              (car buffer))
+                        alist)
+            key (cdr key)
+            buffer (cdr buffer)))
+    (reverse alist)))
+
+(defun ibs ()
+  (interactive)
+  (let ((buffer (save-window-excursion
+                  (let ((alist (ibs-buffer-alist))
+                        (buffer (get-buffer-create ibs-buffer-name)))
+                    (with-current-buffer buffer
+                      (let ((inhibit-read-only t))
+                        (widen)
+                        (erase-buffer)
+                        (dolist (kb alist)
+                          (let* ((key (car kb))
+                                 (buffer (cdr kb))
+                                 (face (cond ((bufferp buffer)
+                                              (ibuffer-buffer-name-face buffer nil))
+                                             (t
+                                              'font-lock-comment-face)))
+                                 (line (propertize (format "[%c] %s\n" key buffer) 'face face)))
+                            (insert line)))
+                        (goto-char (point-min))))
+                    (display-buffer buffer)
+                    (let ((c (read-char "Select a buffer [SPC to read from minibuffer]: ")))
+                      (cond ((eq c ?\s)
+                             (read-buffer "Input a buffer: "))
+                            (t
+                             (cdr (assq c alist)))))))))
+    (cond ((bufferp buffer)
+           (switch-to-buffer buffer))
+          ((stringp buffer)
+           (find-file buffer)))))
 
 
 
