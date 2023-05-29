@@ -4,12 +4,28 @@
 
 ;;* vertico
 (vertico-mode 1)
+(vertico-indexed-mode 1)
 (marginalia-mode 1)
 
 (advice-add 'vertico--setup :after 'vertico-repeat-save)
 (global-set-key (kbd "<f5>") 'vertico-repeat)
 
 (define-key vertico-map (kbd "<f2>") 'embark-export)
+
+(defun vertico-exit-nth (n)
+  (setq vertico--index (+ vertico-indexed-start n))
+  (vertico-insert)
+  (when (vertico--match-p (minibuffer-contents-no-properties))
+    (exit-minibuffer)))
+
+(dotimes (i 10)
+  (let ((funcsym (intern (format "vertico-exit-%d" i))))
+    (eval
+     `(progn
+        (defun ,funcsym ()
+          (interactive)
+          (vertico-exit-nth ,i))
+        (define-key vertico-map (kbd ,(format "M-%d" i)) ',funcsym)))))
 
 (with-eval-after-load 'evil-collection-vertico
   (when evil-collection-setup-minibuffer
@@ -35,6 +51,12 @@
    consult-project-buffer
    consult-theme
    :preview-key '(:debounce 0.5 any)))
+
+(defun +around-enable-recursive (func &rest args)
+  (let ((enable-recursive-minibuffers t))
+    (apply func args)))
+
+(advice-add 'consult-yank-pop :around '+around-enable-recursive)
 
 (defvar +consult-minor-mode-remap-bindings
   '((switch-to-buffer                       . consult-buffer)

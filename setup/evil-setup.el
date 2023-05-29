@@ -40,7 +40,7 @@
 
 (global-set-key "\M-z" [escape])
 (define-key minibuffer-local-map [escape] 'keyboard-escape-quit)
-
+(evil-collection-define-key 'normal 'minibuffer-local-map "o" [?\r])
 (set-keymap-parent evil-ex-completion-map minibuffer-local-map)
 
 (define-key evil-normal-state-map [remap yank-pop] nil)
