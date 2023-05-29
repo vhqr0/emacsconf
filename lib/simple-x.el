@@ -227,6 +227,8 @@
                     (switch-to-buffer-other-window buffer))))))))
 
 ;;; ibs
+(declare-function ibuffer-buffer-name-face "ibuffer")
+
 (defvar ibs-buffer-name "*ibs*")
 
 (defvar ibs-key-list
@@ -257,6 +259,7 @@
 
 (defun ibs ()
   (interactive)
+  (require 'ibuffer)
   (let ((buffer (save-window-excursion
                   (let ((alist (ibs-buffer-alist))
                         (buffer (get-buffer-create ibs-buffer-name)))
