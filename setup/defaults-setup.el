@@ -47,10 +47,12 @@
       remote-file-name-inhibit-locks t
       remote-file-name-inhibit-delete-by-moving-to-trash t)
 
-(setq backup-directory-alist         `((".*" . ,(expand-file-name "backup/"    user-emacs-directory)  ))
-      auto-save-file-name-transforms `((".*"   ,(expand-file-name "auto-save/" user-emacs-directory) t))
-      lock-file-name-transforms      `((".*"   ,(expand-file-name "lock/"      user-emacs-directory) t))
-      trash-directory                           (expand-file-name "trash/"     user-emacs-directory)    )
+(setq backup-directory-alist            `((".*" . ,(expand-file-name "backup/"    user-emacs-directory)  ))
+      auto-save-file-name-transforms    `((".*"   ,(expand-file-name "auto-save/" user-emacs-directory) t))
+      lock-file-name-transforms         `((".*"   ,(expand-file-name "lock/"      user-emacs-directory) t))
+      trash-directory                              (expand-file-name "trash/"     user-emacs-directory)
+      undo-tree-history-directory-alist `((".*" . ,(expand-file-name "undo-tree/" user-emacs-directory)  )) ; undo-tree
+      )
 
 (defvar +auto-save-visited-predicate-hook nil)
 
@@ -62,6 +64,16 @@
       remote-file-name-inhibit-auto-save-visited t)
 (auto-save-visited-mode 1)
 (add-to-list 'minor-mode-alist '(auto-save-visited-mode " ASV"))
+
+(setq undo-tree-mode-lighter nil)
+(global-undo-tree-mode 1)
+(defun +auto-save-visited-predicate-undo-tree ()
+  (and undo-tree-mode
+       (let ((buffer (current-buffer)))
+         (with-current-buffer (window-buffer)
+           (and (eq major-mode 'undo-tree-visualizer-mode)
+                (eq buffer undo-tree-visualizer-parent-buffer))))))
+(add-hook '+auto-save-visited-predicate-hook '+auto-save-visited-predicate-undo-tree)
 
 (setq recentf-max-saved-items 200)
 (recentf-mode 1)
