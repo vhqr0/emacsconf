@@ -234,6 +234,8 @@
 (defvar ibs-key-list
   '(?j ?f ?k ?d ?h ?g ?l ?s ?u ?r ?y ?t ?i ?e ?o ?w ?m ?v ?n ?b ?, ?c ?7 ?4 ?6 ?5 ?8 ?3 ?9 ?2 ?0 ?1 ?\; ?a ?. ?x ?/ ?z))
 
+(defvar ibs-read-buffer-function 'read-buffer)
+
 (defun ibs-buffer-list ()
   (sort
    (cl-remove-if-not
@@ -270,23 +272,33 @@
                         (dolist (kb alist)
                           (let* ((key (car kb))
                                  (buffer (cdr kb))
+                                 (name (cond ((bufferp buffer)
+                                              (buffer-name buffer))
+                                             ((stringp buffer)
+                                              buffer)
+                                             (t
+                                              (user-error "Invalid buffer type"))))
                                  (face (cond ((bufferp buffer)
                                               (ibuffer-buffer-name-face buffer nil))
                                              (t
                                               'font-lock-comment-face)))
-                                 (line (propertize (format "[%c] %s\n" key buffer) 'face face)))
+                                 (line (propertize (format "[%c] %s\n" key name) 'face face)))
                             (insert line)))
                         (goto-char (point-min))))
                     (display-buffer buffer)
                     (let ((c (read-char "Select a buffer [SPC to read from minibuffer]: ")))
                       (cond ((eq c ?\s)
-                             (read-buffer "Input a buffer: "))
+                             (funcall ibs-read-buffer-function "Input a buffer: "))
                             (t
                              (cdr (assq c alist)))))))))
     (cond ((bufferp buffer)
            (switch-to-buffer buffer))
           ((stringp buffer)
-           (find-file buffer)))))
+           (if (get-buffer buffer)
+               (switch-to-buffer buffer)
+             (find-file buffer)))
+          (t
+           (user-error "Invalid buffer type")))))
 
 
 
