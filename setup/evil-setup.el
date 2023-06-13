@@ -135,6 +135,9 @@
 (define-key evil-normal-state-map "gc" '+evil-operator-comment)
 (define-key evil-motion-state-map "g-" '+evil-operator-narrow)
 
+(evil-define-text-object +evil-tobj-line (const &optional beg end type)
+  (evil-range (line-beginning-position) (line-end-position) 'exclusive))
+
 (evil-define-text-object +evil-tobj-filename (const &optional beg end type)
   (cl-destructuring-bind (beg . end)
       (bounds-of-thing-at-point 'filename)
@@ -153,6 +156,8 @@
 (evil-define-text-object +evil-tobj-entire (const &optional beg end type)
   (evil-range (point-min) (point-max) 'line))
 
+(define-key evil-inner-text-objects-map "l" '+evil-tobj-line)
+(define-key evil-outer-text-objects-map "l" '+evil-tobj-line)
 (define-key evil-inner-text-objects-map "F" '+evil-tobj-filename)
 (define-key evil-outer-text-objects-map "F" '+evil-tobj-filename)
 (define-key evil-inner-text-objects-map "u" '+evil-tobj-filename)
