@@ -1,42 +1,40 @@
 ;;; -*- lexical-binding: t -*-
 
-;;* defvars and load custom
+;;* defvars
 
 (defvar +setup-directory  (expand-file-name "setup"  +conf-directory))
 (defvar +lib-directory    (expand-file-name "lib"    +conf-directory))
 (defvar +misc-directory   (expand-file-name "misc"   +conf-directory))
 (defvar +themes-directory (expand-file-name "themes" +conf-directory))
 
-(defvar +package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                            ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-                            ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-
-(defvar +package
-  '(undo-tree
+(defvar +init-setups
+  '(defaults
+    keybindings
     evil
-    evil-surround
-    evil-collection
-    avy
-    orderless
-    vertico
-    marginalia
     consult
-    embark
-    embark-consult
-    wgrep
-    magit
-    yasnippet
-    company
-    python-mls
-    markdown-mode
-    edit-indirect))
+    prog-tools
+    ext-tools
+    simple-modes))
+(defvar +misc-setups nil)
+
+;;* load custom file
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-
 (when (file-exists-p custom-file)
   (load-file custom-file))
 
-
+;;* setup package
+
+(defvar package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                           ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                           ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+
+(setq package-quickstart t)
+
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+(use-package diminish)
 
 ;;* setup internal (lib) and external (elpa) packages
 
@@ -48,25 +46,17 @@
     (make-directory-autoloads +lib-directory lib-autoload))
   (load-file lib-autoload))
 
-(setq package-quickstart t
-      package-archives +package-archives)
-
-(require 'package)
-
-(let (package-refreshed-p)
-  (dolist (pkg +package)
-    (unless (package-installed-p pkg)
-      (unless package-refreshed-p
-        (setq package-refreshed-p t)
-        (package-refresh-contents))
-      (package-install pkg)))
-  (when package-refreshed-p
-    (package-quickstart-refresh)))
-
 
 
 ;;* load *-setup
 
-(dolist (setup
-         '("defaults" "leader" "evil" "consult" "prog-tools" "ext-tools" "simple-modes"))
-  (load-file (expand-file-name (concat setup "-setup.el") +setup-directory)))
+(defun +setup-path (name directory)
+  (when (symbolp name)
+    (setq name (symbol-name name)))
+  (expand-file-name (concat name "-setup.el") directory))
+
+(dolist (setup +init-setups)
+  (load-file (+setup-path setup +setup-directory)))
+
+(dolist (setup +misc-setups)
+  (load-file (+setup-path setup +misc-directory)))

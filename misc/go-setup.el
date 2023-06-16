@@ -1,4 +1,5 @@
-(add-to-list '+package 'go-mode)
-(with-eval-after-load 'go-mode
-  (define-key go-mode-map [remap format-dwim] 'gofmt)
+(use-package go-mode
+  :defer t
+  :config
+  (bind-key [remap format-buffer] 'gofmt go-mode-map)
   (load-file (expand-file-name "go-dlv.el" +misc-directory)))

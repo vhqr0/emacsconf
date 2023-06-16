@@ -1,24 +1,27 @@
 ;;; cmake-mode
-(add-to-list '+package 'cmake-mode)
-(with-eval-after-load 'cmake-mode
+(use-package cmake-mode
+  :defer t
+  :config
   (+company-set-backends 'cmake-mode-hook '(company-cmake)))
 
 ;;; web
-(add-to-list '+package 'emmet-mode)
-(add-hook 'js-mode-hook 'emmet-mode)
-(add-hook 'mhtml-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook 'emmet-mode)
-(add-hook 'web-mode-hook 'emmet-mode)
+(use-package emmet-mode
+  :hook ((js-mode mhtml-mode css-mode web-mode) . emmet-mode))
 
-(add-to-list '+package 'web-mode)
-(setq web-mode-code-indent-offset 2
-      web-mode-markup-indent-offset 2
-      web-mode-css-indent-offset 2)
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(use-package web-mode
+  :magic ("\\.djhtml\\'" . web-mode)
+  :init
+  (setq web-mode-code-indent-offset 2
+        web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2))
 
 ;;; lisp
-(add-to-list '+package 'sly)
-(setq inferior-lisp-program "sbcl")
+(use-package sly
+  :defer t
+  :init
+  (setq inferior-lisp-program "sbcl")
+  (with-eval-after-load 'evil-eval
+    (add-to-list 'evil-eval-alist '(lisp-mode . sly-eval-region))))
 
 ;;; latex
-(add-to-list '+package 'auctex)
+(use-package auctex :defer t)

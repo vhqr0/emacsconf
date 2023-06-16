@@ -1,5 +1,5 @@
 ;;; 29
 
-(add-to-list '+package 'eglot)
+(use-package eglot :defer t)
 
-(define-key goto-map "i" 'imenu)
+(bind-key "i" 'imenu goto-map)

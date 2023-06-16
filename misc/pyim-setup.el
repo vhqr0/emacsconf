@@ -1,21 +1,4 @@
-(add-to-list '+package 'pyim)
-(add-to-list '+package 'pyim-basedict)
-
 (defvar +pyim-page-tooltip '(posframe popon))
-
-(unless (listp +pyim-page-tooltip)
-  (setq +pyim-page-tooltip (list +pyim-page-tooltip)))
-
-(dolist (pkg '(posframe popon popup))
-  (when (memq pkg +pyim-page-tooltip)
-    (add-to-list '+package pkg)))
-
-(with-eval-after-load 'pyim
-  (dolist (pkg '(posframe popon popup))
-    (when (memq pkg +pyim-page-tooltip)
-      (require pkg))))
-
-
 
 (defvar +pyim-zirjma-keymaps
   '(("a"    "a"    "a"          )
@@ -81,21 +64,28 @@
     (":"  "："    )
     ("\\" "、"    )))
 
-
+(dolist (pkg +pyim-page-tooltip)
+  (eval `(use-package ,pkg)))
 
-(setq default-input-method "pyim")
+(use-package pyim-basedict :defer t)
 
-(setq pyim-default-scheme 'zirjma
-      pyim-pinyin-fuzzy-alist nil
-      pyim-enable-shortcode nil
-      pyim-candidates-search-buffer-p nil
-      pyim-indicator-list nil
-      pyim-punctuation-dict +pyim-punctuation-dict
-      pyim-page-tooltip +pyim-page-tooltip)
-
-(with-eval-after-load 'pyim
-  (define-key pyim-mode-map "." 'pyim-page-next-page)
-  (define-key pyim-mode-map "," 'pyim-page-previous-page)
+(use-package pyim
+  :defer t
+  :init
+  (setq default-input-method "pyim")
+  (setq pyim-default-scheme 'zirjma
+        pyim-pinyin-fuzzy-alist nil
+        pyim-enable-shortcode nil
+        pyim-candidates-search-buffer-p nil
+        pyim-indicator-list nil
+        pyim-punctuation-dict +pyim-punctuation-dict
+        pyim-page-tooltip +pyim-page-tooltip)
+  :config
+  (dolist (pkg +pyim-page-tooltip)
+    (require pkg))
+  (bind-keys :map pyim-mode-map
+             ("." . pyim-page-next-page)
+             ("," . pyim-page-previous-page))
   (pyim-scheme-add
    `(zirjma
      :document "zirjma"

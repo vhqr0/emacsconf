@@ -2,6 +2,10 @@
 
 
 
+;;* elisp
+(use-package macrostep
+  :bind (:map emacs-lisp-mode-map ("C-c e" . macrostep-expand)))
+
 ;;* cc
 (defvar +flymake-cc-program "clang")
 (defvar +flymake-cc-args nil)
@@ -16,21 +20,37 @@
 (setq flymake-cc-command '+flymake-cc-command)
 
 ;;* python
-(defvar +ipython-program "ipython")
-(setq python-indent-guess-indent-offset nil ; inhibit verbose
-      python-shell-interpreter +ipython-program
-      python-shell-interpreter-args "--simple-prompt")
-(defun +python-comment-inline-offset-setup ()
-  (setq-local comment-inline-offset 2))
-(add-hook 'python-mode-hook '+python-comment-inline-offset-setup)
-(unless (eq system-type 'windows-nt)
-  (add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode)
-  (add-hook 'inferior-python-mode-hook 'python-mls-mode) ; python-mls
-  )
+(use-package python
+  :init
+  (defvar python-shell-interpreter "ipython")
+  (defvar python-shell-interpreter-args "--simple-prompt")
+  (setq python-indent-guess-indent-offset nil)
+  :config
+  (defun +python-comment-inline-offset-setup ()
+    (setq-local comment-inline-offset 2))
+  (add-hook 'python-mode-hook '+python-comment-inline-offset-setup)
+  (unless (eq system-type 'windows-nt)
+    (add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode)
+    (use-package python-mls
+      :hook (inferior-python-mode . python-mls-mode))))
 
 ;;* web
-(setq js-indent-level 2
-      css-indent-offset 2)
+(use-package js
+  :ensure nil
+  :defer t
+  :init
+  (setq js-indent-level 2))
+
+(use-package css-mode
+  :ensure nil
+  :defer t
+  :init
+  (setq css-indent-offset 2))
 
 ;;* markdown
-(setq markdown-fontify-code-blocks-natively t)
+(use-package markdown-mode
+  :defer t
+  :init
+  (setq markdown-fontify-code-blocks-natively t))
+
+(use-package edit-indirect :defer t)

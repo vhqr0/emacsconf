@@ -4,35 +4,43 @@
 
 ;;* basic
 
-(setq evil-want-keybinding nil
-      evil-want-minibuffer t
-      evil-want-C-w-delete t
-      evil-want-C-u-delete t
-      evil-want-C-u-scroll t
-      evil-want-C-g-bindings t
-      evil-want-Y-yank-to-eol t
-      evil-want-fine-undo t
-      evil-undo-system 'undo-tree
-      evil-search-module 'evil-search
-      evil-ex-search-persistent-highlight nil
-      evil-symbol-word-search t
-      evil-respect-visual-line-mode t
-      evil-collection-setup-minibuffer t)
+(use-package evil
+  :init
+  (setq evil-want-keybinding nil
+        evil-want-minibuffer t
+        evil-want-C-w-delete t
+        evil-want-C-u-delete t
+        evil-want-C-u-scroll t
+        evil-want-C-g-bindings t
+        evil-want-Y-yank-to-eol t
+        evil-want-fine-undo t
+        evil-undo-system 'undo-tree
+        evil-search-module 'evil-search
+        evil-ex-search-persistent-highlight nil
+        evil-symbol-word-search t
+        evil-respect-visual-line-mode t)
+  :config
+  (evil-mode 1))
 
-(evil-mode 1)
-(global-evil-surround-mode 1)
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
 
-(evil-collection-init)
-(setcdr (assq 'evil-collection-unimpaired-mode minor-mode-alist) '(""))
+(use-package evil-collection
+  :diminish evil-collection-unimpaired-mode
+  :init
+  (setq evil-collection-setup-minibuffer t)
+  :config
+  (evil-collection-init))
 
-(global-set-key "\M-z" [escape])
-(define-key minibuffer-local-map [escape] 'keyboard-escape-quit)
-(evil-collection-define-key 'normal 'minibuffer-local-map "o" [?\r])
+(bind-key [escape] "M-z")
+
+(bind-key [escape] 'keyboard-escape-quit minibuffer-local-map)
 (set-keymap-parent evil-ex-completion-map minibuffer-local-map)
 
-(define-key evil-normal-state-map [remap yank-pop] nil)
+(unbind-key [remap yank-pop] evil-normal-state-map)
 
-(define-key evil-insert-state-map "\C-@" nil)
+(unbind-key "C-@" evil-insert-state-map) ; for terminial input method
 
 ;;* workaround
 
@@ -42,35 +50,6 @@
     (sit-for 0.3)
     (evil-ex-delete-hl 'evil-ex-search)))
 (advice-add 'evil-ex-search :after '+evil-ex-search-after)
-
-;;* initial state
-
-(evil-define-state special
-  "Special state."
-  :tag " <SP> "
-  :enable (emacs))
-
-(define-key evil-special-state-map "\C-w" evil-window-map)
-(define-key evil-special-state-map "\C-z" 'evil-motion-state)
-(define-key evil-special-state-map "\\"   'evil-execute-in-emacs-state)
-(define-key evil-special-state-map ":"    'evil-ex)
-(define-key evil-special-state-map "\C-d" 'evil-scroll-down)
-(define-key evil-special-state-map "\C-u" 'evil-scroll-up)
-(define-key evil-special-state-map "\C-f" 'evil-scroll-page-down)
-(define-key evil-special-state-map "\C-b" 'evil-scroll-page-up)
-(define-key evil-special-state-map "\C-e" 'evil-scroll-line-down)
-(define-key evil-special-state-map "\C-y" 'evil-scroll-line-up)
-(define-key evil-special-state-map "j"    [down])
-(define-key evil-special-state-map "k"    [up])
-(define-key evil-special-state-map "h"    [left])
-(define-key evil-special-state-map "l"    [right])
-
-(defun +evil-initial-state-for-buffer-around (func &rest args)
-  (let ((state (apply func args)))
-    (if (eq state 'emacs) 'special state)))
-
-(advice-add 'evil-initial-state-for-buffer
-            :around '+evil-initial-state-for-buffer-around)
 
 ;;* jk
 
@@ -98,90 +77,70 @@
           (push next-char unread-command-events)))
     (+evil-jk-j)))
 
-(define-key evil-insert-state-map  "j" '+evil-jk)
-(define-key evil-replace-state-map "j" '+evil-jk)
+(bind-keys
+ :map evil-insert-state-map  ("j" . +evil-jk)
+ :map evil-replace-state-map ("j" . +evil-jk))
 
 (with-eval-after-load 'company
   (add-to-list 'company-begin-commands '+evil-jk))
 
 
 
-;;* operator and textobject
+;;* extra
 
-(defvar +evil-operator-eval-alist
-  '((emacs-lisp-mode . eval-region)
-    (lisp-interaction-mode . eval-region)
-    (python-mode . python-shell-send-region)))
+(use-package evil-x :ensure nil)
 
-(evil-define-operator +evil-operator-eval (beg end)
-  :move-point nil
-  (interactive "<r>")
-  (let ((func (cdr (assq major-mode +evil-operator-eval-alist))))
-    (if func
-        (funcall func beg end)
-      (user-error "Major mode doesn't support"))))
+(use-package evil-xclip
+  :ensure nil
+  :bind (:map evil-motion-state-map ("gx" . evil-operator-xclip))
+  :init
+  (unbind-key "gx" evil-normal-state-map))
 
-(evil-define-operator +evil-operator-comment (beg end)
-  :move-point nil
-  (interactive "<r>")
-  (comment-or-uncomment-region beg end))
+(use-package evil-eval
+  :ensure nil
+  :bind (:map evil-motion-state-map ("gy" . evil-operator-eval)))
 
-(evil-define-operator +evil-operator-narrow (beg end)
-  :move-point nil
-  (interactive "<r>")
-  (narrow-to-region beg end))
+(use-package evil-format
+  :ensure nil
+  :bind (:map evil-normal-state-map ("g=" . evil-operator-format)))
 
-(define-key evil-motion-state-map "gy" '+evil-operator-eval)
-(define-key evil-normal-state-map "gc" '+evil-operator-comment)
-(define-key evil-motion-state-map "g-" '+evil-operator-narrow)
-
-(evil-define-text-object +evil-tobj-line (const &optional beg end type)
-  (evil-range (line-beginning-position) (line-end-position) 'exclusive))
-
-(evil-define-text-object +evil-tobj-filename (const &optional beg end type)
-  (cl-destructuring-bind (beg . end)
-      (bounds-of-thing-at-point 'filename)
-    (evil-range beg end)))
-
-(evil-define-text-object +evil-tobj-defun (const &optional beg end type)
-  (cl-destructuring-bind (beg . end)
-      (bounds-of-thing-at-point 'defun)
-    (evil-range beg end 'line)))
-
-(evil-define-text-object +evil-tobj-page (const &optional beg end type)
-  (cl-destructuring-bind (beg . end)
-      (bounds-of-thing-at-point 'page)
-    (evil-range beg end 'line)))
-
-(evil-define-text-object +evil-tobj-entire (const &optional beg end type)
-  (evil-range (point-min) (point-max) 'line))
-
-(define-key evil-inner-text-objects-map "l" '+evil-tobj-line)
-(define-key evil-outer-text-objects-map "l" '+evil-tobj-line)
-(define-key evil-inner-text-objects-map "F" '+evil-tobj-filename)
-(define-key evil-outer-text-objects-map "F" '+evil-tobj-filename)
-(define-key evil-inner-text-objects-map "u" '+evil-tobj-filename)
-(define-key evil-outer-text-objects-map "u" '+evil-tobj-filename)
-(define-key evil-inner-text-objects-map "f" '+evil-tobj-defun)
-(define-key evil-outer-text-objects-map "f" '+evil-tobj-defun)
-(define-key evil-inner-text-objects-map "d" '+evil-tobj-defun)
-(define-key evil-outer-text-objects-map "d" '+evil-tobj-defun)
-(define-key evil-inner-text-objects-map "P" '+evil-tobj-page)
-(define-key evil-outer-text-objects-map "P" '+evil-tobj-page)
-(define-key evil-inner-text-objects-map "e" '+evil-tobj-entire)
-(define-key evil-outer-text-objects-map "e" '+evil-tobj-entire)
-(define-key evil-inner-text-objects-map "h" '+evil-tobj-entire)
-(define-key evil-outer-text-objects-map "h" '+evil-tobj-entire)
+(use-package evil-grep
+  :ensure nil
+  :commands evil-grep
+  :init
+  (evil-ex-define-cmd "grep" 'evil-grep)
+  (evil-ex-define-cmd "rg" 'evil-grep))
 
 
 
 ;;* leader
 
-(define-key evil-motion-state-map  "z," 'evil-repeat-find-char-reverse)
-(define-key evil-motion-state-map  ","  +shift-prefix-map)
-(define-key evil-special-state-map ","  +shift-prefix-map)
-(define-key evil-motion-state-map  "\s" +leader-prefix-map)
-(define-key evil-special-state-map "\s" +leader-prefix-map)
+(defvar +shift-translation-alist
+  '((?a  . ?A) (?b  . ?B) (?c  . ?C ) (?d  . ?D )
+    (?e  . ?E) (?f  . ?F) (?g  . ?G ) (?h  . ?H )
+    (?i  . ?I) (?j  . ?J) (?k  . ?K ) (?l  . ?L )
+    (?m  . ?M) (?n  . ?N) (?o  . ?O ) (?p  . ?P )
+    (?q  . ?Q) (?r  . ?R) (?s  . ?S ) (?t  . ?T )
+    (?u  . ?U) (?v  . ?V) (?w  . ?W ) (?x  . ?X )
+    (?y  . ?Y) (?z  . ?Z) (?1  . ?! ) (?2  . ?@ )
+    (?3  . ?#) (?4  . ?$) (?5  . ?% ) (?6  . ?^ )
+    (?7  . ?&) (?8  . ?*) (?9  . ?\() (?0  . ?\))
+    (?`  . ?~) (?-  . ?_) (?=  . ?+ ) (?\[ . ?{ )
+    (?\] . ?}) (?\\ . ?|) (?\; . ?: ) (?'  . ?\")
+    (?,  . ?<) (?.  . ?>) (?/  . ?? )            ))
+
+(defvar +shift-prefix-map
+  (let ((map (make-sparse-keymap)))
+    (dolist (cons +shift-translation-alist)
+      (let ((from (car cons))
+            (to (cdr cons)))
+        (define-key map (vector from)
+                    `(menu-item
+                      "" nil :filter
+                      (lambda (cmd) (key-binding (vector ,to)))))))
+    map))
+
+(bind-key "," 'evil-repeat-find-char-reverse +shift-prefix-map)
 
 (defvar +evil-override-mode-map (make-sparse-keymap))
 

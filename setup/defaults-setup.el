@@ -13,13 +13,9 @@
 
 (setq text-quoting-style 'grave)
 
-(tooltip-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(blink-cursor-mode -1)
-
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
+(dolist (mode '(tooltip-mode tool-bar-mode menu-bar-mode blink-cursor-mode scroll-bar-mode))
+  (when (fboundp mode)
+    (funcall mode -1)))
 
 (unless (eq system-type 'windows-nt)
   (xterm-mouse-mode 1))
@@ -45,38 +41,43 @@
       backup-by-copying t
       delete-by-moving-to-trash t
       remote-file-name-inhibit-locks t
-      remote-file-name-inhibit-delete-by-moving-to-trash t)
+      remote-file-name-inhibit-delete-by-moving-to-trash t
+      remote-file-name-inhibit-auto-save-visited t)
 
 (setq backup-directory-alist            `((".*" . ,(expand-file-name "backup/"    user-emacs-directory)  ))
       auto-save-file-name-transforms    `((".*"   ,(expand-file-name "auto-save/" user-emacs-directory) t))
       lock-file-name-transforms         `((".*"   ,(expand-file-name "lock/"      user-emacs-directory) t))
       trash-directory                              (expand-file-name "trash/"     user-emacs-directory)
-      undo-tree-history-directory-alist `((".*" . ,(expand-file-name "undo-tree/" user-emacs-directory)  )) ; undo-tree
-      )
+      undo-tree-history-directory-alist `((".*" . ,(expand-file-name "undo-tree/" user-emacs-directory)  )))
 
 (defvar +auto-save-visited-predicate-hook nil)
-
 (defun +auto-save-visited-predicate ()
   (not (run-hook-with-args-until-success '+auto-save-visited-predicate-hook)))
-
 (setq auto-save-visited-interval 1
-      auto-save-visited-predicate '+auto-save-visited-predicate
-      remote-file-name-inhibit-auto-save-visited t)
+      auto-save-visited-predicate '+auto-save-visited-predicate)
 (auto-save-visited-mode 1)
 (add-to-list 'minor-mode-alist '(auto-save-visited-mode " ASV"))
 
-(setq undo-tree-mode-lighter nil)
-(global-undo-tree-mode 1)
-(defun +auto-save-visited-predicate-undo-tree ()
-  (and undo-tree-mode
-       (let ((buffer (current-buffer)))
-         (with-current-buffer (window-buffer)
-           (and (eq major-mode 'undo-tree-visualizer-mode)
-                (eq buffer undo-tree-visualizer-parent-buffer))))))
-(add-hook '+auto-save-visited-predicate-hook '+auto-save-visited-predicate-undo-tree)
+(use-package recentf
+  :ensure nil
+  :init
+  (setq recentf-max-saved-items 200)
+  :config
+  (recentf-mode 1))
 
-(setq recentf-max-saved-items 200)
-(recentf-mode 1)
+(use-package undo-tree
+  :init
+  (setq undo-tree-mode-lighter nil)
+  :config
+  (global-undo-tree-mode 1)
+  (defun +auto-save-visited-predicate-undo-tree ()
+    (and undo-tree-mode
+         (let ((buffer (current-buffer)))
+           (with-current-buffer (window-buffer)
+             (and (eq major-mode 'undo-tree-visualizer-mode)
+                  (eq buffer undo-tree-visualizer-parent-buffer))))))
+  (add-hook '+auto-save-visited-predicate-hook
+            '+auto-save-visited-predicate-undo-tree))
 
 
 
@@ -88,19 +89,23 @@
 (show-paren-mode 1)
 (electric-pair-mode 1)
 
-(global-set-key (kbd "C-c r") 'raise-sexp)
-(global-set-key (kbd "C-c d") 'delete-pair)
+(bind-keys ("C-c r" . raise-sexp)
+           ("C-c d" . delete-pair))
 
-(setq display-line-numbers-type 'relative)
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
-(setq global-hl-line-sticky-flag t)
+(use-package display-line-numbers
+  :ensure nil
+  :hook ((text-mode prog-mode) . display-line-numbers-mode)
+  :init
+  (setq display-line-numbers-type 'relative))
 
-(defun +text-setup()
-  (setq-local show-trailing-whitespace t)
-  (display-line-numbers-mode 1))
-
-(dolist (hook '(text-mode-hook prog-mode-hook))
-  (add-hook hook '+text-setup))
+(use-package hl-line
+  :ensure nil
+  :defer t
+  :init
+  (setq global-hl-line-sticky-flag t))
 
 
 
@@ -135,21 +140,31 @@ Override: fix join lines leave space between CJK chars."
 
 (setq disabled-command-function nil)
 
-(repeat-mode 1)
+(use-package repeat
+  :ensure nil
+  :config
+  (repeat-mode 1)
+  (with-eval-after-load 'dired
+    (put 'dired-jump 'repeat-map nil)))
 
-(with-eval-after-load 'dired
-  (put 'dired-jump 'repeat-map nil))
 
 
 
 ;;* layout
 
-(setq tab-bar-tab-hints t
-      tab-bar-select-tab-modifiers '(meta))
+(use-package tab-bar
+  :ensure nil
+  :init
+  (setq tab-bar-tab-hints t
+        tab-bar-select-tab-modifiers '(meta))
+  :config
+  (bind-key "`" 'toggle-frame-tab-bar tab-prefix-map))
 
-(define-key tab-prefix-map "`" 'toggle-frame-tab-bar)
+(use-package winner
+  :ensure nil
+  :config
+  (winner-mode 1))
 
-(winner-mode 1)
 
 
 
@@ -159,80 +174,45 @@ Override: fix join lines leave space between CJK chars."
       read-buffer-completion-ignore-case t
       read-file-name-completion-ignore-case t)
 
-(setq orderless-component-separator 'orderless-escapable-split-on-space)
-(setq completion-styles '(orderless partial-completion basic)) ; orderless
+(use-package orderless
+  :init
+  (setq orderless-component-separator 'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless partial-completion basic)))
 
-(global-set-key "\C-\M-_" 'dabbrev-completion) ; for terminal
+(bind-key "C-M-_" 'dabbrev-completion)  ; for terminal
 
-(global-set-key "\C-@"        'toggle-input-method)
-(global-set-key (kbd "C-SPC") 'toggle-input-method)
+(bind-keys ("C-@"   . toggle-input-method)
+           ("C-SPC" . toggle-input-method))
 
 
 
 ;;* match
 
-(setq isearch-lazy-count t
-      isearch-allow-scroll t
-      isearch-allow-motion t
-      isearch-yank-on-move t
-      isearch-motion-changes-direction t
-      isearch-repeat-on-direction-change t)
+(use-package isearch
+  :ensure nil
+  :init
+  (setq isearch-lazy-count t
+        isearch-allow-scroll t
+        isearch-allow-motion t
+        isearch-yank-on-move t
+        isearch-motion-changes-direction t
+        isearch-repeat-on-direction-change t)
+  :config
+  (bind-keys :map isearch-mode-map
+             ("<f2>" . isearch-occur)
+             ("M-."  . isearch-forward-symbol-at-point)))
 
-(define-key isearch-mode-map (kbd "<f2>") 'isearch-occur)
-(define-key isearch-mode-map "\M-." 'isearch-forward-symbol-at-point)
+;;* misc
 
-
+(use-package simple-x
+  :ensure nil
+  :config
+  (simple-x-default-keybindings))
 
-;;* maps
+(use-package embark
+  :bind ("M-o" . embark-act))
 
-;;** help-map
-(define-key help-map "t"  nil)
-(define-key help-map "tt" 'load-theme)
-(define-key help-map "tf" 'load-file)
-(define-key help-map "tl" 'load-library)
-(define-key help-map "j"  'find-library)
-(define-key help-map "4j" 'find-library-other-window)
-(define-key help-map "5j" 'find-library-other-frame)
-
-;;** ctl-x-4-map
-(define-key ctl-x-4-map "j" 'dired-jump-other-window)
-
-;;** ctl-x-x-map
-(define-key ctl-x-x-map "h" 'hl-line-mode)
-(define-key ctl-x-x-map "l" 'display-line-numbers-mode)
-(define-key ctl-x-x-map "s" 'whitespace-mode)
-(define-key ctl-x-x-map "v" 'visual-line-mode)
-(define-key ctl-x-x-map "a" 'auto-save-visited-mode)
-
-;;** ctl-x-l-map
-(defvar ctl-x-l-map (make-sparse-keymap))
-(define-key ctl-x-map "l" ctl-x-l-map)
-(define-key ctl-x-l-map "b" 'ibuffer)
-(define-key ctl-x-l-map "u" 'undo-tree-visualize) ; undo-tree
-
-
-
-;;* extension
-
-;;** simple-x
-(simple-x-default-keybindings)
-
-;;** project-x
-(project-x-mode 1)
-
-;;** embark
-(global-set-key "\M-o" 'embark-act)
-
-;;** avy
-(setq avy-goto-word-0-regexp "\\_<\\(\\sw\\|\\s_\\)")
-(define-key goto-map ";" 'avy-resume)
-(define-key goto-map "f" 'avy-goto-char)
-(define-key goto-map "j" 'avy-goto-line)
-(define-key goto-map "w" 'avy-goto-word-0)
-
-(defun avy-action-embark (pt)
-  (unwind-protect (save-excursion (goto-char pt) (embark-act))
-    (select-window (cdr (ring-ref avy-ring 0))) t))
-
-(with-eval-after-load 'avy
-  (add-to-list 'avy-dispatch-alist '(?o . avy-action-embark)))
+(use-package which-key
+  :diminish which-key-mode
+  :config
+  (which-key-mode 1))

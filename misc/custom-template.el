@@ -1,5 +1,4 @@
 ;;; ef-themes
-;; (add-to-list '+package 'ef-themes)
 ;; (add-hook 'after-init-hook 'ef-themes-load-random)
 
 ;;; termbright
