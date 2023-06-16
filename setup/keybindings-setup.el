@@ -12,6 +12,10 @@
            ("j"  . find-library)
            ("4j" . find-library-other-window))
 
+;;* ctl-x-4-map
+
+(bind-key "j" 'dired-jump-other-window ctl-x-4-map)
+
 ;;* +minor-prefix-map
 
 (defvar-keymap +minor-prefix-map)
