@@ -7,17 +7,22 @@
   :bind (:map emacs-lisp-mode-map ("C-c e" . macrostep-expand)))
 
 ;;* cc
-(defvar +flymake-cc-program "clang")
-(defvar +flymake-cc-args nil)
-(defun +flymake-cc-command ()
-  `(,+flymake-cc-program "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c")
-                         "-fsyntax-only"
-                         "-fno-color-diagnostics"
-                         "-fno-caret-diagnostics"
-                         "-fno-diagnostics-show-option"
-                         ,@+flymake-cc-args
-                         "-"))
-(setq flymake-cc-command '+flymake-cc-command)
+(use-package flymake-cc
+  :ensure nil
+  :defer t
+  :init
+  (defvar +flymake-cc-program "clang")
+  (defvar +flymake-cc-args nil)
+  :config
+  (defun +flymake-cc-command ()
+    `(,+flymake-cc-program "-x" ,(if (derived-mode-p 'c++-mode) "c++" "c")
+                           "-fsyntax-only"
+                           "-fno-color-diagnostics"
+                           "-fno-caret-diagnostics"
+                           "-fno-diagnostics-show-option"
+                           ,@+flymake-cc-args
+                           "-"))
+  (setq flymake-cc-command '+flymake-cc-command))
 
 ;;* python
 (use-package python

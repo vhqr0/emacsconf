@@ -209,10 +209,18 @@ Override: fix join lines leave space between CJK chars."
   :config
   (simple-x-default-keybindings))
 
-(use-package embark
-  :bind ("M-o" . embark-act))
-
 (use-package which-key
   :diminish which-key-mode
   :config
   (which-key-mode 1))
+
+(use-package embark
+  :bind ("M-o" . embark-act)
+  :init
+  (setq embark-indicators
+        '(embark-which-key-indicator
+          embark-highlight-indicator
+          embark-isearch-highlight-indicator))
+  :config
+  (advice-add 'embark-completing-read-prompter
+              :around 'embark-hide-which-key-indicator))
