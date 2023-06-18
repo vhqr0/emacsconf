@@ -35,9 +35,12 @@
     (setq-local comment-inline-offset 2))
   (add-hook 'python-mode-hook '+python-comment-inline-offset-setup)
   (unless (eq system-type 'windows-nt)
-    (add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode)
-    (use-package python-mls
-      :hook (inferior-python-mode . python-mls-mode))))
+    (add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode)))
+
+(unless (eq system-type 'windows-nt)
+  (use-package python-mls
+    :hook (inferior-python-mode . python-mls-mode)))
+
 
 ;;* web
 (use-package js

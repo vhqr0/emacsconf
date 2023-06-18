@@ -146,6 +146,7 @@
            ("x"   . +leader-C-x)
            ("`"   . tmm-menubar)
            ("SPC" . execute-extended-command)
+           (":"   . eval-expression)
            (";"   . evil-ex)            ; evil
            ("e"   . eshell-dwim)        ; eshell-dwim
            ("="   . format-buffer)      ; evil-format
