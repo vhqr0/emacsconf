@@ -33,19 +33,14 @@
 
 (defvar-keymap +file-prefix-map)
 (bind-keys :map +file-prefix-map
-           ("f"  . find-file)
-           ("4f" . find-file-other-window)
-           ("r"  . find-file-read-only)
-           ("4r" . find-file-read-only-other-window)
-           ("v"  . find-alternate-file)
-           ("4v" . find-alternate-file-other-window)
-           ("d"  . dired)
-           ("4d" . dired-other-window)
-           ("j"  . dired-jump)
-           ("4j" . dired-jump-other-window)
-           ("o"  . xdg-open)            ; simple-x
-           ("i"  . insert-file)
-           ("w"  . write-file))
+           ("f" . find-file)
+           ("r" . find-file-read-only)
+           ("v" . find-alternate-file)
+           ("d" . dired)
+           ("j" . dired-jump)
+           ("o" . xdg-open)            ; simple-x
+           ("i" . insert-file)
+           ("w" . write-file))
 
 ;;* +buffer-prefix-map
 
@@ -60,10 +55,8 @@
            ("q"     . bury-buffer)
            ("Q"     . unbury-buffer)
            ("b"     . switch-to-buffer)
-           ("4b"    . switch-to-buffer-other-window)
            ("s"     . save-buffer)
            ("k"     . kill-buffer-dwim) ; simple-x
-           ("l"     . ibuffer)
            ([left]  . previous-buffer)
            ([right] . next-buffer))
 
@@ -71,6 +64,7 @@
 
 (defvar +list-prefix-map (make-sparse-keymap))
 (bind-keys :map +list-prefix-map
+           ("b" . ibuffer)
            ("n" . notes)                ; notes
            ("u" . undo-tree-visualize)  ; undo-tree
            )
@@ -133,6 +127,10 @@
 
 (with-eval-after-load 'evil
   (bind-keys :map evil-window-map
+             ("0"     . evil-window-delete)
+             ("1"     . delete-other-windows)
+             ("2"     . evil-window-split)
+             ("3"     . evil-window-vsplit)
              ([left]  . winner-undo)
              ([right] . winner-redo))
   (bind-keys :repeat-map evil-other-window-repeat-map
@@ -148,6 +146,9 @@
            ("SPC" . execute-extended-command)
            (":"   . eval-expression)
            (";"   . evil-ex)            ; evil
+           ("["   . sp-wrap-square)     ; smartparens
+           ("("   . sp-wrap-round)      ; smartparens
+           ("{"   . sp-wrap-curly)      ; smartparens
            ("e"   . eshell-dwim)        ; eshell-dwim
            ("="   . format-buffer)      ; evil-format
            ("#"   . server-edit)
@@ -155,6 +156,6 @@
            ("&"   . async-shell-command)
            ("$"   . ispell-word)
            ("%"   . query-replace-regexp)
-           (","   . xref-pop-marker-stack)
+           (","   . xref-go-back)
            ("."   . xref-find-definitions)
            ("?"   . xref-find-references))
