@@ -1,10 +1,10 @@
 (defvar +fonts-en
   (if (eq system-type 'windows-nt)
-      "Courier New"
+      "Cascadia Mono"
     "DejaVu Sans Mono"))
 (defvar +fonts-cjk
   (if (eq system-type 'windows-nt)
-      "微软雅黑"
+      "STXingkai"
     "WenQuanYi Micro Hei"))
 
 (let ((font (font-spec :name +fonts-en)))
