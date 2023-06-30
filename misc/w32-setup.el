@@ -40,7 +40,7 @@
 (setq find-program "find2")
 
 ;; formatter: both utf-8
-(advice-add 'format-dwim :around '+w32-around-proocess-coding-system-utf-8-both)
+(advice-add 'format-buffer :around '+w32-around-proocess-coding-system-utf-8-both)
 
 ;; use wsl sdcv
 (setq sdcv-command-format "wsl sdcv %s")
