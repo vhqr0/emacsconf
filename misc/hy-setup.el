@@ -20,9 +20,7 @@
     (add-to-list 'evil-eval-alist '(hy-mode . +hy-shell-send-region)))
 
   (with-eval-after-load 'smartparens
-    (dolist (list '(sp-lisp-modes sp-clojure-modes))
-      (dolist (mode '(hy-mode inferior-hy-mode))
-        (add-to-list list mode))))
+    (sp-local-pair '(hy-mode inferior-hy-mode) "'" nil :actions nil))
 
   (with-eval-after-load 'evil-cleverparens
     (add-hook 'hy-mode-hook 'evil-cleverparens-mode))

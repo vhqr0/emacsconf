@@ -26,6 +26,7 @@
 
 ;;* python
 (use-package python
+  :ensure nil
   :init
   (defvar python-shell-interpreter "ipython")
   (defvar python-shell-interpreter-args "--simple-prompt")
@@ -37,10 +38,9 @@
   (unless (eq system-type 'windows-nt)
     (add-hook 'inferior-python-mode-hook '+maybe-enable-company-mode)))
 
-(unless (eq system-type 'windows-nt)
-  (use-package python-mls
-    :hook (inferior-python-mode . python-mls-mode)))
-
+(use-package python-mls
+  :unless (eq system-type 'windows-nt)
+  :hook (inferior-python-mode . python-mls-mode))
 
 ;;* web
 (use-package js
