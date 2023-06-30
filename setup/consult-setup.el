@@ -30,6 +30,9 @@
   :defer t
   :init
   (setq consult-preview-key '(:debounce 0.2 any))
+  (bind-keys :map search-map
+             ("s" . consult-line)
+             ("g" . consult-ripgrep))
   :config
   (consult-customize
    consult-grep
@@ -41,10 +44,7 @@
    consult-buffer-other-frame
    consult-project-buffer
    consult-theme
-   :preview-key '(:debounce 0.5 any))
-  (bind-keys :map search-map
-             ("s" . consult-line)
-             ("g" . consult-ripgrep)))
+   :preview-key '(:debounce 0.5 any)))
 
 (use-package embark-consult :defer t)
 

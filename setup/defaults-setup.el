@@ -8,8 +8,7 @@
       initial-scratch-message nil)
 
 (setq use-dialog-box nil
-      use-file-dialog nil
-      confirm-kill-emacs 'y-or-n-p)
+      use-file-dialog nil)
 
 (setq text-quoting-style 'grave)
 
