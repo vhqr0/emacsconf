@@ -27,6 +27,7 @@
   (global-evil-surround-mode 1))
 
 (use-package evil-cleverparens
+  :diminish evil-cleverparens-mode
   :hook (lisp-data-mode . evil-cleverparens-mode)
   :init
   (setq evil-cleverparens-use-regular-insert t

@@ -85,6 +85,7 @@
 (setq-default indent-tabs-mode nil)
 
 (use-package smartparens
+  :diminish smartparens-mode
   :init
   (setq sp-ignore-modes-list nil)
   :config
