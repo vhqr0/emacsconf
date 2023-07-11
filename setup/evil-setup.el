@@ -43,9 +43,7 @@
           ("M-d" . evil-cp-delete-sexp)
           ("M-q" . sp-indent-defun)
           ("M-v" . sp-convolute-sexp)))
-  (advice-add 'evil-cp--enable-text-objects :override 'ignore)
-  :config
-  (add-hook 'evil-cleverparens-mode-hook 'smartparens-strict-mode))
+  (advice-add 'evil-cp--enable-text-objects :override 'ignore))
 
 (use-package evil-collection
   :diminish evil-collection-unimpaired-mode

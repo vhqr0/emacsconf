@@ -19,9 +19,6 @@
       (hy-shell--eval-1 (buffer-substring start end)))
     (add-to-list 'evil-eval-alist '(hy-mode . +hy-shell-send-region)))
 
-  (with-eval-after-load 'smartparens
-    (sp-local-pair '(hy-mode inferior-hy-mode) "'" nil :actions nil))
-
   (with-eval-after-load 'evil-cleverparens
     (add-hook 'hy-mode-hook 'evil-cleverparens-mode))
 

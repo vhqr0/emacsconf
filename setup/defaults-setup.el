@@ -74,25 +74,9 @@
 
 (setq-default indent-tabs-mode nil)
 
-(use-package smartparens
-  :diminish smartparens-mode
-  :init
-  (setq sp-ignore-modes-list nil)
-  :config
-  (require 'smartparens-config)
-  (smartparens-global-mode 1)
-  (show-smartparens-global-mode 1)
-  (let ((pairs '("'" "`"))
-        (modes '(minibuffer-mode minibuffer-inactive-mode)))
-    (dolist (pair pairs) (sp-local-pair modes pair nil :actions nil)))
-  (bind-keys :map smartparens-mode-map
-             ([remap forward-sexp] . sp-forward-sexp)
-             ([remap backward-sexp] . sp-backward-sexp)
-             ([remap backward-up-list] . sp-backward-up-sexp)
-             ([remap down-list] . sp-down-sexp)
-             ([remap backward-list] . sp-previous-sexp)
-             ([remap forward-list] . sp-next-sexp)
-             ([remap kill-sexp] . sp-kill-sexp)))
+(setq show-paren-context-when-offscreen t)
+(show-paren-mode 1)
+(electric-pair-mode 1)
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
