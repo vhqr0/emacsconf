@@ -3,6 +3,8 @@
   :init
   (setq hy-jedhy--enable? nil)
   :config
+  (add-hook 'hy-mode-hook 'paredit-mode)
+
   (with-eval-after-load 'hy-shell
     (require 'hy-mode))
 
@@ -18,9 +20,6 @@
     (defun +hy-shell-send-region (start end)
       (hy-shell--eval-1 (buffer-substring start end)))
     (add-to-list 'evil-eval-alist '(hy-mode . +hy-shell-send-region)))
-
-  (with-eval-after-load 'evil-cleverparens
-    (add-hook 'hy-mode-hook 'evil-cleverparens-mode))
 
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs '(hy-mode . ("hyuga")))))

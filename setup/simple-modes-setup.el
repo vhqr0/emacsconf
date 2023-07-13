@@ -2,9 +2,12 @@
 
 
 
-;;* elisp
+;;* lisp
+(use-package paredit
+  :hook (lisp-data-mode . paredit-mode))
+
 (use-package macrostep
-  :bind (:map emacs-lisp-mode-map ("C-c e" . macrostep-expand)))
+  :bind (:map lisp-data-mode-map ("C-c e" . macrostep-expand)))
 
 ;;* cc
 (use-package flymake-cc

@@ -26,25 +26,6 @@
   :config
   (global-evil-surround-mode 1))
 
-(use-package evil-cleverparens
-  :diminish evil-cleverparens-mode
-  :hook (lisp-data-mode . evil-cleverparens-mode)
-  :init
-  (setq evil-cleverparens-use-regular-insert t
-        evil-cleverparens-use-additional-movement-keys nil
-        evil-cp-additional-bindings
-        '(("M-t" . sp-transpose-sexp)
-          ("M-j" . evil-cp-drag-forward)
-          ("M-k" . evil-cp-drag-backward)
-          ("M-J" . sp-join-sexp)
-          ("M-S" . sp-split-sexp)
-          ("M-s" . sp-splice-sexp)
-          ("M-r" . sp-raise-sexp)
-          ("M-d" . evil-cp-delete-sexp)
-          ("M-q" . sp-indent-defun)
-          ("M-v" . sp-convolute-sexp)))
-  (advice-add 'evil-cp--enable-text-objects :override 'ignore))
-
 (use-package evil-collection
   :diminish evil-collection-unimpaired-mode
   :init

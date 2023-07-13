@@ -24,11 +24,7 @@
     (add-to-list 'evil-eval-alist '(lisp-mode . sly-eval-region))))
 
 (use-package sly-macrostep
-  :after sly
-  :config
-  (bind-key "C-c e" 'macrostep-expand sly-editing-mode-map)
-  (with-eval-after-load 'sly-mrepl
-    (bind-key "C-c e" 'macrostep-expand sly-mrepl-mode-map)))
+  :after sly)
 
 ;;; latex
 (use-package auctex :defer t)
