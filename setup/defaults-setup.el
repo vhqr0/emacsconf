@@ -12,9 +12,54 @@
 
 (setq text-quoting-style 'grave)
 
-(dolist (mode '(tooltip-mode tool-bar-mode menu-bar-mode blink-cursor-mode scroll-bar-mode))
-  (when (fboundp mode)
-    (funcall mode -1)))
+(let ((modes
+       '(blink-cursor-mode
+         tooltip-mode
+         tool-bar-mode
+         menu-bar-mode
+         scroll-bar-mode)))
+  (dolist (mode modes)
+    (when (fboundp mode)
+      (funcall mode -1))))
+
+(setq-default cursor-in-non-selected-windows nil)
+
+(setq frame-title-format nil
+      default-frame-alist
+      '((left-fringe . 0)
+        (right-fringe . 0)
+        (internal-border-width . 24)))
+
+(setq window-divider-default-right-width 24)
+(window-divider-mode 1)
+
+(defun +nanolize (&rest args)
+  (interactive)
+  (let* ((background
+          (plist-get (custom-face-attributes-get 'default nil)
+                     :background))
+         (mode-line
+          (plist-get (custom-face-attributes-get 'mode-line nil)
+                     :background))
+         (mode-line-active
+          (or (plist-get (custom-face-attributes-get 'mode-line-active nil)
+                         :background)
+              mode-line))
+         (mode-line-inactive
+          (or (plist-get (custom-face-attributes-get 'mode-line-inactive nil)
+                         :background)
+              mode-line)))
+    (dolist (face '(window-divider
+                    window-divider-first-pixel
+                    window-divider-last-pixel))
+      (set-face-attribute face nil :foreground background))
+    (set-face-attribute 'mode-line-active nil
+                        :box `(:line-width 6 :color ,mode-line-active :style nil))
+    (set-face-attribute 'mode-line-inactive nil
+                        :box `(:line-width 6 :color ,mode-line-inactive :style nil))))
+
+(+nanolize)
+(advice-add 'enable-theme :after '+nanolize)
 
 
 
