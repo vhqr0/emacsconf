@@ -8,4 +8,6 @@
 (use-package sly-macrostep
   :after sly
   :config
-  (bind-key "C-c e" 'macrostep-expand sly-editing-mode-map))
+  (bind-key "C-c e" 'macrostep-expand sly-editing-mode-map)
+  (with-eval-after-load 'sly-mrepl
+    (bind-key "C-c e" 'macrostep-expand sly-mrepl-mode-map)))
