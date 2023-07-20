@@ -145,12 +145,14 @@
            ("`"   . tmm-menubar)
            ("SPC" . execute-extended-command)
            (":"   . eval-expression)
-           (";"   . evil-ex)             ; evil
-           ("("   . paredit-wrap-round)  ; paredit
-           ("["   . paredit-wrap-square) ; paredit
-           ("{"   . paredit-wrap-curly)  ; paredit
-           ("e"   . eshell-dwim)         ; eshell-dwim
-           ("="   . format-buffer)       ; evil-format
+           (";"   . evil-ex)                  ; evil
+           ("\""  . paredit-meta-doublequote) ; paredit
+           ("("   . paredit-wrap-round)       ; paredit
+           ("["   . paredit-wrap-square)      ; paredit
+           ("{"   . paredit-wrap-curly)       ; paredit
+           ("<"   . paredit-wrap-angled)      ; paredit
+           ("e"   . eshell-dwim)              ; eshell-dwim
+           ("="   . format-buffer)            ; evil-format
            ("#"   . server-edit)
            ("!"   . shell-command)
            ("&"   . async-shell-command)

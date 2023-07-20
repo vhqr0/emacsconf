@@ -8,14 +8,15 @@
 
 
 
-(defvar sdcv-command-format "sdcv %s")
+(defvar sdcv-command-format "sdcv -n %s")
 
 (defun sdcv (&optional word)
   (interactive (list (if current-prefix-arg
                          (read-string "word: ")
                        (thing-at-point 'word))))
   (when word
-    (shell-command (format sdcv-command-format word))))
+    (shell-command (format sdcv-command-format word)
+                   (get-buffer-create "*sdcv*"))))
 
 (defalias 'sd 'sdcv)
 
