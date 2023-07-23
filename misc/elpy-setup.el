@@ -9,4 +9,6 @@
           elpy-module-pyvenv
           elpy-module-django))
   :config
-  (bind-key [remap format-buffer] 'elpy-format-code elpy-mode-map))
+  (bind-keys :map elpy-mode-map
+             ([remap format-buffer]                . elpy-format-code)
+             ([remap python-shell-switch-to-shell] . elpy-shell-switch-to-shell)))

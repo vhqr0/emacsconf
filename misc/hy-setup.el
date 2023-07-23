@@ -1,7 +1,8 @@
 (use-package hy-mode
   :defer t
   :init
-  (setq hy-jedhy--enable? nil)
+  (setq hy-jedhy--enable? nil
+        hy-shell--interpreter-args nil)
   :config
   (add-hook 'hy-mode-hook 'paredit-mode)
 
