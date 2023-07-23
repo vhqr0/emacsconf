@@ -28,10 +28,7 @@
   :hook (org-mode . evil-org-mode)
   :init
   (setq evil-org-key-theme
-        '(navigation return textobjects additional shift calendar)))
-
-(use-package evil-org-agenda
-  :ensure nil
-  :after org
+        '(navigation return textobjects additional shift calendar))
   :config
+  (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
